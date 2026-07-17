@@ -11,6 +11,7 @@ import {
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
+import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
 import {
   buildCompareRows,
@@ -246,42 +247,35 @@ export default class AbayaComparisonArena extends LitElement {
                     ${products.map((p) => {
                       const isSelected = this.selectedIds.includes(p.id);
                       const disabled = !isSelected && atMax;
-                      const discount = getDiscountPercent(p.price, p.old_price);
                       return html`
-                        <button
-                          type="button"
-                          class="acm-pick-card"
+                        <div
+                          class=${classMap({
+                            'acm-pick-slot': true,
+                            'is-disabled': disabled,
+                          })}
                           role="listitem"
-                          aria-pressed=${isSelected ? 'true' : 'false'}
-                          ?disabled=${disabled}
-                          @click=${() => this.toggleProduct(p.id)}
                         >
-                          <span class="acm-pick-card__check" aria-hidden="true">✓</span>
-                          <div class="acm-pick-card__media">
-                            ${p.image
-                              ? html`<img
-                                  class="acm-pick-card__img"
-                                  src=${p.image}
-                                  alt=${p.name}
-                                  loading="lazy"
-                                  decoding="async"
-                                />`
-                              : nothing}
-                          </div>
-                          <div class="acm-pick-card__body">
-                            <p class="acm-pick-card__name">${p.name}</p>
-                            ${p.price > 0
-                              ? html`<span class="acm-pick-card__price">
-                                  ${formatPrice(p.price, currency)}
-                                  ${discount > 0 && p.old_price > 0
-                                    ? html`<span class="acm-pick-card__old">
-                                        ${formatPrice(p.old_price, currency)}
-                                      </span>`
-                                    : nothing}
-                                </span>`
-                              : nothing}
-                          </div>
-                        </button>
+                          ${renderProductCard(
+                            {
+                              id: p.product_id,
+                              name: p.name,
+                              image: p.image,
+                              url: p.url,
+                              price: p.price,
+                              old_price: p.old_price,
+                              rating: p.rating,
+                            },
+                            {
+                              currency,
+                              selectable: true,
+                              selected: isSelected,
+                              wishlist: true,
+                              onSelect: () => {
+                                if (!disabled) this.toggleProduct(p.id);
+                              },
+                            }
+                          )}
+                        </div>
                       `;
                     })}
                   </div>

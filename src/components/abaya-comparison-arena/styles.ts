@@ -139,103 +139,18 @@ export const componentStyles = css`
     }
   }
 
-  .acm-pick-card {
-    position: relative;
-    display: grid;
-    gap: 0;
-    padding: 0;
-    overflow: hidden;
-    text-align: start;
-    cursor: pointer;
-    border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 18px) * 0.7);
-    background: var(--card-bg, #fff);
-    box-shadow: 0 10px 26px rgba(43, 33, 28, 0.06);
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  .acm-pick-slot {
+    display: flex;
+    min-width: 0;
   }
 
-  .acm-pick-card:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 32px rgba(43, 33, 28, 0.1);
-  }
-
-  .acm-pick-card[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent),
-      0 16px 32px rgba(43, 33, 28, 0.1);
-  }
-
-  .acm-pick-card:disabled {
-    opacity: 0.42;
-    cursor: not-allowed;
-  }
-
-  .acm-pick-card__media {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    background: linear-gradient(145deg, #3a2c26, #1c1613);
-  }
-
-  .acm-pick-card__img {
+  .acm-pick-slot > .fs-product-card {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
   }
 
-  .acm-pick-card__check {
-    position: absolute;
-    top: 0.55rem;
-    inset-inline-end: 0.55rem;
-    z-index: 2;
-    width: 1.55rem;
-    height: 1.55rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    box-shadow: 0 6px 14px rgba(43, 33, 28, 0.22);
-    opacity: 0;
-    transform: scale(0.85);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-
-  .acm-pick-card[aria-pressed='true'] .acm-pick-card__check {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .acm-pick-card__body {
-    padding: 0.75rem 0.8rem 0.9rem;
-  }
-
-  .acm-pick-card__name {
-    margin: 0 0 0.3rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text-color, #2b211c);
-  }
-
-  .acm-pick-card__price {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.35rem;
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-  }
-
-  .acm-pick-card__old {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--muted-color, #7a6a62);
-    text-decoration: line-through;
+  .acm-pick-slot.is-disabled {
+    opacity: 0.42;
+    pointer-events: none;
   }
 
   .acm-actions {
@@ -430,8 +345,6 @@ export const componentStyles = css`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .acm-pick-card,
-    .acm-pick-card__check,
     .acm-table-wrap {
       transition: none !important;
       animation: none !important;

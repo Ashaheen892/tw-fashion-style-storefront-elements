@@ -190,6 +190,7 @@ function mergeProduct(draft: ProductDraft, apiRaw?: unknown | null): CompareProd
     old_price,
     url,
     btn_text: draft.btn_text,
+    rating: snap?.rating || 0,
     attributes: draft.attributes,
   };
 }

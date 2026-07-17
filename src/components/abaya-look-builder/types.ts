@@ -11,6 +11,7 @@ export interface LookItem {
   product_id: string;
   is_default: boolean;
   color_note: string;
+  rating: number;
 }
 
 export interface LookGroup {

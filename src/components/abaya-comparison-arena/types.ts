@@ -13,6 +13,7 @@ export interface CompareProduct {
   old_price: number;
   url: string;
   btn_text: string;
+  rating: number;
   /** Merchant-configured comparison rows for this product */
   attributes: CompareAttribute[];
 }

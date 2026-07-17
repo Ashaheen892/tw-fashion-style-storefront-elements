@@ -1,9 +1,9 @@
-import { css as C, LitElement as R, html as o, nothing as s } from "lit";
-import { property as N, state as b, query as E } from "lit/decorators.js";
+import { css as C, LitElement as R, html as i, nothing as s } from "lit";
+import { property as N, state as f, query as E } from "lit/decorators.js";
 import { classMap as x } from "lit/directives/class-map.js";
 import { ifDefined as _ } from "lit/directives/if-defined.js";
-import { styleMap as $ } from "lit/directives/style-map.js";
-import { n as H, l as u, u as S, i as f, b as O, e as T, q as w, v as q, d as P, s as Z, p as k, r as I, a as j, t as c, w as z } from "./sharedStyles-C1vUkqEN.js";
+import { styleMap as k } from "lit/directives/style-map.js";
+import { n as H, l as u, u as S, i as g, b as O, e as T, q as w, v as q, d as P, s as Z, p as $, r as z, a as j, t as l, w as I } from "./sharedStyles-BGb_aVO_.js";
 const V = C`
   .aem-shell {
     display: grid;
@@ -66,12 +66,32 @@ const V = C`
 
   .aem-pick-hint {
     margin: 0;
-    min-height: 2.6rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.4rem;
+    padding: 0.4rem 0.95rem;
     text-align: center;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--muted-color, #7a6a62);
-    line-height: 1.55;
+    line-height: 1.5;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
+    border: 1px dashed color-mix(in srgb, var(--accent-color, #8b5e4b) 30%, transparent);
+  }
+
+  .aem-pick-hint::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent-color, #8b5e4b);
+    opacity: 0.7;
   }
 
   .aem-pick-hint--hidden {
@@ -107,24 +127,59 @@ const V = C`
     width: 100%;
     aspect-ratio: var(--aem-aspect, 3 / 4);
     border-radius: var(--section-radius, 16px);
-    background: var(--aem-stage-bg, #f3ece7);
+    background:
+      radial-gradient(
+        120% 90% at 50% 0%,
+        color-mix(in srgb, var(--card-bg, #fff) 65%, transparent),
+        transparent 60%
+      ),
+      var(--aem-stage-bg, #f3ece7);
     border: 1px solid var(--border-color, #e8ddd6);
-    box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08));
+    box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
     overflow: hidden;
   }
 
   .aem-stage__ornament {
     position: absolute;
-    inset: 8%;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, transparent);
+    inset: 7%;
+    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 26%, transparent);
     border-radius: calc(var(--section-radius, 16px) * 0.7);
     pointer-events: none;
-    opacity: 0.55;
+    opacity: 0.6;
+  }
+
+  /* couture corner ticks on the ornament frame */
+  .aem-stage__ornament::before,
+  .aem-stage__ornament::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 0 solid color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
+    pointer-events: none;
+  }
+
+  .aem-stage__ornament::before {
+    top: -1px;
+    inset-inline-start: -1px;
+    border-top-width: 2px;
+    border-inline-start-width: 2px;
+    border-start-start-radius: 6px;
+  }
+
+  .aem-stage__ornament::after {
+    bottom: -1px;
+    inset-inline-end: -1px;
+    border-bottom-width: 2px;
+    border-inline-end-width: 2px;
+    border-end-end-radius: 6px;
   }
 
   .aem-stage__img-wrap {
     position: absolute;
-    inset: 0;
+    /* keep the abaya tucked inside the ornament frame (matches .aem-spots) */
+    inset: 8.5%;
     display: grid;
     place-items: center;
   }
@@ -145,7 +200,8 @@ const V = C`
 
   .aem-spots {
     position: absolute;
-    inset: 0;
+    /* align the spot coordinate space with the inset image */
+    inset: 8.5%;
     pointer-events: none;
   }
 
@@ -180,11 +236,15 @@ const V = C`
     height: 28px;
     border-radius: 50%;
     border: 2px solid currentColor;
-    background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #fff) 92%, transparent);
     display: grid;
     place-items: center;
-    box-shadow: 0 4px 14px rgba(43, 33, 28, 0.16);
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    box-shadow: 0 4px 14px rgba(43, 33, 28, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(2px);
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease,
+      color 0.22s ease;
   }
 
   .aem-spot__core {
@@ -200,9 +260,10 @@ const V = C`
     display: grid;
     place-items: center;
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-color, #2b211c);
     line-height: 1;
+    transition: color 0.22s ease;
   }
 
   .aem-spot__num + .aem-spot__core {
@@ -221,10 +282,16 @@ const V = C`
 
   .aem-spot--active .aem-spot__ring,
   .aem-spot--hover .aem-spot__ring {
-    transform: scale(1.12);
+    transform: scale(1.16);
     border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    box-shadow: 0 6px 18px color-mix(in srgb, var(--aem-active, #8b5e4b) 35%, transparent);
+    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--aem-active, #8b5e4b) 42%, transparent);
     color: var(--aem-active, var(--accent-color, #8b5e4b));
+  }
+
+  .aem-spot--active .aem-spot__num,
+  .aem-spot--hover .aem-spot__num {
+    color: #fff;
   }
 
   .aem-spot--featured .aem-spot__ring {
@@ -306,17 +373,30 @@ const V = C`
     border: 1px solid var(--aem-card-border, var(--border-color, #e8ddd6));
     border-radius: var(--section-radius, 16px);
     box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08));
-    padding: 0.75rem;
+    padding: 0.85rem;
     display: grid;
-    gap: 0.55rem;
+    gap: 0.6rem;
     min-width: 0;
     cursor: pointer;
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease,
-      transform 0.22s ease,
+      transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
       opacity 0.28s ease;
     text-align: start;
+  }
+
+  /* accent hairline on the leading edge for a couture feel */
+  .aem-card::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.9rem;
+    inset-inline-start: 0;
+    width: 3px;
+    border-radius: 999px;
+    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    opacity: 0;
+    transition: opacity 0.24s ease;
   }
 
   .aem-card:focus {
@@ -330,13 +410,28 @@ const V = C`
 
   .aem-card--active,
   .aem-card--hover {
-    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    box-shadow: 0 12px 32px color-mix(in srgb, var(--aem-active, #8b5e4b) 18%, transparent);
+    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--aem-card-border, #e8ddd6));
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--aem-active, #8b5e4b) 20%, transparent);
+  }
+
+  .aem-card--active::before,
+  .aem-card--hover::before {
+    opacity: 1;
+  }
+
+  .aem-card--hover:not(.aem-card--featured),
+  .aem-card--active:not(.aem-card--featured) {
+    transform: translateY(-3px);
   }
 
   .aem-card--featured {
-    padding: 0.9rem;
+    padding: 0.95rem;
     transform: scale(1.02);
+  }
+
+  .aem-card--featured.aem-card--hover,
+  .aem-card--featured.aem-card--active {
+    transform: scale(1.03) translateY(-2px);
   }
 
   .aem-card__media {
@@ -374,6 +469,34 @@ const V = C`
     padding: 0;
   }
 
+  /* magnifier chip revealed on hover/focus */
+  .aem-card__zoom::after {
+    content: '⤢';
+    position: absolute;
+    inset-block-end: 0.5rem;
+    inset-inline-end: 0.5rem;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--card-bg, #fff) 82%, transparent);
+    color: var(--text-color, #2b211c);
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(43, 33, 28, 0.2);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transform: translateY(4px) scale(0.9);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .aem-card:hover .aem-card__zoom::after,
+  .aem-card__zoom:hover::after,
+  .aem-card__zoom:focus-visible::after {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
   .aem-card__zoom:focus-visible {
     outline: 2px solid var(--aem-active, #8b5e4b);
     outline-offset: -2px;
@@ -381,19 +504,26 @@ const V = C`
 
   .aem-badge {
     display: inline-flex;
+    align-items: center;
     align-self: start;
-    padding: 0.2rem 0.55rem;
+    padding: 0.24rem 0.6rem;
     border-radius: 999px;
     font-size: 0.7rem;
-    font-weight: 700;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, #fff);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, #fff),
+      color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, #fff)
+    );
     color: var(--accent-color, #8b5e4b);
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color, #8b5e4b) 18%, transparent);
   }
 
   .aem-card__title {
     margin: 0;
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-size: 0.98rem;
+    font-weight: 800;
     line-height: 1.35;
     color: var(--text-color, #2b211c);
   }
@@ -401,41 +531,70 @@ const V = C`
   .aem-card__desc {
     margin: 0;
     font-size: 0.82rem;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--muted-color, #7a6a62);
   }
 
   .aem-meta {
     display: grid;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: calc(var(--section-radius, 16px) * 0.5);
+    background: color-mix(in srgb, var(--aem-stage-bg, #f3ece7) 45%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--aem-card-border, #e8ddd6) 65%, transparent);
     font-size: 0.78rem;
+    line-height: 1.5;
     color: var(--muted-color, #7a6a62);
+  }
+
+  .aem-meta > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .aem-meta > div + div {
+    padding-top: 0.35rem;
+    border-top: 1px dashed color-mix(in srgb, var(--aem-card-border, #e8ddd6) 70%, transparent);
   }
 
   .aem-meta strong {
     color: var(--text-color, #2b211c);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .aem-card__link {
-    justify-self: start;
-    min-height: 40px;
-    padding: 0.45rem 0.9rem;
-    font-size: 0.82rem;
+    justify-self: stretch;
+    width: 100%;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: calc(var(--section-radius, 16px) * 0.5);
   }
 
   .aem-clear {
     display: inline-flex;
+    align-items: center;
     margin-inline: auto;
     min-height: 40px;
-    padding: 0.4rem 0.9rem;
+    padding: 0.4rem 1.1rem;
     border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 16px) * 0.55);
-    background: transparent;
+    border-radius: 999px;
+    background: var(--card-bg, #fff);
     color: var(--muted-color, #7a6a62);
     font: inherit;
     font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .aem-clear:hover {
+    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--border-color, #e8ddd6));
+    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 7%, var(--card-bg, #fff));
   }
 
   .aem-clear:focus-visible {
@@ -444,11 +603,17 @@ const V = C`
   }
 
   .aem-mobile__live {
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
     min-height: 1.25rem;
+    padding: 0.3rem 0.9rem;
     text-align: center;
     font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-color, #2b211c);
+    font-weight: 700;
+    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 9%, var(--card-bg, #fff));
+    border-radius: 999px;
   }
 
   .aem-nav {
@@ -465,7 +630,22 @@ const V = C`
     background: var(--card-bg, #fff);
     color: var(--text-color, #2b211c);
     font: inherit;
+    font-size: 1.1rem;
+    line-height: 1;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(43, 33, 28, 0.08);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .aem-nav button:hover:not(:disabled) {
+    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
+    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 8%, var(--card-bg, #fff));
+  }
+
+  .aem-nav button:active:not(:disabled) {
+    transform: scale(0.94);
   }
 
   .aem-nav button:focus-visible {
@@ -488,7 +668,8 @@ const V = C`
   }
 
   .aem-dialog::backdrop {
-    background: rgba(24, 18, 15, 0.55);
+    background: rgba(24, 18, 15, 0.58);
+    backdrop-filter: blur(3px);
   }
 
   .aem-dialog__inner {
@@ -499,6 +680,7 @@ const V = C`
     gap: 0.75rem;
     color: var(--text-color, #2b211c);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    animation: aem-card-in 0.28s ease both;
   }
 
   .aem-dialog__close {
@@ -678,48 +860,48 @@ const V = C`
     }
   }
 `;
-function L(r, e = 50) {
-  const t = P(r, Number.NaN);
+function L(o, e = 50) {
+  const t = P(o, Number.NaN);
   return Number.isFinite(t) ? q(t, 0, 100) : e;
 }
-function B(r) {
-  const e = w(r, "auto").toLowerCase();
+function B(o) {
+  const e = w(o, "auto").toLowerCase();
   return e === "right" || e === "left" || e === "auto" ? e : "auto";
 }
-function K(r) {
-  const e = w(r, "3/4").replace(/\s/g, "").replace(":", "/");
+function K(o) {
+  const e = w(o, "3/4").replace(/\s/g, "").replace(":", "/");
   return e === "2/3" || e === "4/5" || e === "1/1" || e === "3/4" ? e : "3/4";
 }
-function U(r) {
-  const e = w(r, "").toLowerCase();
+function Y(o) {
+  const e = w(o, "").toLowerCase();
   return e === "hand" || e === "machine" || e === "both" ? e : "";
 }
-function M(r) {
-  return r === "hand" ? { ar: "يدوي", en: "Hand" } : r === "machine" ? { ar: "آلي", en: "Machine" } : r === "both" ? { ar: "يدوي وآلي", en: "Hand & machine" } : { ar: "", en: "" };
+function M(o) {
+  return o === "hand" ? { ar: "يدوي", en: "Hand" } : o === "machine" ? { ar: "آلي", en: "Machine" } : o === "both" ? { ar: "يدوي وآلي", en: "Hand & machine" } : { ar: "", en: "" };
 }
-function X(r) {
-  return H(r).map((e, t) => {
-    const i = u(e.name).trim(), a = S(e.sort_order, t + 1);
+function U(o) {
+  return H(o).map((e, t) => {
+    const r = u(e.name).trim(), a = S(e.sort_order, t + 1);
     return {
       index: t,
       sort: a,
-      name: i || `Detail ${t + 1}`,
+      name: r || `Detail ${t + 1}`,
       desc: u(e.desc).trim(),
       image: T(e.image) || String(e.image || "").trim(),
-      alt: u(e.alt).trim() || i || `Embroidery detail ${t + 1}`,
+      alt: u(e.alt).trim() || r || `Embroidery detail ${t + 1}`,
       pos_x: L(e.pos_x ?? e.x, 50),
       pos_y: L(e.pos_y ?? e.y, 50),
       card_side: B(e.card_side),
       stitch_type: u(e.stitch_type).trim(),
       thread: u(e.thread).trim(),
-      method: U(e.method),
+      method: Y(e.method),
       duration: u(e.duration).trim(),
       extra: u(e.extra).trim(),
       product_url: O(e.product_url),
       btn_text: u(e.btn_text).trim(),
-      show_number: f(e.show_number, !0),
+      show_number: g(e.show_number, !0),
       spot_color: String(e.spot_color || "").trim(),
-      is_featured: f(e.is_featured, !1),
+      is_featured: g(e.is_featured, !1),
       badge: u(e.badge).trim()
     };
   }).sort((e, t) => e.sort - t.sort || e.index - t.index).map((e, t) => ({
@@ -744,54 +926,54 @@ function X(r) {
     badge: e.badge
   }));
 }
-function F(r) {
-  return r.card_side === "left" || r.card_side === "right" ? r.card_side : r.pos_x >= 50 ? "right" : "left";
+function F(o) {
+  return o.card_side === "left" || o.card_side === "right" ? o.card_side : o.pos_x >= 50 ? "right" : "left";
 }
-function Y(r) {
+function X(o) {
   const e = /* @__PURE__ */ new Set();
-  for (const t of r)
+  for (const t of o)
     if (t.is_featured && (e.add(t.index), e.size >= 2))
       break;
   return e;
 }
-function G(r, e, t, i) {
-  const a = r.left + r.width / 2 - t.left, l = r.top + r.height / 2 - t.top, d = e.top + e.height / 2 - t.top, m = 14;
+function G(o, e, t, r) {
+  const a = o.left + o.width / 2 - t.left, d = o.top + o.height / 2 - t.top, c = e.top + e.height / 2 - t.top, m = 14;
   let n, p;
-  i === "right" ? (n = e.left - t.left, p = n - m) : (n = e.right - t.left, p = n + m);
+  r === "right" ? (n = e.left - t.left, p = n - m) : (n = e.right - t.left, p = n + m);
   const v = (a + p) / 2;
-  return `M ${a.toFixed(1)} ${l.toFixed(1)} L ${v.toFixed(1)} ${l.toFixed(1)} L ${p.toFixed(1)} ${l.toFixed(1)} L ${p.toFixed(1)} ${d.toFixed(1)} L ${n.toFixed(1)} ${d.toFixed(1)}`;
+  return `M ${a.toFixed(1)} ${d.toFixed(1)} L ${v.toFixed(1)} ${d.toFixed(1)} L ${p.toFixed(1)} ${d.toFixed(1)} L ${p.toFixed(1)} ${c.toFixed(1)} L ${n.toFixed(1)} ${c.toFixed(1)}`;
 }
-function J(r, e, t, i) {
+function J(o, e, t, r) {
   const a = e.getBoundingClientRect();
   if (!a.width || !a.height) return [];
-  const l = [];
-  for (const d of r)
+  const d = [];
+  for (const c of o)
     try {
-      const m = t(d.index), n = i(d.index);
+      const m = t(c.index), n = r(c.index);
       if (!m || !n) continue;
       const p = m.getBoundingClientRect(), v = n.getBoundingClientRect();
       if (!p.width || !v.width) continue;
-      const y = F(d);
-      l.push({
-        index: d.index,
+      const y = F(c);
+      d.push({
+        index: c.index,
         d: G(p, v, a, y)
       });
     } catch {
     }
-  return l;
+  return d;
 }
-function Q(r) {
+function Q(o) {
   const e = [
     "none",
     "0 10px 28px rgba(43, 33, 28, 0.08)",
     "0 16px 40px rgba(43, 33, 28, 0.12)",
     "0 22px 56px rgba(43, 33, 28, 0.18)"
   ];
-  return e[q(r, 0, 3)] || e[1];
+  return e[q(o, 0, 3)] || e[1];
 }
-var W = Object.defineProperty, g = (r, e, t, i) => {
-  for (var a = void 0, l = r.length - 1, d; l >= 0; l--)
-    (d = r[l]) && (a = d(e, t, a) || a);
+var W = Object.defineProperty, b = (o, e, t, r) => {
+  for (var a = void 0, d = o.length - 1, c; d >= 0; d--)
+    (c = o[d]) && (a = c(e, t, a) || a);
   return a && W(e, t, a), a;
 };
 const D = class D extends R {
@@ -799,12 +981,12 @@ const D = class D extends R {
     super(...arguments), this.config = {}, this.activeIndex = null, this.hoverIndex = null, this.lines = [], this.entered = !1, this.zoomOpen = !1, this.zoomIndex = null, this.useFallbackDialog = !1, this.brokenMain = !1, this.brokenDetail = /* @__PURE__ */ new Set(), this.isDesktop = !0, this.boundLang = () => this.requestUpdate(), this.resizeObs = null, this.io = null, this.mq = null, this.lineRaf = 0, this.enterOnce = !1, this.zoomTrigger = null, this.boundMq = () => this.onMqChange(), this.boundKeydown = (e) => this.onGlobalKey(e);
   }
   connectedCallback() {
-    var e, t, i, a;
-    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.mq = window.matchMedia("(min-width: 960px)"), this.isDesktop = this.mq.matches, (t = (e = this.mq).addEventListener) == null || t.call(e, "change", this.boundMq), (a = (i = this.mq).addListener) == null || a.call(i, this.boundMq);
+    var e, t, r, a;
+    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.mq = window.matchMedia("(min-width: 960px)"), this.isDesktop = this.mq.matches, (t = (e = this.mq).addEventListener) == null || t.call(e, "change", this.boundMq), (a = (r = this.mq).addListener) == null || a.call(r, this.boundMq);
   }
   disconnectedCallback() {
-    var e, t, i, a;
-    window.removeEventListener("language-changed", this.boundLang), (t = (e = this.mq) == null ? void 0 : e.removeEventListener) == null || t.call(e, "change", this.boundMq), (a = (i = this.mq) == null ? void 0 : i.removeListener) == null || a.call(i, this.boundMq), this.teardownObservers(), this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), this.lineRaf && cancelAnimationFrame(this.lineRaf), super.disconnectedCallback();
+    var e, t, r, a;
+    window.removeEventListener("language-changed", this.boundLang), (t = (e = this.mq) == null ? void 0 : e.removeEventListener) == null || t.call(e, "change", this.boundMq), (a = (r = this.mq) == null ? void 0 : r.removeListener) == null || a.call(r, this.boundMq), this.teardownObservers(), this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), this.lineRaf && cancelAnimationFrame(this.lineRaf), super.disconnectedCallback();
   }
   firstUpdated() {
     this.setupObservers(), this.scheduleLines();
@@ -814,38 +996,38 @@ const D = class D extends R {
   }
   get details() {
     var e;
-    return X((e = this.config) == null ? void 0 : e.aem_details);
+    return U((e = this.config) == null ? void 0 : e.aem_details);
   }
   get mainImage() {
     const e = this.config || {};
     return T(e.aem_image) || String(e.aem_image || "").trim();
   }
   get featuredSet() {
-    return Y(this.details);
+    return X(this.details);
   }
   get enableLines() {
     var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_lines, !0);
+    return g((e = this.config) == null ? void 0 : e.aem_enable_lines, !0);
   }
   get enablePulse() {
     var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_pulse, !0) && !k();
+    return g((e = this.config) == null ? void 0 : e.aem_enable_pulse, !0) && !$();
   }
   get showNumbers() {
     var e;
-    return f((e = this.config) == null ? void 0 : e.aem_show_numbers, !0);
+    return g((e = this.config) == null ? void 0 : e.aem_show_numbers, !0);
   }
   get enableDetailImages() {
     var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_detail_images, !0);
+    return g((e = this.config) == null ? void 0 : e.aem_enable_detail_images, !0);
   }
   get enableZoom() {
     var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_zoom, !0);
+    return g((e = this.config) == null ? void 0 : e.aem_enable_zoom, !0);
   }
   get openNewTab() {
     var e;
-    return f((e = this.config) == null ? void 0 : e.aem_open_new_tab, !0);
+    return g((e = this.config) == null ? void 0 : e.aem_open_new_tab, !0);
   }
   teardownObservers() {
     var e, t;
@@ -871,7 +1053,7 @@ const D = class D extends R {
   }
   triggerEnter() {
     if (this.enterOnce) return;
-    if (this.enterOnce = !0, !I(this.config, "aem_").animate || k()) {
+    if (this.enterOnce = !0, !z(this.config, "aem_").animate || $()) {
       this.entered = !1;
       return;
     }
@@ -889,7 +1071,7 @@ const D = class D extends R {
       this.lines.length && (this.lines = []);
       return;
     }
-    const e = this.focusIndex(), t = e == null ? [] : this.details.filter((a) => a.index === e), i = J(
+    const e = this.focusIndex(), t = e == null ? [] : this.details.filter((a) => a.index === e), r = J(
       t,
       this.deskEl,
       (a) => this.renderRoot.querySelector(
@@ -899,7 +1081,7 @@ const D = class D extends R {
         `.aem-desk .aem-card[data-index="${a}"]`
       )
     );
-    this.lines = i;
+    this.lines = r;
   }
   setHover(e) {
     this.hoverIndex !== e && (this.hoverIndex = e);
@@ -918,37 +1100,37 @@ const D = class D extends R {
     this.setActive(null), this.hoverIndex = null;
   }
   onSpotKeydown(e, t) {
-    const i = this.details.length;
-    if (!i) return;
+    const r = this.details.length;
+    if (!r) return;
     let a = t;
     if (e.key === "ArrowRight" || e.key === "ArrowDown")
-      e.preventDefault(), a = (t + 1) % i;
+      e.preventDefault(), a = (t + 1) % r;
     else if (e.key === "ArrowLeft" || e.key === "ArrowUp")
-      e.preventDefault(), a = (t - 1 + i) % i;
+      e.preventDefault(), a = (t - 1 + r) % r;
     else if (e.key === "Home")
       e.preventDefault(), a = 0;
     else if (e.key === "End")
-      e.preventDefault(), a = i - 1;
+      e.preventDefault(), a = r - 1;
     else
       return;
     this.setActive(a);
-    const l = this.renderRoot.querySelector(
+    const d = this.renderRoot.querySelector(
       `.aem-spot[data-index="${a}"]`
     );
-    l == null || l.focus();
+    d == null || d.focus();
   }
   openZoom(e, t) {
     if (!this.enableZoom) return;
-    const i = this.details[e];
-    !(i != null && i.image) || this.brokenDetail.has(e) || (this.zoomTrigger = t instanceof HTMLElement ? t : null, this.zoomIndex = e, this.zoomOpen = !0, this.lockPageScroll(), document.addEventListener("keydown", this.boundKeydown), requestAnimationFrame(() => {
+    const r = this.details[e];
+    !(r != null && r.image) || this.brokenDetail.has(e) || (this.zoomTrigger = t instanceof HTMLElement ? t : null, this.zoomIndex = e, this.zoomOpen = !0, this.lockPageScroll(), document.addEventListener("keydown", this.boundKeydown), requestAnimationFrame(() => {
       const a = this.dialogEl;
       a && typeof a.showModal == "function" ? (this.useFallbackDialog = !1, a.open || a.showModal()) : this.useFallbackDialog = !0;
     }));
   }
   closeZoom() {
-    var t, i;
+    var t, r;
     const e = this.dialogEl;
-    e != null && e.open && e.close(), this.zoomOpen = !1, this.useFallbackDialog = !1, this.zoomIndex = null, this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), (i = (t = this.zoomTrigger) == null ? void 0 : t.focus) == null || i.call(t), this.zoomTrigger = null;
+    e != null && e.open && e.close(), this.zoomOpen = !1, this.useFallbackDialog = !1, this.zoomIndex = null, this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), (r = (t = this.zoomTrigger) == null ? void 0 : t.focus) == null || r.call(t), this.zoomTrigger = null;
   }
   onGlobalKey(e) {
     e.key === "Escape" && this.zoomOpen && (e.preventDefault(), this.closeZoom());
@@ -964,7 +1146,7 @@ const D = class D extends R {
     t.add(e), this.brokenDetail = t;
   }
   designVars() {
-    const e = this.config || {}, t = I(e, "aem_"), i = Math.max(0, Math.min(3, S(e.aem_shadow, 1)));
+    const e = this.config || {}, t = z(e, "aem_"), r = Math.max(0, Math.min(3, S(e.aem_shadow, 1)));
     return {
       ...j(t),
       "--aem-stage-bg": String(e.aem_stage_bg || "#f3ece7"),
@@ -972,7 +1154,7 @@ const D = class D extends R {
       "--aem-line-color": String(e.aem_line_color || "#c4a99a"),
       "--aem-active": String(e.aem_active_color || t.accent),
       "--aem-card-border": String(e.aem_card_border || t.border),
-      "--aem-shadow": Q(i),
+      "--aem-shadow": Q(r),
       "--aem-aspect": K(e.aem_aspect).replace("/", " / "),
       "--aem-max-width": `${S(e.aem_max_width, 420)}px`
     };
@@ -981,8 +1163,8 @@ const D = class D extends R {
     return this.hoverIndex ?? this.activeIndex;
   }
   renderSpot(e) {
-    const t = this.highlightIndex(), i = this.featuredSet.has(e.index), a = this.showNumbers && e.show_number, l = e.spot_color || void 0;
-    return o`
+    const t = this.highlightIndex(), r = this.featuredSet.has(e.index), a = this.showNumbers && e.show_number, d = e.spot_color || void 0;
+    return i`
       <button
         type="button"
         class=${x({
@@ -990,12 +1172,12 @@ const D = class D extends R {
       "aem-spot--pulse": this.enablePulse,
       "aem-spot--active": this.activeIndex === e.index,
       "aem-spot--hover": this.hoverIndex === e.index,
-      "aem-spot--featured": i
+      "aem-spot--featured": r
     })}
-        style=${$({
+        style=${k({
       left: `${e.pos_x}%`,
       top: `${e.pos_y}%`,
-      ...l ? { color: l } : {},
+      ...d ? { color: d } : {},
       ...this.entered ? { animationDelay: `${80 + e.index * 55}ms` } : {}
     })}
         data-index=${e.index}
@@ -1004,15 +1186,15 @@ const D = class D extends R {
         @pointerenter=${() => this.setHover(e.index)}
         @pointerleave=${() => this.setHover(null)}
         @focus=${() => this.setHover(e.index)}
-        @blur=${(d) => {
-      const m = d.relatedTarget;
+        @blur=${(c) => {
+      const m = c.relatedTarget;
       m && this.renderRoot.contains(m) || this.setHover(null);
     }}
         @click=${() => this.toggleActive(e.index)}
-        @keydown=${(d) => this.onSpotKeydown(d, e.index)}
+        @keydown=${(c) => this.onSpotKeydown(c, e.index)}
       >
         <span class="aem-spot__ring">
-          ${a ? o`<span class="aem-spot__num">${e.index + 1}</span>` : o`<span class="aem-spot__core" aria-hidden="true"></span>`}
+          ${a ? i`<span class="aem-spot__num">${e.index + 1}</span>` : i`<span class="aem-spot__core" aria-hidden="true"></span>`}
         </span>
         <span
           class=${x({
@@ -1025,8 +1207,8 @@ const D = class D extends R {
     `;
   }
   renderCard(e) {
-    const t = this.featuredSet.has(e.index), i = this.enableDetailImages && e.image && !this.brokenDetail.has(e.index), a = M(e.method), l = a.ar ? c(a.ar, a.en) : "", d = e.btn_text || c("عرض المنتج", "View product"), m = z(e.product_url) ? e.product_url : "";
-    return o`
+    const t = this.featuredSet.has(e.index), r = this.enableDetailImages && e.image && !this.brokenDetail.has(e.index), a = M(e.method), d = a.ar ? l(a.ar, a.en) : "", c = e.btn_text || l("عرض المنتج", "View product"), m = I(e.product_url) ? e.product_url : "";
+    return i`
       <article
         class=${x({
       "aem-card": !0,
@@ -1052,8 +1234,8 @@ const D = class D extends R {
       (n.key === "Enter" || n.key === " ") && (n.preventDefault(), this.toggleActive(e.index));
     }}
       >
-        ${t && e.badge ? o`<span class="aem-badge">${e.badge}</span>` : s}
-        ${i ? o`<div class="aem-card__media">
+        ${t && e.badge ? i`<span class="aem-badge">${e.badge}</span>` : s}
+        ${r ? i`<div class="aem-card__media">
               <img
                 src=${e.image}
                 alt=${e.alt || e.name}
@@ -1061,56 +1243,56 @@ const D = class D extends R {
                 decoding="async"
                 @error=${() => this.markBrokenDetail(e.index)}
               />
-              ${this.enableZoom ? o`<button
+              ${this.enableZoom ? i`<button
                     type="button"
                     class="aem-card__zoom"
-                    aria-label=${c("تكبير التفصيلة", "Zoom detail")}
+                    aria-label=${l("تكبير التفصيلة", "Zoom detail")}
                     @click=${(n) => {
       n.stopPropagation(), this.openZoom(e.index, n.currentTarget);
     }}
                   ></button>` : s}
             </div>` : s}
         <h3 class="aem-card__title">${e.name}</h3>
-        ${e.desc ? o`<p class="aem-card__desc">${e.desc}</p>` : s}
-        ${e.stitch_type || e.thread || l || e.duration || e.extra ? o`<div class="aem-meta">
-              ${e.stitch_type ? o`<div>
-                    <strong>${c("التطريز", "Stitch")}:</strong> ${e.stitch_type}
+        ${e.desc ? i`<p class="aem-card__desc">${e.desc}</p>` : s}
+        ${e.stitch_type || e.thread || d || e.duration || e.extra ? i`<div class="aem-meta">
+              ${e.stitch_type ? i`<div>
+                    <strong>${l("التطريز", "Stitch")}:</strong> ${e.stitch_type}
                   </div>` : s}
-              ${e.thread ? o`<div>
-                    <strong>${c("الخيط / الخامة", "Thread / material")}:</strong>
+              ${e.thread ? i`<div>
+                    <strong>${l("الخيط / الخامة", "Thread / material")}:</strong>
                     ${e.thread}
                   </div>` : s}
-              ${l ? o`<div>
-                    <strong>${c("التنفيذ", "Method")}:</strong> ${l}
+              ${d ? i`<div>
+                    <strong>${l("التنفيذ", "Method")}:</strong> ${d}
                   </div>` : s}
-              ${e.duration ? o`<div>
-                    <strong>${c("المدة", "Duration")}:</strong> ${e.duration}
+              ${e.duration ? i`<div>
+                    <strong>${l("المدة", "Duration")}:</strong> ${e.duration}
                   </div>` : s}
-              ${e.extra ? o`<div>${e.extra}</div>` : s}
+              ${e.extra ? i`<div>${e.extra}</div>` : s}
             </div>` : s}
-        ${m ? o`<a
+        ${m ? i`<a
               class="fs-btn aem-card__link"
               href=${m}
               target=${_(this.openNewTab ? "_blank" : void 0)}
               rel=${_(this.openNewTab ? "noopener noreferrer" : void 0)}
               @click=${(n) => n.stopPropagation()}
-              >${d}</a
+              >${c}</a
             >` : s}
       </article>
     `;
   }
   renderLines() {
-    return !this.isDesktop || !this.enableLines || !this.lines.length ? s : (this.highlightIndex(), o`
+    return !this.isDesktop || !this.enableLines || !this.lines.length ? s : (this.highlightIndex(), i`
       <svg class="aem-lines" aria-hidden="true" focusable="false">
         ${this.lines.map(
-      (e) => o`<path
+      (e) => i`<path
             class=${x({
         "aem-line": !0,
         "aem-line--active": this.activeIndex === e.index,
         "aem-line--hover": this.hoverIndex === e.index
       })}
             d=${e.d}
-            style=${this.entered ? $({
+            style=${this.entered ? k({
         animationDelay: `${350 + e.index * 40}ms`
       }) : s}
           />`
@@ -1119,13 +1301,13 @@ const D = class D extends R {
     `);
   }
   renderStage() {
-    const e = this.config || {}, t = u(e.aem_image_alt).trim() || c("عباية", "Abaya");
-    return o`
+    const e = this.config || {}, t = u(e.aem_image_alt).trim() || l("عباية", "Abaya");
+    return i`
       <div class="aem-stage-wrap">
         <div class="aem-stage">
           <div class="aem-stage__ornament" aria-hidden="true"></div>
           <div class="aem-stage__img-wrap">
-            ${this.brokenMain ? s : o`<img
+            ${this.brokenMain ? s : i`<img
                   class="aem-stage__img"
                   src=${this.mainImage}
                   alt=${t}
@@ -1136,30 +1318,30 @@ const D = class D extends R {
                 />`}
           </div>
           <div class="aem-spots">
-            ${this.details.map((i) => this.renderSpot(i))}
+            ${this.details.map((r) => this.renderSpot(r))}
           </div>
         </div>
       </div>
     `;
   }
   renderColSlot(e, t) {
-    const i = t && F(t) === e;
-    return o`
+    const r = t && F(t) === e;
+    return i`
       <div class="aem-col aem-col--${e}">
-        ${i && t ? o`<div class="aem-card-slot aem-card-slot--in">
+        ${r && t ? i`<div class="aem-card-slot aem-card-slot--in">
               ${this.renderCard(t)}
-            </div>` : o`<div class="aem-col__placeholder" aria-hidden="true"></div>`}
+            </div>` : i`<div class="aem-col__placeholder" aria-hidden="true"></div>`}
       </div>
     `;
   }
   renderDesktop() {
     var a;
-    const e = this.focusIndex(), t = e != null && this.details[e] || null, i = this.highlightIndex();
-    return o`
+    const e = this.focusIndex(), t = e != null && this.details[e] || null, r = this.highlightIndex();
+    return i`
       <div
         class=${x({
       "aem-desk": !0,
-      "aem-desk--dim": i != null,
+      "aem-desk--dim": r != null,
       "aem-desk--compact": w((a = this.config) == null ? void 0 : a.aem_layout, "map") === "compact",
       "aem-desk--focus": t != null
     })}
@@ -1175,7 +1357,7 @@ const D = class D extends R {
             aria-live="polite"
             aria-hidden=${t != null ? "true" : "false"}
           >
-            ${c(
+            ${l(
       "اضغطي على رقم التفصيلة لعرض تفاصيلها",
       "Tap a detail number to view it"
     )}
@@ -1188,27 +1370,27 @@ const D = class D extends R {
   }
   renderMobile() {
     const e = this.activeIndex != null ? this.details[this.activeIndex] : null, t = this.details.length > 1;
-    return o`
+    return i`
       <div class="aem-mobile">
         ${this.renderStage()}
         <div class="aem-mobile__live" aria-live="polite">
-          ${e ? e.name : c(
+          ${e ? e.name : l(
       "اضغطي على رقم التفصيلة",
       "Tap a detail number"
     )}
         </div>
-        ${e ? o`<div class="aem-mobile__card aem-card-slot aem-card-slot--in">
+        ${e ? i`<div class="aem-mobile__card aem-card-slot aem-card-slot--in">
               ${this.renderCard(e)}
-            </div>` : o`<p class="aem-pick-hint">
-              ${c(
+            </div>` : i`<p class="aem-pick-hint">
+              ${l(
       "اختاري تفصيلة من الأرقام على الصورة",
       "Choose a detail from the numbers on the image"
     )}
             </p>`}
-        ${t && e ? o`<div class="aem-nav">
+        ${t && e ? i`<div class="aem-nav">
               <button
                 type="button"
-                aria-label=${c("السابق", "Previous")}
+                aria-label=${l("السابق", "Previous")}
                 ?disabled=${e.index <= 0}
                 @click=${() => this.setActive(Math.max(0, e.index - 1))}
               >
@@ -1216,7 +1398,7 @@ const D = class D extends R {
               </button>
               <button
                 type="button"
-                aria-label=${c("التالي", "Next")}
+                aria-label=${l("التالي", "Next")}
                 ?disabled=${e.index >= this.details.length - 1}
                 @click=${() => this.setActive(
       Math.min(this.details.length - 1, e.index + 1)
@@ -1232,44 +1414,44 @@ const D = class D extends R {
     if (!this.zoomOpen || this.zoomIndex == null) return s;
     const e = this.details[this.zoomIndex];
     if (!e) return s;
-    const t = M(e.method), i = t.ar ? c(t.ar, t.en) : "", a = z(e.product_url) ? e.product_url : "", l = e.btn_text || c("عرض المنتج", "View product"), d = o`
+    const t = M(e.method), r = t.ar ? l(t.ar, t.en) : "", a = I(e.product_url) ? e.product_url : "", d = e.btn_text || l("عرض المنتج", "View product"), c = i`
       <div class="aem-dialog__inner">
         <button
           type="button"
           class="aem-dialog__close"
-          aria-label=${c("إغلاق", "Close")}
+          aria-label=${l("إغلاق", "Close")}
           @click=${() => this.closeZoom()}
         >
           ✕
         </button>
         <img class="aem-dialog__img" src=${e.image} alt=${e.alt || e.name} />
         <h3 class="aem-dialog__title">${e.name}</h3>
-        ${e.desc ? o`<p class="aem-dialog__desc">${e.desc}</p>` : s}
-        ${e.stitch_type || i ? o`<div class="aem-meta">
-              ${e.stitch_type ? o`<div>
-                    <strong>${c("التطريز", "Stitch")}:</strong> ${e.stitch_type}
+        ${e.desc ? i`<p class="aem-dialog__desc">${e.desc}</p>` : s}
+        ${e.stitch_type || r ? i`<div class="aem-meta">
+              ${e.stitch_type ? i`<div>
+                    <strong>${l("التطريز", "Stitch")}:</strong> ${e.stitch_type}
                   </div>` : s}
-              ${i ? o`<div>
-                    <strong>${c("التنفيذ", "Method")}:</strong> ${i}
+              ${r ? i`<div>
+                    <strong>${l("التنفيذ", "Method")}:</strong> ${r}
                   </div>` : s}
             </div>` : s}
-        ${a ? o`<a
+        ${a ? i`<a
               class="fs-btn"
               href=${a}
               target=${_(this.openNewTab ? "_blank" : void 0)}
               rel=${_(this.openNewTab ? "noopener noreferrer" : void 0)}
-              >${l}</a
+              >${d}</a
             >` : s}
       </div>
     `;
-    return this.useFallbackDialog ? o`<div
+    return this.useFallbackDialog ? i`<div
         class="aem-fs-fallback"
         @click=${(m) => {
       m.target === m.currentTarget && this.closeZoom();
     }}
       >
-        ${d}
-      </div>` : o`<dialog
+        ${c}
+      </div>` : i`<dialog
       class="aem-dialog"
       @click=${(m) => {
       m.target === this.dialogEl && this.closeZoom();
@@ -1278,41 +1460,41 @@ const D = class D extends R {
       this.zoomOpen && this.closeZoom();
     }}
     >
-      ${d}
+      ${c}
     </dialog>`;
   }
   render() {
     if (!this.mainImage) return s;
-    const e = this.config || {}, i = I(e, "aem_").animate && !k(), a = f(e.aem_full_width, !1), l = f(e.aem_show_title, !0), d = f(e.aem_show_desc, !0), m = f(e.aem_show_btn, !0), n = l ? u(e.aem_title).trim() : "", p = d ? u(e.aem_desc).trim() : "", v = O(e.aem_product_url), y = u(e.aem_btn_text).trim() || c("عرض العباية", "View abaya"), A = m && z(v);
-    return o`
+    const e = this.config || {}, r = z(e, "aem_").animate && !$(), a = g(e.aem_full_width, !1), d = g(e.aem_show_title, !0), c = g(e.aem_show_desc, !0), m = g(e.aem_show_btn, !0), n = d ? u(e.aem_title).trim() : "", p = c ? u(e.aem_desc).trim() : "", v = O(e.aem_product_url), y = u(e.aem_btn_text).trim() || l("عرض العباية", "View abaya"), A = m && I(v);
+    return i`
       <section
         class=${x({
       "fs-section": !0,
       "fs-section--full": a,
-      "fs-animate": i,
+      "fs-animate": r,
       "aem--enter": this.entered
     })}
-        style=${$(this.designVars())}
-        aria-label=${n || c("خريطة تطريز العباية", "Abaya embroidery map")}
+        style=${k(this.designVars())}
+        aria-label=${n || l("خريطة تطريز العباية", "Abaya embroidery map")}
       >
         <div class="fs-container">
-          ${n || p ? o`<header class="fs-header">
-                ${n ? o`<h2 class="fs-title">${n}</h2>` : s}
-                ${p ? o`<p class="fs-desc">${p}</p>` : s}
+          ${n || p ? i`<header class="fs-header">
+                ${n ? i`<h2 class="fs-title">${n}</h2>` : s}
+                ${p ? i`<p class="fs-desc">${p}</p>` : s}
               </header>` : s}
 
           <div class="aem-shell">
             ${this.isDesktop ? this.renderDesktop() : this.renderMobile()}
-            ${this.activeIndex != null ? o`<div class="aem-clear-wrap">
+            ${this.activeIndex != null ? i`<div class="aem-clear-wrap">
                   <button
                     type="button"
                     class="aem-clear"
                     @click=${() => this.clearActive()}
                   >
-                    ${c("مسح التحديد", "Clear selection")}
+                    ${l("مسح التحديد", "Clear selection")}
                   </button>
                 </div>` : s}
-            ${A ? o`<div class="aem-cta">
+            ${A ? i`<div class="aem-cta">
                   <a
                     class="fs-btn"
                     href=${v}
@@ -1340,43 +1522,43 @@ D.styles = [
     `
 ];
 let h = D;
-g([
+b([
   N({ type: Object })
 ], h.prototype, "config");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "activeIndex");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "hoverIndex");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "lines");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "entered");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "zoomOpen");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "zoomIndex");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "useFallbackDialog");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "brokenMain");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "brokenDetail");
-g([
-  b()
+b([
+  f()
 ], h.prototype, "isDesktop");
-g([
+b([
   E(".aem-desk")
 ], h.prototype, "deskEl");
-g([
+b([
   E("dialog.aem-dialog")
 ], h.prototype, "dialogEl");
 typeof h < "u" && h.registerSallaComponent("salla-abaya-embroidery-map");

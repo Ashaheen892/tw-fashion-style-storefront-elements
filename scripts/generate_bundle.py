@@ -252,25 +252,23 @@ def products_picker(
     desc=None,
     conditions=None,
 ):
-    """Saji-style Products dropdown (theme/twilight-bundles compatible)."""
+    """Saji-style Products picker (matches theme Saji's «المنتجات المختارة»)."""
     return with_conditions(
         {
-            "type": "items",
-            "icon": "sicon-keyboard_arrow_down",
-            "label": label,
             "id": fid,
+            "icon": "sicon-keyboard_arrow_down",
+            "type": "items",
+            "label": label,
             "format": "dropdown-list",
-            "description": desc,
-            "selected": [],
+            "source": "products",
             "options": [],
             "required": required,
-            "multichoice": multichoice,
-            "source": "products",
-            "searchable": True,
+            "selected": [],
             "maxLength": max_length,
             "minLength": min_length,
-            "value": [],
-            "placeholder": "البحث في قائمة المنتجات...",
+            "searchable": True,
+            "description": desc,
+            "multichoice": multichoice,
             "key": u(),
         },
         conditions,
@@ -288,7 +286,12 @@ def dropdown_manual(
     desc=None,
     conditions=None,
 ):
-    """Raed-style Manual dropdown (products source type, etc.)."""
+    """Saji-style Manual dropdown (products source type, etc.).
+
+    Mirrors theme Saji's «نوع المنتجات» field exactly: no `value`/`searchable`
+    keys — the selection lives in `selected`, which is what Salla's editor uses
+    to evaluate `conditions` on dependent fields.
+    """
     opts = [{"key": val, "label": lbl, "value": val} for lbl, val in options]
     selected = next((o for o in opts if o["value"] == selected_value), opts[0])
     return with_conditions(
@@ -302,10 +305,8 @@ def dropdown_manual(
             "options": opts,
             "required": False,
             "selected": [selected],
-            "value": None,
             "description": desc,
             "multichoice": multichoice,
-            "searchable": False,
             "key": u(),
         },
         conditions,
@@ -313,6 +314,7 @@ def dropdown_manual(
 
 
 def categories_picker(fid, label="التصنيف", *, conditions=None, desc=None):
+    """Saji-style categories picker (matches theme Saji's «التصنيف»)."""
     return with_conditions(
         {
             "id": fid,
@@ -324,9 +326,7 @@ def categories_picker(fid, label="التصنيف", *, conditions=None, desc=None
             "options": [],
             "required": False,
             "selected": [],
-            "value": [],
             "searchable": True,
-            "multichoice": False,
             "description": desc,
             "key": u(),
         },
@@ -1020,7 +1020,6 @@ def build_vab():
             ),
             image(f"{p}map_image", "صورة خريطة البوتيك", IMG["boutique"]),
             boolean(f"{p}enable_pulse", "تفعيل نبض النقاط", True),
-            text(f"{p}currency", "العملة", "ر.س", max_len="20"),
             collection(
                 f"{p}hotspots",
                 "نقطة",

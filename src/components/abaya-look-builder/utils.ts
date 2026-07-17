@@ -203,6 +203,7 @@ export function draftToLookItem(draft: LookItemDraft): LookItem {
     product_id: draft.product_id,
     is_default: draft.is_default,
     color_note: draft.color_note,
+    rating: 0,
   };
 }
 
@@ -256,6 +257,7 @@ export function mergeApiProduct(draft: LookItemDraft, apiRaw: unknown): LookItem
     product_id: draft.product_id || snap?.id || '',
     is_default: draft.is_default,
     color_note: draft.color_note,
+    rating: snap?.rating || 0,
   };
 }
 

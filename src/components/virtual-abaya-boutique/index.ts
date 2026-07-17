@@ -1,8 +1,9 @@
 import { css, html, LitElement, nothing } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import {
+  getStoreCurrency,
   isTruthy,
   isValidHref,
   prefersReducedMotion,
@@ -11,15 +12,11 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
-import {
-  resolveProductsSliderAttrs,
-  type ProductsSliderAttrs,
-} from '../../utils/productPicker.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
+import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
 import {
   ensureConfig,
-  formatPrice,
   parseHotspots,
   resolveSpotProducts,
   spotProductsCacheKey,
@@ -33,10 +30,15 @@ export default class VirtualAbayaBoutique extends LitElement {
   @state() private activeId: string | null = null;
   @state() private products: BoutiqueProduct[] = [];
   @state() private productsLoading = false;
-  @state() private nativeSliderReady = false;
+  @state() private canScrollRail = false;
 
   private productCache = new Map<string, BoutiqueProduct[]>();
   private loadToken = 0;
+
+  @query('.vab-products') private railEl?: HTMLElement;
+  private autoplayTimer?: ReturnType<typeof setInterval>;
+  private autoplayPaused = false;
+  private railObserver?: ResizeObserver;
 
   private boundLangHandler = () => this.requestUpdate();
   private boundKeyHandler = (e: KeyboardEvent) => {
@@ -58,29 +60,15 @@ export default class VirtualAbayaBoutique extends LitElement {
     super.connectedCallback();
     window.addEventListener('language-changed', this.boundLangHandler);
     window.addEventListener('keydown', this.boundKeyHandler);
-    this.watchNativeSlider();
     this.ensureActiveSpot();
-  }
-
-  private watchNativeSlider(): void {
-    if (typeof customElements === 'undefined') return;
-    if (customElements.get('salla-products-slider')) {
-      this.nativeSliderReady = true;
-      return;
-    }
-    customElements
-      .whenDefined('salla-products-slider')
-      .then(() => {
-        this.nativeSliderReady = true;
-      })
-      .catch(() => {
-        /* keep custom product rail */
-      });
   }
 
   disconnectedCallback(): void {
     window.removeEventListener('language-changed', this.boundLangHandler);
     window.removeEventListener('keydown', this.boundKeyHandler);
+    this.stopAutoplay();
+    this.railObserver?.disconnect();
+    this.railObserver = undefined;
     super.disconnectedCallback();
   }
 
@@ -89,7 +77,97 @@ export default class VirtualAbayaBoutique extends LitElement {
       this.productCache.clear();
       this.ensureActiveSpot();
     }
+    if (changed.has('products') || changed.has('productsLoading')) {
+      requestAnimationFrame(() => {
+        this.observeRail();
+        this.restartAutoplay();
+      });
+    }
   }
+
+  private observeRail(): void {
+    const rail = this.railEl;
+    if (!rail) {
+      this.canScrollRail = false;
+      return;
+    }
+    if (!this.railObserver) {
+      this.railObserver = new ResizeObserver(() => this.measureRail());
+    } else {
+      this.railObserver.disconnect();
+    }
+    this.railObserver.observe(rail);
+    this.measureRail();
+  }
+
+  private measureRail(): void {
+    const rail = this.railEl;
+    const can = !!rail && rail.scrollWidth - rail.clientWidth > 2;
+    if (can !== this.canScrollRail) {
+      this.canScrollRail = can;
+      if (!can) this.stopAutoplay();
+    }
+  }
+
+  private railStep(): number {
+    const rail = this.railEl;
+    if (!rail) return 0;
+    const first = rail.firstElementChild as HTMLElement | null;
+    const gap = parseFloat(getComputedStyle(rail).columnGap || '0') || 11;
+    return first ? first.getBoundingClientRect().width + gap : rail.clientWidth * 0.8;
+  }
+
+  private get railIsRtl(): boolean {
+    return getComputedStyle(this).direction === 'rtl';
+  }
+
+  private scrollRail(physicalDelta: number): void {
+    const rail = this.railEl;
+    if (!rail) return;
+    rail.scrollBy({ left: physicalDelta, behavior: 'smooth' });
+  }
+
+  private advanceRail(): void {
+    const rail = this.railEl;
+    if (!rail) return;
+    const maxScroll = rail.scrollWidth - rail.clientWidth;
+    if (maxScroll <= 2) return;
+    const current = Math.abs(rail.scrollLeft);
+    if (current >= maxScroll - 2) {
+      rail.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+    const step = this.railStep();
+    this.scrollRail(this.railIsRtl ? -step : step);
+  }
+
+  private restartAutoplay(): void {
+    this.stopAutoplay();
+    if (prefersReducedMotion() || this.products.length < 2) return;
+    // wait for the rail to render before measuring overflow
+    requestAnimationFrame(() => {
+      const rail = this.railEl;
+      if (!rail || rail.scrollWidth - rail.clientWidth <= 2) return;
+      this.autoplayTimer = setInterval(() => {
+        if (!this.autoplayPaused) this.advanceRail();
+      }, 3500);
+    });
+  }
+
+  private stopAutoplay(): void {
+    if (this.autoplayTimer) {
+      clearInterval(this.autoplayTimer);
+      this.autoplayTimer = undefined;
+    }
+  }
+
+  private pauseAutoplay = (): void => {
+    this.autoplayPaused = true;
+  };
+
+  private resumeAutoplay = (): void => {
+    this.autoplayPaused = false;
+  };
 
   private ensureActiveSpot(): void {
     const hotspots = this.hotspots;
@@ -113,7 +191,7 @@ export default class VirtualAbayaBoutique extends LitElement {
   }
 
   private get currency(): string {
-    return String(this.cfg.vab_currency || 'ر.س').trim() || 'ر.س';
+    return getStoreCurrency();
   }
 
   private selectSpot(id: string): void {
@@ -139,14 +217,6 @@ export default class VirtualAbayaBoutique extends LitElement {
   private async loadProductsForActive(): Promise<void> {
     const spot = this.hotspots.find((h) => h.spot_id === this.activeId);
     if (!spot) {
-      this.products = [];
-      this.productsLoading = false;
-      return;
-    }
-
-    // Native Salla slider loads its own products — avoid a second fetch
-    // that can pop demo alerts مثل «حقل التصنيفات مطلوب».
-    if (this.sliderAttrsForSpot(spot) && this.nativeSliderReady) {
       this.products = [];
       this.productsLoading = false;
       return;
@@ -372,105 +442,103 @@ export default class VirtualAbayaBoutique extends LitElement {
     `;
   }
 
-  private sliderAttrsForSpot(spot: Hotspot): ProductsSliderAttrs | null {
-    return resolveProductsSliderAttrs({
-      source: spot.products_source,
-      chosen: spot.chosen_products,
-      category: spot.category,
-      limit: spot.products_limit,
-      fallbackSelectedWhenChosen: true,
-    });
-  }
-
-  /** Official Salla product cards (same path as Raed / Saji / reference zip). */
-  private renderSallaSlider(attrs: ProductsSliderAttrs, spotId: string) {
-    return html`
-      <div
-        class="vab-slider"
-        aria-label=${t('منتجات المنطقة', 'Zone products')}
-      >
-        <salla-products-slider
-          slider-id=${`vab-${spotId}-slider`}
-          source=${attrs.source}
-          source-value=${attrs.sourceValue}
-          limit=${String(attrs.limit)}
-          autoplay
-        ></salla-products-slider>
-      </div>
-    `;
-  }
-
   private renderProductRail(products: BoutiqueProduct[]) {
     if (!products.length) return nothing;
     const currency = this.currency;
 
+    const step = () => this.railStep() || 200;
+    const showNav = this.canScrollRail;
+
     return html`
       <div
-        class="vab-products"
-        role="list"
-        aria-label=${t('منتجات المنطقة', 'Zone products')}
+        class=${classMap({ 'vab-rail': true, 'has-nav': showNav })}
+        @pointerenter=${this.pauseAutoplay}
+        @pointerleave=${this.resumeAutoplay}
+        @focusin=${this.pauseAutoplay}
+        @focusout=${this.resumeAutoplay}
       >
-        ${products.map((product) => {
-          const label = product.name || t('منتج', 'Product');
-          return html`
-            <a
-              class=${classMap({
-                'vab-product': true,
-                'vab-product--link': isValidHref(product.url),
-              })}
-              role="listitem"
-              href=${isValidHref(product.url) ? product.url : '#'}
-              @click=${(e: Event) => {
-                if (!isValidHref(product.url)) e.preventDefault();
-              }}
+        ${showNav
+          ? html`<button
+              type="button"
+              class="vab-rail__nav vab-rail__nav--prev"
+              aria-label=${t('السابق', 'Previous')}
+              @click=${() => this.scrollRail(-step())}
             >
-              <div class="vab-product__media">
-                ${product.image
-                  ? html`<img
-                      src=${product.image}
-                      alt=${label}
-                      loading="lazy"
-                      decoding="async"
-                    />`
-                  : html`<span class="vab-product__placeholder" aria-hidden="true"></span>`}
-              </div>
-              <div class="vab-product__body">
-                <span class="vab-product__name">${label}</span>
-                ${product.price > 0
-                  ? html`<span class="vab-product__price">
-                      ${formatPrice(product.price, currency)}
-                      ${product.old_price > product.price
-                        ? html`<s>${formatPrice(product.old_price, currency)}</s>`
-                        : nothing}
-                    </span>`
-                  : nothing}
-              </div>
-            </a>
-          `;
-        })}
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M15 5l-7 7 7 7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>`
+          : nothing}
+
+        <div
+          class="vab-products"
+          role="list"
+          aria-label=${t('منتجات المنطقة', 'Zone products')}
+        >
+          ${products.map(
+            (product) => html`<div class="vab-product-slot" role="listitem">
+              ${renderProductCard(
+                {
+                  id: product.id,
+                  name: product.name || t('منتج', 'Product'),
+                  image: product.image,
+                  url: product.url,
+                  price: product.price,
+                  old_price: product.old_price,
+                },
+                {
+                  currency,
+                  wishlist: true,
+                  addToCart: true,
+                }
+              )}
+            </div>`
+          )}
+        </div>
+
+        ${showNav
+          ? html`<button
+              type="button"
+              class="vab-rail__nav vab-rail__nav--next"
+              aria-label=${t('التالي', 'Next')}
+              @click=${() => this.scrollRail(step())}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M9 5l7 7-7 7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>`
+          : nothing}
       </div>
     `;
   }
 
   private renderActiveDetail(spot: Hotspot) {
-    const slider = this.sliderAttrsForSpot(spot);
     const href = isValidHref(spot.spot_url)
       ? spot.spot_url
       : this.products.find((p) => isValidHref(p.url))?.url || '';
 
-    const useNativeSlider = Boolean(slider && this.nativeSliderReady);
-    const productsBlock = useNativeSlider
-      ? this.renderSallaSlider(slider!, spot.spot_id)
-      : this.productsLoading
-        ? html`<p class="vab-products__status" role="status">
-            ${t('جاري تحميل المنتجات...', 'Loading products...')}
-          </p>`
-        : this.renderProductRail(this.products);
+    const count = this.products.length;
+    const productsBlock = this.productsLoading
+      ? html`<p class="vab-products__status" role="status">
+          ${t('جاري تحميل المنتجات...', 'Loading products...')}
+        </p>`
+      : this.renderProductRail(this.products);
 
-    const empty =
-      !useNativeSlider &&
-      !this.productsLoading &&
-      !this.products.length;
+    const empty = !this.productsLoading && !this.products.length;
 
     return html`
       <div
@@ -478,6 +546,17 @@ export default class VirtualAbayaBoutique extends LitElement {
         aria-live="polite"
         aria-label=${spot.spot_name || t('منتجات المنطقة', 'Zone products')}
       >
+        ${!this.productsLoading && count
+          ? html`<div class="vab-detail__head">
+              <span class="vab-detail__title">
+                ${spot.spot_name || t('منتجات المنطقة', 'Zone products')}
+              </span>
+              <span class="vab-detail__count">
+                ${count} ${count === 1 ? t('منتج', 'product') : t('منتجات', 'products')}
+              </span>
+            </div>`
+          : nothing}
+
         ${productsBlock}
 
         ${empty

@@ -14,6 +14,7 @@ import {
 import { localizedString } from '../../utils/localizedString.js';
 import { addProductsToCart } from '../../utils/sallaApi.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
+import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
 import {
   buildLookGroups,
@@ -302,56 +303,28 @@ export default class AbayaLookBuilder extends LitElement {
                             <div class="alb-grid" role="list">
                               ${current.items.map((item) => {
                                 const selected = this.selections[current.key] === item.id;
-                                return html`
-                                  <button
-                                    type="button"
-                                    class="alb-item"
-                                    role="listitem"
-                                    aria-pressed=${selected ? 'true' : 'false'}
-                                    @click=${() => this.selectItem(current.key, item.id)}
-                                  >
-                                    <span class="alb-item__check" aria-hidden="true">✓</span>
-                                    <div class="alb-item__media">
-                                      ${item.image
-                                        ? html`<img
-                                            class="alb-item__img"
-                                            src=${item.image}
-                                            alt=${item.piece_name}
-                                            loading="lazy"
-                                            decoding="async"
-                                          />`
-                                        : nothing}
-                                      <span class="alb-item__store" aria-hidden="true">
-                                        ${t('من المتجر', 'Store')}
-                                      </span>
-                                    </div>
-                                    <div class="alb-item__body">
-                                      <p class="alb-item__name">${item.piece_name}</p>
-                                      ${item.color_note
-                                        ? html`<p class="alb-item__note">${item.color_note}</p>`
-                                        : nothing}
-                                      ${item.price > 0
-                                        ? html`<span class="alb-item__price">
-                                            ${formatPrice(item.price, currency)}
-                                            ${item.old_price > item.price
-                                              ? html`<span class="alb-item__old">
-                                                  ${formatPrice(item.old_price, currency)}
-                                                </span>`
-                                              : nothing}
-                                          </span>`
-                                        : nothing}
-                                      ${item.url
-                                        ? html`<a
-                                            class="alb-item__link"
-                                            href=${item.url}
-                                            @click=${(e: Event) => e.stopPropagation()}
-                                          >
-                                            ${t('عرض المنتج', 'View product')}
-                                          </a>`
-                                        : nothing}
-                                    </div>
-                                  </button>
-                                `;
+                                return html`<div class="alb-slot" role="listitem">
+                                  ${renderProductCard(
+                                    {
+                                      id: item.product_id,
+                                      name: item.piece_name,
+                                      image: item.image,
+                                      url: item.url,
+                                      price: item.price,
+                                      old_price: item.old_price,
+                                      rating: item.rating,
+                                      subtitle: item.color_note,
+                                    },
+                                    {
+                                      currency,
+                                      selectable: true,
+                                      selected,
+                                      wishlist: true,
+                                      viewLink: true,
+                                      onSelect: () => this.selectItem(current.key, item.id),
+                                    }
+                                  )}
+                                </div>`;
                               })}
                             </div>
                           `

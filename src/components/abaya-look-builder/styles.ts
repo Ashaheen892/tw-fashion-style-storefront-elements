@@ -104,105 +104,13 @@ export const componentStyles = css`
     }
   }
 
-  .alb-item {
-    position: relative;
-    display: grid;
-    gap: 0;
-    padding: 0;
-    overflow: hidden;
-    text-align: start;
-    cursor: pointer;
-    border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 18px) * 0.65);
-    background: var(--card-bg, #fff);
-    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.06);
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  .alb-slot {
+    display: flex;
+    min-width: 0;
   }
 
-  .alb-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(43, 33, 28, 0.1);
-  }
-
-  .alb-item[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent),
-      0 14px 30px rgba(43, 33, 28, 0.1);
-  }
-
-  .alb-item__check {
-    position: absolute;
-    top: 0.5rem;
-    inset-inline-end: 0.5rem;
-    z-index: 2;
-    width: 1.45rem;
-    height: 1.45rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    box-shadow: 0 6px 14px rgba(43, 33, 28, 0.2);
-    opacity: 0;
-    transform: scale(0.85);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-
-  .alb-item[aria-pressed='true'] .alb-item__check {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .alb-item__media {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    background: linear-gradient(145deg, #3a2c26, #1c1613);
-  }
-
-  .alb-item__img {
+  .alb-slot > .fs-product-card {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .alb-item__body {
-    padding: 0.65rem 0.7rem 0.8rem;
-  }
-
-  .alb-item__name {
-    margin: 0 0 0.25rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text-color, #2b211c);
-  }
-
-  .alb-item__note {
-    margin: 0 0 0.35rem;
-    font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
-    line-height: 1.4;
-  }
-
-  .alb-item__price {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.3rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-  }
-
-  .alb-item__old {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--muted-color, #7a6a62);
-    text-decoration: line-through;
   }
 
   .alb-summary {
@@ -433,8 +341,6 @@ export const componentStyles = css`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .alb-item,
-    .alb-item__check,
     .alb-tab,
     .alb-mood-tile,
     .alb-copy-msg {

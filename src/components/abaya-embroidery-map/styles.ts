@@ -62,12 +62,32 @@ export const componentStyles = css`
 
   .aem-pick-hint {
     margin: 0;
-    min-height: 2.6rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.4rem;
+    padding: 0.4rem 0.95rem;
     text-align: center;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--muted-color, #7a6a62);
-    line-height: 1.55;
+    line-height: 1.5;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
+    border: 1px dashed color-mix(in srgb, var(--accent-color, #8b5e4b) 30%, transparent);
+  }
+
+  .aem-pick-hint::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent-color, #8b5e4b);
+    opacity: 0.7;
   }
 
   .aem-pick-hint--hidden {
@@ -103,24 +123,59 @@ export const componentStyles = css`
     width: 100%;
     aspect-ratio: var(--aem-aspect, 3 / 4);
     border-radius: var(--section-radius, 16px);
-    background: var(--aem-stage-bg, #f3ece7);
+    background:
+      radial-gradient(
+        120% 90% at 50% 0%,
+        color-mix(in srgb, var(--card-bg, #fff) 65%, transparent),
+        transparent 60%
+      ),
+      var(--aem-stage-bg, #f3ece7);
     border: 1px solid var(--border-color, #e8ddd6);
-    box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08));
+    box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
     overflow: hidden;
   }
 
   .aem-stage__ornament {
     position: absolute;
-    inset: 8%;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, transparent);
+    inset: 7%;
+    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 26%, transparent);
     border-radius: calc(var(--section-radius, 16px) * 0.7);
     pointer-events: none;
-    opacity: 0.55;
+    opacity: 0.6;
+  }
+
+  /* couture corner ticks on the ornament frame */
+  .aem-stage__ornament::before,
+  .aem-stage__ornament::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 0 solid color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
+    pointer-events: none;
+  }
+
+  .aem-stage__ornament::before {
+    top: -1px;
+    inset-inline-start: -1px;
+    border-top-width: 2px;
+    border-inline-start-width: 2px;
+    border-start-start-radius: 6px;
+  }
+
+  .aem-stage__ornament::after {
+    bottom: -1px;
+    inset-inline-end: -1px;
+    border-bottom-width: 2px;
+    border-inline-end-width: 2px;
+    border-end-end-radius: 6px;
   }
 
   .aem-stage__img-wrap {
     position: absolute;
-    inset: 0;
+    /* keep the abaya tucked inside the ornament frame (matches .aem-spots) */
+    inset: 8.5%;
     display: grid;
     place-items: center;
   }
@@ -141,7 +196,8 @@ export const componentStyles = css`
 
   .aem-spots {
     position: absolute;
-    inset: 0;
+    /* align the spot coordinate space with the inset image */
+    inset: 8.5%;
     pointer-events: none;
   }
 
@@ -176,11 +232,15 @@ export const componentStyles = css`
     height: 28px;
     border-radius: 50%;
     border: 2px solid currentColor;
-    background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #fff) 92%, transparent);
     display: grid;
     place-items: center;
-    box-shadow: 0 4px 14px rgba(43, 33, 28, 0.16);
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    box-shadow: 0 4px 14px rgba(43, 33, 28, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(2px);
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease,
+      color 0.22s ease;
   }
 
   .aem-spot__core {
@@ -196,9 +256,10 @@ export const componentStyles = css`
     display: grid;
     place-items: center;
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-color, #2b211c);
     line-height: 1;
+    transition: color 0.22s ease;
   }
 
   .aem-spot__num + .aem-spot__core {
@@ -217,10 +278,16 @@ export const componentStyles = css`
 
   .aem-spot--active .aem-spot__ring,
   .aem-spot--hover .aem-spot__ring {
-    transform: scale(1.12);
+    transform: scale(1.16);
     border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    box-shadow: 0 6px 18px color-mix(in srgb, var(--aem-active, #8b5e4b) 35%, transparent);
+    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--aem-active, #8b5e4b) 42%, transparent);
     color: var(--aem-active, var(--accent-color, #8b5e4b));
+  }
+
+  .aem-spot--active .aem-spot__num,
+  .aem-spot--hover .aem-spot__num {
+    color: #fff;
   }
 
   .aem-spot--featured .aem-spot__ring {
@@ -302,17 +369,30 @@ export const componentStyles = css`
     border: 1px solid var(--aem-card-border, var(--border-color, #e8ddd6));
     border-radius: var(--section-radius, 16px);
     box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08));
-    padding: 0.75rem;
+    padding: 0.85rem;
     display: grid;
-    gap: 0.55rem;
+    gap: 0.6rem;
     min-width: 0;
     cursor: pointer;
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease,
-      transform 0.22s ease,
+      transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
       opacity 0.28s ease;
     text-align: start;
+  }
+
+  /* accent hairline on the leading edge for a couture feel */
+  .aem-card::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.9rem;
+    inset-inline-start: 0;
+    width: 3px;
+    border-radius: 999px;
+    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    opacity: 0;
+    transition: opacity 0.24s ease;
   }
 
   .aem-card:focus {
@@ -326,13 +406,28 @@ export const componentStyles = css`
 
   .aem-card--active,
   .aem-card--hover {
-    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    box-shadow: 0 12px 32px color-mix(in srgb, var(--aem-active, #8b5e4b) 18%, transparent);
+    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--aem-card-border, #e8ddd6));
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--aem-active, #8b5e4b) 20%, transparent);
+  }
+
+  .aem-card--active::before,
+  .aem-card--hover::before {
+    opacity: 1;
+  }
+
+  .aem-card--hover:not(.aem-card--featured),
+  .aem-card--active:not(.aem-card--featured) {
+    transform: translateY(-3px);
   }
 
   .aem-card--featured {
-    padding: 0.9rem;
+    padding: 0.95rem;
     transform: scale(1.02);
+  }
+
+  .aem-card--featured.aem-card--hover,
+  .aem-card--featured.aem-card--active {
+    transform: scale(1.03) translateY(-2px);
   }
 
   .aem-card__media {
@@ -370,6 +465,34 @@ export const componentStyles = css`
     padding: 0;
   }
 
+  /* magnifier chip revealed on hover/focus */
+  .aem-card__zoom::after {
+    content: '⤢';
+    position: absolute;
+    inset-block-end: 0.5rem;
+    inset-inline-end: 0.5rem;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--card-bg, #fff) 82%, transparent);
+    color: var(--text-color, #2b211c);
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(43, 33, 28, 0.2);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transform: translateY(4px) scale(0.9);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .aem-card:hover .aem-card__zoom::after,
+  .aem-card__zoom:hover::after,
+  .aem-card__zoom:focus-visible::after {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
   .aem-card__zoom:focus-visible {
     outline: 2px solid var(--aem-active, #8b5e4b);
     outline-offset: -2px;
@@ -377,19 +500,26 @@ export const componentStyles = css`
 
   .aem-badge {
     display: inline-flex;
+    align-items: center;
     align-self: start;
-    padding: 0.2rem 0.55rem;
+    padding: 0.24rem 0.6rem;
     border-radius: 999px;
     font-size: 0.7rem;
-    font-weight: 700;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, #fff);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, #fff),
+      color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, #fff)
+    );
     color: var(--accent-color, #8b5e4b);
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color, #8b5e4b) 18%, transparent);
   }
 
   .aem-card__title {
     margin: 0;
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-size: 0.98rem;
+    font-weight: 800;
     line-height: 1.35;
     color: var(--text-color, #2b211c);
   }
@@ -397,41 +527,70 @@ export const componentStyles = css`
   .aem-card__desc {
     margin: 0;
     font-size: 0.82rem;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--muted-color, #7a6a62);
   }
 
   .aem-meta {
     display: grid;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: calc(var(--section-radius, 16px) * 0.5);
+    background: color-mix(in srgb, var(--aem-stage-bg, #f3ece7) 45%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--aem-card-border, #e8ddd6) 65%, transparent);
     font-size: 0.78rem;
+    line-height: 1.5;
     color: var(--muted-color, #7a6a62);
+  }
+
+  .aem-meta > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .aem-meta > div + div {
+    padding-top: 0.35rem;
+    border-top: 1px dashed color-mix(in srgb, var(--aem-card-border, #e8ddd6) 70%, transparent);
   }
 
   .aem-meta strong {
     color: var(--text-color, #2b211c);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .aem-card__link {
-    justify-self: start;
-    min-height: 40px;
-    padding: 0.45rem 0.9rem;
-    font-size: 0.82rem;
+    justify-self: stretch;
+    width: 100%;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: calc(var(--section-radius, 16px) * 0.5);
   }
 
   .aem-clear {
     display: inline-flex;
+    align-items: center;
     margin-inline: auto;
     min-height: 40px;
-    padding: 0.4rem 0.9rem;
+    padding: 0.4rem 1.1rem;
     border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 16px) * 0.55);
-    background: transparent;
+    border-radius: 999px;
+    background: var(--card-bg, #fff);
     color: var(--muted-color, #7a6a62);
     font: inherit;
     font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .aem-clear:hover {
+    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--border-color, #e8ddd6));
+    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 7%, var(--card-bg, #fff));
   }
 
   .aem-clear:focus-visible {
@@ -440,11 +599,17 @@ export const componentStyles = css`
   }
 
   .aem-mobile__live {
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
     min-height: 1.25rem;
+    padding: 0.3rem 0.9rem;
     text-align: center;
     font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-color, #2b211c);
+    font-weight: 700;
+    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 9%, var(--card-bg, #fff));
+    border-radius: 999px;
   }
 
   .aem-nav {
@@ -461,7 +626,22 @@ export const componentStyles = css`
     background: var(--card-bg, #fff);
     color: var(--text-color, #2b211c);
     font: inherit;
+    font-size: 1.1rem;
+    line-height: 1;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(43, 33, 28, 0.08);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .aem-nav button:hover:not(:disabled) {
+    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
+    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 8%, var(--card-bg, #fff));
+  }
+
+  .aem-nav button:active:not(:disabled) {
+    transform: scale(0.94);
   }
 
   .aem-nav button:focus-visible {
@@ -484,7 +664,8 @@ export const componentStyles = css`
   }
 
   .aem-dialog::backdrop {
-    background: rgba(24, 18, 15, 0.55);
+    background: rgba(24, 18, 15, 0.58);
+    backdrop-filter: blur(3px);
   }
 
   .aem-dialog__inner {
@@ -495,6 +676,7 @@ export const componentStyles = css`
     gap: 0.75rem;
     color: var(--text-color, #2b211c);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    animation: aem-card-in 0.28s ease both;
   }
 
   .aem-dialog__close {

@@ -1,10 +1,10 @@
-import { css as N, LitElement as Y, nothing as b, html as l } from "lit";
-import { property as q, state as z } from "lit/decorators.js";
-import { classMap as C } from "lit/directives/class-map.js";
+import { css as D, LitElement as K, nothing as b, html as d } from "lit";
+import { property as q, state as C } from "lit/decorators.js";
+import { classMap as $ } from "lit/directives/class-map.js";
 import { styleMap as R } from "lit/directives/style-map.js";
-import { n as E, l as p, b as A, d as j, e as _, f as O, i as H, h as y, s as X, j as L, t as m, r as G, p as J, a as Q } from "./sharedStyles-C1vUkqEN.js";
-import { f as W, u as Z, e as ee } from "./productPicker-Do8cFPDM.js";
-const te = N`
+import { n as S, l as u, b as M, d as A, e as v, f as j, i as B, h as y, s as X, j as Y, t as m, r as G, p as J, a as Q } from "./sharedStyles-BGb_aVO_.js";
+import { f as W, u as Z, e as ee, r as te } from "./productPicker-DSFtCeT4.js";
+const re = D`
   .acm-studio {
     position: relative;
     overflow: hidden;
@@ -143,103 +143,18 @@ const te = N`
     }
   }
 
-  .acm-pick-card {
-    position: relative;
-    display: grid;
-    gap: 0;
-    padding: 0;
-    overflow: hidden;
-    text-align: start;
-    cursor: pointer;
-    border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 18px) * 0.7);
-    background: var(--card-bg, #fff);
-    box-shadow: 0 10px 26px rgba(43, 33, 28, 0.06);
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  .acm-pick-slot {
+    display: flex;
+    min-width: 0;
   }
 
-  .acm-pick-card:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 32px rgba(43, 33, 28, 0.1);
-  }
-
-  .acm-pick-card[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent),
-      0 16px 32px rgba(43, 33, 28, 0.1);
-  }
-
-  .acm-pick-card:disabled {
-    opacity: 0.42;
-    cursor: not-allowed;
-  }
-
-  .acm-pick-card__media {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    background: linear-gradient(145deg, #3a2c26, #1c1613);
-  }
-
-  .acm-pick-card__img {
+  .acm-pick-slot > .fs-product-card {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
   }
 
-  .acm-pick-card__check {
-    position: absolute;
-    top: 0.55rem;
-    inset-inline-end: 0.55rem;
-    z-index: 2;
-    width: 1.55rem;
-    height: 1.55rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    box-shadow: 0 6px 14px rgba(43, 33, 28, 0.22);
-    opacity: 0;
-    transform: scale(0.85);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-
-  .acm-pick-card[aria-pressed='true'] .acm-pick-card__check {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .acm-pick-card__body {
-    padding: 0.75rem 0.8rem 0.9rem;
-  }
-
-  .acm-pick-card__name {
-    margin: 0 0 0.3rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text-color, #2b211c);
-  }
-
-  .acm-pick-card__price {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.35rem;
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-  }
-
-  .acm-pick-card__old {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--muted-color, #7a6a62);
-    text-decoration: line-through;
+  .acm-pick-slot.is-disabled {
+    opacity: 0.42;
+    pointer-events: none;
   }
 
   .acm-actions {
@@ -434,8 +349,6 @@ const te = N`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .acm-pick-card,
-    .acm-pick-card__check,
     .acm-table-wrap {
       transition: none !important;
       animation: none !important;
@@ -495,51 +408,51 @@ const te = N`
     }
   }
 `;
-function re(t) {
+function ae(t) {
   return Z(t);
 }
-function ae(t) {
+function ie(t) {
   return ee(t);
 }
-function ie(t) {
-  const e = !!p(t.name).trim(), r = !!(_(t.image) || _(t.thumbnail) || _(t.main_image)), i = !!A(t.url || t.permalink), a = y(t.price) > 0 || y(t.sale_price) > 0 || y(t.regular_price) > 0;
+function oe(t) {
+  const e = !!u(t.name).trim(), r = !!(v(t.image) || v(t.thumbnail) || v(t.main_image)), i = !!M(t.url || t.permalink), a = y(t.price) > 0 || y(t.sale_price) > 0 || y(t.regular_price) > 0;
   return e && (r || i || a);
 }
 function ce(t) {
-  for (const r of re(t))
+  for (const r of ae(t))
     if (r != null) {
       if (typeof r == "number" || typeof r == "string") {
         const i = String(r).trim();
         if (i) return { id: i, label: "", hydrated: null };
       }
       if (typeof r == "object") {
-        const i = r, a = ae(i), c = p(i.label ?? i.name).trim(), o = ie(i) ? i : null;
-        if (a || o)
+        const i = r, a = ie(i), o = u(i.label ?? i.name).trim(), c = oe(i) ? i : null;
+        if (a || c)
           return {
-            id: a || String((o == null ? void 0 : o.id) ?? "").trim(),
-            label: c,
-            hydrated: o
+            id: a || String((c == null ? void 0 : c.id) ?? "").trim(),
+            label: o,
+            hydrated: c
           };
       }
     }
-  const e = O(t);
+  const e = j(t);
   return e != null && e.id ? {
     id: e.id,
     label: e.name,
     hydrated: t && typeof t == "object" ? t : null
   } : null;
 }
-function V(t, e) {
+function H(t, e) {
   return t.trim().toLowerCase().replace(/\s+/g, "-") || `criterion-${e + 1}`;
 }
-function oe(t) {
-  return E(t).map((e, r) => {
-    const i = p(e.label).trim(), a = p(e.value).trim(), c = p(e.key).trim() || V(i, r);
-    return { key: c, label: i || c, value: a };
+function ne(t) {
+  return S(t).map((e, r) => {
+    const i = u(e.label).trim(), a = u(e.value).trim(), o = u(e.key).trim() || H(i, r);
+    return { key: o, label: i || o, value: a };
   }).filter((e) => e.label && e.value);
 }
-function U(t) {
-  return E(t).map((e, r) => {
+function N(t) {
+  return S(t).map((e, r) => {
     const i = ce(
       e.product ?? e.products ?? e.selected_product
     ), a = (i == null ? void 0 : i.id) || "";
@@ -548,74 +461,75 @@ function U(t) {
       product_id: a,
       product_label: (i == null ? void 0 : i.label) || "",
       hydrated: (i == null ? void 0 : i.hydrated) || null,
-      name: p(e.name),
-      image: _(e.image),
-      price: j(e.price, 0),
-      old_price: j(e.old_price, 0),
-      url: A(e.url),
-      btn_text: p(e.btn_text),
-      attributes: oe(e.attributes)
+      name: u(e.name),
+      image: v(e.image),
+      price: A(e.price, 0),
+      old_price: A(e.old_price, 0),
+      url: M(e.url),
+      btn_text: u(e.btn_text),
+      attributes: ne(e.attributes)
     };
   }).filter((e) => e.product_id || e.name || e.image || e.hydrated || e.attributes.length);
 }
-function ne(t) {
+function se(t) {
   return t.hydrated ? !0 : !!(t.name && (t.image || t.url || t.price > 0));
 }
-function S(t, e) {
-  const r = e ? O(e) : null, i = e && typeof e == "object" ? e : null, a = t.name || (r == null ? void 0 : r.name) || (i ? p(i.name) : "") || t.product_label, c = t.image || (r == null ? void 0 : r.image) || (i ? _(i.image) || _(i.thumbnail) || _(i.main_image) : ""), o = t.url || (r == null ? void 0 : r.url) || (i ? A(i.url || i.permalink) : "");
-  let n = t.price > 0 ? t.price : (r == null ? void 0 : r.price) || 0, d = t.old_price > 0 ? t.old_price : (r == null ? void 0 : r.old_price) || 0;
+function z(t, e) {
+  const r = e ? j(e) : null, i = e && typeof e == "object" ? e : null, a = t.name || (r == null ? void 0 : r.name) || (i ? u(i.name) : "") || t.product_label, o = t.image || (r == null ? void 0 : r.image) || (i ? v(i.image) || v(i.thumbnail) || v(i.main_image) : ""), c = t.url || (r == null ? void 0 : r.url) || (i ? M(i.url || i.permalink) : "");
+  let n = t.price > 0 ? t.price : (r == null ? void 0 : r.price) || 0, l = t.old_price > 0 ? t.old_price : (r == null ? void 0 : r.old_price) || 0;
   if (!(t.price > 0) && i) {
-    const u = H(i.is_on_sale) || H(i.on_sale), h = y(i.sale_price), f = y(i.regular_price), k = y(i.price);
-    u && h > 0 ? (n = h, d = f > h ? f : 0) : k > 0 && (n = k, f > k && (d = f));
+    const p = B(i.is_on_sale) || B(i.on_sale), h = y(i.sale_price), f = y(i.regular_price), w = y(i.price);
+    p && h > 0 ? (n = h, l = f > h ? f : 0) : w > 0 && (n = w, f > w && (l = f));
   }
   return {
     id: t.id,
     product_id: t.product_id || (r == null ? void 0 : r.id) || "",
     name: a,
-    image: c,
+    image: o,
     price: n,
-    old_price: d,
-    url: o,
+    old_price: l,
+    url: c,
     btn_text: t.btn_text,
+    rating: (r == null ? void 0 : r.rating) || 0,
     attributes: t.attributes
   };
 }
-function M(t, e) {
-  return e ? S(t, e) : t.hydrated ? S(t, t.hydrated) : S(t);
+function L(t, e) {
+  return e ? z(t, e) : t.hydrated ? z(t, t.hydrated) : z(t);
 }
-function se(t) {
-  return U(t).map((e) => M(e)).filter((e) => e.name || e.image || e.product_id || e.attributes.length);
-}
-async function le(t) {
-  return W(t);
+function le(t) {
+  return N(t).map((e) => L(e)).filter((e) => e.name || e.image || e.product_id || e.attributes.length);
 }
 async function de(t) {
-  const e = U(t), r = e.filter((a) => a.product_id && !ne(a)).map((a) => a.product_id), i = r.length ? await le(r) : /* @__PURE__ */ new Map();
-  return e.map((a) => a.product_id && i.has(a.product_id) ? M(a, i.get(a.product_id)) : M(a)).filter((a) => a.name || a.image || a.product_id || a.attributes.length);
+  return W(t);
 }
-function me(t, e = []) {
-  const r = E(t).map((c, o) => {
-    const n = p(c.label).trim(), d = p(c.key).trim() || V(n, o);
-    return { key: d, label: n || d };
-  }).filter((c) => c.label);
+async function me(t) {
+  const e = N(t), r = e.filter((a) => a.product_id && !se(a)).map((a) => a.product_id), i = r.length ? await de(r) : /* @__PURE__ */ new Map();
+  return e.map((a) => a.product_id && i.has(a.product_id) ? L(a, i.get(a.product_id)) : L(a)).filter((a) => a.name || a.image || a.product_id || a.attributes.length);
+}
+function ue(t, e = []) {
+  const r = S(t).map((o, c) => {
+    const n = u(o.label).trim(), l = u(o.key).trim() || H(n, c);
+    return { key: l, label: n || l };
+  }).filter((o) => o.label);
   if (r.length) return r;
   const i = /* @__PURE__ */ new Set(), a = [];
-  for (const c of e)
-    for (const o of c.attributes) {
-      const n = o.key || o.label;
-      !n || i.has(n) || (i.add(n), a.push({ key: o.key, label: o.label }));
+  for (const o of e)
+    for (const c of o.attributes) {
+      const n = c.key || c.label;
+      !n || i.has(n) || (i.add(n), a.push({ key: c.key, label: c.label }));
     }
   return a;
 }
-function F(t, e) {
-  const r = t.attributes.find((c) => c.key === e.key);
+function O(t, e) {
+  const r = t.attributes.find((o) => o.key === e.key);
   if (r != null && r.value) return r.value;
   const i = e.label.trim().toLowerCase(), a = t.attributes.find(
-    (c) => c.label.trim().toLowerCase() === i
+    (o) => o.label.trim().toLowerCase() === i
   );
   return (a == null ? void 0 : a.value) || "";
 }
-function T(t, e) {
+function V(t, e) {
   return !e || e <= t ? 0 : Math.round((e - t) / e * 100);
 }
 function pe(t) {
@@ -644,41 +558,41 @@ function pe(t) {
     }))
   ];
 }
-function ue(t, e, r) {
+function be(t, e, r) {
   const i = /* @__PURE__ */ new Set();
-  let a = null, c = null;
+  let a = null, o = null;
   if (t.highlightIdentical && t.criterionKey && e.length > 1) {
-    const o = r.find((n) => n.key === t.criterionKey);
-    if (o) {
-      const n = e.map((d) => F(d, o).trim().toLowerCase()).filter(Boolean);
-      n.length === e.length && n.every((d) => d === n[0]) && e.forEach((d) => i.add(d.id));
+    const c = r.find((n) => n.key === t.criterionKey);
+    if (c) {
+      const n = e.map((l) => O(l, c).trim().toLowerCase()).filter(Boolean);
+      n.length === e.length && n.every((l) => l === n[0]) && e.forEach((l) => i.add(l.id));
     }
   }
   if (t.isPrice) {
-    const o = e.filter((n) => n.price > 0);
-    if (o.length) {
-      const n = Math.min(...o.map((u) => u.price)), d = o.filter((u) => u.price === n);
-      d.length === 1 && (a = d[0].id);
+    const c = e.filter((n) => n.price > 0);
+    if (c.length) {
+      const n = Math.min(...c.map((p) => p.price)), l = c.filter((p) => p.price === n);
+      l.length === 1 && (a = l[0].id);
     }
   }
   if (t.isDiscount) {
-    const o = e.map((n) => ({
+    const c = e.map((n) => ({
       id: n.id,
-      pct: T(n.price, n.old_price)
+      pct: V(n.price, n.old_price)
     })).filter((n) => n.pct > 0);
-    if (o.length) {
-      const n = Math.max(...o.map((u) => u.pct)), d = o.filter((u) => u.pct === n);
-      d.length === 1 && (c = d[0].id);
+    if (c.length) {
+      const n = Math.max(...c.map((p) => p.pct)), l = c.filter((p) => p.pct === n);
+      l.length === 1 && (o = l[0].id);
     }
   }
-  return { identical: i, bestPriceId: a, bestDiscountId: c };
+  return { identical: i, bestPriceId: a, bestDiscountId: o };
 }
-var be = Object.defineProperty, w = (t, e, r, i) => {
-  for (var a = void 0, c = t.length - 1, o; c >= 0; c--)
-    (o = t[c]) && (a = o(e, r, a) || a);
-  return a && be(e, r, a), a;
+var ge = Object.defineProperty, k = (t, e, r, i) => {
+  for (var a = void 0, o = t.length - 1, c; o >= 0; o--)
+    (c = t[o]) && (a = c(e, r, a) || a);
+  return a && ge(e, r, a), a;
 };
-const $ = 3, I = 2, B = class B extends Y {
+const I = 3, P = 2, T = class T extends K {
   constructor() {
     super(...arguments), this.config = {}, this.products = [], this.productsLoading = !1, this.selectedIds = [], this.showTable = !1, this.loadToken = 0, this.boundLangHandler = () => this.requestUpdate();
   }
@@ -693,7 +607,7 @@ const $ = 3, I = 2, B = class B extends Y {
   }
   get criteria() {
     var e;
-    return me((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
+    return ue((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
   }
   get selected() {
     return this.selectedIds.map((e) => this.products.find((r) => r.id === e)).filter((e) => !!e);
@@ -703,56 +617,56 @@ const $ = 3, I = 2, B = class B extends Y {
     return String(((e = this.config) == null ? void 0 : e.acm_currency) || "ر.س").trim() || "ر.س";
   }
   async loadProducts() {
-    var a, c;
-    const e = ++this.loadToken, r = se((a = this.config) == null ? void 0 : a.acm_products);
+    var a, o;
+    const e = ++this.loadToken, r = le((a = this.config) == null ? void 0 : a.acm_products);
     r.length ? (this.products = r, this.productsLoading = !1) : this.productsLoading = !0;
-    const i = await de((c = this.config) == null ? void 0 : c.acm_products);
+    const i = await me((o = this.config) == null ? void 0 : o.acm_products);
     e === this.loadToken && (this.products = i, this.productsLoading = !1, this.selectedIds = this.selectedIds.filter(
-      (o) => i.some((n) => n.id === o)
-    ), this.selectedIds.length < I && (this.showTable = !1));
+      (c) => i.some((n) => n.id === c)
+    ), this.selectedIds.length < P && (this.showTable = !1));
   }
   toggleProduct(e) {
     if (this.selectedIds.includes(e)) {
-      this.selectedIds = this.selectedIds.filter((r) => r !== e), this.selectedIds.length < I && (this.showTable = !1);
+      this.selectedIds = this.selectedIds.filter((r) => r !== e), this.selectedIds.length < P && (this.showTable = !1);
       return;
     }
-    this.selectedIds.length >= $ || (this.selectedIds = [...this.selectedIds, e]);
+    this.selectedIds.length >= I || (this.selectedIds = [...this.selectedIds, e]);
   }
   removeProduct(e) {
-    this.selectedIds = this.selectedIds.filter((r) => r !== e), this.selectedIds.length < I && (this.showTable = !1);
+    this.selectedIds = this.selectedIds.filter((r) => r !== e), this.selectedIds.length < P && (this.showTable = !1);
   }
   clearAll() {
     this.selectedIds = [], this.showTable = !1;
   }
   formatCellValue(e, r, i) {
     if (e === "price")
-      return r.price > 0 ? L(r.price, this.currency) : "—";
+      return r.price > 0 ? Y(r.price, this.currency) : "—";
     if (e === "discount") {
-      const a = T(r.price, r.old_price);
+      const a = V(r.price, r.old_price);
       return a > 0 ? `${a}%` : "—";
     }
     if (i) {
-      const a = this.criteria.find((c) => c.key === i);
+      const a = this.criteria.find((o) => o.key === i);
       if (a)
-        return F(r, a) || "—";
+        return O(r, a) || "—";
     }
     return "—";
   }
   _renderSlots(e) {
-    return l`
+    return d`
       <div class="acm-slots" aria-label=${m("خانات المقارنة", "Comparison slots")}>
-        ${Array.from({ length: $ }, (r, i) => {
+        ${Array.from({ length: I }, (r, i) => {
       const a = e[i];
-      return l`
+      return d`
             <div
-              class=${C({
+              class=${$({
         "acm-slot": !0,
         "acm-slot--filled": !!a
       })}
             >
               <span class="acm-slot__num" aria-hidden="true">${i + 1}</span>
-              ${a ? l`
-                    ${a.image ? l`<img
+              ${a ? d`
+                    ${a.image ? d`<img
                           class="acm-slot__thumb"
                           src=${a.image}
                           alt=""
@@ -770,7 +684,7 @@ const $ = 3, I = 2, B = class B extends Y {
                     >
                       ×
                     </button>
-                  ` : l`<span class="acm-slot__empty">
+                  ` : d`<span class="acm-slot__empty">
                     ${m("فارغة", "Empty")}
                   </span>`}
             </div>
@@ -780,72 +694,72 @@ const $ = 3, I = 2, B = class B extends Y {
     `;
   }
   render() {
-    const e = this.config || {}, r = G(e, "acm_"), i = r.animate && !J(), a = this.products, c = this.selected, o = this.currency, n = this.selectedIds.length >= $, d = c.length >= I, u = p(e.acm_title), h = p(e.acm_desc), f = this.criteria, k = pe(f);
-    return l`
+    const e = this.config || {}, r = G(e, "acm_"), i = r.animate && !J(), a = this.products, o = this.selected, c = this.currency, n = this.selectedIds.length >= I, l = o.length >= P, p = u(e.acm_title), h = u(e.acm_desc), f = this.criteria, w = pe(f);
+    return d`
       <section
-        class=${C({
+        class=${$({
       "fs-section": !0,
       "fs-animate": i
     })}
         style=${R(Q(r))}
-        aria-label=${u || m("مقارنة العبايات", "Compare abayas")}
+        aria-label=${p || m("مقارنة العبايات", "Compare abayas")}
       >
         <div class="fs-container">
-          ${u || h ? l`<div class="fs-header">
-                ${u ? l`<h2 class="fs-title">${u}</h2>` : b}
-                ${h ? l`<p class="fs-desc">${h}</p>` : b}
+          ${p || h ? d`<div class="fs-header">
+                ${p ? d`<h2 class="fs-title">${p}</h2>` : b}
+                ${h ? d`<p class="fs-desc">${h}</p>` : b}
               </div>` : b}
 
-          ${this.productsLoading ? l`<div class="fs-empty" role="status">
+          ${this.productsLoading ? d`<div class="fs-empty" role="status">
                 ${m("جاري تحميل المنتجات...", "Loading products...")}
-              </div>` : a.length ? l`<div class="acm-studio">
+              </div>` : a.length ? d`<div class="acm-studio">
                   <div class="acm-toolbar">
                     <p class="acm-hint">
-                      ${p(e.acm_select_hint) || m(
+                      ${u(e.acm_select_hint) || m(
       "اختاري من 2 إلى 3 عبايات ثم اضغطي قارني",
       "Pick 2 to 3 abayas, then tap Compare"
     )}
                     </p>
                     <span class="acm-count" aria-live="polite">
-                      ${c.length} / ${$}
+                      ${o.length} / ${I}
                       ${m("مختارة", "selected")}
                     </span>
                   </div>
 
-                  ${this._renderSlots(c)}
+                  ${this._renderSlots(o)}
 
                   <div class="acm-picker" role="list">
                     ${a.map((s) => {
-      const v = this.selectedIds.includes(s.id), x = !v && n, P = T(s.price, s.old_price);
-      return l`
-                        <button
-                          type="button"
-                          class="acm-pick-card"
+      const x = this.selectedIds.includes(s.id), _ = !x && n;
+      return d`
+                        <div
+                          class=${$({
+        "acm-pick-slot": !0,
+        "is-disabled": _
+      })}
                           role="listitem"
-                          aria-pressed=${v ? "true" : "false"}
-                          ?disabled=${x}
-                          @click=${() => this.toggleProduct(s.id)}
                         >
-                          <span class="acm-pick-card__check" aria-hidden="true">✓</span>
-                          <div class="acm-pick-card__media">
-                            ${s.image ? l`<img
-                                  class="acm-pick-card__img"
-                                  src=${s.image}
-                                  alt=${s.name}
-                                  loading="lazy"
-                                  decoding="async"
-                                />` : b}
-                          </div>
-                          <div class="acm-pick-card__body">
-                            <p class="acm-pick-card__name">${s.name}</p>
-                            ${s.price > 0 ? l`<span class="acm-pick-card__price">
-                                  ${L(s.price, o)}
-                                  ${P > 0 && s.old_price > 0 ? l`<span class="acm-pick-card__old">
-                                        ${L(s.old_price, o)}
-                                      </span>` : b}
-                                </span>` : b}
-                          </div>
-                        </button>
+                          ${te(
+        {
+          id: s.product_id,
+          name: s.name,
+          image: s.image,
+          url: s.url,
+          price: s.price,
+          old_price: s.old_price,
+          rating: s.rating
+        },
+        {
+          currency: c,
+          selectable: !0,
+          selected: x,
+          wishlist: !0,
+          onSelect: () => {
+            _ || this.toggleProduct(s.id);
+          }
+        }
+      )}
+                        </div>
                       `;
     })}
                   </div>
@@ -854,27 +768,27 @@ const $ = 3, I = 2, B = class B extends Y {
                     <button
                       type="button"
                       class="fs-btn"
-                      ?disabled=${!d}
+                      ?disabled=${!l}
                       @click=${() => {
       this.showTable = !0;
     }}
                     >
-                      ${p(e.acm_compare_btn) || m("قارني", "Compare")}
+                      ${u(e.acm_compare_btn) || m("قارني", "Compare")}
                     </button>
                     <button
                       type="button"
                       class="fs-btn fs-btn--ghost"
-                      ?disabled=${!c.length}
+                      ?disabled=${!o.length}
                       @click=${this.clearAll}
                     >
-                      ${p(e.acm_clear_btn) || m("مسح الكل", "Clear all")}
+                      ${u(e.acm_clear_btn) || m("مسح الكل", "Clear all")}
                     </button>
                   </div>
 
-                  ${this.showTable && d ? l`
+                  ${this.showTable && l ? d`
                         <div class="acm-table-wrap">
                           <p class="acm-user-hint">
-                            ${p(e.acm_user_hint) || m(
+                            ${u(e.acm_user_hint) || m(
       "السعر من المتجر تلقائيًا — وبقية المقارنة من إعدادات كل منتج",
       "Price comes from the store — other rows come from each product’s settings"
     )}
@@ -893,11 +807,11 @@ const $ = 3, I = 2, B = class B extends Y {
                             <thead>
                               <tr>
                                 <th class="acm-table__label">${m("الخاصية", "Attribute")}</th>
-                                ${c.map(
-      (s) => l`
+                                ${o.map(
+      (s) => d`
                                     <th>
                                       <div class="acm-product-head">
-                                        ${s.image ? l`<img
+                                        ${s.image ? d`<img
                                               class="acm-product-head__img"
                                               src=${s.image}
                                               alt=${s.name}
@@ -905,7 +819,7 @@ const $ = 3, I = 2, B = class B extends Y {
                                               decoding="async"
                                             />` : b}
                                         <span class="acm-product-head__name">${s.name}</span>
-                                        ${s.url ? l`<a class="fs-btn fs-btn--ghost" href=${s.url}>
+                                        ${s.url ? d`<a class="fs-btn fs-btn--ghost" href=${s.url}>
                                               ${s.btn_text || m("عرض", "View")}
                                             </a>` : b}
                                       </div>
@@ -915,28 +829,28 @@ const $ = 3, I = 2, B = class B extends Y {
                               </tr>
                             </thead>
                             <tbody>
-                              ${k.map((s) => {
-      const v = ue(s, c, f);
-      return l`
+                              ${w.map((s) => {
+      const x = be(s, o, f);
+      return d`
                                   <tr>
                                     <th class="acm-table__label" scope="row">
                                       ${m(s.labelAr, s.labelEn)}
                                     </th>
-                                    ${c.map((x) => {
-        const P = v.identical.has(x.id), D = v.bestPriceId === x.id || v.bestDiscountId === x.id, K = this.formatCellValue(
+                                    ${o.map((_) => {
+        const U = x.identical.has(_.id), E = x.bestPriceId === _.id || x.bestDiscountId === _.id, F = this.formatCellValue(
           s.key,
-          x,
+          _,
           s.criterionKey
         );
-        return l`
+        return d`
                                         <td
-                                          class=${C({
-          "acm-cell--same": P,
-          "acm-cell--best": D
+                                          class=${$({
+          "acm-cell--same": U,
+          "acm-cell--best": E
         })}
                                         >
-                                          ${K}
-                                          ${D ? l`<span class="acm-cell__badge">
+                                          ${F}
+                                          ${E ? d`<span class="acm-cell__badge">
                                                 ${m("الأفضل", "Best")}
                                               </span>` : b}
                                         </td>
@@ -955,30 +869,30 @@ const $ = 3, I = 2, B = class B extends Y {
     `;
   }
 };
-B.styles = [
+T.styles = [
   X,
-  te,
-  N`
+  re,
+  D`
       :host {
         direction: inherit;
       }
     `
 ];
-let g = B;
-w([
+let g = T;
+k([
   q({ type: Object })
 ], g.prototype, "config");
-w([
-  z()
+k([
+  C()
 ], g.prototype, "products");
-w([
-  z()
+k([
+  C()
 ], g.prototype, "productsLoading");
-w([
-  z()
+k([
+  C()
 ], g.prototype, "selectedIds");
-w([
-  z()
+k([
+  C()
 ], g.prototype, "showTable");
 typeof g < "u" && g.registerSallaComponent("salla-abaya-comparison-arena");
 export {

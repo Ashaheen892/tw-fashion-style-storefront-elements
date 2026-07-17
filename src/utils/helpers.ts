@@ -420,6 +420,23 @@ export interface SallaProductSnapshot {
   url: string;
   price: number;
   old_price: number;
+  rating: number;
+}
+
+/** Read a 0–5 rating from varied Salla shapes (rating.stars, rating, rate...). */
+export function extractRating(val: unknown): number {
+  if (val == null) return 0;
+  if (typeof val === 'number' && Number.isFinite(val)) {
+    return Math.max(0, Math.min(5, val));
+  }
+  if (typeof val === 'string') return extractRating(toNumber(val, 0));
+  if (typeof val === 'object') {
+    const obj = val as Record<string, unknown>;
+    const candidate =
+      obj.stars ?? obj.rate ?? obj.rating ?? obj.average ?? obj.value;
+    if (candidate != null && candidate !== val) return extractRating(candidate);
+  }
+  return 0;
 }
 
 /** Normalize Salla Products dropdown values (object, array, or selected wrapper). */
@@ -450,7 +467,7 @@ export function extractSallaProduct(raw: unknown): SallaProductSnapshot | null {
 
   if (candidate != null && (typeof candidate === 'string' || typeof candidate === 'number')) {
     const id = String(candidate).trim();
-    return id ? { id, name: '', image: '', url: '', price: 0, old_price: 0 } : null;
+    return id ? { id, name: '', image: '', url: '', price: 0, old_price: 0, rating: 0 } : null;
   }
 
   if (!candidate || typeof candidate !== 'object') return null;
@@ -509,7 +526,9 @@ export function extractSallaProduct(raw: unknown): SallaProductSnapshot | null {
     old_price = regularPrice;
   }
 
+  const rating = extractRating(product.rating ?? product.rate ?? product.rating_stars);
+
   if (!id && !name && !image && !url) return null;
 
-  return { id, name, image, url, price, old_price };
+  return { id, name, image, url, price, old_price, rating };
 }

@@ -1,9 +1,9 @@
-import { css as F, LitElement as W, nothing as _, html as u } from "lit";
-import { property as X, state as x } from "lit/decorators.js";
-import { classMap as D } from "lit/directives/class-map.js";
-import { styleMap as Z } from "lit/directives/style-map.js";
-import { k as R, m as ee, n as H, l as g, d as T, i as L, b as A, u as te, f as E, e as $, h as w, q as re, s as oe, y as ae, t as n, j as k, c as ie, r as se, p as ne, a as le } from "./sharedStyles-C1vUkqEN.js";
-import { a as P, t as ce, b as de, u as pe, f as ue, e as me, c as be } from "./productPicker-Do8cFPDM.js";
+import { css as F, LitElement as Q, nothing as y, html as g } from "lit";
+import { property as W, state as $ } from "lit/decorators.js";
+import { classMap as O } from "lit/directives/class-map.js";
+import { styleMap as X } from "lit/directives/style-map.js";
+import { k as Z, m as R, n as H, l as b, d as T, i as z, b as A, u as ee, f as E, e as k, h as x, q as te, s as re, y as oe, t as l, j as S, c as ae, r as se, p as ie, a as ne } from "./sharedStyles-BGb_aVO_.js";
+import { a as L, t as le, b as ce, u as de, f as ue, e as pe, c as me, r as be } from "./productPicker-DSFtCeT4.js";
 const ge = F`
   .alb-studio {
     position: relative;
@@ -108,105 +108,13 @@ const ge = F`
     }
   }
 
-  .alb-item {
-    position: relative;
-    display: grid;
-    gap: 0;
-    padding: 0;
-    overflow: hidden;
-    text-align: start;
-    cursor: pointer;
-    border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 18px) * 0.65);
-    background: var(--card-bg, #fff);
-    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.06);
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  .alb-slot {
+    display: flex;
+    min-width: 0;
   }
 
-  .alb-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(43, 33, 28, 0.1);
-  }
-
-  .alb-item[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent),
-      0 14px 30px rgba(43, 33, 28, 0.1);
-  }
-
-  .alb-item__check {
-    position: absolute;
-    top: 0.5rem;
-    inset-inline-end: 0.5rem;
-    z-index: 2;
-    width: 1.45rem;
-    height: 1.45rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    box-shadow: 0 6px 14px rgba(43, 33, 28, 0.2);
-    opacity: 0;
-    transform: scale(0.85);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-
-  .alb-item[aria-pressed='true'] .alb-item__check {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .alb-item__media {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    background: linear-gradient(145deg, #3a2c26, #1c1613);
-  }
-
-  .alb-item__img {
+  .alb-slot > .fs-product-card {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .alb-item__body {
-    padding: 0.65rem 0.7rem 0.8rem;
-  }
-
-  .alb-item__name {
-    margin: 0 0 0.25rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text-color, #2b211c);
-  }
-
-  .alb-item__note {
-    margin: 0 0 0.35rem;
-    font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
-    line-height: 1.4;
-  }
-
-  .alb-item__price {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.3rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-  }
-
-  .alb-item__old {
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--muted-color, #7a6a62);
-    text-decoration: line-through;
   }
 
   .alb-summary {
@@ -437,8 +345,6 @@ const ge = F`
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .alb-item,
-    .alb-item__check,
     .alb-tab,
     .alb-mood-tile,
     .alb-copy-msg {
@@ -448,16 +354,16 @@ const ge = F`
   }
 `;
 function N(e) {
-  const t = !!g(e.name).trim(), o = !!($(e.image) || $(e.thumbnail) || $(e.main_image)), r = !!A(e.url || e.permalink), a = w(e.price) > 0 || w(e.sale_price) > 0 || w(e.regular_price) > 0;
+  const t = !!b(e.name).trim(), o = !!(k(e.image) || k(e.thumbnail) || k(e.main_image)), r = !!A(e.url || e.permalink), a = x(e.price) > 0 || x(e.sale_price) > 0 || x(e.regular_price) > 0;
   return t && (o || r || a);
 }
 function C(e) {
+  return de(e);
+}
+function I(e) {
   return pe(e);
 }
-function z(e) {
-  return me(e);
-}
-function Y(e) {
+function K(e) {
   const t = C(e);
   for (const r of t)
     if (r != null) {
@@ -466,12 +372,12 @@ function Y(e) {
         if (a) return { id: a, label: "", hydrated: null };
       }
       if (typeof r == "object") {
-        const a = r, i = z(a), s = g(a.label ?? a.name).trim(), l = N(a) ? a : null;
-        if (i || l)
+        const a = r, s = I(a), i = b(a.label ?? a.name).trim(), n = N(a) ? a : null;
+        if (s || n)
           return {
-            id: i || String((l == null ? void 0 : l.id) ?? "").trim(),
-            label: s,
-            hydrated: l
+            id: s || String((n == null ? void 0 : n.id) ?? "").trim(),
+            label: i,
+            hydrated: n
           };
       }
     }
@@ -481,22 +387,22 @@ function Y(e) {
 function fe(e) {
   return e.product ?? e.products ?? e.selected_product ?? e.chosen_products ?? e["alb_items.product"] ?? e["alb_tabs.products"];
 }
-function j(e) {
+function G(e) {
   const t = H(e), o = [];
   return t.forEach((r, a) => {
-    const i = g(r.group_name) || g(r.group_key) || `تبويب ${a + 1}`, s = g(r.group_key) || i || `tab-${a}`, l = T(r.group_order, a + 1), m = r.products ?? r.product ?? r.chosen_products ?? r["alb_tabs.products"], d = C(m);
-    d.length && d.forEach((b, f) => {
-      const p = Y(b);
-      if (!(p != null && p.id) && !(p != null && p.hydrated)) return;
-      const S = (p == null ? void 0 : p.id) || "";
+    const s = b(r.group_name) || b(r.group_key) || `تبويب ${a + 1}`, i = b(r.group_key) || s || `tab-${a}`, n = T(r.group_order, a + 1), p = r.products ?? r.product ?? r.chosen_products ?? r["alb_tabs.products"], c = C(p);
+    c.length && c.forEach((m, f) => {
+      const d = K(m);
+      if (!(d != null && d.id) && !(d != null && d.hydrated)) return;
+      const w = (d == null ? void 0 : d.id) || "";
       o.push({
-        id: S ? `tab-${a}-product-${S}` : `tab-${a}-item-${f}`,
-        group_key: s,
-        group_name: i,
-        group_order: l,
-        product_id: S,
-        product_label: (p == null ? void 0 : p.label) || "",
-        hydrated: (p == null ? void 0 : p.hydrated) || null,
+        id: w ? `tab-${a}-product-${w}` : `tab-${a}-item-${f}`,
+        group_key: i,
+        group_name: s,
+        group_order: n,
+        product_id: w,
+        product_label: (d == null ? void 0 : d.label) || "",
+        hydrated: (d == null ? void 0 : d.hydrated) || null,
         piece_name: "",
         image: "",
         price: 0,
@@ -509,26 +415,26 @@ function j(e) {
   }), o;
 }
 function _e(e) {
-  return $(e) || (typeof e == "string" ? e.trim() : g(e));
+  return k(e) || (typeof e == "string" ? e.trim() : b(e));
 }
-function G(e) {
+function j(e) {
   return H(e).map((t, o) => {
-    const r = Y(fe(t)), a = (r == null ? void 0 : r.id) || "";
+    const r = K(fe(t)), a = (r == null ? void 0 : r.id) || "";
     return {
       id: a ? `product-${a}` : `item-${o}`,
-      group_key: g(t.group_key) || g(t.group_name) || "default",
-      group_name: g(t.group_name) || g(t.group_key) || "default",
+      group_key: b(t.group_key) || b(t.group_name) || "default",
+      group_name: b(t.group_name) || b(t.group_key) || "default",
       group_order: T(t.group_order, 0),
       product_id: a,
       product_label: (r == null ? void 0 : r.label) || "",
       hydrated: (r == null ? void 0 : r.hydrated) || null,
-      piece_name: g(t.piece_name),
+      piece_name: b(t.piece_name),
       image: _e(t.image),
       price: T(t.price, 0),
       old_price: T(t.old_price, 0),
       url: A(t.url),
-      is_default: L(t.is_default),
-      color_note: g(t.color_note)
+      is_default: z(t.is_default),
+      color_note: b(t.color_note)
     };
   }).filter((t) => t.product_id || t.piece_name || t.image || t.hydrated);
 }
@@ -545,15 +451,16 @@ function he(e) {
     url: e.url,
     product_id: e.product_id,
     is_default: e.is_default,
-    color_note: e.color_note
+    color_note: e.color_note,
+    rating: 0
   };
 }
 function M(e, t) {
-  const o = E(t), r = t && typeof t == "object" ? t : {}, a = e.piece_name || (o == null ? void 0 : o.name) || g(r.name) || e.product_label, i = e.image || (o == null ? void 0 : o.image) || $(r.image) || $(r.thumbnail) || $(r.main_image), s = e.url || (o == null ? void 0 : o.url) || A(r.url || r.permalink || r.link);
-  let l = e.price > 0 ? e.price : (o == null ? void 0 : o.price) || 0, m = e.old_price > 0 ? e.old_price : (o == null ? void 0 : o.old_price) || 0;
+  const o = E(t), r = t && typeof t == "object" ? t : {}, a = e.piece_name || (o == null ? void 0 : o.name) || b(r.name) || e.product_label, s = e.image || (o == null ? void 0 : o.image) || k(r.image) || k(r.thumbnail) || k(r.main_image), i = e.url || (o == null ? void 0 : o.url) || A(r.url || r.permalink || r.link);
+  let n = e.price > 0 ? e.price : (o == null ? void 0 : o.price) || 0, p = e.old_price > 0 ? e.old_price : (o == null ? void 0 : o.old_price) || 0;
   if (!(e.price > 0)) {
-    const d = L(r.is_on_sale) || L(r.on_sale), b = w(r.sale_price), f = w(r.regular_price), p = w(r.price);
-    d && b > 0 ? (l = b, m = f > b ? f : 0) : p > 0 && (l = p, f > p && (m = f));
+    const c = z(r.is_on_sale) || z(r.on_sale), m = x(r.sale_price), f = x(r.regular_price), d = x(r.price);
+    c && m > 0 ? (n = m, p = f > m ? f : 0) : d > 0 && (n = d, f > d && (p = f));
   }
   return {
     id: e.id,
@@ -561,20 +468,21 @@ function M(e, t) {
     group_name: e.group_name,
     group_order: e.group_order,
     piece_name: a,
-    image: i,
-    price: l,
-    old_price: m,
-    url: s,
+    image: s,
+    price: n,
+    old_price: p,
+    url: i,
     product_id: e.product_id || (o == null ? void 0 : o.id) || "",
     is_default: e.is_default,
-    color_note: e.color_note
+    color_note: e.color_note,
+    rating: (o == null ? void 0 : o.rating) || 0
   };
 }
-async function K(e) {
+async function Y(e) {
   return ue(e);
 }
 function ye(e) {
-  const t = re(e, "").toLowerCase();
+  const t = te(e, "").toLowerCase();
   return !t || t === "none" ? "" : ["categories", "sales", "latest", "selected"].includes(t) ? t : "";
 }
 function ve(e, t, o) {
@@ -585,7 +493,7 @@ function ve(e, t, o) {
     group_key: t.key,
     group_name: t.name,
     group_order: t.order,
-    product_id: (r == null ? void 0 : r.id) || z(e),
+    product_id: (r == null ? void 0 : r.id) || I(e),
     product_label: (r == null ? void 0 : r.name) || "",
     piece_name: "",
     image: "",
@@ -600,48 +508,48 @@ function ve(e, t, o) {
 async function ke(e) {
   const t = ye(e.alb_products);
   if (!t) return [];
-  const o = Math.max(1, Math.min(40, te(e.alb_products_limit, 12))), r = g(e.alb_import_group_name) || "المنتجات", a = {
-    key: g(e.alb_import_group_key) || r,
+  const o = Math.max(1, Math.min(40, ee(e.alb_products_limit, 12))), r = b(e.alb_import_group_name) || "المنتجات", a = {
+    key: b(e.alb_import_group_key) || r,
     name: r,
     order: T(e.alb_import_group_order, 0)
   };
-  let i = [];
+  let s = [];
   if (t === "latest")
-    i = await P({ source: "latest", limit: o });
+    s = await L({ source: "latest", limit: o });
   else if (t === "sales") {
-    for (const s of [
+    for (const i of [
       { source: "sales", source_value: "sales", limit: o },
       { source: "sales", limit: o },
       { source: "offers", limit: o }
     ])
-      if (i = await P(s), i.length) break;
+      if (s = await L(i), s.length) break;
   } else if (t === "categories") {
-    const s = ce(
-      C(e.alb_category).map((l) => z(l)).filter(Boolean)
+    const i = le(
+      C(e.alb_category).map((n) => I(n)).filter(Boolean)
     );
-    s.length && (i = await P({
+    i.length && (s = await L({
       source: "categories",
-      source_value: s.length === 1 ? s[0] : s,
+      source_value: i.length === 1 ? i[0] : i,
       limit: o
     }));
   } else if (t === "selected") {
-    const s = C(e.alb_chosen_products), l = de(e.alb_chosen_products).slice(0, o), m = /* @__PURE__ */ new Map();
-    for (const b of s) {
-      if (!b || typeof b != "object") continue;
-      const f = b;
+    const i = C(e.alb_chosen_products), n = ce(e.alb_chosen_products).slice(0, o), p = /* @__PURE__ */ new Map();
+    for (const m of i) {
+      if (!m || typeof m != "object") continue;
+      const f = m;
       if (!N(f)) continue;
-      const p = z(f);
-      p && m.set(p, f);
+      const d = I(f);
+      d && p.set(d, f);
     }
-    const d = l.filter((b) => !m.has(b));
-    if (d.length) {
-      const b = await K(d);
-      for (const [f, p] of b) m.set(f, p);
+    const c = n.filter((m) => !p.has(m));
+    if (c.length) {
+      const m = await Y(c);
+      for (const [f, d] of m) p.set(f, d);
     }
-    l.length ? i = l.map((b) => m.get(b)).filter(Boolean) : i = [...m.values()];
+    n.length ? s = n.map((m) => p.get(m)).filter(Boolean) : s = [...p.values()];
   }
-  return i.slice(0, o).map((s, l) => ve(s, a, l)).filter(
-    (s) => !!s && !!s.product_id && !!(s.piece_name || s.image)
+  return s.slice(0, o).map((i, n) => ve(i, a, n)).filter(
+    (i) => !!i && !!i.product_id && !!(i.piece_name || i.image)
   );
 }
 function $e(e) {
@@ -653,41 +561,41 @@ function B(e, t) {
     piece_name: e.piece_name || e.product_label
   });
 }
-function I(e) {
+function P(e) {
   return !!e.product_id;
 }
 function J(e) {
-  const t = j(e.alb_tabs), o = G(e.alb_items);
+  const t = G(e.alb_tabs), o = j(e.alb_items);
   return t.length ? t : o;
 }
 function xe(e) {
-  return (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? J(e) : [...j(e), ...G(e)]).filter((o) => o.product_id).map((o) => B(o)).filter(I);
+  return (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? J(e) : [...G(e), ...j(e)]).filter((o) => o.product_id).map((o) => B(o)).filter(P);
 }
 async function we(e) {
-  const t = (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? J(e) : [...j(e), ...G(e)]).filter((a) => a.product_id), o = t.filter((a) => a.product_id && !$e(a)).map((a) => a.product_id), r = o.length ? await K(o) : /* @__PURE__ */ new Map();
-  return t.map((a) => a.product_id && r.has(a.product_id) ? B(a, r.get(a.product_id)) : B(a)).filter(I);
+  const t = (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? J(e) : [...G(e), ...j(e)]).filter((a) => a.product_id), o = t.filter((a) => a.product_id && !$e(a)).map((a) => a.product_id), r = o.length ? await Y(o) : /* @__PURE__ */ new Map();
+  return t.map((a) => a.product_id && r.has(a.product_id) ? B(a, r.get(a.product_id)) : B(a)).filter(P);
 }
 async function Se(e) {
   const t = e && typeof e == "object" ? e : {}, [o, r] = await Promise.all([
     we(t),
     ke(t)
-  ]), a = r.filter(I), i = o.filter(I);
-  if (!a.length) return i;
-  if (!i.length) return a;
-  const s = new Set(i.map((m) => m.product_id).filter(Boolean)), l = [...i];
-  for (const m of a)
-    s.has(m.product_id) || (s.add(m.product_id), l.push(m));
-  return l;
+  ]), a = r.filter(P), s = o.filter(P);
+  if (!a.length) return s;
+  if (!s.length) return a;
+  const i = new Set(s.map((p) => p.product_id).filter(Boolean)), n = [...s];
+  for (const p of a)
+    i.has(p.product_id) || (i.add(p.product_id), n.push(p));
+  return n;
 }
-function O(e) {
-  const t = R(e, "group_key"), o = [];
+function V(e) {
+  const t = Z(e, "group_key"), o = [];
   for (const [r, a] of t) {
-    const i = ee(a, "group_order"), s = i[0];
+    const s = R(a, "group_order"), i = s[0];
     o.push({
       key: r,
-      name: s.group_name || r,
-      order: s.group_order,
-      items: i
+      name: i.group_name || r,
+      order: i.group_order,
+      items: s
     });
   }
   return o.sort((r, a) => r.order - a.order);
@@ -702,27 +610,27 @@ function Te(e) {
 }
 function q(e, t, o) {
   const r = [];
-  let a = 0, i = 0, s = 0;
-  for (const l of e) {
-    const m = t[l.key], d = l.items.find((f) => f.id === m);
-    if (!d) continue;
-    s += 1, a += d.price, d.old_price > d.price && (i += d.old_price - d.price);
-    const b = d.color_note ? ` (${d.color_note})` : "";
-    r.push(`${l.name}: ${d.piece_name}${b}`), d.url && r.push(`  ${d.url}`), d.price > 0 && r.push(`  ${d.price} ${o}`);
+  let a = 0, s = 0, i = 0;
+  for (const n of e) {
+    const p = t[n.key], c = n.items.find((f) => f.id === p);
+    if (!c) continue;
+    i += 1, a += c.price, c.old_price > c.price && (s += c.old_price - c.price);
+    const m = c.color_note ? ` (${c.color_note})` : "";
+    r.push(`${n.name}: ${c.piece_name}${m}`), c.url && r.push(`  ${c.url}`), c.price > 0 && r.push(`  ${c.price} ${o}`);
   }
-  return { lines: r, total: a, count: s, savings: i };
+  return { lines: r, total: a, count: i, savings: s };
 }
 var Ce = Object.defineProperty, v = (e, t, o, r) => {
-  for (var a = void 0, i = e.length - 1, s; i >= 0; i--)
-    (s = e[i]) && (a = s(t, o, a) || a);
+  for (var a = void 0, s = e.length - 1, i; s >= 0; s--)
+    (i = e[s]) && (a = i(t, o, a) || a);
   return a && Ce(t, o, a), a;
 };
-const U = class U extends W {
+const U = class U extends Q {
   constructor() {
     super(...arguments), this.config = {}, this.activeGroup = "", this.selections = {}, this.statusMsg = "", this.statusError = !1, this.items = [], this.loading = !0, this.addingToCart = !1, this.boundLangHandler = () => this.requestUpdate(), this.statusTimer = null, this.loadToken = 0;
   }
   get currency() {
-    return ae("ر.س");
+    return oe("ر.س");
   }
   connectedCallback() {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLangHandler), this.loadItems();
@@ -734,12 +642,12 @@ const U = class U extends W {
     t.has("config") && this.loadItems();
   }
   get groups() {
-    return O(this.items);
+    return V(this.items);
   }
   applyItems(t) {
     var r;
     this.items = t;
-    const o = O(t);
+    const o = V(t);
     this.selections = Te(o), (!this.activeGroup || !o.some((a) => a.key === this.activeGroup)) && (this.activeGroup = ((r = o[0]) == null ? void 0 : r.key) || "");
   }
   async loadItems() {
@@ -764,17 +672,17 @@ const U = class U extends W {
   }
   async handleCopy() {
     const t = this.currency, o = q(this.groups, this.selections, t), r = [
-      g(this.config.alb_title) || n("إطلالة مختارة", "Selected look"),
+      b(this.config.alb_title) || l("إطلالة مختارة", "Selected look"),
       "",
       ...o.lines,
       "",
-      `${n("الإجمالي", "Total")}: ${k(o.total, t)}`,
-      `${n("عدد القطع", "Pieces")}: ${o.count}`,
-      o.savings > 0 ? `${n("التوفير", "Savings")}: ${k(o.savings, t)}` : ""
+      `${l("الإجمالي", "Total")}: ${S(o.total, t)}`,
+      `${l("عدد القطع", "Pieces")}: ${o.count}`,
+      o.savings > 0 ? `${l("التوفير", "Savings")}: ${S(o.savings, t)}` : ""
     ].filter(Boolean).join(`
-`), a = await ie(r);
+`), a = await ae(r);
     this.setStatus(
-      a ? n("تم نسخ التفاصيل", "Details copied") : n("تعذر النسخ", "Could not copy"),
+      a ? l("تم نسخ التفاصيل", "Details copied") : l("تعذر النسخ", "Could not copy"),
       !a
     );
   }
@@ -783,19 +691,19 @@ const U = class U extends W {
     const t = this.getSelectedItems(), o = t.map(({ item: a }) => a.product_id).filter(Boolean);
     if (!o.length) {
       this.setStatus(
-        n("اختاري قطعاً من المتجر أولاً", "Select store pieces first"),
+        l("اختاري قطعاً من المتجر أولاً", "Select store pieces first"),
         !0
       );
       return;
     }
     this.addingToCart = !0;
-    const r = await be(o);
+    const r = await me(o);
     if (this.addingToCart = !1, r.ok) {
       this.setStatus(
-        r.error === "partial" ? n(
+        r.error === "partial" ? l(
           "أُضيفت بعض القطع إلى السلة. تأكدي من السلة قبل الدفع.",
           "Some pieces were added. Check the cart before checkout."
-        ) : n(
+        ) : l(
           `تمت إضافة ${r.added} قطعة إلى السلة`,
           `Added ${r.added} piece(s) to cart`
         )
@@ -804,19 +712,19 @@ const U = class U extends W {
     }
     if (r.error === "unavailable") {
       this.setStatus(
-        n(
+        l(
           "السلة غير متاحة في المعاينة. افتحي صفحة المنتج للإضافة من المتجر.",
           "Cart is unavailable in preview. Open the product page to add it in the store."
         ),
         !0
       );
-      const a = t.map(({ item: i }) => i.url).find(Boolean);
+      const a = t.map(({ item: s }) => s.url).find(Boolean);
       a && window.open(a, "_blank", "noopener,noreferrer");
       return;
     }
     if (r.added > 0 || r.error === "partial") {
       this.setStatus(
-        n(
+        l(
           `أُضيفت ${r.added} قطعة، وتعذّر إكمال الباقي`,
           `Added ${r.added} piece(s); some could not be added`
         ),
@@ -825,7 +733,7 @@ const U = class U extends W {
       return;
     }
     this.setStatus(
-      n(
+      l(
         "تعذّرت الإضافة. جرّبي فتح صفحة المنتج أو اختيار مقاس إن وُجد.",
         "Could not add. Try opening the product page or choosing a size if required."
       ),
@@ -833,149 +741,131 @@ const U = class U extends W {
     );
   }
   render() {
-    var V;
-    const t = this.config || {}, o = se(t, "alb_"), r = o.animate && !ne(), a = this.groups, i = this.currency, s = a.find((c) => c.key === this.activeGroup) || a[0], l = this.getSelectedItems(), m = l.map((c) => c.item), d = q(a, this.selections, i), b = g(t.alb_title), f = g(t.alb_desc), p = (V = m.find((c) => c.url)) == null ? void 0 : V.url, S = m.some((c) => c.product_id);
-    return u`
+    var D;
+    const t = this.config || {}, o = se(t, "alb_"), r = o.animate && !ie(), a = this.groups, s = this.currency, i = a.find((u) => u.key === this.activeGroup) || a[0], n = this.getSelectedItems(), p = n.map((u) => u.item), c = q(a, this.selections, s), m = b(t.alb_title), f = b(t.alb_desc), d = (D = p.find((u) => u.url)) == null ? void 0 : D.url, w = p.some((u) => u.product_id);
+    return g`
       <section
-        class=${D({
+        class=${O({
       "fs-section": !0,
       "fs-animate": r
     })}
-        style=${Z(le(o))}
-        aria-label=${b || n("منسقة الإطلالة", "Look builder")}
+        style=${X(ne(o))}
+        aria-label=${m || l("منسقة الإطلالة", "Look builder")}
       >
         <div class="fs-container">
-          ${b || f ? u`<div class="fs-header">
-                ${b ? u`<h2 class="fs-title">${b}</h2>` : _}
-                ${f ? u`<p class="fs-desc">${f}</p>` : _}
-              </div>` : _}
+          ${m || f ? g`<div class="fs-header">
+                ${m ? g`<h2 class="fs-title">${m}</h2>` : y}
+                ${f ? g`<p class="fs-desc">${f}</p>` : y}
+              </div>` : y}
 
-          ${this.loading ? u`<div class="alb-studio">
+          ${this.loading ? g`<div class="alb-studio">
                 <div class="alb-loading" role="status">
-                  ${n("جاري تحميل منتجات الإطلالة…", "Loading look products…")}
+                  ${l("جاري تحميل منتجات الإطلالة…", "Loading look products…")}
                 </div>
-              </div>` : a.length ? u`<div class="alb-studio">
+              </div>` : a.length ? g`<div class="alb-studio">
                   <div class="alb-layout">
                     <div class="alb-picker">
                       <div
                         class="alb-tabs"
                         role="tablist"
-                        aria-label=${n("تبويبات الإطلالة", "Look tabs")}
+                        aria-label=${l("تبويبات الإطلالة", "Look tabs")}
                       >
                         ${a.map(
-      (c) => u`
+      (u) => g`
                             <button
                               type="button"
                               class="alb-tab"
                               role="tab"
-                              aria-selected=${this.activeGroup === c.key ? "true" : "false"}
+                              aria-selected=${this.activeGroup === u.key ? "true" : "false"}
                               @click=${() => {
-        this.activeGroup = c.key;
+        this.activeGroup = u.key;
       }}
                             >
-                              ${c.name}${this.selections[c.key] ? " · ✓" : ""}
+                              ${u.name}${this.selections[u.key] ? " · ✓" : ""}
                             </button>
                           `
     )}
                       </div>
 
-                      ${s ? u`
+                      ${i ? g`
                             <p class="alb-panel-label">
-                              ${n("اختاري من", "Choose from")} ${s.name}
+                              ${l("اختاري من", "Choose from")} ${i.name}
                             </p>
                             <div class="alb-grid" role="list">
-                              ${s.items.map((c) => {
-      const y = this.selections[s.key] === c.id;
-      return u`
-                                  <button
-                                    type="button"
-                                    class="alb-item"
-                                    role="listitem"
-                                    aria-pressed=${y ? "true" : "false"}
-                                    @click=${() => this.selectItem(s.key, c.id)}
-                                  >
-                                    <span class="alb-item__check" aria-hidden="true">✓</span>
-                                    <div class="alb-item__media">
-                                      ${c.image ? u`<img
-                                            class="alb-item__img"
-                                            src=${c.image}
-                                            alt=${c.piece_name}
-                                            loading="lazy"
-                                            decoding="async"
-                                          />` : _}
-                                      <span class="alb-item__store" aria-hidden="true">
-                                        ${n("من المتجر", "Store")}
-                                      </span>
-                                    </div>
-                                    <div class="alb-item__body">
-                                      <p class="alb-item__name">${c.piece_name}</p>
-                                      ${c.color_note ? u`<p class="alb-item__note">${c.color_note}</p>` : _}
-                                      ${c.price > 0 ? u`<span class="alb-item__price">
-                                            ${k(c.price, i)}
-                                            ${c.old_price > c.price ? u`<span class="alb-item__old">
-                                                  ${k(c.old_price, i)}
-                                                </span>` : _}
-                                          </span>` : _}
-                                      ${c.url ? u`<a
-                                            class="alb-item__link"
-                                            href=${c.url}
-                                            @click=${(Q) => Q.stopPropagation()}
-                                          >
-                                            ${n("عرض المنتج", "View product")}
-                                          </a>` : _}
-                                    </div>
-                                  </button>
-                                `;
+                              ${i.items.map((u) => {
+      const h = this.selections[i.key] === u.id;
+      return g`<div class="alb-slot" role="listitem">
+                                  ${be(
+        {
+          id: u.product_id,
+          name: u.piece_name,
+          image: u.image,
+          url: u.url,
+          price: u.price,
+          old_price: u.old_price,
+          rating: u.rating,
+          subtitle: u.color_note
+        },
+        {
+          currency: s,
+          selectable: !0,
+          selected: h,
+          wishlist: !0,
+          viewLink: !0,
+          onSelect: () => this.selectItem(i.key, u.id)
+        }
+      )}
+                                </div>`;
     })}
                             </div>
-                          ` : _}
+                          ` : y}
                     </div>
 
                     <aside
                       class="alb-summary"
-                      aria-label=${n("ملخص الإطلالة", "Look summary")}
+                      aria-label=${l("ملخص الإطلالة", "Look summary")}
                     >
                       <div class="alb-summary__head">
                         <h3 class="alb-summary__title">
-                          ${n("ملخص الإطلالة", "Look summary")}
+                          ${l("ملخص الإطلالة", "Look summary")}
                         </h3>
                         <span class="alb-summary__badge">
-                          ${d.count}
-                          ${n("قطع", "pieces")}
+                          ${c.count}
+                          ${l("قطع", "pieces")}
                         </span>
                       </div>
 
-                      ${l.length ? u`<div class="alb-pieces">
-                            ${l.map(
-      ({ group: c, item: y }) => u`
+                      ${n.length ? g`<div class="alb-pieces">
+                            ${n.map(
+      ({ group: u, item: h }) => g`
                                 <div class="alb-piece">
-                                  ${y.image ? u`<img
+                                  ${h.image ? g`<img
                                         class="alb-piece__thumb"
-                                        src=${y.image}
+                                        src=${h.image}
                                         alt=""
                                         loading="lazy"
                                         decoding="async"
-                                      />` : u`<span class="alb-piece__thumb" aria-hidden="true"></span>`}
+                                      />` : g`<span class="alb-piece__thumb" aria-hidden="true"></span>`}
                                   <span class="alb-piece__meta">
-                                    <span class="alb-piece__group">${c.name}</span>
-                                    <span class="alb-piece__name">${y.piece_name}</span>
+                                    <span class="alb-piece__group">${u.name}</span>
+                                    <span class="alb-piece__name">${h.piece_name}</span>
                                   </span>
-                                  ${y.price > 0 ? u`<span class="alb-piece__price">
-                                        ${k(y.price, i)}
-                                      </span>` : _}
-                                  ${y.url ? u`<a
+                                  ${h.price > 0 ? g`<span class="alb-piece__price">
+                                        ${S(h.price, s)}
+                                      </span>` : y}
+                                  ${h.url ? g`<a
                                         class="alb-piece__link"
-                                        href=${y.url}
+                                        href=${h.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        ${n("عرض القطعة", "View piece")}
-                                      </a>` : _}
+                                        ${l("عرض القطعة", "View piece")}
+                                      </a>` : y}
                                 </div>
                               `
     )}
-                          </div>` : u`<p class="alb-summary__empty">
-                            ${n(
+                          </div>` : g`<p class="alb-summary__empty">
+                            ${l(
       "اختاري قطعاً لبناء إطلالتك",
       "Select pieces to build your look"
     )}
@@ -983,57 +873,57 @@ const U = class U extends W {
 
                       <div class="alb-stats">
                         <div class="alb-stat">
-                          <span class="alb-stat__label">${n("عدد القطع", "Pieces")}</span>
-                          <span class="alb-stat__value">${d.count}</span>
+                          <span class="alb-stat__label">${l("عدد القطع", "Pieces")}</span>
+                          <span class="alb-stat__value">${c.count}</span>
                         </div>
                         <div class="alb-stat alb-stat--accent">
-                          <span class="alb-stat__label">${n("الإجمالي", "Total")}</span>
+                          <span class="alb-stat__label">${l("الإجمالي", "Total")}</span>
                           <span class="alb-stat__value">
-                            ${k(d.total, i)}
+                            ${S(c.total, s)}
                           </span>
                         </div>
-                        ${d.savings > 0 ? u`<div class="alb-stat alb-stat--wide alb-stat--accent">
-                              <span class="alb-stat__label">${n("التوفير", "Savings")}</span>
+                        ${c.savings > 0 ? g`<div class="alb-stat alb-stat--wide alb-stat--accent">
+                              <span class="alb-stat__label">${l("التوفير", "Savings")}</span>
                               <span class="alb-stat__value">
-                                ${k(d.savings, i)}
+                                ${S(c.savings, s)}
                               </span>
-                            </div>` : _}
+                            </div>` : y}
                       </div>
 
                       <div class="alb-actions">
                         <button
                           type="button"
                           class="fs-btn"
-                          ?disabled=${this.addingToCart || !S}
+                          ?disabled=${this.addingToCart || !w}
                           @click=${this.handleAddToCart}
                         >
-                          ${this.addingToCart ? n("جاري الإضافة…", "Adding…") : g(t.alb_cart_btn) || n("أضيفي إلى السلة", "Add to cart")}
+                          ${this.addingToCart ? l("جاري الإضافة…", "Adding…") : b(t.alb_cart_btn) || l("أضيفي إلى السلة", "Add to cart")}
                         </button>
                         <button type="button" class="fs-btn fs-btn--ghost" @click=${this.handleCopy}>
-                          ${g(t.alb_copy_btn) || n("نسخ التفاصيل", "Copy details")}
+                          ${b(t.alb_copy_btn) || l("نسخ التفاصيل", "Copy details")}
                         </button>
-                        ${p ? u`<a
+                        ${d ? g`<a
                               class="fs-btn fs-btn--ghost"
-                              href=${p}
+                              href=${d}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              ${g(t.alb_view_btn) || n("عرض المختار", "View selected")}
-                            </a>` : _}
+                              ${b(t.alb_view_btn) || l("عرض المختار", "View selected")}
+                            </a>` : y}
                       </div>
-                      ${this.statusMsg ? u`<p
-                            class=${D({
+                      ${this.statusMsg ? g`<p
+                            class=${O({
       "alb-copy-msg": !0,
       "alb-copy-msg--error": this.statusError
     })}
                             role="status"
                           >
                             ${this.statusMsg}
-                          </p>` : _}
+                          </p>` : y}
                     </aside>
                   </div>
-                </div>` : u`<div class="fs-empty">
-                  ${n(
+                </div>` : g`<div class="fs-empty">
+                  ${l(
       "أضيفي تبويبات من إعدادات العنصر واختاري منتجات لكل تبويب",
       "Add tabs in the element settings and pick products for each tab"
     )}
@@ -1043,7 +933,7 @@ const U = class U extends W {
     `;
   }
 };
-U.styles = [oe, ge, F`
+U.styles = [re, ge, F`
     :host {
       direction: inherit;
     }
@@ -1066,32 +956,32 @@ U.styles = [oe, ge, F`
       color: #8f4a45;
     }
   `];
-let h = U;
+let _ = U;
 v([
-  X({ type: Object })
-], h.prototype, "config");
+  W({ type: Object })
+], _.prototype, "config");
 v([
-  x()
-], h.prototype, "activeGroup");
+  $()
+], _.prototype, "activeGroup");
 v([
-  x()
-], h.prototype, "selections");
+  $()
+], _.prototype, "selections");
 v([
-  x()
-], h.prototype, "statusMsg");
+  $()
+], _.prototype, "statusMsg");
 v([
-  x()
-], h.prototype, "statusError");
+  $()
+], _.prototype, "statusError");
 v([
-  x()
-], h.prototype, "items");
+  $()
+], _.prototype, "items");
 v([
-  x()
-], h.prototype, "loading");
+  $()
+], _.prototype, "loading");
 v([
-  x()
-], h.prototype, "addingToCart");
-typeof h < "u" && h.registerSallaComponent("salla-abaya-look-builder");
+  $()
+], _.prototype, "addingToCart");
+typeof _ < "u" && _.registerSallaComponent("salla-abaya-look-builder");
 export {
-  h as default
+  _ as default
 };

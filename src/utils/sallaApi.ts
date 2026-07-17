@@ -25,6 +25,12 @@ export type SallaCartApi = {
   ) => Promise<unknown>;
 };
 
+export type SallaWishlistApi = {
+  toggle?: (id: string | number) => Promise<unknown> | unknown;
+  add?: (id: string | number) => Promise<unknown> | unknown;
+  remove?: (id: string | number) => Promise<unknown> | unknown;
+};
+
 export type SallaApi = {
   onReady?: () => Promise<unknown> | void;
   api?: {
@@ -33,6 +39,13 @@ export type SallaApi = {
   notify?: unknown;
   product?: SallaProductApi;
   cart?: SallaCartApi;
+  wishlist?: SallaWishlistApi;
+  storage?: {
+    get?: (key: string, fallback?: unknown) => unknown;
+  };
+  config?: {
+    isGuest?: () => boolean;
+  };
 };
 
 export function getSalla(): SallaApi | null {
@@ -341,4 +354,71 @@ export async function addProductsToCart(
   } catch {
     return { ok: false, added, error: added > 0 ? 'partial' : 'failed' };
   }
+}
+
+/** Add a single product to cart (per-card add-to-cart button). */
+export async function addProductToCart(
+  productId: string | number
+): Promise<{ ok: boolean; error?: string }> {
+  const salla = await awaitSallaReady();
+  const cart = salla?.cart;
+  const addItem = cart?.addItem?.bind(cart);
+  if (typeof addItem !== 'function') {
+    return { ok: false, error: 'unavailable' };
+  }
+  let ok = false;
+  try {
+    await silentSalla(async () => {
+      ok = await tryAddOneItem(addItem, productId);
+    });
+  } catch {
+    ok = false;
+  }
+  return ok ? { ok: true } : { ok: false, error: 'failed' };
+}
+
+/** Whether a product id is in the guest/customer wishlist (local snapshot). */
+export function isInWishlist(productId: string | number): boolean {
+  const salla = getSalla();
+  const get = salla?.storage?.get;
+  if (typeof get !== 'function') return false;
+  try {
+    const list = get('salla::wishlist', []);
+    if (!Array.isArray(list)) return false;
+    return list.map((x) => String(x)).includes(String(productId));
+  } catch {
+    return false;
+  }
+}
+
+/** Toggle wishlist state via the Salla SDK. Returns the new state, or null if unavailable. */
+export async function toggleWishlist(
+  productId: string | number
+): Promise<boolean | null> {
+  const salla = await awaitSallaReady();
+  const wishlist = salla?.wishlist;
+  const wasIn = isInWishlist(productId);
+  try {
+    if (typeof wishlist?.toggle === 'function') {
+      await silentSalla(async () => {
+        await Promise.resolve(wishlist.toggle!(productId));
+      });
+      return !wasIn;
+    }
+    if (!wasIn && typeof wishlist?.add === 'function') {
+      await silentSalla(async () => {
+        await Promise.resolve(wishlist.add!(productId));
+      });
+      return true;
+    }
+    if (wasIn && typeof wishlist?.remove === 'function') {
+      await silentSalla(async () => {
+        await Promise.resolve(wishlist.remove!(productId));
+      });
+      return false;
+    }
+  } catch {
+    return null;
+  }
+  return null;
 }

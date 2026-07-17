@@ -308,10 +308,14 @@ async function fetchByProductSource(
   }
 
   if (source === 'sales') {
+    // Salla sources for best-selling: `sales`, with `top-rated`/`offers` as
+    // graceful fallbacks. `source_value` is unused here but Salla's validator
+    // is happier with an explicit empty array.
     const attempts: Record<string, unknown>[] = [
-      { source: 'sales', source_value: 'sales', limit },
+      { source: 'sales', source_value: [], limit },
       { source: 'sales', limit },
-      { source: 'offers', limit },
+      { source: 'top-rated', source_value: [], limit },
+      { source: 'offers', source_value: [], limit },
     ];
     for (const params of attempts) {
       const list = await callProductFetch(params);
@@ -328,9 +332,11 @@ async function fetchByProductSource(
     );
     // Never call API without a real category — triggers «حقل التصنيفات مطلوب»
     if (!catIds.length) return [];
+    // Salla requires an ARRAY of category ids for the `categories` source,
+    // even when only one category is picked.
     return callProductFetch({
       source: 'categories',
-      source_value: catIds.length === 1 ? catIds[0] : catIds,
+      source_value: catIds,
       limit,
     });
   }

@@ -365,103 +365,132 @@ export const componentStyles = css`
     border-radius: calc(var(--section-radius, 18px) * 0.45);
   }
 
-  .vab-slider {
-    width: 100%;
-    min-width: 0;
-    overflow: hidden;
+  .vab-detail__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.15rem;
   }
 
-  .vab-slider salla-products-slider {
-    display: block;
-    width: 100%;
+  .vab-detail__title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-color, #2b211c);
+  }
+
+  .vab-detail__count {
+    flex: 0 0 auto;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, #8b5e4b);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .vab-rail {
+    position: relative;
+    /* keep the slider strictly inside the detail panel */
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .vab-rail__nav {
+    position: absolute;
+    top: 42%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--border-color, #e8ddd6));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
+    color: var(--text-color, #2b211c);
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(43, 33, 28, 0.16);
+    backdrop-filter: blur(8px);
+    transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+
+  .vab-rail__nav svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .vab-rail__nav:hover {
+    background: var(--accent-color, #8b5e4b);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.24);
+  }
+
+  .vab-rail__nav:active {
+    transform: translateY(-50%) scale(0.92);
+  }
+
+  .vab-rail__nav:focus-visible {
+    outline: 2px solid var(--accent-color, #8b5e4b);
+    outline-offset: 2px;
+  }
+
+  .vab-rail__nav--prev {
+    inset-inline-start: 0.25rem;
+  }
+
+  .vab-rail__nav--next {
+    inset-inline-end: 0.25rem;
+  }
+
+  /* mirror the chevrons for RTL reading direction */
+  :host-context([dir='rtl']) .vab-rail__nav svg {
+    transform: scaleX(-1);
   }
 
   .vab-products {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.7rem;
     overflow-x: auto;
-    padding: 0.15rem 0.1rem 0.45rem;
+    padding: 0.2rem 0.15rem 0.5rem;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.15rem;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent) transparent;
+  }
+
+  /* leave room for the arrows only when they are shown */
+  .vab-rail.has-nav .vab-products {
+    padding-inline: 2.4rem;
+    scroll-padding-inline: 2.4rem;
   }
 
   .vab-products::-webkit-scrollbar {
-    height: 4px;
+    height: 6px;
+  }
+
+  .vab-products::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   .vab-products::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent);
+    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, transparent);
     border-radius: 999px;
   }
 
-  .vab-product {
-    flex: 0 0 7.5rem;
-    scroll-snap-align: start;
-    display: grid;
-    gap: 0.4rem;
-    text-decoration: none;
-    color: inherit;
+  .vab-product-slot {
+    flex: 0 0 clamp(9.5rem, 42%, 11.5rem);
     min-width: 0;
-  }
-
-  .vab-product--link:hover .vab-product__name {
-    color: var(--accent-color, #8b5e4b);
-  }
-
-  .vab-product__media {
-    aspect-ratio: 3 / 4;
-    border-radius: calc(var(--section-radius, 18px) * 0.45);
-    overflow: hidden;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 55%, transparent);
-  }
-
-  .vab-product__media img,
-  .vab-product__placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .vab-product__placeholder {
-    min-height: 100%;
-    background:
-      linear-gradient(
-        145deg,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 18%, #ddd),
-        color-mix(in srgb, var(--border-color, #e8ddd6) 70%, #fff)
-      );
-  }
-
-  .vab-product__body {
-    display: grid;
-    gap: 0.15rem;
-  }
-
-  .vab-product__name {
-    font-size: 0.78rem;
-    font-weight: 600;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .vab-product__price {
-    font-size: 0.74rem;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    align-items: baseline;
+    scroll-snap-align: start;
   }
 
-  .vab-product__price s {
-    font-weight: 500;
-    color: var(--muted-color, #7a6a62);
-    font-size: 0.68rem;
+  .vab-product-slot > .fs-product-card {
+    width: 100%;
   }
 
   .vab-products__status {
@@ -520,11 +549,6 @@ export const componentStyles = css`
       margin-inline-start: auto;
     }
 
-    .vab-products {
-      margin-inline: -0.25rem;
-      padding-inline: 0.15rem;
-    }
-
     .vab-detail {
       padding: 0.9rem;
     }
@@ -534,6 +558,14 @@ export const componentStyles = css`
     .vab-map-panel,
     .vab-map {
       max-height: min(16.5rem, 44vh);
+    }
+
+    .vab-product-slot {
+      flex-basis: clamp(8.5rem, 62%, 10.5rem);
+    }
+
+    .vab-detail__title {
+      font-size: 0.9rem;
     }
 
     .vab-card {
