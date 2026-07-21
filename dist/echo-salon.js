@@ -1,42 +1,54 @@
-import { css as b, LitElement as _, html as a, nothing as o } from "lit";
-import { property as y, state as $ } from "lit/decorators.js";
-import { classMap as f } from "lit/directives/class-map.js";
+import { css as b, LitElement as x, html as a, nothing as o } from "lit";
+import { property as $, state as _ } from "lit/decorators.js";
+import { classMap as u } from "lit/directives/class-map.js";
 import { styleMap as w } from "lit/directives/style-map.js";
-import { n as k, l as d, v as A, d as z, s as I, i as q, p as v, r as T, t as u, a as C } from "./sharedStyles-BGb_aVO_.js";
-const S = b`
+import { n as k, l as d, z as A, f as z, s as I, i as q, p as v, r as C, t as p, a as T, b as S } from "./sharedStyles-BYm1OK6w.js";
+const L = b`
   .es-shell {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.35rem;
   }
 
   .es-featured {
     position: relative;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
+    padding: clamp(1.6rem, 4vw, 2.65rem);
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 42%),
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
       linear-gradient(165deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 40px rgba(43, 33, 28, 0.07);
+    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.07);
     overflow: hidden;
+    animation: es-swap 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes es-swap {
+    from {
+      opacity: 0.35;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .es-featured__mark {
     position: absolute;
-    top: 0.6rem;
+    top: 0.4rem;
     inset-inline-end: 1rem;
-    font-size: clamp(4rem, 12vw, 7rem);
+    font-size: clamp(4.5rem, 14vw, 8rem);
     line-height: 1;
-    color: color-mix(in srgb, var(--accent-color, #8b5e4b) 16%, transparent);
+    color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 18%, transparent);
     font-family: Georgia, 'Times New Roman', serif;
     pointer-events: none;
     user-select: none;
   }
 
   .es-featured__quote {
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.35rem;
     max-width: 40rem;
-    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    font-size: clamp(1.2rem, 2.5vw, 1.65rem);
     line-height: 1.75;
     font-weight: 500;
     color: var(--text-color, #2b211c);
@@ -50,24 +62,26 @@ const S = b`
   }
 
   .es-avatar {
-    width: 3.25rem;
-    height: 3.25rem;
-    border-radius: 10px;
+    width: 3.35rem;
+    height: 3.35rem;
+    border-radius: 999px;
     object-fit: cover;
+    border: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, #fff);
     background: color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
+    box-shadow: 0 8px 18px rgba(43, 33, 28, 0.1);
   }
 
   .es-avatar--placeholder {
     display: grid;
     place-items: center;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
+    font-weight: 800;
+    color: var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
   }
 
   .es-person {
     display: grid;
-    gap: 0.15rem;
+    gap: 0.12rem;
   }
 
   .es-person strong {
@@ -81,8 +95,8 @@ const S = b`
 
   .es-stars {
     display: inline-flex;
-    gap: 0.15rem;
-    color: var(--accent-color, #8b5e4b);
+    gap: 0.12rem;
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.95rem;
     letter-spacing: 0.04em;
   }
@@ -96,22 +110,26 @@ const S = b`
     align-items: baseline;
     gap: 0.4rem;
     margin-inline-start: auto;
-    font-size: 0.82rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
+    font-size: 0.8rem;
     color: var(--muted-color, #7a6a62);
   }
 
   .es-score strong {
-    font-size: 1.35rem;
-    color: var(--accent-color, #8b5e4b);
+    font-size: 1.25rem;
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .es-rail {
     display: flex;
     gap: 0.85rem;
     overflow-x: auto;
-    padding: 0.15rem 0.1rem 0.55rem;
+    padding: 0.2rem 0.1rem 0.65rem;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 
   .es-rail::-webkit-scrollbar {
@@ -119,52 +137,81 @@ const S = b`
   }
 
   .es-rail::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, transparent);
     border-radius: 999px;
   }
 
   .es-card {
-    flex: 0 0 min(17.5rem, 78vw);
+    flex: 0 0 min(78vw, 17.5rem);
     scroll-snap-align: start;
     display: grid;
-    gap: 0.75rem;
-    padding: 1rem;
-    border-radius: calc(var(--section-radius, 18px) * 0.7);
+    gap: 0.65rem;
+    min-height: 11.5rem;
+    padding: 1rem 1.05rem;
+    border-radius: calc(var(--section-radius, 16px) * 0.85);
     border: 1px solid var(--border-color, #e8ddd6);
     background: var(--card-bg, #fff);
-    text-align: start;
     color: inherit;
     font: inherit;
+    text-align: start;
     cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.05);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .fs-animate .es-card {
+    animation: es-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .fs-animate .es-card:nth-child(1) { animation-delay: 0.05s; }
+  .fs-animate .es-card:nth-child(2) { animation-delay: 0.12s; }
+  .fs-animate .es-card:nth-child(3) { animation-delay: 0.19s; }
+  .fs-animate .es-card:nth-child(4) { animation-delay: 0.26s; }
+
+  @keyframes es-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .es-card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, var(--border-color, #e8ddd6));
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
   }
 
   .es-card--active {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow: 0 12px 28px rgba(43, 33, 28, 0.1);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, var(--card-bg, #fff));
+    border-color: var(--accent-color, var(--fs-store-primary));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent),
+      0 16px 34px rgba(43, 33, 28, 0.1);
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff)),
+        var(--card-bg, #fff)
+      );
   }
 
   .es-card__quote {
     margin: 0;
     font-size: 0.9rem;
-    line-height: 1.65;
-    color: var(--text-color, #2b211c);
+    line-height: 1.6;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
   .es-card__note {
     margin: 0;
-    font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    font-size: 0.75rem;
+    color: var(--accent-color, var(--fs-store-primary));
+    font-weight: 700;
   }
 
   .es-card__foot {
@@ -174,69 +221,21 @@ const S = b`
     margin-top: auto;
   }
 
-  .es-card__foot .es-avatar {
+  .es-card .es-avatar {
     width: 2.35rem;
     height: 2.35rem;
-    border-radius: 8px;
-  }
-
-  @media (max-width: 959px) {
-    .es-shell {
-      gap: 1.2rem;
-    }
-
-    .es-featured {
-      padding: 1.25rem 1.1rem;
-    }
-
-    .es-rail {
-      margin-inline: -16px;
-      padding-inline: 16px;
-    }
-  }
-
-  @media (max-width: 639px) {
-    .es-shell {
-      gap: 1rem;
-    }
-
-    .es-featured {
-      padding: 1.05rem 0.9rem;
-    }
-
-    .es-featured__mark {
-      font-size: 3.1rem;
-      top: 0.2rem;
-      inset-inline-end: 0.55rem;
-    }
-
-    .es-featured__quote {
-      margin-bottom: 0.9rem;
-      font-size: 1rem;
-      line-height: 1.65;
-    }
-
-    .es-rail {
-      margin-inline: -12px;
-      padding-inline: 12px;
-      gap: 0.65rem;
-    }
-
-    .es-card {
-      flex-basis: min(15.5rem, 84vw);
-      padding: 0.85rem;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .es-card,
-    .es-card:hover {
-      transition: none;
-      transform: none;
+    .es-featured,
+    .es-card {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
     }
   }
 `;
-function L(n) {
+function M(n) {
   return k(n).map((e, r) => ({
     id: d(e.id) || `echo-${r + 1}`,
     name: d(e.name),
@@ -247,17 +246,17 @@ function L(n) {
     product_note: d(e.product_note)
   })).filter((e) => e.name || e.quote);
 }
-function M(n) {
+function R(n) {
   if (!n.length) return 0;
   const e = n.reduce((r, c) => r + c.rating, 0);
   return Math.round(e / n.length * 10) / 10;
 }
-var R = Object.defineProperty, x = (n, e, r, c) => {
-  for (var t = void 0, s = n.length - 1, l; s >= 0; s--)
-    (l = n[s]) && (t = l(e, r, t) || t);
-  return t && R(e, r, t), t;
+var j = Object.defineProperty, y = (n, e, r, c) => {
+  for (var t = void 0, i = n.length - 1, l; i >= 0; i--)
+    (l = n[i]) && (t = l(e, r, t) || t);
+  return t && j(e, r, t), t;
 };
-const g = class g extends _ {
+const h = class h extends x {
   constructor() {
     super(...arguments), this.config = {}, this.activeId = "", this.boundLang = () => this.requestUpdate(), this.autoTimer = null;
   }
@@ -272,7 +271,7 @@ const g = class g extends _ {
   }
   get reviews() {
     var e;
-    return L((e = this.config) == null ? void 0 : e.es_reviews);
+    return M((e = this.config) == null ? void 0 : e.es_reviews);
   }
   get active() {
     return this.reviews.find((e) => e.id === this.activeId) || this.reviews[0] || null;
@@ -318,93 +317,109 @@ const g = class g extends _ {
     return a`<span class="es-avatar es-avatar--placeholder" aria-hidden="true">${t}</span>`;
   }
   render() {
-    const e = this.config || {}, r = T(e, "es_"), c = r.animate && !v(), t = this.reviews, s = this.active, l = d(e.es_title), m = d(e.es_desc), h = M(t);
+    const e = this.config || {}, r = C(e, "es_"), c = r.animate && !v(), t = this.reviews, i = this.active, l = d(e.es_title), f = d(e.es_desc), g = R(t);
     return t.length ? a`
       <section
-        class=${f({
+        class=${u({
       "fs-section": !0,
       "fs-animate": c
     })}
-        style=${w(C(r))}
-        aria-label=${l || u("رواق الشهادات", "Testimony Arcade")}
+        style=${w(T(r))}
+        aria-label=${l || p("رواق الشهادات", "Testimony Arcade")}
       >
         <div class="fs-container">
-          ${l || m ? a`<header class="fs-header">
+          ${l || f ? a`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${p("آراء العملاء", "Customer voices")}</p>
                 ${l ? a`<h2 class="fs-title">${l}</h2>` : o}
-                ${m ? a`<p class="fs-desc">${m}</p>` : o}
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${f ? a`<p class="fs-desc">${f}</p>` : o}
               </header>` : o}
 
           <div class="es-shell">
-            ${s ? a`<article class="es-featured" aria-live="polite">
+            ${i ? a`<article class="es-featured" aria-live="polite">
                   <span class="es-featured__mark" aria-hidden="true">”</span>
-                  <p class="es-featured__quote">${s.quote}</p>
+                  <p class="es-featured__quote">${i.quote}</p>
                   <div class="es-featured__meta">
-                    ${this.renderAvatar(s, !0)}
+                    ${this.renderAvatar(i, !0)}
                     <div class="es-person">
-                      <strong>${s.name}</strong>
-                      ${s.role ? a`<span>${s.role}</span>` : o}
-                      ${s.product_note ? a`<span>${s.product_note}</span>` : o}
+                      <strong>${i.name}</strong>
+                      ${i.role ? a`<span>${i.role}</span>` : o}
+                      ${i.product_note ? a`<span>${i.product_note}</span>` : o}
                     </div>
-                    ${this.renderStars(s.rating)}
-                    ${h > 0 ? a`<div class="es-score">
-                          <strong>${h}</strong>
-                          <span>/ 5 · ${t.length} ${u("صدى", "echoes")}</span>
+                    ${this.renderStars(i.rating)}
+                    ${g > 0 ? a`<div class="es-score">
+                          <strong>${g}</strong>
+                          <span>/ 5 · ${t.length} ${p("صدى", "echoes")}</span>
                         </div>` : o}
                   </div>
                 </article>` : o}
 
             <div class="es-rail" role="list">
               ${t.map(
-      (i) => a`
+      (s) => a`
                   <button
                     type="button"
-                    class=${f({
+                    class=${u({
         "es-card": !0,
-        "es-card--active": i.id === this.activeId
+        "es-card--active": s.id === this.activeId
       })}
                     role="listitem"
-                    aria-pressed=${i.id === this.activeId ? "true" : "false"}
-                    @click=${() => this.select(i.id)}
+                    aria-pressed=${s.id === this.activeId ? "true" : "false"}
+                    @click=${() => this.select(s.id)}
                   >
-                    ${this.renderStars(i.rating)}
-                    <p class="es-card__quote">${i.quote}</p>
-                    ${i.product_note ? a`<p class="es-card__note">${i.product_note}</p>` : o}
+                    ${this.renderStars(s.rating)}
+                    <p class="es-card__quote">${s.quote}</p>
+                    ${s.product_note ? a`<p class="es-card__note">${s.product_note}</p>` : o}
                     <div class="es-card__foot">
-                      ${this.renderAvatar(i)}
+                      ${this.renderAvatar(s)}
                       <div class="es-person">
-                        <strong>${i.name}</strong>
-                        ${i.role ? a`<span>${i.role}</span>` : o}
+                        <strong>${s.name}</strong>
+                        ${s.role ? a`<span>${s.role}</span>` : o}
                       </div>
                     </div>
                   </button>
                 `
     )}
             </div>
+
+            ${t.length > 1 ? a`<div class="fs-dots" role="tablist" aria-label=${p("التنقل بين الشهادات", "Browse reviews")}>
+                  ${t.map(
+      (s) => a`
+                      <button
+                        type="button"
+                        class=${u({ "fs-dot": !0, "is-active": s.id === this.activeId })}
+                        aria-label=${s.name || p("شهادة", "Review")}
+                        @click=${() => this.select(s.id)}
+                      ></button>
+                    `
+    )}
+                </div>` : o}
           </div>
         </div>
+        ${S(this.config || {}, "es_")}
       </section>
     ` : a`<div class="fs-empty" role="status">
-        ${u("أضيفي شهادات الزبونات في الإعدادات", "Add customer echoes in settings")}
+        ${p("أضف شهادات العملاء في الإعدادات", "Add customer echoes in settings")}
       </div>`;
   }
 };
-g.styles = [
+h.styles = [
   I,
-  S,
+  L,
   b`
       :host {
         direction: inherit;
       }
     `
 ];
-let p = g;
-x([
-  y({ type: Object })
-], p.prototype, "config");
-x([
-  $()
-], p.prototype, "activeId");
-typeof p < "u" && p.registerSallaComponent("salla-echo-salon");
+let m = h;
+y([
+  $({ type: Object })
+], m.prototype, "config");
+y([
+  _()
+], m.prototype, "activeId");
+typeof m < "u" && m.registerSallaComponent("salla-echo-salon");
 export {
-  p as default
+  m as default
 };

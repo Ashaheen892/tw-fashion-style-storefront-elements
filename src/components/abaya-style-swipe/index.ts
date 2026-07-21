@@ -11,6 +11,7 @@ import {
   t,
   themeStyleMap,
 } from '../../utils/helpers.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -240,6 +241,7 @@ export default class AbayaStyleSwipe extends LitElement {
             ? this._renderResult(restartLabel)
             : this._renderDeck(likeLabel, skipLabel, undoLabel)}
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'ass_')}
       </section>
     `;
   }

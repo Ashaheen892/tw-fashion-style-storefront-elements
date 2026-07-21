@@ -1,10 +1,10 @@
-import { css as F, LitElement as Q, nothing as y, html as g } from "lit";
-import { property as W, state as $ } from "lit/decorators.js";
-import { classMap as O } from "lit/directives/class-map.js";
-import { styleMap as X } from "lit/directives/style-map.js";
-import { k as Z, m as R, n as H, l as b, d as T, i as z, b as A, u as ee, f as E, e as k, h as x, q as te, s as re, y as oe, t as l, j as S, c as ae, r as se, p as ie, a as ne } from "./sharedStyles-BGb_aVO_.js";
-import { a as L, t as le, b as ce, u as de, f as ue, e as pe, c as me, r as be } from "./productPicker-DSFtCeT4.js";
-const ge = F`
+import { css as H, LitElement as W, nothing as y, html as g } from "lit";
+import { property as X, state as $ } from "lit/decorators.js";
+import { classMap as U } from "lit/directives/class-map.js";
+import { styleMap as Z } from "lit/directives/style-map.js";
+import { q as R, v as ee, n as N, l as b, f as C, i as z, d as E, y as te, C as P, D as F, E as re, u as oe, j as A, e as k, k as x, h as ae, x as se, m as ie, s as ne, F as le, t as l, o as S, c as ce, G as de, r as ue, p as pe, a as me, b as be } from "./sharedStyles-BYm1OK6w.js";
+import { r as ge } from "./productCard-BlEnQRkD.js";
+const fe = H`
   .alb-studio {
     position: relative;
     overflow: hidden;
@@ -12,8 +12,8 @@ const ge = F`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 42%),
-      radial-gradient(circle at 95% 100%, color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent), transparent 40%),
+      radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 42%),
+      radial-gradient(circle at 95% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 40%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -82,11 +82,11 @@ const ge = F`
   }
 
   .alb-tab[aria-selected='true'] {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .alb-tab[aria-selected='true']::after {
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .alb-panel-label {
@@ -149,8 +149,8 @@ const ge = F`
     display: inline-flex;
     padding: 0.25rem 0.65rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
   }
@@ -165,7 +165,7 @@ const ge = F`
     border-radius: calc(var(--section-radius, 18px) * 0.65);
     border: 1px dashed color-mix(in srgb, var(--border-color, #e8ddd6) 90%, transparent);
     background:
-      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, transparent), transparent 55%),
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, transparent), transparent 55%),
       color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
   }
 
@@ -260,7 +260,7 @@ const ge = F`
   .alb-piece__price {
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     white-space: nowrap;
   }
 
@@ -268,7 +268,7 @@ const ge = F`
     grid-column: 1 / -1;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     text-decoration: none;
   }
 
@@ -285,8 +285,8 @@ const ge = F`
   .alb-stat {
     padding: 0.65rem 0.7rem;
     border-radius: calc(var(--section-radius, 18px) * 0.45);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, var(--card-bg, #fff));
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--border-color, #e8ddd6));
   }
 
   .alb-stat--wide {
@@ -308,7 +308,7 @@ const ge = F`
   }
 
   .alb-stat--accent .alb-stat__value {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .alb-actions {
@@ -325,8 +325,8 @@ const ge = F`
     margin: 0;
     padding: 0.45rem 0.65rem;
     border-radius: calc(var(--section-radius, 18px) * 0.4);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.8rem;
     font-weight: 600;
     text-align: center;
@@ -353,18 +353,18 @@ const ge = F`
     }
   }
 `;
-function N(e) {
-  const t = !!b(e.name).trim(), o = !!(k(e.image) || k(e.thumbnail) || k(e.main_image)), r = !!A(e.url || e.permalink), a = x(e.price) > 0 || x(e.sale_price) > 0 || x(e.regular_price) > 0;
+function K(e) {
+  const t = !!b(e.name).trim(), o = !!(k(e.image) || k(e.thumbnail) || k(e.main_image)), r = !!E(e.url || e.permalink), a = x(e.price) > 0 || x(e.sale_price) > 0 || x(e.regular_price) > 0;
   return t && (o || r || a);
 }
-function C(e) {
-  return de(e);
+function T(e) {
+  return oe(e);
 }
 function I(e) {
-  return pe(e);
+  return ie(e);
 }
-function K(e) {
-  const t = C(e);
+function Y(e) {
+  const t = T(e);
   for (const r of t)
     if (r != null) {
       if (typeof r == "number" || typeof r == "string") {
@@ -372,33 +372,33 @@ function K(e) {
         if (a) return { id: a, label: "", hydrated: null };
       }
       if (typeof r == "object") {
-        const a = r, s = I(a), i = b(a.label ?? a.name).trim(), n = N(a) ? a : null;
-        if (s || n)
+        const a = r, i = I(a), s = b(a.label ?? a.name).trim(), n = K(a) ? a : null;
+        if (i || n)
           return {
-            id: s || String((n == null ? void 0 : n.id) ?? "").trim(),
-            label: i,
+            id: i || String((n == null ? void 0 : n.id) ?? "").trim(),
+            label: s,
             hydrated: n
           };
       }
     }
-  const o = E(e);
+  const o = A(e);
   return o != null && o.id ? { id: o.id, label: o.name, hydrated: e } : null;
 }
-function fe(e) {
+function _e(e) {
   return e.product ?? e.products ?? e.selected_product ?? e.chosen_products ?? e["alb_items.product"] ?? e["alb_tabs.products"];
 }
 function G(e) {
-  const t = H(e), o = [];
+  const t = N(e), o = [];
   return t.forEach((r, a) => {
-    const s = b(r.group_name) || b(r.group_key) || `تبويب ${a + 1}`, i = b(r.group_key) || s || `tab-${a}`, n = T(r.group_order, a + 1), p = r.products ?? r.product ?? r.chosen_products ?? r["alb_tabs.products"], c = C(p);
+    const i = b(r.group_name) || b(r.group_key) || `تبويب ${a + 1}`, s = b(r.group_key) || i || `tab-${a}`, n = C(r.group_order, a + 1), p = r.products ?? r.product ?? r.chosen_products ?? r["alb_tabs.products"], c = T(p);
     c.length && c.forEach((m, f) => {
-      const d = K(m);
+      const d = Y(m);
       if (!(d != null && d.id) && !(d != null && d.hydrated)) return;
       const w = (d == null ? void 0 : d.id) || "";
       o.push({
         id: w ? `tab-${a}-product-${w}` : `tab-${a}-item-${f}`,
-        group_key: i,
-        group_name: s,
+        group_key: s,
+        group_name: i,
         group_order: n,
         product_id: w,
         product_label: (d == null ? void 0 : d.label) || "",
@@ -414,31 +414,31 @@ function G(e) {
     });
   }), o;
 }
-function _e(e) {
+function he(e) {
   return k(e) || (typeof e == "string" ? e.trim() : b(e));
 }
 function j(e) {
-  return H(e).map((t, o) => {
-    const r = K(fe(t)), a = (r == null ? void 0 : r.id) || "";
+  return N(e).map((t, o) => {
+    const r = Y(_e(t)), a = (r == null ? void 0 : r.id) || "";
     return {
       id: a ? `product-${a}` : `item-${o}`,
       group_key: b(t.group_key) || b(t.group_name) || "default",
       group_name: b(t.group_name) || b(t.group_key) || "default",
-      group_order: T(t.group_order, 0),
+      group_order: C(t.group_order, 0),
       product_id: a,
       product_label: (r == null ? void 0 : r.label) || "",
       hydrated: (r == null ? void 0 : r.hydrated) || null,
       piece_name: b(t.piece_name),
-      image: _e(t.image),
-      price: T(t.price, 0),
-      old_price: T(t.old_price, 0),
-      url: A(t.url),
+      image: he(t.image),
+      price: C(t.price, 0),
+      old_price: C(t.old_price, 0),
+      url: E(t.url),
       is_default: z(t.is_default),
       color_note: b(t.color_note)
     };
   }).filter((t) => t.product_id || t.piece_name || t.image || t.hydrated);
 }
-function he(e) {
+function ye(e) {
   return {
     id: e.id,
     group_key: e.group_key,
@@ -456,7 +456,7 @@ function he(e) {
   };
 }
 function M(e, t) {
-  const o = E(t), r = t && typeof t == "object" ? t : {}, a = e.piece_name || (o == null ? void 0 : o.name) || b(r.name) || e.product_label, s = e.image || (o == null ? void 0 : o.image) || k(r.image) || k(r.thumbnail) || k(r.main_image), i = e.url || (o == null ? void 0 : o.url) || A(r.url || r.permalink || r.link);
+  const o = A(t), r = t && typeof t == "object" ? t : {}, a = e.piece_name || (o == null ? void 0 : o.name) || b(r.name) || e.product_label, i = e.image || (o == null ? void 0 : o.image) || k(r.image) || k(r.thumbnail) || k(r.main_image), s = e.url || (o == null ? void 0 : o.url) || E(r.url || r.permalink || r.link);
   let n = e.price > 0 ? e.price : (o == null ? void 0 : o.price) || 0, p = e.old_price > 0 ? e.old_price : (o == null ? void 0 : o.old_price) || 0;
   if (!(e.price > 0)) {
     const c = z(r.is_on_sale) || z(r.on_sale), m = x(r.sale_price), f = x(r.regular_price), d = x(r.price);
@@ -468,25 +468,25 @@ function M(e, t) {
     group_name: e.group_name,
     group_order: e.group_order,
     piece_name: a,
-    image: s,
+    image: i,
     price: n,
     old_price: p,
-    url: i,
+    url: s,
     product_id: e.product_id || (o == null ? void 0 : o.id) || "",
     is_default: e.is_default,
     color_note: e.color_note,
     rating: (o == null ? void 0 : o.rating) || 0
   };
 }
-async function Y(e) {
-  return ue(e);
+async function J(e) {
+  return ae(e);
 }
-function ye(e) {
-  const t = te(e, "").toLowerCase();
-  return !t || t === "none" ? "" : ["categories", "sales", "latest", "selected"].includes(t) ? t : "";
+function ve(e) {
+  const t = se(e, "").toLowerCase();
+  return !t || t === "none" ? "" : ["categories", "brands", "sales", "latest", "selected"].includes(t) ? t : "";
 }
-function ve(e, t, o) {
-  const r = E(e);
+function ke(e, t, o) {
+  const r = A(e);
   if (!r && (!e || typeof e != "object")) return null;
   const a = {
     id: `product-${(r == null ? void 0 : r.id) || o}`,
@@ -505,97 +505,106 @@ function ve(e, t, o) {
   };
   return M(a, e || r);
 }
-async function ke(e) {
-  const t = ye(e.alb_products);
+async function $e(e) {
+  const t = ve(e.alb_products);
   if (!t) return [];
-  const o = Math.max(1, Math.min(40, ee(e.alb_products_limit, 12))), r = b(e.alb_import_group_name) || "المنتجات", a = {
+  const o = Math.max(1, Math.min(40, te(e.alb_products_limit, 12))), r = b(e.alb_import_group_name) || "المنتجات", a = {
     key: b(e.alb_import_group_key) || r,
     name: r,
-    order: T(e.alb_import_group_order, 0)
+    order: C(e.alb_import_group_order, 0)
   };
-  let s = [];
+  let i = [];
   if (t === "latest")
-    s = await L({ source: "latest", limit: o });
+    i = await P({ source: "latest", limit: o });
   else if (t === "sales") {
-    for (const i of [
+    for (const s of [
       { source: "sales", source_value: "sales", limit: o },
       { source: "sales", limit: o },
       { source: "offers", limit: o }
     ])
-      if (s = await L(i), s.length) break;
+      if (i = await P(s), i.length) break;
   } else if (t === "categories") {
-    const i = le(
-      C(e.alb_category).map((n) => I(n)).filter(Boolean)
+    const s = F(
+      T(e.alb_category).map((n) => I(n)).filter(Boolean)
     );
-    i.length && (s = await L({
+    s.length && (i = await P({
       source: "categories",
-      source_value: i.length === 1 ? i[0] : i,
+      source_value: s.length === 1 ? s[0] : s,
+      limit: o
+    }));
+  } else if (t === "brands") {
+    const s = F(
+      T(e.alb_brands ?? e.brands).map((n) => I(n)).filter(Boolean)
+    );
+    s.length && (i = await P({
+      source: "brands",
+      source_value: s.length === 1 ? s[0] : s,
       limit: o
     }));
   } else if (t === "selected") {
-    const i = C(e.alb_chosen_products), n = ce(e.alb_chosen_products).slice(0, o), p = /* @__PURE__ */ new Map();
-    for (const m of i) {
+    const s = T(e.alb_chosen_products), n = re(e.alb_chosen_products).slice(0, o), p = /* @__PURE__ */ new Map();
+    for (const m of s) {
       if (!m || typeof m != "object") continue;
       const f = m;
-      if (!N(f)) continue;
+      if (!K(f)) continue;
       const d = I(f);
       d && p.set(d, f);
     }
     const c = n.filter((m) => !p.has(m));
     if (c.length) {
-      const m = await Y(c);
+      const m = await J(c);
       for (const [f, d] of m) p.set(f, d);
     }
-    n.length ? s = n.map((m) => p.get(m)).filter(Boolean) : s = [...p.values()];
+    n.length ? i = n.map((m) => p.get(m)).filter(Boolean) : i = [...p.values()];
   }
-  return s.slice(0, o).map((i, n) => ve(i, a, n)).filter(
-    (i) => !!i && !!i.product_id && !!(i.piece_name || i.image)
+  return i.slice(0, o).map((s, n) => ke(s, a, n)).filter(
+    (s) => !!s && !!s.product_id && !!(s.piece_name || s.image)
   );
 }
-function $e(e) {
+function xe(e) {
   return e.hydrated ? !0 : !!((e.piece_name || e.product_label) && (e.image || e.url || e.price > 0));
 }
 function B(e, t) {
-  return t ? M(e, t) : e.hydrated ? M(e, e.hydrated) : he({
+  return t ? M(e, t) : e.hydrated ? M(e, e.hydrated) : ye({
     ...e,
     piece_name: e.piece_name || e.product_label
   });
 }
-function P(e) {
+function L(e) {
   return !!e.product_id;
 }
-function J(e) {
+function Q(e) {
   const t = G(e.alb_tabs), o = j(e.alb_items);
   return t.length ? t : o;
 }
-function xe(e) {
-  return (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? J(e) : [...G(e), ...j(e)]).filter((o) => o.product_id).map((o) => B(o)).filter(P);
-}
-async function we(e) {
-  const t = (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? J(e) : [...G(e), ...j(e)]).filter((a) => a.product_id), o = t.filter((a) => a.product_id && !$e(a)).map((a) => a.product_id), r = o.length ? await Y(o) : /* @__PURE__ */ new Map();
-  return t.map((a) => a.product_id && r.has(a.product_id) ? B(a, r.get(a.product_id)) : B(a)).filter(P);
+function we(e) {
+  return (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? Q(e) : [...G(e), ...j(e)]).filter((o) => o.product_id).map((o) => B(o)).filter(L);
 }
 async function Se(e) {
+  const t = (e && typeof e == "object" && !Array.isArray(e) && ("alb_tabs" in e || "alb_items" in e) ? Q(e) : [...G(e), ...j(e)]).filter((a) => a.product_id), o = t.filter((a) => a.product_id && !xe(a)).map((a) => a.product_id), r = o.length ? await J(o) : /* @__PURE__ */ new Map();
+  return t.map((a) => a.product_id && r.has(a.product_id) ? B(a, r.get(a.product_id)) : B(a)).filter(L);
+}
+async function Ce(e) {
   const t = e && typeof e == "object" ? e : {}, [o, r] = await Promise.all([
-    we(t),
-    ke(t)
-  ]), a = r.filter(P), s = o.filter(P);
-  if (!a.length) return s;
-  if (!s.length) return a;
-  const i = new Set(s.map((p) => p.product_id).filter(Boolean)), n = [...s];
+    Se(t),
+    $e(t)
+  ]), a = r.filter(L), i = o.filter(L);
+  if (!a.length) return i;
+  if (!i.length) return a;
+  const s = new Set(i.map((p) => p.product_id).filter(Boolean)), n = [...i];
   for (const p of a)
-    i.has(p.product_id) || (i.add(p.product_id), n.push(p));
+    s.has(p.product_id) || (s.add(p.product_id), n.push(p));
   return n;
 }
 function V(e) {
-  const t = Z(e, "group_key"), o = [];
+  const t = R(e, "group_key"), o = [];
   for (const [r, a] of t) {
-    const s = R(a, "group_order"), i = s[0];
+    const i = ee(a, "group_order"), s = i[0];
     o.push({
       key: r,
-      name: i.group_name || r,
-      order: i.group_order,
-      items: s
+      name: s.group_name || r,
+      order: s.group_order,
+      items: i
     });
   }
   return o.sort((r, a) => r.order - a.order);
@@ -610,27 +619,27 @@ function Te(e) {
 }
 function q(e, t, o) {
   const r = [];
-  let a = 0, s = 0, i = 0;
+  let a = 0, i = 0, s = 0;
   for (const n of e) {
     const p = t[n.key], c = n.items.find((f) => f.id === p);
     if (!c) continue;
-    i += 1, a += c.price, c.old_price > c.price && (s += c.old_price - c.price);
+    s += 1, a += c.price, c.old_price > c.price && (i += c.old_price - c.price);
     const m = c.color_note ? ` (${c.color_note})` : "";
     r.push(`${n.name}: ${c.piece_name}${m}`), c.url && r.push(`  ${c.url}`), c.price > 0 && r.push(`  ${c.price} ${o}`);
   }
-  return { lines: r, total: a, count: i, savings: s };
+  return { lines: r, total: a, count: s, savings: i };
 }
-var Ce = Object.defineProperty, v = (e, t, o, r) => {
-  for (var a = void 0, s = e.length - 1, i; s >= 0; s--)
-    (i = e[s]) && (a = i(t, o, a) || a);
-  return a && Ce(t, o, a), a;
+var Ie = Object.defineProperty, v = (e, t, o, r) => {
+  for (var a = void 0, i = e.length - 1, s; i >= 0; i--)
+    (s = e[i]) && (a = s(t, o, a) || a);
+  return a && Ie(t, o, a), a;
 };
-const U = class U extends Q {
+const D = class D extends W {
   constructor() {
     super(...arguments), this.config = {}, this.activeGroup = "", this.selections = {}, this.statusMsg = "", this.statusError = !1, this.items = [], this.loading = !0, this.addingToCart = !1, this.boundLangHandler = () => this.requestUpdate(), this.statusTimer = null, this.loadToken = 0;
   }
   get currency() {
-    return oe("ر.س");
+    return le("ر.س");
   }
   connectedCallback() {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLangHandler), this.loadItems();
@@ -651,9 +660,9 @@ const U = class U extends Q {
     this.selections = Te(o), (!this.activeGroup || !o.some((a) => a.key === this.activeGroup)) && (this.activeGroup = ((r = o[0]) == null ? void 0 : r.key) || "");
   }
   async loadItems() {
-    const t = ++this.loadToken, o = xe(this.config || {});
+    const t = ++this.loadToken, o = we(this.config || {});
     o.length ? (this.applyItems(o), this.loading = !1) : this.loading = !0;
-    const r = await Se(this.config);
+    const r = await Ce(this.config);
     t === this.loadToken && (this.applyItems(r), this.loading = !1);
   }
   selectItem(t, o) {
@@ -680,7 +689,7 @@ const U = class U extends Q {
       `${l("عدد القطع", "Pieces")}: ${o.count}`,
       o.savings > 0 ? `${l("التوفير", "Savings")}: ${S(o.savings, t)}` : ""
     ].filter(Boolean).join(`
-`), a = await ae(r);
+`), a = await ce(r);
     this.setStatus(
       a ? l("تم نسخ التفاصيل", "Details copied") : l("تعذر النسخ", "Could not copy"),
       !a
@@ -697,7 +706,7 @@ const U = class U extends Q {
       return;
     }
     this.addingToCart = !0;
-    const r = await me(o);
+    const r = await de(o);
     if (this.addingToCart = !1, r.ok) {
       this.setStatus(
         r.error === "partial" ? l(
@@ -718,7 +727,7 @@ const U = class U extends Q {
         ),
         !0
       );
-      const a = t.map(({ item: s }) => s.url).find(Boolean);
+      const a = t.map(({ item: i }) => i.url).find(Boolean);
       a && window.open(a, "_blank", "noopener,noreferrer");
       return;
     }
@@ -741,15 +750,15 @@ const U = class U extends Q {
     );
   }
   render() {
-    var D;
-    const t = this.config || {}, o = se(t, "alb_"), r = o.animate && !ie(), a = this.groups, s = this.currency, i = a.find((u) => u.key === this.activeGroup) || a[0], n = this.getSelectedItems(), p = n.map((u) => u.item), c = q(a, this.selections, s), m = b(t.alb_title), f = b(t.alb_desc), d = (D = p.find((u) => u.url)) == null ? void 0 : D.url, w = p.some((u) => u.product_id);
+    var O;
+    const t = this.config || {}, o = ue(t, "alb_"), r = o.animate && !pe(), a = this.groups, i = this.currency, s = a.find((u) => u.key === this.activeGroup) || a[0], n = this.getSelectedItems(), p = n.map((u) => u.item), c = q(a, this.selections, i), m = b(t.alb_title), f = b(t.alb_desc), d = (O = p.find((u) => u.url)) == null ? void 0 : O.url, w = p.some((u) => u.product_id);
     return g`
       <section
-        class=${O({
+        class=${U({
       "fs-section": !0,
       "fs-animate": r
     })}
-        style=${X(ne(o))}
+        style=${Z(me(o))}
         aria-label=${m || l("منسقة الإطلالة", "Look builder")}
       >
         <div class="fs-container">
@@ -787,15 +796,15 @@ const U = class U extends Q {
     )}
                       </div>
 
-                      ${i ? g`
+                      ${s ? g`
                             <p class="alb-panel-label">
-                              ${l("اختاري من", "Choose from")} ${i.name}
+                              ${l("اختاري من", "Choose from")} ${s.name}
                             </p>
                             <div class="alb-grid" role="list">
-                              ${i.items.map((u) => {
-      const h = this.selections[i.key] === u.id;
+                              ${s.items.map((u) => {
+      const h = this.selections[s.key] === u.id;
       return g`<div class="alb-slot" role="listitem">
-                                  ${be(
+                                  ${ge(
         {
           id: u.product_id,
           name: u.piece_name,
@@ -807,12 +816,12 @@ const U = class U extends Q {
           subtitle: u.color_note
         },
         {
-          currency: s,
+          currency: i,
           selectable: !0,
           selected: h,
           wishlist: !0,
           viewLink: !0,
-          onSelect: () => this.selectItem(i.key, u.id)
+          onSelect: () => this.selectItem(s.key, u.id)
         }
       )}
                                 </div>`;
@@ -851,7 +860,7 @@ const U = class U extends Q {
                                     <span class="alb-piece__name">${h.piece_name}</span>
                                   </span>
                                   ${h.price > 0 ? g`<span class="alb-piece__price">
-                                        ${S(h.price, s)}
+                                        ${S(h.price, i)}
                                       </span>` : y}
                                   ${h.url ? g`<a
                                         class="alb-piece__link"
@@ -879,13 +888,13 @@ const U = class U extends Q {
                         <div class="alb-stat alb-stat--accent">
                           <span class="alb-stat__label">${l("الإجمالي", "Total")}</span>
                           <span class="alb-stat__value">
-                            ${S(c.total, s)}
+                            ${S(c.total, i)}
                           </span>
                         </div>
                         ${c.savings > 0 ? g`<div class="alb-stat alb-stat--wide alb-stat--accent">
                               <span class="alb-stat__label">${l("التوفير", "Savings")}</span>
                               <span class="alb-stat__value">
-                                ${S(c.savings, s)}
+                                ${S(c.savings, i)}
                               </span>
                             </div>` : y}
                       </div>
@@ -912,7 +921,7 @@ const U = class U extends Q {
                             </a>` : y}
                       </div>
                       ${this.statusMsg ? g`<p
-                            class=${O({
+                            class=${U({
       "alb-copy-msg": !0,
       "alb-copy-msg--error": this.statusError
     })}
@@ -929,11 +938,12 @@ const U = class U extends Q {
     )}
                 </div>`}
         </div>
+        ${be(this.config || {}, "alb_")}
       </section>
     `;
   }
 };
-U.styles = [re, ge, F`
+D.styles = [ne, fe, H`
     :host {
       direction: inherit;
     }
@@ -956,9 +966,9 @@ U.styles = [re, ge, F`
       color: #8f4a45;
     }
   `];
-let _ = U;
+let _ = D;
 v([
-  W({ type: Object })
+  X({ type: Object })
 ], _.prototype, "config");
 v([
   $()

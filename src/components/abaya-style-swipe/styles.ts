@@ -10,8 +10,8 @@ export const componentStyles = css`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 16%, transparent), transparent 42%),
-      radial-gradient(circle at 90% 100%, color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent), transparent 38%),
+      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
+      radial-gradient(circle at 90% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 38%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -31,8 +31,8 @@ export const componentStyles = css`
     gap: 0.4rem;
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
   }
@@ -51,8 +51,8 @@ export const componentStyles = css`
     border-radius: inherit;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 70%, #c4a484),
-      var(--accent-color, #8b5e4b)
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #c4a484),
+      var(--accent-color, var(--fs-store-primary))
     );
     transition: width 0.35s ease;
   }
@@ -201,15 +201,15 @@ export const componentStyles = css`
 
   .ass-indicator--like {
     inset-inline-start: 1rem;
-    color: #2f7a58;
-    border-color: #2f7a58;
+    color: var(--fs-success, #2f7a58);
+    border-color: var(--fs-success, #2f7a58);
     transform: rotate(-14deg);
   }
 
   .ass-indicator--skip {
     inset-inline-end: 1rem;
-    color: #b33a3a;
-    border-color: #b33a3a;
+    color: var(--fs-danger, #b33a3a);
+    border-color: var(--fs-danger, #b33a3a);
     transform: rotate(14deg);
   }
 
@@ -252,14 +252,14 @@ export const componentStyles = css`
 
   .ass-btn-round--like {
     color: #fff;
-    background: linear-gradient(145deg, #3d9a72, #2f7a58);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--fs-success, #2f7a58) 75%, #fff), var(--fs-success, #2f7a58));
     border-color: transparent;
   }
 
   .ass-btn-round--skip {
-    color: #b33a3a;
-    background: color-mix(in srgb, #b33a3a 8%, var(--card-bg, #fff));
-    border-color: color-mix(in srgb, #b33a3a 28%, var(--border-color, #e8ddd6));
+    color: var(--fs-danger, #b33a3a);
+    background: color-mix(in srgb, var(--fs-danger, #b33a3a) 8%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, var(--fs-danger, #b33a3a) 28%, var(--border-color, #e8ddd6));
   }
 
   .ass-btn-labels {
@@ -274,7 +274,7 @@ export const componentStyles = css`
   }
 
   .ass-btn-labels span:last-child {
-    color: #2f7a58;
+    color: var(--fs-success, #2f7a58);
   }
 
   .ass-undo {
@@ -293,7 +293,7 @@ export const componentStyles = css`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 45%),
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 45%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
     animation: ass-reveal 0.45s ease both;
@@ -306,8 +306,8 @@ export const componentStyles = css`
     margin-bottom: 0.85rem;
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;
   }

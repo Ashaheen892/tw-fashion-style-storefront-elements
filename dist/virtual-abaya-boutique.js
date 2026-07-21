@@ -1,10 +1,10 @@
-import { css as Z, LitElement as K, html as n, nothing as u } from "lit";
+import { css as W, LitElement as K, html as n, nothing as u } from "lit";
 import { property as V, state as z, query as Y } from "lit/decorators.js";
 import { classMap as S } from "lit/directives/class-map.js";
 import { styleMap as E } from "lit/directives/style-map.js";
-import { n as D, l as m, v as B, u as T, b as F, q as N, e as f, h as x, f as G, s as X, p as O, y as J, w as y, r as Q, i as ee, t as c, a as te } from "./sharedStyles-BGb_aVO_.js";
-import { e as w, u as ae, t as re, a as oe, f as ie, r as se } from "./productPicker-DSFtCeT4.js";
-const ne = Z`
+import { n as Z, l as m, z as B, y as O, d as q, m as w, x as N, u as G, D as X, e as b, k as x, j as J, C as Q, h as ee, s as te, p as T, F as re, A as y, r as ae, i as oe, t as c, a as ie, b as se } from "./sharedStyles-BYm1OK6w.js";
+import { r as ne } from "./productCard-BlEnQRkD.js";
+const ce = W`
   .vab-shell {
     display: grid;
     gap: 1.25rem;
@@ -23,7 +23,7 @@ const ne = Z`
     border-radius: var(--section-radius, 18px);
     overflow: hidden;
     background:
-      radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--accent-color, #8b5e4b) 16%, transparent), transparent 46%),
+      radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 46%),
       var(--card-bg, #fff);
     border: 1px solid var(--border-color, #e8ddd6);
     box-shadow: 0 16px 40px rgba(43, 33, 28, 0.08);
@@ -88,7 +88,7 @@ const ne = Z`
     margin: -1.375rem 0 0 -1.375rem;
     border: 2px solid rgba(255, 255, 255, 0.95);
     border-radius: 50%;
-    background: var(--spot-color, var(--accent-color, #8b5e4b));
+    background: var(--spot-color, var(--accent-color, var(--fs-store-primary)));
     box-shadow:
       0 0 0 6px color-mix(in srgb, var(--spot-color, #8b5e4b) 18%, transparent),
       0 8px 20px rgba(43, 33, 28, 0.28);
@@ -113,7 +113,7 @@ const ne = Z`
     position: absolute;
     inset: -7px;
     border-radius: inherit;
-    border: 2px solid var(--spot-color, var(--accent-color, #8b5e4b));
+    border: 2px solid var(--spot-color, var(--accent-color, var(--fs-store-primary)));
     animation: vab-pulse 2s ease-out infinite;
   }
 
@@ -188,15 +188,15 @@ const ne = Z`
 
   .vab-card:hover {
     transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
   }
 
   .vab-card--active {
-    border-color: var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
     background:
       linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff)),
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff)),
         var(--card-bg, #fff) 55%
       );
     box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
@@ -226,7 +226,7 @@ const ne = Z`
     height: 0.65rem;
     border-radius: 50%;
     border: 1.5px solid #fff;
-    background: var(--spot-color, var(--accent-color, #8b5e4b));
+    background: var(--spot-color, var(--accent-color, var(--fs-store-primary)));
   }
 
   .vab-card__body {
@@ -287,7 +287,7 @@ const ne = Z`
   }
 
   .vab-card__status--on {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .vab-card__status--on::before {
@@ -296,7 +296,7 @@ const ne = Z`
     height: 0.4rem;
     margin-inline-end: 0.4rem;
     border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .vab-card__cta {
@@ -307,7 +307,7 @@ const ne = Z`
     min-height: 44px;
     padding: 0.45rem 0.95rem;
     border-radius: calc(var(--section-radius, 18px) * 0.4);
-    background: var(--button-bg, #8b5e4b);
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
     color: var(--button-color, #fff);
     text-decoration: none;
     font-size: 0.8rem;
@@ -324,8 +324,8 @@ const ne = Z`
     margin-top: 0.25rem;
     padding: 1rem;
     border-radius: calc(var(--section-radius, 18px) * 0.8);
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #fff));
     display: grid;
     gap: 0.65rem;
     animation: vab-fade 0.35s ease;
@@ -387,8 +387,8 @@ const ne = Z`
     flex: 0 0 auto;
     padding: 0.18rem 0.6rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
   }
@@ -411,7 +411,7 @@ const ne = Z`
     width: 2rem;
     height: 2rem;
     padding: 0;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e8ddd6));
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
     color: var(--text-color, #2b211c);
@@ -427,7 +427,7 @@ const ne = Z`
   }
 
   .vab-rail__nav:hover {
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
     box-shadow: 0 10px 22px rgba(43, 33, 28, 0.24);
   }
@@ -437,7 +437,7 @@ const ne = Z`
   }
 
   .vab-rail__nav:focus-visible {
-    outline: 2px solid var(--accent-color, #8b5e4b);
+    outline: 2px solid var(--accent-color, var(--fs-store-primary));
     outline-offset: 2px;
   }
 
@@ -464,7 +464,7 @@ const ne = Z`
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent) transparent;
+    scrollbar-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, transparent) transparent;
   }
 
   /* leave room for the arrows only when they are shown */
@@ -482,7 +482,7 @@ const ne = Z`
   }
 
   .vab-products::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, transparent);
     border-radius: 999px;
   }
 
@@ -622,66 +622,66 @@ const ne = Z`
       transform: none;
     }
   }
-`, b = /* @__PURE__ */ new Set(["none", "categories", "sales", "latest", "selected"]);
-function g(a) {
-  return ae(a);
+`, v = /* @__PURE__ */ new Set(["none", "categories", "sales", "latest", "selected"]);
+function g(r) {
+  return G(r);
 }
-function ce(a) {
-  const e = !!(m(a.name).trim() || m(a.label).trim()), t = !!(f(a.image) || f(a.thumbnail) || f(a.main_image) || a.value && typeof a.value == "object" && f(a.value.image)), o = !!F(a.url || a.permalink || a.link), r = x(a.price) > 0 || x(a.sale_price) > 0 || x(a.regular_price) > 0;
-  return e && (t || o || r);
+function le(r) {
+  const e = !!(m(r.name).trim() || m(r.label).trim()), t = !!(b(r.image) || b(r.thumbnail) || b(r.main_image) || r.value && typeof r.value == "object" && b(r.value.image)), o = !!q(r.url || r.permalink || r.link), a = x(r.price) > 0 || x(r.sale_price) > 0 || x(r.regular_price) > 0;
+  return e && (t || o || a);
 }
-function q(a) {
-  if (!a || typeof a != "object") return !1;
-  const e = a, t = String(e.value ?? e.key ?? "").toLowerCase().trim();
-  return b.has(t) && !e.id && !e.product_id;
+function F(r) {
+  if (!r || typeof r != "object") return !1;
+  const e = r, t = String(e.value ?? e.key ?? "").toLowerCase().trim();
+  return v.has(t) && !e.id && !e.product_id;
 }
-function C(a) {
-  const e = g(a);
-  return !e.length || e.length === 1 && q(e[0]) ? !1 : e.some((t) => {
+function C(r) {
+  const e = g(r);
+  return !e.length || e.length === 1 && F(e[0]) ? !1 : e.some((t) => {
     if (t == null) return !1;
     if (typeof t == "number" || typeof t == "string") {
       const i = String(t).trim();
-      return !!i && !b.has(i.toLowerCase());
+      return !!i && !v.has(i.toLowerCase());
     }
-    if (typeof t != "object" || q(t)) return !1;
+    if (typeof t != "object" || F(t)) return !1;
     const o = t;
-    if (ce(o)) return !0;
-    const r = w(o);
-    return !!r && !b.has(r.toLowerCase());
+    if (le(o)) return !0;
+    const a = w(o);
+    return !!a && !v.has(a.toLowerCase());
   });
 }
-function le(a) {
-  if (C(a)) return "selected";
-  const e = N(a, "").toLowerCase();
+function de(r) {
+  if (C(r)) return "selected";
+  const e = N(r, "").toLowerCase();
   return !e || e === "none" ? "" : ["categories", "sales", "latest", "selected"].includes(e) ? e : "";
 }
-function de(a) {
-  const t = N(a, "").toLowerCase() || m(a).toLowerCase();
+function pe(r) {
+  const t = N(r, "").toLowerCase() || m(r).toLowerCase();
   return ["left", "right", "top", "bottom"].includes(t) ? t : "";
 }
-function pe(a) {
+function ue(r) {
   const e = [
-    a.chosen_products,
-    a.selected_products,
-    a.product_ids,
-    a.products_list,
-    a["chosen_products.selected"]
+    r.chosen_products,
+    r.selected_products,
+    r.product_ids,
+    r.products_list,
+    r["chosen_products.selected"]
   ];
   for (const t of e)
     if (g(t).length || C(t))
       return t;
-  return C(a.products) ? a.products : a.chosen_products ?? null;
+  return C(r.products) ? r.products : r.chosen_products ?? null;
 }
-function P(a) {
-  if (a == null) return null;
-  if (typeof a == "number" || typeof a == "string") {
-    const A = String(a).trim();
-    return !A || b.has(A.toLowerCase()) ? null : { id: A, name: "", image: "", url: "", price: 0, old_price: 0 };
+function P(r) {
+  if (r == null) return null;
+  if (typeof r == "number" || typeof r == "string") {
+    const R = String(r).trim();
+    return !R || v.has(R.toLowerCase()) ? null : { id: R, name: "", image: "", url: "", price: 0, old_price: 0 };
   }
-  if (typeof a != "object" || q(a)) return null;
-  const e = G(a);
+  if (typeof r != "object" || F(r)) return null;
+  const e = J(r);
   if (e && (e.name || e.image || e.url || e.id))
-    return e.id && b.has(e.id.toLowerCase()) && !e.name && !e.image ? null : {
+    return e.id && v.has(e.id.toLowerCase()) && !e.name && !e.image ? null : {
       id: e.id,
       name: e.name,
       image: e.image,
@@ -689,83 +689,83 @@ function P(a) {
       price: e.price,
       old_price: e.old_price
     };
-  const t = a, o = t.value && typeof t.value == "object" && !Array.isArray(t.value) ? t.value : null, r = m(t.name).trim() || m(t.label).trim() || m(t.title).trim() || (o ? m(o.name).trim() || m(o.label).trim() : ""), i = f(t.image) || f(t.thumbnail) || f(t.main_image) || (o ? f(o.image) : ""), s = F(
+  const t = r, o = t.value && typeof t.value == "object" && !Array.isArray(t.value) ? t.value : null, a = m(t.name).trim() || m(t.label).trim() || m(t.title).trim() || (o ? m(o.name).trim() || m(o.label).trim() : ""), i = b(t.image) || b(t.thumbnail) || b(t.main_image) || (o ? b(o.image) : ""), s = q(
     t.url || t.permalink || t.link || (o == null ? void 0 : o.url) || (o == null ? void 0 : o.permalink)
-  ), l = w(t), d = o || t, _ = !!(d.on_sale || d.is_on_sale), p = x(d.sale_price), v = x(d.regular_price), $ = x(d.price);
-  let I = $, R = 0;
-  return _ && p > 0 ? (I = p, R = v > p ? v : 0) : v > $ && $ > 0 && (I = $, R = v), !r && !i && !s && !l || l && b.has(l.toLowerCase()) && !r && !i ? null : { id: l, name: r, image: i, url: s, price: I, old_price: R };
+  ), l = w(t), d = o || t, _ = !!(d.on_sale || d.is_on_sale), p = x(d.sale_price), f = x(d.regular_price), $ = x(d.price);
+  let I = $, A = 0;
+  return _ && p > 0 ? (I = p, A = f > p ? f : 0) : f > $ && $ > 0 && (I = $, A = f), !a && !i && !s && !l || l && v.has(l.toLowerCase()) && !a && !i ? null : { id: l, name: a, image: i, url: s, price: I, old_price: A };
 }
-function ue(a) {
-  return D(a).map((e) => P(e)).filter((e) => !!e);
+function me(r) {
+  return Z(r).map((e) => P(e)).filter((e) => !!e);
 }
-function me(a) {
-  return D(a).map((e, t) => {
-    const o = m(e.spot_name), r = m(e.spot_id) || o || `zone-${t + 1}`, i = pe(e);
-    let s = le(e.products);
+function he(r) {
+  return Z(r).map((e, t) => {
+    const o = m(e.spot_name), a = m(e.spot_id) || o || `zone-${t + 1}`, i = ue(e);
+    let s = de(e.products);
     return !s && C(i) && (s = "selected"), {
-      spot_id: r,
+      spot_id: a,
       spot_name: o,
       spot_desc: m(e.spot_desc),
-      pos_x: B(T(e.pos_x, 50), 0, 100),
-      pos_y: B(T(e.pos_y, 50), 0, 100),
+      pos_x: B(O(e.pos_x, 50), 0, 100),
+      pos_y: B(O(e.pos_y, 50), 0, 100),
       spot_image: String(e.spot_image || "").trim(),
-      spot_url: F(e.spot_url),
+      spot_url: q(e.spot_url),
       spot_btn: m(e.spot_btn),
       spot_color: String(e.spot_color || "").trim() || "#8b5e4b",
-      card_dir: de(e.card_dir),
+      card_dir: pe(e.card_dir),
       products_source: s,
       chosen_products: i,
       category: e.category,
-      products_limit: B(T(e.products_limit, 6) || 6, 1, 24),
-      demo_products: ue(e.demo_products)
+      products_limit: B(O(e.products_limit, 6) || 6, 1, 24),
+      demo_products: me(e.demo_products)
     };
   }).filter((e) => e.spot_name.trim() !== "" || e.spot_image !== "");
 }
-function he(a) {
-  return a.map((e) => P(e)).filter((e) => !!e && !!(e.name || e.image || e.id));
+function ve(r) {
+  return r.map((e) => P(e)).filter((e) => !!e && !!(e.name || e.image || e.id));
 }
-async function j(a) {
-  return he(await oe(a));
+async function j(r) {
+  return ve(await Q(r));
 }
-async function M(a, e) {
-  const t = [...new Set(a.filter(Boolean))].slice(0, e);
+async function M(r, e) {
+  const t = [...new Set(r.filter(Boolean))].slice(0, e);
   if (!t.length) return [];
-  const o = await ie(t);
-  return t.map((r) => P(o.get(r) ?? r)).filter((r) => !!r && !!(r.name || r.image || r.id)).slice(0, e);
+  const o = await ee(t);
+  return t.map((a) => P(o.get(a) ?? a)).filter((a) => !!a && !!(a.name || a.image || a.id)).slice(0, e);
 }
-function U(a, e) {
-  const t = g(a), o = [], r = /* @__PURE__ */ new Set();
+function U(r, e) {
+  const t = g(r), o = [], a = /* @__PURE__ */ new Set();
   for (const i of t) {
     if (o.length >= e) break;
     const s = P(i);
     if (!s || !s.name && !s.image && !s.id) continue;
     const l = s.id || `${s.name}|${s.image}`;
-    l && r.has(l) || (l && r.add(l), o.push(s));
+    l && a.has(l) || (l && a.add(l), o.push(s));
   }
   return o;
 }
-function L(a) {
-  return g(a).map((e) => w(e)).filter((e) => !!e && !b.has(e.toLowerCase()));
+function L(r) {
+  return g(r).map((e) => w(e)).filter((e) => !!e && !v.has(e.toLowerCase()));
 }
-async function be(a, e, t) {
-  if (a === "latest")
+async function fe(r, e, t) {
+  if (r === "latest")
     return j({ source: "latest", limit: t });
-  if (a === "sales") {
+  if (r === "sales") {
     const o = [
       { source: "sales", source_value: [], limit: t },
       { source: "sales", limit: t },
       { source: "top-rated", source_value: [], limit: t },
       { source: "offers", source_value: [], limit: t }
     ];
-    for (const r of o) {
-      const i = await j(r);
+    for (const a of o) {
+      const i = await j(a);
       if (i.length) return i;
     }
     return [];
   }
-  if (a === "categories") {
-    const o = re(
-      g(e.category).map((r) => w(r)).filter((r) => !!r && !b.has(r.toLowerCase()))
+  if (r === "categories") {
+    const o = X(
+      g(e.category).map((a) => w(a)).filter((a) => !!a && !v.has(a.toLowerCase()))
     );
     return o.length ? j({
       source: "categories",
@@ -773,7 +773,7 @@ async function be(a, e, t) {
       limit: t
     }) : [];
   }
-  if (a === "selected") {
+  if (r === "selected") {
     const o = U(e.chosen_products, t);
     if (o.some((i) => i.name || i.image)) {
       const i = L(e.chosen_products);
@@ -784,10 +784,10 @@ async function be(a, e, t) {
       }
       return o;
     }
-    const r = L(e.chosen_products);
-    if (r.length) {
-      const i = await M(r, t);
-      return i.some((s) => s.name || s.image) ? i : o.length ? o : r.slice(0, t).map((s) => ({
+    const a = L(e.chosen_products);
+    if (a.length) {
+      const i = await M(a, t);
+      return i.some((s) => s.name || s.image) ? i : o.length ? o : a.slice(0, t).map((s) => ({
         id: s,
         name: "",
         image: "",
@@ -800,39 +800,39 @@ async function be(a, e, t) {
   }
   return [];
 }
-async function ve(a) {
-  const e = a.products_limit || 6;
-  let t = a.products_source;
-  !t && L(a.chosen_products).length && (t = "selected");
-  const o = g(a.category).map((i) => w(i)).filter((i) => !!i && !b.has(i.toLowerCase()));
+async function be(r) {
+  const e = r.products_limit || 6;
+  let t = r.products_source;
+  !t && L(r.chosen_products).length && (t = "selected");
+  const o = g(r.category).map((i) => w(i)).filter((i) => !!i && !v.has(i.toLowerCase()));
   if (!t && o.length && (t = "categories"), !t || t === "categories" && !o.length)
-    return a.demo_products.slice(0, e);
-  const r = await be(t, a, e);
-  if (r.length) return r.slice(0, e);
+    return r.demo_products.slice(0, e);
+  const a = await fe(t, r, e);
+  if (a.length) return a.slice(0, e);
   if (t === "selected") {
-    const i = U(a.chosen_products, e);
+    const i = U(r.chosen_products, e);
     if (i.length) return i;
   }
-  return a.demo_products.slice(0, e);
+  return r.demo_products.slice(0, e);
 }
-function fe(a) {
-  return a && typeof a == "object" ? a : {};
+function ge(r) {
+  return r && typeof r == "object" ? r : {};
 }
-function W(a) {
-  const e = L(a.chosen_products).join(","), t = g(a.category).map((r) => w(r)).filter(Boolean).join(","), o = g(a.chosen_products).length;
+function D(r) {
+  const e = L(r.chosen_products).join(","), t = g(r.category).map((a) => w(a)).filter(Boolean).join(","), o = g(r.chosen_products).length;
   return [
-    a.spot_id,
-    a.products_source || "none",
-    a.products_limit,
+    r.spot_id,
+    r.products_source || "none",
+    r.products_limit,
     t,
     e,
     o
   ].join("|");
 }
-var ge = Object.defineProperty, k = (a, e, t, o) => {
-  for (var r = void 0, i = a.length - 1, s; i >= 0; i--)
-    (s = a[i]) && (r = s(e, t, r) || r);
-  return r && ge(e, t, r), r;
+var _e = Object.defineProperty, k = (r, e, t, o) => {
+  for (var a = void 0, i = r.length - 1, s; i >= 0; i--)
+    (s = r[i]) && (a = s(e, t, a) || a);
+  return a && _e(e, t, a), a;
 };
 const H = class H extends K {
   constructor() {
@@ -890,11 +890,11 @@ const H = class H extends K {
       e.scrollTo({ left: 0, behavior: "smooth" });
       return;
     }
-    const r = this.railStep();
-    this.scrollRail(this.railIsRtl ? -r : r);
+    const a = this.railStep();
+    this.scrollRail(this.railIsRtl ? -a : a);
   }
   restartAutoplay() {
-    this.stopAutoplay(), !(O() || this.products.length < 2) && requestAnimationFrame(() => {
+    this.stopAutoplay(), !(T() || this.products.length < 2) && requestAnimationFrame(() => {
       const e = this.railEl;
       !e || e.scrollWidth - e.clientWidth <= 2 || (this.autoplayTimer = setInterval(() => {
         this.autoplayPaused || this.advanceRail();
@@ -913,13 +913,13 @@ const H = class H extends K {
     (!this.activeId || !e.some((t) => t.spot_id === this.activeId)) && (this.activeId = e[0].spot_id), this.loadProductsForActive();
   }
   get cfg() {
-    return fe(this.config);
+    return ge(this.config);
   }
   get hotspots() {
-    return me(this.cfg.vab_hotspots);
+    return he(this.cfg.vab_hotspots);
   }
   get currency() {
-    return J();
+    return re();
   }
   selectSpot(e) {
     const t = this.activeId === e;
@@ -927,12 +927,12 @@ const H = class H extends K {
       return;
     if (t) {
       const i = this.hotspots.find((s) => s.spot_id === e);
-      i && this.productCache.delete(W(i));
+      i && this.productCache.delete(D(i));
     }
     this.loadProductsForActive();
-    const o = this.renderRoot.querySelectorAll("[data-spot-id]"), r = Array.from(o).find((i) => i.dataset.spotId === e);
-    r == null || r.scrollIntoView({
-      behavior: O() ? "auto" : "smooth",
+    const o = this.renderRoot.querySelectorAll("[data-spot-id]"), a = Array.from(o).find((i) => i.dataset.spotId === e);
+    a == null || a.scrollIntoView({
+      behavior: T() ? "auto" : "smooth",
       block: "nearest"
     });
   }
@@ -942,15 +942,15 @@ const H = class H extends K {
       this.products = [], this.productsLoading = !1;
       return;
     }
-    const t = W(e), o = this.productCache.get(t);
+    const t = D(e), o = this.productCache.get(t);
     if (o != null && o.length) {
       this.products = o, this.productsLoading = !1;
       return;
     }
-    const r = ++this.loadToken;
+    const a = ++this.loadToken;
     this.productsLoading = !0;
-    const i = await ve(e);
-    if (r !== this.loadToken) return;
+    const i = await be(e);
+    if (a !== this.loadToken) return;
     const s = new Set(
       e.demo_products.map((d) => `${d.name}|${d.image}`)
     ), l = !!e.products_source && i.length > 0 && i.every((d) => s.has(`${d.name}|${d.image}`));
@@ -965,8 +965,8 @@ const H = class H extends K {
     return t && y(t.url) ? t.url : "";
   }
   render() {
-    const e = this.cfg, t = Q(e, "vab_"), o = t.animate && !O(), r = this.hotspots, i = ee(e.vab_enable_pulse, !0), s = String(e.vab_map_image || "").trim(), l = m(e.vab_title), d = m(e.vab_desc), _ = r.find((p) => p.spot_id === this.activeId) || r[0] || null;
-    return !r.length && !s ? n`<div class="fs-empty" role="status">
+    const e = this.cfg, t = ae(e, "vab_"), o = t.animate && !T(), a = this.hotspots, i = oe(e.vab_enable_pulse, !0), s = String(e.vab_map_image || "").trim(), l = m(e.vab_title), d = m(e.vab_desc), _ = a.find((p) => p.spot_id === this.activeId) || a[0] || null;
+    return !a.length && !s ? n`<div class="fs-empty" role="status">
         ${c("أضيفي صورة البوتيك ومناطق التفاعل", "Add boutique image and interactive zones")}
       </div>` : n`
       <section
@@ -974,7 +974,7 @@ const H = class H extends K {
       "fs-section": !0,
       "fs-animate": o
     })}
-        style=${E(te(t))}
+        style=${E(ie(t))}
         aria-label=${l || c("بوتيك العبايات التفاعلي", "Virtual abaya boutique")}
       >
         <div class="fs-container">
@@ -1006,8 +1006,8 @@ const H = class H extends K {
                     </span>
                   </div>` : u}
 
-              ${r.map(
-      (p, v) => n`
+              ${a.map(
+      (p, f) => n`
                   <button
                     type="button"
                     class=${S({
@@ -1024,7 +1024,7 @@ const H = class H extends K {
                     aria-pressed=${this.activeId === p.spot_id ? "true" : "false"}
                     @click=${() => this.selectSpot(p.spot_id)}
                   >
-                    <span class="vab-hotspot__index">${v + 1}</span>
+                    <span class="vab-hotspot__index">${f + 1}</span>
                   </button>
                 `
     )}
@@ -1034,15 +1034,15 @@ const H = class H extends K {
               <div class="vab-gallery__head">
                 <h3>${c("مناطق البوتيك", "Boutique zones")}</h3>
                 <span class="vab-gallery__count">
-                  ${r.length}
+                  ${a.length}
                   ${c("منطقة", "zones")}
                 </span>
               </div>
 
-              ${r.length ? n`
+              ${a.length ? n`
                     <div class="vab-cards" role="list">
-                      ${r.map(
-      (p, v) => this.renderZoneCard(p, v, o)
+                      ${a.map(
+      (p, f) => this.renderZoneCard(p, f, o)
     )}
                     </div>
 
@@ -1053,22 +1053,23 @@ const H = class H extends K {
             </aside>
           </div>
         </div>
+        ${se(this.config || {}, "vab_")}
       </section>
     `;
   }
   renderZoneCard(e, t, o) {
-    const r = this.activeId === e.spot_id, i = this.zoneHref(e);
+    const a = this.activeId === e.spot_id, i = this.zoneHref(e);
     return n`
       <div
         class=${S({
       "vab-card": !0,
-      "vab-card--active": r,
+      "vab-card--active": a,
       "fs-animate": o
     })}
         data-spot-id=${e.spot_id}
         role="listitem"
         tabindex="0"
-        aria-pressed=${r ? "true" : "false"}
+        aria-pressed=${a ? "true" : "false"}
         @click=${() => this.selectSpot(e.spot_id)}
         @keydown=${(s) => {
       (s.key === "Enter" || s.key === " ") && (s.preventDefault(), this.selectSpot(e.spot_id));
@@ -1095,8 +1096,8 @@ const H = class H extends K {
             ${e.spot_desc ? n`<p class="vab-card__desc">${e.spot_desc}</p>` : u}
           </div>
           <div class="vab-card__actions">
-            <span class="vab-card__status ${r ? "vab-card__status--on" : ""}">
-              ${r ? c("مختارة الآن", "Selected") : c("عرض التفاصيل", "View details")}
+            <span class="vab-card__status ${a ? "vab-card__status--on" : ""}">
+              ${a ? c("مختارة الآن", "Selected") : c("عرض التفاصيل", "View details")}
             </span>
             ${y(i) ? n`<a
                   class="vab-card__cta"
@@ -1112,16 +1113,16 @@ const H = class H extends K {
   }
   renderProductRail(e) {
     if (!e.length) return u;
-    const t = this.currency, o = () => this.railStep() || 200, r = this.canScrollRail;
+    const t = this.currency, o = () => this.railStep() || 200, a = this.canScrollRail;
     return n`
       <div
-        class=${S({ "vab-rail": !0, "has-nav": r })}
+        class=${S({ "vab-rail": !0, "has-nav": a })}
         @pointerenter=${this.pauseAutoplay}
         @pointerleave=${this.resumeAutoplay}
         @focusin=${this.pauseAutoplay}
         @focusout=${this.resumeAutoplay}
       >
-        ${r ? n`<button
+        ${a ? n`<button
               type="button"
               class="vab-rail__nav vab-rail__nav--prev"
               aria-label=${c("السابق", "Previous")}
@@ -1146,7 +1147,7 @@ const H = class H extends K {
         >
           ${e.map(
       (i) => n`<div class="vab-product-slot" role="listitem">
-              ${se(
+              ${ne(
         {
           id: i.id,
           name: i.name || c("منتج", "Product"),
@@ -1165,7 +1166,7 @@ const H = class H extends K {
     )}
         </div>
 
-        ${r ? n`<button
+        ${a ? n`<button
               type="button"
               class="vab-rail__nav vab-rail__nav--next"
               aria-label=${c("التالي", "Next")}
@@ -1187,7 +1188,7 @@ const H = class H extends K {
   }
   renderActiveDetail(e) {
     var s;
-    const t = y(e.spot_url) ? e.spot_url : ((s = this.products.find((l) => y(l.url))) == null ? void 0 : s.url) || "", o = this.products.length, r = this.productsLoading ? n`<p class="vab-products__status" role="status">
+    const t = y(e.spot_url) ? e.spot_url : ((s = this.products.find((l) => y(l.url))) == null ? void 0 : s.url) || "", o = this.products.length, a = this.productsLoading ? n`<p class="vab-products__status" role="status">
           ${c("جاري تحميل المنتجات...", "Loading products...")}
         </p>` : this.renderProductRail(this.products), i = !this.productsLoading && !this.products.length;
     return n`
@@ -1205,7 +1206,7 @@ const H = class H extends K {
               </span>
             </div>` : u}
 
-        ${r}
+        ${a}
 
         ${i ? n`<p class="vab-products__status">
               ${c(
@@ -1224,9 +1225,9 @@ const H = class H extends K {
   }
 };
 H.styles = [
-  X,
-  ne,
-  Z`
+  te,
+  ce,
+  W`
       :host {
         direction: inherit;
       }

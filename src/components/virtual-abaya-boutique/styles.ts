@@ -19,7 +19,7 @@ export const componentStyles = css`
     border-radius: var(--section-radius, 18px);
     overflow: hidden;
     background:
-      radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--accent-color, #8b5e4b) 16%, transparent), transparent 46%),
+      radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 46%),
       var(--card-bg, #fff);
     border: 1px solid var(--border-color, #e8ddd6);
     box-shadow: 0 16px 40px rgba(43, 33, 28, 0.08);
@@ -84,7 +84,7 @@ export const componentStyles = css`
     margin: -1.375rem 0 0 -1.375rem;
     border: 2px solid rgba(255, 255, 255, 0.95);
     border-radius: 50%;
-    background: var(--spot-color, var(--accent-color, #8b5e4b));
+    background: var(--spot-color, var(--accent-color, var(--fs-store-primary)));
     box-shadow:
       0 0 0 6px color-mix(in srgb, var(--spot-color, #8b5e4b) 18%, transparent),
       0 8px 20px rgba(43, 33, 28, 0.28);
@@ -109,7 +109,7 @@ export const componentStyles = css`
     position: absolute;
     inset: -7px;
     border-radius: inherit;
-    border: 2px solid var(--spot-color, var(--accent-color, #8b5e4b));
+    border: 2px solid var(--spot-color, var(--accent-color, var(--fs-store-primary)));
     animation: vab-pulse 2s ease-out infinite;
   }
 
@@ -184,15 +184,15 @@ export const componentStyles = css`
 
   .vab-card:hover {
     transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
   }
 
   .vab-card--active {
-    border-color: var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
     background:
       linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff)),
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff)),
         var(--card-bg, #fff) 55%
       );
     box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
@@ -222,7 +222,7 @@ export const componentStyles = css`
     height: 0.65rem;
     border-radius: 50%;
     border: 1.5px solid #fff;
-    background: var(--spot-color, var(--accent-color, #8b5e4b));
+    background: var(--spot-color, var(--accent-color, var(--fs-store-primary)));
   }
 
   .vab-card__body {
@@ -283,7 +283,7 @@ export const componentStyles = css`
   }
 
   .vab-card__status--on {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .vab-card__status--on::before {
@@ -292,7 +292,7 @@ export const componentStyles = css`
     height: 0.4rem;
     margin-inline-end: 0.4rem;
     border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .vab-card__cta {
@@ -303,7 +303,7 @@ export const componentStyles = css`
     min-height: 44px;
     padding: 0.45rem 0.95rem;
     border-radius: calc(var(--section-radius, 18px) * 0.4);
-    background: var(--button-bg, #8b5e4b);
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
     color: var(--button-color, #fff);
     text-decoration: none;
     font-size: 0.8rem;
@@ -320,8 +320,8 @@ export const componentStyles = css`
     margin-top: 0.25rem;
     padding: 1rem;
     border-radius: calc(var(--section-radius, 18px) * 0.8);
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #fff));
     display: grid;
     gap: 0.65rem;
     animation: vab-fade 0.35s ease;
@@ -383,8 +383,8 @@ export const componentStyles = css`
     flex: 0 0 auto;
     padding: 0.18rem 0.6rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
   }
@@ -407,7 +407,7 @@ export const componentStyles = css`
     width: 2rem;
     height: 2rem;
     padding: 0;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e8ddd6));
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
     color: var(--text-color, #2b211c);
@@ -423,7 +423,7 @@ export const componentStyles = css`
   }
 
   .vab-rail__nav:hover {
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
     box-shadow: 0 10px 22px rgba(43, 33, 28, 0.24);
   }
@@ -433,7 +433,7 @@ export const componentStyles = css`
   }
 
   .vab-rail__nav:focus-visible {
-    outline: 2px solid var(--accent-color, #8b5e4b);
+    outline: 2px solid var(--accent-color, var(--fs-store-primary));
     outline-offset: 2px;
   }
 
@@ -460,7 +460,7 @@ export const componentStyles = css`
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent) transparent;
+    scrollbar-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, transparent) transparent;
   }
 
   /* leave room for the arrows only when they are shown */
@@ -478,7 +478,7 @@ export const componentStyles = css`
   }
 
   .vab-products::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, transparent);
     border-radius: 999px;
   }
 

@@ -2,8 +2,8 @@ import { css as A, LitElement as E, html as i, nothing as n } from "lit";
 import { property as G, state as _ } from "lit/decorators.js";
 import { classMap as L } from "lit/directives/class-map.js";
 import { styleMap as F } from "lit/directives/style-map.js";
-import { n as j, i as f, l as p, e as P, s as K, r as M, g as N, c as R, t as o, p as W, a as Q } from "./sharedStyles-BGb_aVO_.js";
-const U = A`
+import { n as j, i as f, l as p, e as P, s as K, r as M, g as N, c as R, t as o, p as W, a as Q, b as U } from "./sharedStyles-BYm1OK6w.js";
+const I = A`
   .aca-layout {
     display: grid;
     gap: 1.75rem;
@@ -45,7 +45,7 @@ const U = A`
       linear-gradient(180deg, rgba(255, 252, 247, 0.98), #fff 55%),
       linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, transparent),
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, transparent),
         transparent 55%
       );
     box-shadow:
@@ -77,7 +77,7 @@ const U = A`
   }
 
   .aca-search:focus-visible {
-    outline: 2px solid color-mix(in srgb, #c9a86c 55%, var(--accent-color, #8b5e4b));
+    outline: 2px solid color-mix(in srgb, #c9a86c 55%, var(--accent-color, var(--fs-store-primary)));
     outline-offset: 2px;
   }
 
@@ -119,10 +119,10 @@ const U = A`
   }
 
   .aca-list__item[aria-current='true'] {
-    border-color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, #8b5e4b));
+    border-color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, var(--fs-store-primary)));
     background: linear-gradient(
       120deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, #fff),
       #fff
     );
     box-shadow: 0 12px 24px rgba(43, 33, 28, 0.08);
@@ -194,7 +194,7 @@ const U = A`
     color: #fff;
     background:
       linear-gradient(115deg, rgba(22, 16, 13, 0.78), rgba(43, 33, 28, 0.28)),
-      var(--accent-color, #8b5e4b);
+      var(--accent-color, var(--fs-store-primary));
   }
 
   .aca-panel__hero::after {
@@ -350,12 +350,12 @@ const U = A`
     display: grid;
     place-items: center;
     border-radius: 1px;
-    background: linear-gradient(145deg, #b08d57, var(--accent-color, #8b5e4b));
+    background: linear-gradient(145deg, #b08d57, var(--accent-color, var(--fs-store-primary)));
     color: #fff;
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
     font-size: 1.05rem;
-    box-shadow: 0 10px 18px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent);
+    box-shadow: 0 10px 18px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
   }
 
   .aca-step__title {
@@ -463,7 +463,7 @@ const U = A`
   }
 
   .aca-extra strong {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
   }
 
@@ -493,7 +493,7 @@ const U = A`
     margin: 0 auto;
     max-width: 20rem;
     padding: 0.9rem 1.15rem;
-    background: linear-gradient(135deg, #6b4a3d, var(--accent-color, #8b5e4b));
+    background: linear-gradient(135deg, #6b4a3d, var(--accent-color, var(--fs-store-primary)));
     color: #fff;
     border-radius: 2px;
     text-align: center;
@@ -678,7 +678,7 @@ function m(t) {
   }
   return v(e) ? "" : e;
 }
-function I(t) {
+function V(t) {
   return j(t).map((a) => ({
     fabric_name: p(a.fabric_name),
     fabric_image: P(a.fabric_image),
@@ -705,7 +705,7 @@ function u(t) {
     { key: "store", labelAr: "التخزين", labelEn: "Storage", value: t.store }
   ].filter((r) => r.value.trim() !== "");
 }
-function V(t, a) {
+function Y(t, a) {
   const r = [t.fabric_name];
   t.fabric_summary && r.push(t.fabric_summary);
   for (const e of u(t))
@@ -717,18 +717,18 @@ function V(t, a) {
   ), r.join(`
 `);
 }
-function Y(t, a) {
+function B(t, a) {
   const r = a.trim().toLowerCase();
   return r ? t.filter(
     (e) => e.fabric_name.toLowerCase().includes(r) || e.fabric_summary.toLowerCase().includes(r)
   ) : t;
 }
-var B = Object.defineProperty, h = (t, a, r, e) => {
-  for (var s = void 0, d = t.length - 1, b; d >= 0; d--)
-    (b = t[d]) && (s = b(a, r, s) || s);
-  return s && B(a, r, s), s;
+var O = Object.defineProperty, b = (t, a, r, e) => {
+  for (var s = void 0, d = t.length - 1, g; d >= 0; d--)
+    (g = t[d]) && (s = g(a, r, s) || s);
+  return s && O(a, r, s), s;
 }, c;
-const g = (c = class extends E {
+const h = (c = class extends E {
   constructor() {
     super(...arguments), this.config = {}, this.searchQuery = "", this.selectedKey = "", this.showToast = !1, this._onLangChange = () => this.requestUpdate(), this._toastTimer = null;
   }
@@ -753,10 +753,10 @@ const g = (c = class extends E {
   }
   get fabrics() {
     var a;
-    return I((a = this.config) == null ? void 0 : a.aca_fabrics);
+    return V((a = this.config) == null ? void 0 : a.aca_fabrics);
   }
   get filteredFabrics() {
-    return Y(this.fabrics, this.searchQuery);
+    return B(this.fabrics, this.searchQuery);
   }
   get theme() {
     return M(this.config, "aca_");
@@ -785,7 +785,7 @@ const g = (c = class extends E {
     const a = this.selected;
     if (!a) return;
     const r = N() === "en";
-    await R(V(a, r)) && this._showCopiedToast();
+    await R(Y(a, r)) && this._showCopiedToast();
   }
   _printCare() {
     window.print();
@@ -800,12 +800,12 @@ const g = (c = class extends E {
     return p((s = this.config) == null ? void 0 : s[a], "") || o(r, e);
   }
   render() {
-    var y, w;
+    var x, w;
     if (!this.fabrics.length)
       return i`<div class="fs-empty" role="status">
         ${o("لا توجد أقمشة متاحة", "No fabrics available")}
       </div>`;
-    const a = this.theme, r = a.animate && !W(), e = this.selected, s = p((y = this.config) == null ? void 0 : y.aca_title), d = p((w = this.config) == null ? void 0 : w.aca_desc), b = this._label("aca_search_placeholder", "ابحثي عن الخامة...", "Search fabrics..."), C = this._label("aca_copy_btn", "نسخ التعليمات", "Copy instructions"), z = this._label("aca_print_btn", "طباعة البطاقة", "Print card"), T = this._label("aca_copied_msg", "تم النسخ بنجاح", "Copied successfully"), x = e ? u(e) : [];
+    const a = this.theme, r = a.animate && !W(), e = this.selected, s = p((x = this.config) == null ? void 0 : x.aca_title), d = p((w = this.config) == null ? void 0 : w.aca_desc), g = this._label("aca_search_placeholder", "ابحثي عن الخامة...", "Search fabrics..."), C = this._label("aca_copy_btn", "نسخ التعليمات", "Copy instructions"), z = this._label("aca_print_btn", "طباعة البطاقة", "Print card"), T = this._label("aca_copied_msg", "تم النسخ بنجاح", "Copied successfully"), y = e ? u(e) : [];
     return i`
       <section
         class=${L({
@@ -831,9 +831,9 @@ const g = (c = class extends E {
                 class="aca-search"
                 type="search"
                 .value=${this.searchQuery}
-                placeholder=${b}
+                placeholder=${g}
                 @input=${this._onSearch}
-                aria-label=${b}
+                aria-label=${g}
               />
               <ul class="aca-list" role="listbox" aria-label=${o("قائمة الأقمشة", "Fabric list")}>
                 ${this.filteredFabrics.map(
@@ -888,8 +888,8 @@ const g = (c = class extends E {
                       <h4 class="aca-section-title">
                         ${o("طقوس العناية بأناقة", "An elegant care ritual")}
                       </h4>
-                      ${x.length ? i`<div class="aca-journey" aria-label=${o("خطوات العناية", "Care steps")}>
-                            ${x.map(
+                      ${y.length ? i`<div class="aca-journey" aria-label=${o("خطوات العناية", "Care steps")}>
+                            ${y.map(
       (l, S) => i`
                                 <div class="aca-step">
                                   <span class="aca-step__num" aria-hidden="true">${S + 1}</span>
@@ -953,6 +953,7 @@ const g = (c = class extends E {
         ${this.showToast ? i`<div class="aca-toast" role="status" aria-live="polite">${T}</div>` : n}
 
         ${e ? this._renderPrintCard(e) : n}
+        ${U(this.config || {}, "aca_")}
       </section>
     `;
   }
@@ -984,20 +985,20 @@ const g = (c = class extends E {
       </div>
     `;
   }
-}, c.fontsReady = !1, c.styles = [K, U], c);
-h([
+}, c.fontsReady = !1, c.styles = [K, I], c);
+b([
   G({ type: Object })
-], g.prototype, "config");
-h([
+], h.prototype, "config");
+b([
   _()
-], g.prototype, "searchQuery");
-h([
+], h.prototype, "searchQuery");
+b([
   _()
-], g.prototype, "selectedKey");
-h([
+], h.prototype, "selectedKey");
+b([
   _()
-], g.prototype, "showToast");
-let $ = g;
+], h.prototype, "showToast");
+let $ = h;
 typeof $ < "u" && $.registerSallaComponent("salla-abaya-care-assistant");
 export {
   $ as default

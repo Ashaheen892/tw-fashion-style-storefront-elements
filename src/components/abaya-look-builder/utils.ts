@@ -24,7 +24,7 @@ import {
 } from '../../utils/sallaApi.js';
 import type { LookGroup, LookItem, LookItemDraft } from './types.js';
 
-type ProductSource = 'categories' | 'sales' | 'latest' | 'selected' | '';
+type ProductSource = 'categories' | 'brands' | 'sales' | 'latest' | 'selected' | '';
 
 function looksLikeFullProduct(obj: Record<string, unknown>): boolean {
   const hasName = Boolean(localizedString(obj.name as string).trim());
@@ -268,7 +268,7 @@ async function fetchSelectedProducts(ids: string[]): Promise<Map<string, unknown
 function normalizeProductSource(raw: unknown): ProductSource {
   const val = getRadioValue(raw, '').toLowerCase();
   if (!val || val === 'none') return '';
-  if (['categories', 'sales', 'latest', 'selected'].includes(val)) {
+  if (['categories', 'brands', 'sales', 'latest', 'selected'].includes(val)) {
     return val as ProductSource;
   }
   return '';
@@ -344,6 +344,19 @@ async function fetchSourceProducts(
       list = await fetchSallaProducts({
         source: 'categories',
         source_value: catIds.length === 1 ? catIds[0] : catIds,
+        limit,
+      });
+    }
+  } else if (source === 'brands') {
+    const brandIds = toSourceIds(
+      unwrapProductList(config.alb_brands ?? config.brands)
+        .map((entry) => extractProductId(entry))
+        .filter(Boolean)
+    );
+    if (brandIds.length) {
+      list = await fetchSallaProducts({
+        source: 'brands',
+        source_value: brandIds.length === 1 ? brandIds[0] : brandIds,
         limit,
       });
     }

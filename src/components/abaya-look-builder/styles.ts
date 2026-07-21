@@ -8,8 +8,8 @@ export const componentStyles = css`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 42%),
-      radial-gradient(circle at 95% 100%, color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent), transparent 40%),
+      radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 42%),
+      radial-gradient(circle at 95% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 40%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -78,11 +78,11 @@ export const componentStyles = css`
   }
 
   .alb-tab[aria-selected='true'] {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .alb-tab[aria-selected='true']::after {
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .alb-panel-label {
@@ -145,8 +145,8 @@ export const componentStyles = css`
     display: inline-flex;
     padding: 0.25rem 0.65rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
   }
@@ -161,7 +161,7 @@ export const componentStyles = css`
     border-radius: calc(var(--section-radius, 18px) * 0.65);
     border: 1px dashed color-mix(in srgb, var(--border-color, #e8ddd6) 90%, transparent);
     background:
-      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, transparent), transparent 55%),
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, transparent), transparent 55%),
       color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
   }
 
@@ -256,7 +256,7 @@ export const componentStyles = css`
   .alb-piece__price {
     font-size: 0.78rem;
     font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     white-space: nowrap;
   }
 
@@ -264,7 +264,7 @@ export const componentStyles = css`
     grid-column: 1 / -1;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     text-decoration: none;
   }
 
@@ -281,8 +281,8 @@ export const componentStyles = css`
   .alb-stat {
     padding: 0.65rem 0.7rem;
     border-radius: calc(var(--section-radius, 18px) * 0.45);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, var(--card-bg, #fff));
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--border-color, #e8ddd6));
   }
 
   .alb-stat--wide {
@@ -304,7 +304,7 @@ export const componentStyles = css`
   }
 
   .alb-stat--accent .alb-stat__value {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .alb-actions {
@@ -321,8 +321,8 @@ export const componentStyles = css`
     margin: 0;
     padding: 0.45rem 0.65rem;
     border-radius: calc(var(--section-radius, 18px) * 0.4);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.8rem;
     font-weight: 600;
     text-align: center;

@@ -8,7 +8,7 @@ export const componentStyles = css`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 40%),
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 40%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -28,8 +28,8 @@ export const componentStyles = css`
     gap: 0.45rem;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
   }
@@ -49,7 +49,7 @@ export const componentStyles = css`
   .asd-dot--active {
     width: 1.1rem;
     border-radius: 999px;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .asd-question {
@@ -84,7 +84,7 @@ export const componentStyles = css`
     margin: 0.15rem auto;
     border-radius: 50%;
     background:
-      linear-gradient(145deg, var(--accent-color, #8b5e4b), color-mix(in srgb, var(--accent-color, #8b5e4b) 65%, #000));
+      linear-gradient(145deg, var(--accent-color, var(--fs-store-primary)), color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 65%, #000));
     color: #fff;
     font-weight: 800;
     font-size: 0.82rem;
@@ -134,7 +134,7 @@ export const componentStyles = css`
 
   .asd-option:hover:not(:disabled) {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
   }
 
   .asd-option:disabled {
@@ -142,14 +142,14 @@ export const componentStyles = css`
   }
 
   .asd-option--winner {
-    border-color: var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5e4b) 25%, transparent),
+      0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, transparent),
       0 16px 34px rgba(43, 33, 28, 0.12);
   }
 
   .asd-option--picked {
-    outline: 2px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent);
     outline-offset: 2px;
   }
 
@@ -207,7 +207,7 @@ export const componentStyles = css`
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.94);
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;
     white-space: nowrap;
@@ -221,7 +221,7 @@ export const componentStyles = css`
     transform: translateX(-50%);
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;
@@ -265,7 +265,7 @@ export const componentStyles = css`
     font-size: 1.35rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .asd-pct-label {
@@ -289,8 +289,8 @@ export const componentStyles = css`
     border-radius: inherit;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 70%, #c4a484),
-      var(--accent-color, #8b5e4b)
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #c4a484),
+      var(--accent-color, var(--fs-store-primary))
     );
     transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -299,8 +299,8 @@ export const componentStyles = css`
     margin-top: 1.25rem;
     padding: 1rem 1.05rem;
     border-radius: calc(var(--section-radius, 18px) * 0.65);
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff));
     line-height: 1.7;
     font-size: 0.92rem;
     text-align: center;

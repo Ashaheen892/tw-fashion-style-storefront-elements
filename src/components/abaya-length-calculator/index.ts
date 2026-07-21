@@ -10,6 +10,7 @@ import {
   t,
   themeStyleMap,
 } from '../../utils/helpers.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -608,6 +609,7 @@ export default class AbayaLengthCalculator extends LitElement {
             ? html`<p class="alc-disclaimer">${disclaimer}</p>`
             : nothing}
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'alc_')}
       </section>
     `;
   }

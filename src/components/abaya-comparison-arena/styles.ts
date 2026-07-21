@@ -8,8 +8,8 @@ export const componentStyles = css`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 42%),
-      radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent), transparent 40%),
+      radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 42%),
+      radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 40%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -36,8 +36,8 @@ export const componentStyles = css`
     gap: 0.35rem;
     padding: 0.3rem 0.75rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
     white-space: nowrap;
@@ -59,12 +59,14 @@ export const componentStyles = css`
     border-radius: calc(var(--section-radius, 18px) * 0.55);
     border: 1px dashed color-mix(in srgb, var(--border-color, #e8ddd6) 90%, transparent);
     background: color-mix(in srgb, var(--card-bg, #fff) 70%, transparent);
+    transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
   }
 
   .acm-slot--filled {
     border-style: solid;
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #fff));
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
   }
 
   .acm-slot__num {
@@ -74,8 +76,8 @@ export const componentStyles = css`
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
   }
@@ -185,12 +187,12 @@ export const componentStyles = css`
   }
 
   .acm-legend__swatch--same {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
   }
 
   .acm-legend__swatch--best {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--card-bg, #fff));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--card-bg, #fff));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent);
   }
 
   .acm-table-wrap {
@@ -230,9 +232,9 @@ export const componentStyles = css`
   }
 
   .acm-input:focus {
-    outline: 2px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, transparent);
     outline-offset: 1px;
-    border-color: var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
   }
 
   .acm-input::placeholder {
@@ -282,14 +284,14 @@ export const componentStyles = css`
   }
 
   .acm-cell--same {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff)) !important;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff)) !important;
   }
 
   .acm-cell--best {
     position: relative;
     font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, var(--card-bg, #fff)) !important;
+    color: var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, var(--card-bg, #fff)) !important;
   }
 
   .acm-cell__badge {
@@ -297,7 +299,7 @@ export const componentStyles = css`
     margin-inline-start: 0.35rem;
     padding: 0.1rem 0.4rem;
     border-radius: 999px;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
     font-size: 0.65rem;
     font-weight: 700;

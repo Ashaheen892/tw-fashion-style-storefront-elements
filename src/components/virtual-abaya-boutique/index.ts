@@ -12,6 +12,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
@@ -371,6 +372,7 @@ export default class VirtualAbayaBoutique extends LitElement {
             </aside>
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'vab_')}
       </section>
     `;
   }

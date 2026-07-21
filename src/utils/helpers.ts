@@ -12,13 +12,69 @@ export function normalizeItem<T extends Record<string, unknown> = Record<string,
   }, {} as Record<string, unknown>) as T;
 }
 
+/** Stable id from label when merchant UI has no internal-id field (Raed add-on UX). */
+export function slugifyId(value: unknown, fallback = ''): string {
+  const raw =
+    typeof value === 'string' || typeof value === 'number'
+      ? String(value).trim()
+      : localizedString(value as LocaleValue, '').trim();
+  if (!raw) return fallback;
+  const slug = raw
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48);
+  return slug || fallback;
+}
+
+export function resolveItemId(
+  item: Record<string, unknown>,
+  index: number,
+  prefix = 'item'
+): string {
+  const keys = [
+    'id',
+    'value',
+    'key',
+    'zone_id',
+    'family_id',
+    'character_id',
+    'note_id',
+    'active_id',
+    'tex_id',
+    'light_id',
+    'pt_id',
+    'cond_id',
+    'color_id',
+    'step_id',
+    'recipe_id',
+    'strength_id',
+    'time_id',
+    'result_id',
+  ];
+  for (const key of keys) {
+    const s = String(item[key] ?? '').trim();
+    if (s) return s;
+  }
+  return (
+    slugifyId(item.name ?? item.title ?? item.label, '') || `${prefix}-${index + 1}`
+  );
+}
+
 export function normalizeCollection<T extends Record<string, unknown> = Record<string, unknown>>(
   items: unknown
 ): T[] {
   if (!Array.isArray(items)) return [];
   return items
     .filter((item): item is Record<string, unknown> => !!item && typeof item === 'object')
-    .map((item) => normalizeItem<T>(item));
+    .map((item, index) => {
+      const normalized = normalizeItem<T>(item);
+      const row = normalized as Record<string, unknown>;
+      if (!String(row.id ?? '').trim()) {
+        row.id = resolveItemId(row, index);
+      }
+      return normalized;
+    });
 }
 
 export function getUnitValue(val: unknown, fallback = 0): number {
@@ -330,10 +386,10 @@ export function themeStyleMap(theme: SectionTheme): Record<string, string> {
     '--section-bg': theme.bg,
     '--text-color': theme.text,
     '--muted-color': theme.muted,
-    '--accent-color': theme.accent,
+    '--accent-color': theme.accent || 'var(--color-primary, var(--primary-color, #64748b))', /* raed-bridge */
     '--card-bg': theme.card,
     '--border-color': theme.border,
-    '--button-bg': theme.buttonBg,
+    '--button-bg': theme.buttonBg || theme.accent || 'var(--color-primary, var(--primary-color, #64748b))',
     '--button-color': theme.buttonColor,
     '--section-radius': theme.radius,
     '--space-desktop': `${theme.spaceDesktop}px`,

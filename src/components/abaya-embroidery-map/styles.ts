@@ -76,8 +76,8 @@ export const componentStyles = css`
     color: var(--muted-color, #7a6a62);
     line-height: 1.5;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
-    border: 1px dashed color-mix(in srgb, var(--accent-color, #8b5e4b) 30%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
+    border: 1px dashed color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 30%, transparent);
   }
 
   .aem-pick-hint::before {
@@ -86,7 +86,7 @@ export const componentStyles = css`
     width: 0.55rem;
     height: 0.55rem;
     border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     opacity: 0.7;
   }
 
@@ -139,7 +139,7 @@ export const componentStyles = css`
   .aem-stage__ornament {
     position: absolute;
     inset: 7%;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 26%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 26%, transparent);
     border-radius: calc(var(--section-radius, 16px) * 0.7);
     pointer-events: none;
     opacity: 0.6;
@@ -152,7 +152,7 @@ export const componentStyles = css`
     position: absolute;
     width: 14px;
     height: 14px;
-    border: 0 solid color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
+    border: 0 solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent);
     pointer-events: none;
   }
 
@@ -214,7 +214,7 @@ export const componentStyles = css`
     z-index: 2;
     display: grid;
     place-items: center;
-    color: var(--aem-spot-color, var(--accent-color, #8b5e4b));
+    color: var(--aem-spot-color, var(--accent-color, var(--fs-store-primary)));
   }
 
   .aem-spot:focus {
@@ -222,7 +222,7 @@ export const componentStyles = css`
   }
 
   .aem-spot:focus-visible .aem-spot__ring {
-    outline: 2px solid var(--aem-active, var(--accent-color, #8b5e4b));
+    outline: 2px solid var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     outline-offset: 3px;
   }
 
@@ -279,10 +279,10 @@ export const componentStyles = css`
   .aem-spot--active .aem-spot__ring,
   .aem-spot--hover .aem-spot__ring {
     transform: scale(1.16);
-    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    border-color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
+    background: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     box-shadow: 0 8px 22px color-mix(in srgb, var(--aem-active, #8b5e4b) 42%, transparent);
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
   }
 
   .aem-spot--active .aem-spot__num,
@@ -353,7 +353,7 @@ export const componentStyles = css`
 
   .aem-line--active,
   .aem-line--hover {
-    stroke: var(--aem-active, var(--accent-color, #8b5e4b));
+    stroke: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     stroke-width: 2.1;
     opacity: 1;
   }
@@ -390,7 +390,7 @@ export const componentStyles = css`
     inset-inline-start: 0;
     width: 3px;
     border-radius: 999px;
-    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     opacity: 0;
     transition: opacity 0.24s ease;
   }
@@ -400,7 +400,7 @@ export const componentStyles = css`
   }
 
   .aem-card:focus-visible {
-    outline: 2px solid var(--aem-active, var(--accent-color, #8b5e4b));
+    outline: 2px solid var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     outline-offset: 2px;
   }
 
@@ -509,11 +509,11 @@ export const componentStyles = css`
     letter-spacing: 0.01em;
     background: linear-gradient(
       135deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, #fff),
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, #fff)
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, #fff)
     );
-    color: var(--accent-color, #8b5e4b);
-    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color, #8b5e4b) 18%, transparent);
+    color: var(--accent-color, var(--fs-store-primary));
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 18%, transparent);
   }
 
   .aem-card__title {
@@ -589,7 +589,7 @@ export const componentStyles = css`
 
   .aem-clear:hover {
     border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--border-color, #e8ddd6));
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     background: color-mix(in srgb, var(--aem-active, #8b5e4b) 7%, var(--card-bg, #fff));
   }
 
@@ -607,8 +607,8 @@ export const componentStyles = css`
     text-align: center;
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 9%, var(--card-bg, #fff));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #fff));
     border-radius: 999px;
   }
 
@@ -635,8 +635,8 @@ export const componentStyles = css`
   }
 
   .aem-nav button:hover:not(:disabled) {
-    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    border-color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     background: color-mix(in srgb, var(--aem-active, #8b5e4b) 8%, var(--card-bg, #fff));
   }
 

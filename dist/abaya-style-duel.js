@@ -1,9 +1,9 @@
-import { css as q, LitElement as M, html as s, nothing as i } from "lit";
+import { css as q, LitElement as M, html as o, nothing as i } from "lit";
 import { property as B, state as I } from "lit/decorators.js";
-import { classMap as v } from "lit/directives/class-map.js";
+import { classMap as b } from "lit/directives/class-map.js";
 import { styleMap as R } from "lit/directives/style-map.js";
-import { n as K, l, b as C, u as S, s as j, r as A, i as x, t as d, z as O, A as T, p as E, a as N, w as V } from "./sharedStyles-BGb_aVO_.js";
-const P = q`
+import { n as K, l, d as C, y as S, s as O, r as j, i as x, t as d, H as A, I as T, p as E, a as N, b as P, A as V } from "./sharedStyles-BYm1OK6w.js";
+const H = q`
   .asd-arena {
     position: relative;
     overflow: hidden;
@@ -11,7 +11,7 @@ const P = q`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 40%),
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 40%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -31,8 +31,8 @@ const P = q`
     gap: 0.45rem;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
   }
@@ -52,7 +52,7 @@ const P = q`
   .asd-dot--active {
     width: 1.1rem;
     border-radius: 999px;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .asd-question {
@@ -87,7 +87,7 @@ const P = q`
     margin: 0.15rem auto;
     border-radius: 50%;
     background:
-      linear-gradient(145deg, var(--accent-color, #8b5e4b), color-mix(in srgb, var(--accent-color, #8b5e4b) 65%, #000));
+      linear-gradient(145deg, var(--accent-color, var(--fs-store-primary)), color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 65%, #000));
     color: #fff;
     font-weight: 800;
     font-size: 0.82rem;
@@ -137,7 +137,7 @@ const P = q`
 
   .asd-option:hover:not(:disabled) {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
   }
 
   .asd-option:disabled {
@@ -145,14 +145,14 @@ const P = q`
   }
 
   .asd-option--winner {
-    border-color: var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5e4b) 25%, transparent),
+      0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, transparent),
       0 16px 34px rgba(43, 33, 28, 0.12);
   }
 
   .asd-option--picked {
-    outline: 2px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent);
     outline-offset: 2px;
   }
 
@@ -210,7 +210,7 @@ const P = q`
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.94);
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;
     white-space: nowrap;
@@ -224,7 +224,7 @@ const P = q`
     transform: translateX(-50%);
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;
@@ -268,7 +268,7 @@ const P = q`
     font-size: 1.35rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .asd-pct-label {
@@ -292,8 +292,8 @@ const P = q`
     border-radius: inherit;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 70%, #c4a484),
-      var(--accent-color, #8b5e4b)
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #c4a484),
+      var(--accent-color, var(--fs-store-primary))
     );
     transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -302,8 +302,8 @@ const P = q`
     margin-top: 1.25rem;
     padding: 1rem 1.05rem;
     border-radius: calc(var(--section-radius, 18px) * 0.65);
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff));
     line-height: 1.7;
     font-size: 0.92rem;
     text-align: center;
@@ -385,8 +385,8 @@ const P = q`
   }
 `;
 function U(c) {
-  return K(c).map((e, t) => ({
-    id: `round-${t}`,
+  return K(c).map((e, r) => ({
+    id: `round-${r}`,
     question: l(e.question),
     img_a: l(e.img_a),
     name_a: l(e.name_a),
@@ -402,23 +402,23 @@ function U(c) {
     (e) => e.question.trim() !== "" && (e.name_a.trim() !== "" || e.img_a.trim() !== "") && (e.name_b.trim() !== "" || e.img_b.trim() !== "")
   );
 }
-function X(c, e, t) {
-  let a = t ? c.votes_a : 0, r = t ? c.votes_b : 0;
-  e === "a" && (a += 1), e === "b" && (r += 1);
-  const o = a + r;
-  return o === 0 ? { pctA: 50, pctB: 50, total: 0 } : {
-    pctA: Math.round(a / o * 100),
-    pctB: Math.round(r / o * 100),
-    total: o
+function X(c, e, r) {
+  let t = r ? c.votes_a : 0, a = r ? c.votes_b : 0;
+  e === "a" && (t += 1), e === "b" && (a += 1);
+  const s = t + a;
+  return s === 0 ? { pctA: 50, pctB: 50, total: 0 } : {
+    pctA: Math.round(t / s * 100),
+    pctB: Math.round(a / s * 100),
+    total: s
   };
 }
 function Y(c, e) {
   return l(c, e).trim() || e;
 }
-var G = Object.defineProperty, w = (c, e, t, a) => {
-  for (var r = void 0, o = c.length - 1, p; o >= 0; o--)
-    (p = c[o]) && (r = p(e, t, r) || r);
-  return r && G(e, t, r), r;
+var G = Object.defineProperty, y = (c, e, r, t) => {
+  for (var a = void 0, s = c.length - 1, p; s >= 0; s--)
+    (p = c[s]) && (a = p(e, r, a) || a);
+  return a && G(e, r, a), a;
 };
 const $ = class $ extends M {
   constructor() {
@@ -438,7 +438,7 @@ const $ = class $ extends M {
     return U((e = this.config) == null ? void 0 : e.asd_rounds);
   }
   get theme() {
-    return A(this.config, "asd_");
+    return j(this.config, "asd_");
   }
   get useSeedVotes() {
     var e;
@@ -455,57 +455,57 @@ const $ = class $ extends M {
   get currentRound() {
     return this.rounds[this.roundIndex] ?? null;
   }
-  _label(e, t, a) {
-    var r;
-    return l((r = this.config) == null ? void 0 : r[e], "") || d(t, a);
+  _label(e, r, t) {
+    var a;
+    return l((a = this.config) == null ? void 0 : a[e], "") || d(r, t);
   }
   _syncVisibility() {
     this.style.display = this.rounds.length ? "" : "none";
   }
   _loadVotes() {
-    var t;
+    var r;
     this._storageKey = Y(
-      (t = this.config) == null ? void 0 : t.asd_storage_key,
+      (r = this.config) == null ? void 0 : r.asd_storage_key,
       "asd-style-duel-votes"
     );
-    const e = O(this._storageKey, { votes: {} });
+    const e = A(this._storageKey, { votes: {} });
     this.votes = e.votes || {};
   }
   _saveVotes() {
     T(this._storageKey, { votes: this.votes });
   }
   _vote(e) {
-    const t = this.currentRound;
-    !t || this.votes[t.id] && !this.allowRevote || (this.votes = { ...this.votes, [t.id]: e }, this._saveVotes());
+    const r = this.currentRound;
+    !r || this.votes[r.id] && !this.allowRevote || (this.votes = { ...this.votes, [r.id]: e }, this._saveVotes());
   }
   _nextRound() {
     this.roundIndex < this.rounds.length - 1 && (this.roundIndex += 1);
   }
   render() {
-    var y, k, z;
+    var w, k, z;
     if (!this.rounds.length)
-      return s`<div class="fs-empty" role="status">
+      return o`<div class="fs-empty" role="status">
         ${d("لا توجد جولات متاحة", "No rounds available")}
       </div>`;
-    const e = this.theme, t = e.animate && !E(), a = this.currentRound;
-    if (!a) return i;
-    const r = l((y = this.config) == null ? void 0 : y.asd_title), o = l((k = this.config) == null ? void 0 : k.asd_desc), p = l((z = this.config) == null ? void 0 : z.asd_result_note), _ = this._label("asd_next_btn", "المواجهة التالية", "Next duel"), g = this.votes[a.id] ?? null, n = g !== null, { pctA: m, pctB: u } = X(a, g, this.useSeedVotes), h = n && m >= u, f = n && u > m;
-    return s`
+    const e = this.theme, r = e.animate && !E(), t = this.currentRound;
+    if (!t) return i;
+    const a = l((w = this.config) == null ? void 0 : w.asd_title), s = l((k = this.config) == null ? void 0 : k.asd_desc), p = l((z = this.config) == null ? void 0 : z.asd_result_note), _ = this._label("asd_next_btn", "المواجهة التالية", "Next duel"), m = this.votes[t.id] ?? null, n = m !== null, { pctA: g, pctB: h } = X(t, m, this.useSeedVotes), f = n && g >= h, v = n && h > g;
+    return o`
       <section
-        class=${v({
+        class=${b({
       "fs-section": !0,
-      "fs-animate": t
+      "fs-animate": r
     })}
         style=${R(N(e))}
-        aria-label=${r || d("تحدي العبايات", "Abaya style duel")}
+        aria-label=${a || d("تحدي العبايات", "Abaya style duel")}
       >
         <div class="fs-container">
-          ${r || o ? s`<header class="fs-header">
-                ${r ? s`<h2 class="fs-title">${r}</h2>` : i}
-                ${o ? s`<p class="fs-desc">${o}</p>` : i}
+          ${a || s ? o`<header class="fs-header">
+                ${a ? o`<h2 class="fs-title">${a}</h2>` : i}
+                ${s ? o`<p class="fs-desc">${s}</p>` : i}
               </header>` : i}
 
-          <div class="asd-arena" role="group" aria-label=${a.question}>
+          <div class="asd-arena" role="group" aria-label=${t.question}>
             <div class="asd-progress">
               <span class="asd-progress__meta">
                 ${d("جولة", "Round")} ${this.roundIndex + 1}
@@ -514,8 +514,8 @@ const $ = class $ extends M {
               </span>
               <div class="asd-dots" aria-hidden="true">
                 ${this.rounds.map(
-      (H, L) => s`<span
-                    class=${v({
+      (F, L) => o`<span
+                    class=${b({
         "asd-dot": !0,
         "asd-dot--active": L === this.roundIndex
       })}
@@ -524,23 +524,23 @@ const $ = class $ extends M {
               </div>
             </div>
 
-            <p class="asd-question">${a.question}</p>
+            <p class="asd-question">${t.question}</p>
 
             <div class="asd-options">
-              ${this._renderOption("a", a, m, h, n, g === "a", t)}
+              ${this._renderOption("a", t, g, f, n, m === "a", r)}
               <span class="asd-vs" aria-hidden="true">VS</span>
-              ${this._renderOption("b", a, u, f, n, g === "b", t)}
+              ${this._renderOption("b", t, h, v, n, m === "b", r)}
             </div>
 
-            ${n && a.result_desc ? s`<div class="asd-result" aria-live="polite">${a.result_desc}</div>` : i}
+            ${n && t.result_desc ? o`<div class="asd-result" aria-live="polite">${t.result_desc}</div>` : i}
 
-            ${n && a.enable_next && this.roundIndex < this.rounds.length - 1 ? s`<div class="asd-nav">
+            ${n && t.enable_next && this.roundIndex < this.rounds.length - 1 ? o`<div class="asd-nav">
                   <button type="button" class="fs-btn" @click=${this._nextRound}>
                     ${_}
                   </button>
                 </div>` : i}
 
-            ${p && !this.hideResultSource ? s`<p class="asd-note">${p}</p>` : i}
+            ${p && !this.hideResultSource ? o`<p class="asd-note">${p}</p>` : i}
 
             <p class="asd-note">
               ${d(
@@ -550,33 +550,34 @@ const $ = class $ extends M {
             </p>
           </div>
         </div>
+        ${P(this.config || {}, "asd_")}
       </section>
     `;
   }
-  _renderOption(e, t, a, r, o, p, _) {
-    const g = e === "a" ? t.img_a : t.img_b, n = e === "a" ? t.name_a : t.name_b, m = e === "a" ? t.url_a : t.url_b, u = !o || this.allowRevote, h = {
+  _renderOption(e, r, t, a, s, p, _) {
+    const m = e === "a" ? r.img_a : r.img_b, n = e === "a" ? r.name_a : r.name_b, g = e === "a" ? r.url_a : r.url_b, h = !s || this.allowRevote, f = {
       "asd-option": !0,
-      "asd-option--winner": r,
+      "asd-option--winner": a,
       "asd-option--picked": p,
-      "fs-celebrate": _ && r
-    }, f = s`
+      "fs-celebrate": _ && a
+    }, v = o`
       <div class="asd-option__media">
-        ${g ? s`<img
+        ${m ? o`<img
               class="asd-option__img"
-              src=${g}
+              src=${m}
               alt=${n}
               loading=${e === "a" ? "eager" : "lazy"}
               decoding="async"
             />` : i}
         <div class="asd-option__veil" aria-hidden="true"></div>
-        ${o ? i : s`<span class="asd-option__vote-label">${d("صوّتي لها", "Vote for this")}</span>`}
-        ${r ? s`<span class="asd-option__crown">${d("الأقرب لذوقك", "Your pick lead")}</span>` : i}
+        ${s ? i : o`<span class="asd-option__vote-label">${d("صوّتي لها", "Vote for this")}</span>`}
+        ${a ? o`<span class="asd-option__crown">${d("الأقرب لذوقك", "Your pick lead")}</span>` : i}
       </div>
       <div class="asd-option__body">
         <p class="asd-option__name">${n}</p>
-        ${o ? s`
+        ${s ? o`
               <div class="asd-pct-row">
-                <p class="asd-pct">${a}%</p>
+                <p class="asd-pct">${t}%</p>
                 <span class="asd-pct-label">${d("من ذوقك", "of your taste")}</span>
               </div>
               <div
@@ -584,51 +585,51 @@ const $ = class $ extends M {
                 role="progressbar"
                 aria-valuemin="0"
                 aria-valuemax="100"
-                aria-valuenow=${a}
-                aria-label=${`${n}: ${a}%`}
+                aria-valuenow=${t}
+                aria-label=${`${n}: ${t}%`}
               >
-                <span style=${R({ width: `${a}%` })}></span>
+                <span style=${R({ width: `${t}%` })}></span>
               </div>
-              ${V(m) ? s`<p class="asd-option__cta">${d("اضغطي لعرض المنتج", "Tap to view product")}</p>` : i}
-            ` : s`<p class="asd-option__cta">${d("اختاري ما يقرّب من ذوقك", "Choose what matches your taste")}</p>`}
+              ${V(g) ? o`<p class="asd-option__cta">${d("اضغطي لعرض المنتج", "Tap to view product")}</p>` : i}
+            ` : o`<p class="asd-option__cta">${d("اختاري ما يقرّب من ذوقك", "Choose what matches your taste")}</p>`}
       </div>
     `;
-    return V(m) && o ? s`
+    return V(g) && s ? o`
         <a
-          class=${v(h)}
-          href=${m}
+          class=${b(f)}
+          href=${g}
           target="_blank"
           rel="noopener noreferrer"
           aria-label=${n}
         >
-          ${f}
+          ${v}
         </a>
-      ` : s`
+      ` : o`
       <button
         type="button"
-        class=${v(h)}
-        ?disabled=${!u && o}
+        class=${b(f)}
+        ?disabled=${!h && s}
         aria-label=${d(`اختيار ${n}`, `Choose ${n}`)}
         aria-pressed=${p ? "true" : "false"}
         @click=${() => this._vote(e)}
       >
-        ${f}
+        ${v}
       </button>
     `;
   }
 };
-$.styles = [j, P];
-let b = $;
-w([
+$.styles = [O, H];
+let u = $;
+y([
   B({ type: Object })
-], b.prototype, "config");
-w([
+], u.prototype, "config");
+y([
   I()
-], b.prototype, "roundIndex");
-w([
+], u.prototype, "roundIndex");
+y([
   I()
-], b.prototype, "votes");
-typeof b < "u" && b.registerSallaComponent("salla-abaya-style-duel");
+], u.prototype, "votes");
+typeof u < "u" && u.registerSallaComponent("salla-abaya-style-duel");
 export {
-  b as default
+  u as default
 };

@@ -2,8 +2,8 @@ import { css as w, LitElement as k, nothing as c, html as i } from "lit";
 import { property as C, state as _ } from "lit/decorators.js";
 import { classMap as f } from "lit/directives/class-map.js";
 import { styleMap as y } from "lit/directives/style-map.js";
-import { l as t, n as O, b as x, v as U, u as j, s as H, p as b, i as p, t as m, r as I, a as E } from "./sharedStyles-BGb_aVO_.js";
-const D = w`
+import { l as t, n as O, d as x, z as U, y as j, s as H, p as b, i as p, t as m, r as I, a as E, b as D } from "./sharedStyles-BYm1OK6w.js";
+const P = w`
   .cr-stage {
     position: relative;
     overflow: hidden;
@@ -87,7 +87,7 @@ const D = w`
     font-size: 1.65rem;
     font-weight: 700;
     line-height: 1.1;
-    color: var(--timer-color, var(--accent-color, #8b5e4b));
+    color: var(--timer-color, var(--accent-color, var(--fs-store-primary)));
   }
 
   .cr-timer__label {
@@ -105,7 +105,7 @@ const D = w`
     z-index: 5;
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 92%, #000) 0%,
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 92%, #000) 0%,
       color-mix(in srgb, var(--text-color, #2b211c) 88%, #000) 100%
     );
     transform: translateY(0);
@@ -242,17 +242,17 @@ const D = w`
     }
   }
 `;
-function P(a) {
+function Q(a) {
   const e = t(a, "").trim();
   if (!e) return null;
   const r = new Date(e);
   return Number.isFinite(r.getTime()) ? r : null;
 }
-function Q(a, e = /* @__PURE__ */ new Date()) {
-  const r = Math.max(0, a.getTime() - e.getTime()), s = Math.floor(r / 1e3), n = Math.floor(s / 86400), d = Math.floor(s % 86400 / 3600), o = Math.floor(s % 3600 / 60), g = s % 60;
-  return { days: n, hours: d, minutes: o, seconds: g, totalMs: r };
+function Y(a, e = /* @__PURE__ */ new Date()) {
+  const r = Math.max(0, a.getTime() - e.getTime()), s = Math.floor(r / 1e3), n = Math.floor(s / 86400), l = Math.floor(s % 86400 / 3600), o = Math.floor(s % 3600 / 60), g = s % 60;
+  return { days: n, hours: l, minutes: o, seconds: g, totalMs: r };
 }
-function Y(a) {
+function q(a) {
   return O(a).map((e) => ({
     image: t(e.image),
     name: t(e.name),
@@ -261,16 +261,16 @@ function Y(a) {
     btn_text: t(e.btn_text)
   })).filter((e) => e.name || e.image);
 }
-function q(a) {
+function A(a) {
   return a ? /\.(mp4|webm|ogg)(\?|$)/i.test(a) || a.includes("video") : !1;
 }
-function A(a) {
+function F(a) {
   return U(j(a, 0), 0, 100) / 100;
 }
-var F = Object.defineProperty, h = (a, e, r, s) => {
-  for (var n = void 0, d = a.length - 1, o; d >= 0; d--)
-    (o = a[d]) && (n = o(e, r, n) || n);
-  return n && F(e, r, n), n;
+var R = Object.defineProperty, h = (a, e, r, s) => {
+  for (var n = void 0, l = a.length - 1, o; l >= 0; l--)
+    (o = a[l]) && (n = o(e, r, n) || n);
+  return n && R(e, r, n), n;
 };
 const v = class v extends k {
   constructor() {
@@ -298,13 +298,13 @@ const v = class v extends k {
   }
   syncTimer() {
     this.clearTimer();
-    const e = P(this.cfg.cr_launch_at);
+    const e = Q(this.cfg.cr_launch_at);
     if (!e) {
       this.phase = "post";
       return;
     }
     const r = () => {
-      const s = Q(e);
+      const s = Y(e);
       this.countdown = s, s.totalMs <= 0 && (this.clearTimer(), this.phase === "pre" && this.beginLaunchReveal());
     };
     r(), this.phase === "pre" && (this.timerId = setInterval(r, 1e3));
@@ -334,7 +334,7 @@ const v = class v extends k {
     ` : c;
   }
   render() {
-    const e = this.cfg, r = I(e, "cr_"), s = r.animate && !b(), n = Y(e.cr_products), d = x(e.cr_cta_url), o = t(e.cr_launch_media), g = A(e.cr_overlay_opacity), $ = String(e.cr_timer_color || r.accent), T = String(e.cr_overlay_color || "#2b211c"), M = p(e.cr_show_days, !0), S = p(e.cr_show_hours, !0), z = p(e.cr_show_minutes, !0), L = p(e.cr_show_seconds, !0);
+    const e = this.cfg, r = I(e, "cr_"), s = r.animate && !b(), n = q(e.cr_products), l = x(e.cr_cta_url), o = t(e.cr_launch_media), g = F(e.cr_overlay_opacity), $ = String(e.cr_timer_color || r.accent), T = String(e.cr_overlay_color || "#2b211c"), M = p(e.cr_show_days, !0), z = p(e.cr_show_hours, !0), S = p(e.cr_show_minutes, !0), L = p(e.cr_show_seconds, !0);
     return i`
       <section
         class=${f({
@@ -382,8 +382,8 @@ const v = class v extends k {
                         />` : c}
                     <div class="cr-timer" role="timer" aria-label=${m("العد التنازلي", "Countdown")}>
                       ${this.renderTimerUnit(this.countdown.days, "يوم", "Days", M)}
-                      ${this.renderTimerUnit(this.countdown.hours, "ساعة", "Hours", S)}
-                      ${this.renderTimerUnit(this.countdown.minutes, "دقيقة", "Minutes", z)}
+                      ${this.renderTimerUnit(this.countdown.hours, "ساعة", "Hours", z)}
+                      ${this.renderTimerUnit(this.countdown.minutes, "دقيقة", "Minutes", S)}
                       ${this.renderTimerUnit(this.countdown.seconds, "ثانية", "Seconds", L)}
                     </div>
                   </div>
@@ -401,7 +401,7 @@ const v = class v extends k {
                     <h2 class="fs-title">${t(e.cr_launch_title)}</h2>
                     <p class="fs-desc">${t(e.cr_launch_desc)}</p>
                   </div>
-                  ${o ? q(o) ? i`<video
+                  ${o ? A(o) ? i`<video
                           class="cr-media"
                           src=${o}
                           controls
@@ -416,26 +416,26 @@ const v = class v extends k {
                           loading="eager"
                           decoding="async"
                         />` : c}
-                  ${d ? i`<div class="cr-cta-wrap">
-                        <a class="fs-btn" href=${d}>
+                  ${l ? i`<div class="cr-cta-wrap">
+                        <a class="fs-btn" href=${l}>
                           ${t(e.cr_cta_text) || m("اكتشفي المجموعة", "Explore collection")}
                         </a>
                       </div>` : c}
                   ${n.length ? i`<div class="cr-products">
                         ${n.map(
-      (l) => i`
+      (d) => i`
                             <article class="cr-product fs-card">
-                              ${l.image ? i`<img
+                              ${d.image ? i`<img
                                     class="cr-product__img"
-                                    src=${l.image}
-                                    alt=${l.name || m("منتج", "Product")}
+                                    src=${d.image}
+                                    alt=${d.name || m("منتج", "Product")}
                                     loading="lazy"
                                     decoding="async"
                                   />` : c}
-                              <h3 class="cr-product__name">${l.name}</h3>
-                              ${l.desc ? i`<p class="cr-product__desc">${l.desc}</p>` : c}
-                              ${l.url ? i`<a class="fs-btn" href=${l.url}>
-                                    ${l.btn_text || m("تسوقي الآن", "Shop now")}
+                              <h3 class="cr-product__name">${d.name}</h3>
+                              ${d.desc ? i`<p class="cr-product__desc">${d.desc}</p>` : c}
+                              ${d.url ? i`<a class="fs-btn" href=${d.url}>
+                                    ${d.btn_text || m("تسوقي الآن", "Shop now")}
                                   </a>` : c}
                             </article>
                           `
@@ -444,11 +444,12 @@ const v = class v extends k {
                 </div>
               `}
         </div>
+        ${D(this.config || {}, "cr_")}
       </section>
     `;
   }
 };
-v.styles = [H, D, w`
+v.styles = [H, P, w`
     :host {
       direction: inherit;
     }

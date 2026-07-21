@@ -42,7 +42,7 @@ export const componentStyles = css`
       linear-gradient(180deg, rgba(255, 252, 247, 0.98), #fff 55%),
       linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, transparent),
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, transparent),
         transparent 55%
       );
     box-shadow:
@@ -74,7 +74,7 @@ export const componentStyles = css`
   }
 
   .aca-search:focus-visible {
-    outline: 2px solid color-mix(in srgb, #c9a86c 55%, var(--accent-color, #8b5e4b));
+    outline: 2px solid color-mix(in srgb, #c9a86c 55%, var(--accent-color, var(--fs-store-primary)));
     outline-offset: 2px;
   }
 
@@ -116,10 +116,10 @@ export const componentStyles = css`
   }
 
   .aca-list__item[aria-current='true'] {
-    border-color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, #8b5e4b));
+    border-color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, var(--fs-store-primary)));
     background: linear-gradient(
       120deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, #fff),
       #fff
     );
     box-shadow: 0 12px 24px rgba(43, 33, 28, 0.08);
@@ -191,7 +191,7 @@ export const componentStyles = css`
     color: #fff;
     background:
       linear-gradient(115deg, rgba(22, 16, 13, 0.78), rgba(43, 33, 28, 0.28)),
-      var(--accent-color, #8b5e4b);
+      var(--accent-color, var(--fs-store-primary));
   }
 
   .aca-panel__hero::after {
@@ -347,12 +347,12 @@ export const componentStyles = css`
     display: grid;
     place-items: center;
     border-radius: 1px;
-    background: linear-gradient(145deg, #b08d57, var(--accent-color, #8b5e4b));
+    background: linear-gradient(145deg, #b08d57, var(--accent-color, var(--fs-store-primary)));
     color: #fff;
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
     font-size: 1.05rem;
-    box-shadow: 0 10px 18px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent);
+    box-shadow: 0 10px 18px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
   }
 
   .aca-step__title {
@@ -460,7 +460,7 @@ export const componentStyles = css`
   }
 
   .aca-extra strong {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
   }
 
@@ -490,7 +490,7 @@ export const componentStyles = css`
     margin: 0 auto;
     max-width: 20rem;
     padding: 0.9rem 1.15rem;
-    background: linear-gradient(135deg, #6b4a3d, var(--accent-color, #8b5e4b));
+    background: linear-gradient(135deg, #6b4a3d, var(--accent-color, var(--fs-store-primary)));
     color: #fff;
     border-radius: 2px;
     text-align: center;

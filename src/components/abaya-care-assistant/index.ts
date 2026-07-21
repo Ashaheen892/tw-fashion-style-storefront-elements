@@ -10,6 +10,7 @@ import {
   t,
   themeStyleMap,
 } from '../../utils/helpers.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -333,6 +334,7 @@ export default class AbayaCareAssistant extends LitElement {
           : nothing}
 
         ${fabric ? this._renderPrintCard(fabric) : nothing}
+        ${renderCommerceOutcome(this.config || {}, 'aca_')}
       </section>
     `;
   }

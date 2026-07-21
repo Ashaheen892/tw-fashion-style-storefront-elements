@@ -1,9 +1,9 @@
-import { css as m, LitElement as v, nothing as n, html as s } from "lit";
-import { property as _, state as $ } from "lit/decorators.js";
+import { css as b, LitElement as x, nothing as i, html as r } from "lit";
+import { property as w, state as z } from "lit/decorators.js";
 import { classMap as f } from "lit/directives/class-map.js";
-import { styleMap as x } from "lit/directives/style-map.js";
-import { n as g, l as i, s as y, t as o, r as w, p as z, a as S } from "./sharedStyles-BGb_aVO_.js";
-const k = m`
+import { styleMap as g } from "lit/directives/style-map.js";
+import { n as v, l as a, s as S, t as n, r as k, p as I, a as C, b as L } from "./sharedStyles-BYm1OK6w.js";
+const M = b`
   .sfr-layout {
     display: grid;
     gap: 1.35rem;
@@ -27,17 +27,36 @@ const k = m`
   }
 
   .sfr-panel {
-    padding: 1.15rem;
+    padding: 1.2rem;
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background: var(--card-bg, #fff);
     box-shadow: 0 14px 34px rgba(43, 33, 28, 0.06);
   }
 
+  .fs-animate .sfr-panel {
+    animation: sfr-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .fs-animate .sfr-panel:nth-child(2) { animation-delay: 0.08s; }
+  .fs-animate .sfr-panel--preview { animation-delay: 0.14s; }
+
+  @keyframes sfr-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   .sfr-panel__title {
-    margin: 0 0 0.85rem;
+    margin: 0 0 0.95rem;
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
 
   .sfr-steps {
@@ -48,46 +67,49 @@ const k = m`
   .sfr-step-btn {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 0.7rem;
+    gap: 0.75rem;
     align-items: center;
-    min-height: 44px;
-    padding: 0.75rem 0.85rem;
-    border-radius: 10px;
+    min-height: 52px;
+    padding: 0.8rem 0.9rem;
+    border-radius: calc(var(--section-radius, 16px) * 0.65);
     border: 1px solid var(--border-color, #e8ddd6);
     background: transparent;
     color: inherit;
     font: inherit;
     text-align: start;
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
+    transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
   }
 
   .sfr-step-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, var(--border-color, #e8ddd6));
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
   }
 
   .sfr-step-btn--active {
-    border-color: var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, var(--card-bg, #fff));
+    border-color: var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #fff));
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, transparent);
   }
 
   .sfr-step-btn__num {
-    width: 2rem;
-    height: 2rem;
-    min-width: 2rem;
-    min-height: 2rem;
-    flex: 0 0 auto;
+    width: 2.15rem;
+    height: 2.15rem;
+    min-width: 2.15rem;
     display: inline-grid;
     place-items: center;
-    box-sizing: border-box;
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent);
-    color: var(--accent-color, #8b5e4b);
-    font-size: 0.8rem;
-    font-weight: 700;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent);
+    color: var(--accent-color, var(--fs-store-primary));
+    font-size: 0.82rem;
+    font-weight: 800;
     line-height: 1;
-    margin: 0;
-    padding: 0;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .sfr-step-btn--active .sfr-step-btn__num {
+    background: var(--accent-color, var(--fs-store-primary));
+    color: #fff;
   }
 
   .sfr-step-btn__copy {
@@ -96,32 +118,46 @@ const k = m`
 
   .sfr-step-btn__copy strong {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
   }
 
   .sfr-step-btn__copy span {
     display: block;
-    margin-top: 0.15rem;
-    font-size: 0.75rem;
+    margin-top: 0.18rem;
+    font-size: 0.76rem;
     color: var(--muted-color, #7a6a62);
     line-height: 1.45;
   }
 
   .sfr-panel--preview {
     display: grid;
-    gap: 0.85rem;
+    gap: 0.9rem;
+    background:
+      radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, transparent), transparent 40%),
+      var(--card-bg, #fff);
   }
 
   .sfr-detail__media {
-    border-radius: 12px;
+    position: relative;
+    border-radius: calc(var(--section-radius, 16px) * 0.75);
     overflow: hidden;
     aspect-ratio: 4 / 3;
     background:
-      linear-gradient(145deg, color-mix(in srgb, var(--accent-color, #8b5e4b) 18%, #2b211c), #1c1613);
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, #2b211c), #1c1613);
   }
 
   .sfr-detail__media--empty {
-    min-height: 10rem;
+    min-height: 11rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .sfr-detail__media--empty::after {
+    content: attr(data-label);
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
   }
 
   .sfr-detail__media img {
@@ -129,12 +165,19 @@ const k = m`
     height: 100%;
     object-fit: cover;
     display: block;
+    animation: sfr-fade 0.35s ease;
+  }
+
+  @keyframes sfr-fade {
+    from { opacity: 0.4; transform: scale(1.02); }
+    to { opacity: 1; transform: none; }
   }
 
   .sfr-detail__title {
     margin: 0;
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
 
   .sfr-detail__desc {
@@ -146,10 +189,10 @@ const k = m`
 
   .sfr-tip {
     margin: 0;
-    padding: 0.75rem 0.9rem;
-    border-radius: 10px;
-    border-inline-start: 3px solid var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
+    padding: 0.8rem 0.95rem;
+    border-radius: calc(var(--section-radius, 16px) * 0.55);
+    border-inline-start: 3px solid var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
     font-size: 0.85rem;
     line-height: 1.6;
     color: var(--text-color, #2b211c);
@@ -157,6 +200,7 @@ const k = m`
 
   .sfr-table-wrap {
     overflow-x: auto;
+    border-radius: calc(var(--section-radius, 16px) * 0.55);
   }
 
   .sfr-table {
@@ -169,25 +213,31 @@ const k = m`
 
   .sfr-table th,
   .sfr-table td {
-    padding: 0.7rem 0.75rem;
+    padding: 0.75rem 0.8rem;
     text-align: start;
     border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 88%, transparent);
   }
 
   .sfr-table thead th {
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--muted-color, #7a6a62);
     background: color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
   }
 
+  .sfr-table tbody tr {
+    transition: background 0.2s ease;
+  }
+
   .sfr-table tbody tr:hover td {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 5%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, transparent);
   }
 
   .sfr-table__size {
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
+    font-weight: 800;
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .sfr-table__note {
@@ -203,41 +253,9 @@ const k = m`
     line-height: 1.55;
   }
 
-  @media (max-width: 959px) {
-    .sfr-layout {
-      gap: 1.1rem;
-    }
-
-    .sfr-panel {
-      padding: 1rem 0.95rem;
-    }
-
-    .sfr-steps {
-      gap: 0.45rem;
-    }
-
-    .sfr-step-btn {
-      min-height: 44px;
-    }
-  }
-
   @media (max-width: 639px) {
     .sfr-panel {
-      padding: 0.9rem 0.8rem;
-    }
-
-    .sfr-layout {
-      gap: 0.95rem;
-    }
-
-    .sfr-main {
-      gap: 0.95rem;
-    }
-
-    .sfr-table-wrap {
-      margin-inline: -0.15rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      padding: 0.95rem 0.85rem;
     }
 
     .sfr-table {
@@ -245,54 +263,48 @@ const k = m`
       font-size: 0.78rem;
     }
 
-    .sfr-table th,
-    .sfr-table td {
-      padding: 0.5rem 0.45rem;
-      white-space: nowrap;
-    }
-
     .sfr-detail__media {
       aspect-ratio: 1 / 1;
       max-height: 14.5rem;
     }
-
-    .sfr-note {
-      font-size: 0.76rem;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .sfr-step-btn {
-      transition: none;
+    .sfr-panel,
+    .sfr-step-btn,
+    .sfr-detail__media img {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
     }
   }
 `;
-function C(l) {
-  return g(l).map((e, r) => ({
-    id: i(e.id) || `step-${r + 1}`,
-    title: i(e.title),
-    desc: i(e.desc),
+function P(l) {
+  return v(l).map((e, s) => ({
+    id: a(e.id) || `step-${s + 1}`,
+    title: a(e.title),
+    desc: a(e.desc),
     image: String(e.image || "").trim(),
-    tip: i(e.tip)
+    tip: a(e.tip)
   })).filter((e) => e.title || e.desc || e.image);
 }
-function I(l) {
-  return g(l).map((e, r) => ({
-    id: i(e.id) || `size-${r + 1}`,
-    size_label: i(e.size_label),
-    bust: i(e.bust),
-    waist: i(e.waist),
-    hips: i(e.hips),
-    length: i(e.length),
-    note: i(e.note)
+function j(l) {
+  return v(l).map((e, s) => ({
+    id: a(e.id) || `size-${s + 1}`,
+    size_label: a(e.size_label),
+    bust: a(e.bust),
+    waist: a(e.waist),
+    hips: a(e.hips),
+    length: a(e.length),
+    note: a(e.note)
   })).filter((e) => e.size_label);
 }
-var L = Object.defineProperty, b = (l, e, r, a) => {
-  for (var t = void 0, d = l.length - 1, c; d >= 0; d--)
-    (c = l[d]) && (t = c(e, r, t) || t);
-  return t && L(e, r, t), t;
+var E = Object.defineProperty, u = (l, e, s, o) => {
+  for (var t = void 0, c = l.length - 1, d; c >= 0; c--)
+    (d = l[c]) && (t = d(e, s, t) || t);
+  return t && E(e, s, t), t;
 };
-const h = class h extends v {
+const m = class m extends x {
   constructor() {
     super(...arguments), this.config = {}, this.activeStepId = "", this.boundLang = () => this.requestUpdate();
   }
@@ -307,11 +319,11 @@ const h = class h extends v {
   }
   get steps() {
     var e;
-    return C((e = this.config) == null ? void 0 : e.sfr_steps);
+    return P((e = this.config) == null ? void 0 : e.sfr_steps);
   }
   get sizes() {
     var e;
-    return I((e = this.config) == null ? void 0 : e.sfr_sizes);
+    return j((e = this.config) == null ? void 0 : e.sfr_sizes);
   }
   get activeStep() {
     return this.steps.find((e) => e.id === this.activeStepId) || this.steps[0] || null;
@@ -322,53 +334,57 @@ const h = class h extends v {
       this.activeStepId = "";
       return;
     }
-    e.some((r) => r.id === this.activeStepId) || (this.activeStepId = e[0].id);
+    e.some((s) => s.id === this.activeStepId) || (this.activeStepId = e[0].id);
   }
   renderPreview() {
     const e = this.activeStep;
-    return e ? s`
+    return e ? r`
       <div class="sfr-panel sfr-panel--preview" aria-live="polite">
-        ${e.image ? s`<div class="sfr-detail__media">
+        ${e.image ? r`<div class="sfr-detail__media">
               <img
                 src=${e.image}
                 alt=${e.title}
                 loading="lazy"
                 decoding="async"
               />
-            </div>` : s`<div class="sfr-detail__media sfr-detail__media--empty" aria-hidden="true"></div>`}
+            </div>` : r`<div
+              class="sfr-detail__media sfr-detail__media--empty"
+              data-label=${n("معاينة الخطوة", "Step preview")}
+              aria-hidden="true"
+            ></div>`}
         <h4 class="sfr-detail__title">${e.title}</h4>
-        ${e.desc ? s`<p class="sfr-detail__desc">${e.desc}</p>` : n}
-        ${e.tip ? s`<p class="sfr-tip">
-              <strong>${o("نصيحة", "Tip")}:</strong> ${e.tip}
-            </p>` : n}
+        ${e.desc ? r`<p class="sfr-detail__desc">${e.desc}</p>` : i}
+        ${e.tip ? r`<p class="sfr-tip">
+              <strong>${n("نصيحة", "Tip")}:</strong> ${e.tip}
+            </p>` : i}
       </div>
-    ` : n;
+    ` : i;
   }
   renderChart() {
-    const e = this.config || {}, r = this.sizes, a = i(e.sfr_chart_note);
-    return r.length ? s`
+    const e = this.config || {}, s = this.sizes, o = a(e.sfr_chart_note);
+    return s.length ? r`
       <div class="sfr-panel">
         <h3 class="sfr-panel__title">
-          ${i(e.sfr_chart_title) || o("دليل المقاسات", "Size chart")}
+          ${a(e.sfr_chart_title) || n("دليل المقاسات", "Size chart")}
         </h3>
         <div class="sfr-table-wrap">
           <table class="sfr-table">
             <thead>
               <tr>
-                <th>${o("المقاس", "Size")}</th>
-                <th>${o("الصدر", "Bust")}</th>
-                <th>${o("الخصر", "Waist")}</th>
-                <th>${o("الورك", "Hips")}</th>
-                <th>${o("الطول", "Length")}</th>
+                <th>${n("المقاس", "Size")}</th>
+                <th>${n("الصدر", "Bust")}</th>
+                <th>${n("الخصر", "Waist")}</th>
+                <th>${n("الورك", "Hips")}</th>
+                <th>${n("الطول", "Length")}</th>
               </tr>
             </thead>
             <tbody>
-              ${r.map(
-      (t) => s`
+              ${s.map(
+      (t) => r`
                   <tr>
                     <td class="sfr-table__size">
                       ${t.size_label}
-                      ${t.note ? s`<div class="sfr-table__note">${t.note}</div>` : n}
+                      ${t.note ? r`<div class="sfr-table__note">${t.note}</div>` : i}
                     </td>
                     <td>${t.bust || "—"}</td>
                     <td>${t.waist || "—"}</td>
@@ -380,95 +396,108 @@ const h = class h extends v {
             </tbody>
           </table>
         </div>
-        ${a ? s`<p class="sfr-note">${a}</p>` : n}
+        ${o ? r`<p class="sfr-note">${o}</p>` : i}
       </div>
-    ` : n;
+    ` : i;
   }
   renderSteps() {
-    const e = this.config || {}, r = this.steps;
-    return r.length ? s`
+    const e = this.config || {}, s = this.steps;
+    return s.length ? r`
       <div class="sfr-panel">
         <h3 class="sfr-panel__title">
-          ${i(e.sfr_steps_title) || o("كيف تأخذين مقاساتك", "How to take your measurements")}
+          ${a(e.sfr_steps_title) || n("كيف تأخذ مقاساتك", "How to take your measurements")}
         </h3>
         <div class="sfr-steps" role="tablist">
-          ${r.map(
-      (a, t) => s`
+          ${s.map(
+      (o, t) => r`
               <button
                 type="button"
                 class=${f({
         "sfr-step-btn": !0,
-        "sfr-step-btn--active": a.id === this.activeStepId
+        "sfr-step-btn--active": o.id === this.activeStepId
       })}
                 role="tab"
-                aria-selected=${a.id === this.activeStepId ? "true" : "false"}
+                aria-selected=${o.id === this.activeStepId ? "true" : "false"}
                 @click=${() => {
-        this.activeStepId = a.id;
+        this.activeStepId = o.id;
       }}
               >
                 <span class="sfr-step-btn__num">${t + 1}</span>
                 <span class="sfr-step-btn__copy">
-                  <strong>${a.title}</strong>
-                  ${a.desc ? s`<span>${a.desc}</span>` : n}
+                  <strong>${o.title}</strong>
+                  ${o.desc ? r`<span>${o.desc}</span>` : i}
                 </span>
               </button>
             `
     )}
         </div>
       </div>
-    ` : n;
+    ` : i;
   }
   render() {
-    const e = this.config || {}, r = w(e, "sfr_"), a = r.animate && !z(), t = i(e.sfr_title), d = i(e.sfr_desc), c = this.steps, u = this.sizes;
-    return !c.length && !u.length ? s`<div class="fs-empty" role="status">
-        ${o("أضيفي خطوات القياس أو جدول المقاسات", "Add measure steps or a size chart")}
-      </div>` : s`
+    const e = this.config || {}, s = k(e, "sfr_"), o = s.animate && !I(), t = a(e.sfr_title), c = a(e.sfr_desc), d = this.steps, _ = this.sizes;
+    if (!d.length && !_.length)
+      return r`<div class="fs-empty" role="status">
+        ${n("أضف خطوات القياس أو جدول المقاسات", "Add measure steps or a size chart")}
+      </div>`;
+    const h = Math.max(0, d.findIndex(($) => $.id === this.activeStepId)), y = d.length ? Math.round((h + 1) / d.length * 100) : 0;
+    return r`
       <section
         class=${f({
       "fs-section": !0,
-      "fs-animate": a
+      "fs-animate": o
     })}
-        style=${x(S(r))}
-        aria-label=${t || o("طقوس القياس", "Silhouette Fit Ritual")}
+        style=${g(C(s))}
+        aria-label=${t || n("طقوس القياس", "Silhouette Fit Ritual")}
       >
         <div class="fs-container">
-          ${t || d ? s`<header class="fs-header">
-                ${t ? s`<h2 class="fs-title">${t}</h2>` : n}
-                ${d ? s`<p class="fs-desc">${d}</p>` : n}
-              </header>` : n}
+          ${t || c ? r`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${n("دليل المقاس", "Fit guide")}</p>
+                ${t ? r`<h2 class="fs-title">${t}</h2>` : i}
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${c ? r`<p class="fs-desc">${c}</p>` : i}
+              </header>` : i}
+
+          ${d.length ? r`<div class="fs-progress" aria-hidden="true">
+                <span class="fs-progress__label">${n("الخطوة", "Step")} ${h + 1} / ${d.length}</span>
+                <div class="fs-progress__track">
+                  <div class="fs-progress__bar" style=${g({ width: `${y}%` })}></div>
+                </div>
+              </div>` : i}
 
           <div
             class=${f({
       "sfr-layout": !0,
-      "sfr-layout--with-preview": c.length > 0
+      "sfr-layout--with-preview": d.length > 0
     })}
           >
             <div class="sfr-main">
               ${this.renderChart()}
               ${this.renderSteps()}
             </div>
-            ${c.length ? this.renderPreview() : n}
+            ${d.length ? this.renderPreview() : i}
           </div>
         </div>
+        ${L(this.config || {}, "sfr_")}
       </section>
     `;
   }
 };
-h.styles = [
-  y,
-  k,
-  m`
+m.styles = [
+  S,
+  M,
+  b`
       :host {
         direction: inherit;
       }
     `
 ];
-let p = h;
-b([
-  _({ type: Object })
+let p = m;
+u([
+  w({ type: Object })
 ], p.prototype, "config");
-b([
-  $()
+u([
+  z()
 ], p.prototype, "activeStepId");
 typeof p < "u" && p.registerSallaComponent("salla-silhouette-fit-ritual");
 export {

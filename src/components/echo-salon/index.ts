@@ -10,6 +10,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import { averageRating, parseReviews } from './utils.js';
@@ -131,7 +132,7 @@ export default class EchoSalon extends LitElement {
 
     if (!reviews.length) {
       return html`<div class="fs-empty" role="status">
-        ${t('أضيفي شهادات الزبونات في الإعدادات', 'Add customer echoes in settings')}
+        ${t('أضف شهادات العملاء في الإعدادات', 'Add customer echoes in settings')}
       </div>`;
     }
 
@@ -146,8 +147,10 @@ export default class EchoSalon extends LitElement {
       >
         <div class="fs-container">
           ${title || desc
-            ? html`<header class="fs-header">
+            ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('آراء العملاء', 'Customer voices')}</p>
                 ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                <span class="fs-title-line" aria-hidden="true"></span>
                 ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>`
             : nothing}
@@ -208,8 +211,24 @@ export default class EchoSalon extends LitElement {
                 `
               )}
             </div>
+
+            ${reviews.length > 1
+              ? html`<div class="fs-dots" role="tablist" aria-label=${t('التنقل بين الشهادات', 'Browse reviews')}>
+                  ${reviews.map(
+                    (review) => html`
+                      <button
+                        type="button"
+                        class=${classMap({ 'fs-dot': true, 'is-active': review.id === this.activeId })}
+                        aria-label=${review.name || t('شهادة', 'Review')}
+                        @click=${() => this.select(review.id)}
+                      ></button>
+                    `
+                  )}
+                </div>`
+              : nothing}
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'es_')}
       </section>
     `;
   }

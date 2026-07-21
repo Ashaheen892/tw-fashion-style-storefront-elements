@@ -243,7 +243,7 @@ export const componentStyles = css`
     margin-top: 0.45rem;
     font-size: 0.78rem;
     font-weight: 600;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     text-decoration: none;
   }
 
@@ -294,7 +294,7 @@ export const componentStyles = css`
     display: block;
     height: 100%;
     width: var(--amm-progress, 0%);
-    background: var(--amm-progress-color, var(--accent-color, #8b5e4b));
+    background: var(--amm-progress-color, var(--accent-color, var(--fs-store-primary)));
     border-radius: inherit;
   }
 
@@ -334,11 +334,11 @@ export const componentStyles = css`
   }
 
   .amm-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
   }
 
   .amm-btn--primary {
-    background: var(--button-bg, #8b5e4b);
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
     color: var(--button-color, #fff);
     border-color: transparent;
   }
@@ -425,7 +425,7 @@ export const componentStyles = css`
   .amm-meter__bar > span {
     display: block;
     height: 100%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     border-radius: inherit;
   }
 

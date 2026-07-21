@@ -1,10 +1,10 @@
-import { css as D, LitElement as K, nothing as b, html as d } from "lit";
+import { css as D, LitElement as K, nothing as h, html as d } from "lit";
 import { property as q, state as C } from "lit/decorators.js";
 import { classMap as $ } from "lit/directives/class-map.js";
 import { styleMap as R } from "lit/directives/style-map.js";
-import { n as S, l as u, b as M, d as A, e as v, f as j, i as B, h as y, s as X, j as Y, t as m, r as G, p as J, a as Q } from "./sharedStyles-BGb_aVO_.js";
-import { f as W, u as Z, e as ee, r as te } from "./productPicker-DSFtCeT4.js";
-const re = D`
+import { n as S, l as u, d as M, f as A, e as _, h as X, j, i as B, k as x, u as Y, m as G, s as J, o as Q, t as m, r as W, p as Z, a as ee, b as te } from "./sharedStyles-BYm1OK6w.js";
+import { r as re } from "./productCard-BlEnQRkD.js";
+const ae = D`
   .acm-studio {
     position: relative;
     overflow: hidden;
@@ -12,8 +12,8 @@ const re = D`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 42%),
-      radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent), transparent 40%),
+      radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 42%),
+      radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 40%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -40,8 +40,8 @@ const re = D`
     gap: 0.35rem;
     padding: 0.3rem 0.75rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
     white-space: nowrap;
@@ -63,12 +63,14 @@ const re = D`
     border-radius: calc(var(--section-radius, 18px) * 0.55);
     border: 1px dashed color-mix(in srgb, var(--border-color, #e8ddd6) 90%, transparent);
     background: color-mix(in srgb, var(--card-bg, #fff) 70%, transparent);
+    transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
   }
 
   .acm-slot--filled {
     border-style: solid;
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #fff));
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
   }
 
   .acm-slot__num {
@@ -78,8 +80,8 @@ const re = D`
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
   }
@@ -189,12 +191,12 @@ const re = D`
   }
 
   .acm-legend__swatch--same {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
   }
 
   .acm-legend__swatch--best {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, var(--card-bg, #fff));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--card-bg, #fff));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent);
   }
 
   .acm-table-wrap {
@@ -234,9 +236,9 @@ const re = D`
   }
 
   .acm-input:focus {
-    outline: 2px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, transparent);
     outline-offset: 1px;
-    border-color: var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
   }
 
   .acm-input::placeholder {
@@ -286,14 +288,14 @@ const re = D`
   }
 
   .acm-cell--same {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff)) !important;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff)) !important;
   }
 
   .acm-cell--best {
     position: relative;
     font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, var(--card-bg, #fff)) !important;
+    color: var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, var(--card-bg, #fff)) !important;
   }
 
   .acm-cell__badge {
@@ -301,7 +303,7 @@ const re = D`
     margin-inline-start: 0.35rem;
     padding: 0.1rem 0.4rem;
     border-radius: 999px;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
     font-size: 0.65rem;
     font-weight: 700;
@@ -408,30 +410,30 @@ const re = D`
     }
   }
 `;
-function ae(t) {
-  return Z(t);
-}
 function ie(t) {
-  return ee(t);
+  return Y(t);
 }
 function oe(t) {
-  const e = !!u(t.name).trim(), r = !!(v(t.image) || v(t.thumbnail) || v(t.main_image)), i = !!M(t.url || t.permalink), a = y(t.price) > 0 || y(t.sale_price) > 0 || y(t.regular_price) > 0;
+  return G(t);
+}
+function se(t) {
+  const e = !!u(t.name).trim(), r = !!(_(t.image) || _(t.thumbnail) || _(t.main_image)), i = !!M(t.url || t.permalink), a = x(t.price) > 0 || x(t.sale_price) > 0 || x(t.regular_price) > 0;
   return e && (r || i || a);
 }
 function ce(t) {
-  for (const r of ae(t))
+  for (const r of ie(t))
     if (r != null) {
       if (typeof r == "number" || typeof r == "string") {
         const i = String(r).trim();
         if (i) return { id: i, label: "", hydrated: null };
       }
       if (typeof r == "object") {
-        const i = r, a = ie(i), o = u(i.label ?? i.name).trim(), c = oe(i) ? i : null;
-        if (a || c)
+        const i = r, a = oe(i), o = u(i.label ?? i.name).trim(), s = se(i) ? i : null;
+        if (a || s)
           return {
-            id: a || String((c == null ? void 0 : c.id) ?? "").trim(),
+            id: a || String((s == null ? void 0 : s.id) ?? "").trim(),
             label: o,
-            hydrated: c
+            hydrated: s
           };
       }
     }
@@ -442,16 +444,16 @@ function ce(t) {
     hydrated: t && typeof t == "object" ? t : null
   } : null;
 }
-function H(t, e) {
+function O(t, e) {
   return t.trim().toLowerCase().replace(/\s+/g, "-") || `criterion-${e + 1}`;
 }
 function ne(t) {
   return S(t).map((e, r) => {
-    const i = u(e.label).trim(), a = u(e.value).trim(), o = u(e.key).trim() || H(i, r);
+    const i = u(e.label).trim(), a = u(e.value).trim(), o = u(e.key).trim() || O(i, r);
     return { key: o, label: i || o, value: a };
   }).filter((e) => e.label && e.value);
 }
-function N(t) {
+function H(t) {
   return S(t).map((e, r) => {
     const i = ce(
       e.product ?? e.products ?? e.selected_product
@@ -462,7 +464,7 @@ function N(t) {
       product_label: (i == null ? void 0 : i.label) || "",
       hydrated: (i == null ? void 0 : i.hydrated) || null,
       name: u(e.name),
-      image: v(e.image),
+      image: _(e.image),
       price: A(e.price, 0),
       old_price: A(e.old_price, 0),
       url: M(e.url),
@@ -471,24 +473,24 @@ function N(t) {
     };
   }).filter((e) => e.product_id || e.name || e.image || e.hydrated || e.attributes.length);
 }
-function se(t) {
+function le(t) {
   return t.hydrated ? !0 : !!(t.name && (t.image || t.url || t.price > 0));
 }
 function z(t, e) {
-  const r = e ? j(e) : null, i = e && typeof e == "object" ? e : null, a = t.name || (r == null ? void 0 : r.name) || (i ? u(i.name) : "") || t.product_label, o = t.image || (r == null ? void 0 : r.image) || (i ? v(i.image) || v(i.thumbnail) || v(i.main_image) : ""), c = t.url || (r == null ? void 0 : r.url) || (i ? M(i.url || i.permalink) : "");
-  let n = t.price > 0 ? t.price : (r == null ? void 0 : r.price) || 0, l = t.old_price > 0 ? t.old_price : (r == null ? void 0 : r.old_price) || 0;
+  const r = e ? j(e) : null, i = e && typeof e == "object" ? e : null, a = t.name || (r == null ? void 0 : r.name) || (i ? u(i.name) : "") || t.product_label, o = t.image || (r == null ? void 0 : r.image) || (i ? _(i.image) || _(i.thumbnail) || _(i.main_image) : ""), s = t.url || (r == null ? void 0 : r.url) || (i ? M(i.url || i.permalink) : "");
+  let c = t.price > 0 ? t.price : (r == null ? void 0 : r.price) || 0, l = t.old_price > 0 ? t.old_price : (r == null ? void 0 : r.old_price) || 0;
   if (!(t.price > 0) && i) {
-    const p = B(i.is_on_sale) || B(i.on_sale), h = y(i.sale_price), f = y(i.regular_price), w = y(i.price);
-    p && h > 0 ? (n = h, l = f > h ? f : 0) : w > 0 && (n = w, f > w && (l = f));
+    const p = B(i.is_on_sale) || B(i.on_sale), g = x(i.sale_price), b = x(i.regular_price), w = x(i.price);
+    p && g > 0 ? (c = g, l = b > g ? b : 0) : w > 0 && (c = w, b > w && (l = b));
   }
   return {
     id: t.id,
     product_id: t.product_id || (r == null ? void 0 : r.id) || "",
     name: a,
     image: o,
-    price: n,
+    price: c,
     old_price: l,
-    url: c,
+    url: s,
     btn_text: t.btn_text,
     rating: (r == null ? void 0 : r.rating) || 0,
     attributes: t.attributes
@@ -497,31 +499,31 @@ function z(t, e) {
 function L(t, e) {
   return e ? z(t, e) : t.hydrated ? z(t, t.hydrated) : z(t);
 }
-function le(t) {
-  return N(t).map((e) => L(e)).filter((e) => e.name || e.image || e.product_id || e.attributes.length);
-}
-async function de(t) {
-  return W(t);
+function de(t) {
+  return H(t).map((e) => L(e)).filter((e) => e.name || e.image || e.product_id || e.attributes.length);
 }
 async function me(t) {
-  const e = N(t), r = e.filter((a) => a.product_id && !se(a)).map((a) => a.product_id), i = r.length ? await de(r) : /* @__PURE__ */ new Map();
+  return X(t);
+}
+async function ue(t) {
+  const e = H(t), r = e.filter((a) => a.product_id && !le(a)).map((a) => a.product_id), i = r.length ? await me(r) : /* @__PURE__ */ new Map();
   return e.map((a) => a.product_id && i.has(a.product_id) ? L(a, i.get(a.product_id)) : L(a)).filter((a) => a.name || a.image || a.product_id || a.attributes.length);
 }
-function ue(t, e = []) {
-  const r = S(t).map((o, c) => {
-    const n = u(o.label).trim(), l = u(o.key).trim() || H(n, c);
-    return { key: l, label: n || l };
+function pe(t, e = []) {
+  const r = S(t).map((o, s) => {
+    const c = u(o.label).trim(), l = u(o.key).trim() || O(c, s);
+    return { key: l, label: c || l };
   }).filter((o) => o.label);
   if (r.length) return r;
   const i = /* @__PURE__ */ new Set(), a = [];
   for (const o of e)
-    for (const c of o.attributes) {
-      const n = c.key || c.label;
-      !n || i.has(n) || (i.add(n), a.push({ key: c.key, label: c.label }));
+    for (const s of o.attributes) {
+      const c = s.key || s.label;
+      !c || i.has(c) || (i.add(c), a.push({ key: s.key, label: s.label }));
     }
   return a;
 }
-function O(t, e) {
+function N(t, e) {
   const r = t.attributes.find((o) => o.key === e.key);
   if (r != null && r.value) return r.value;
   const i = e.label.trim().toLowerCase(), a = t.attributes.find(
@@ -532,7 +534,7 @@ function O(t, e) {
 function V(t, e) {
   return !e || e <= t ? 0 : Math.round((e - t) / e * 100);
 }
-function pe(t) {
+function fe(t) {
   return [
     {
       key: "price",
@@ -558,38 +560,38 @@ function pe(t) {
     }))
   ];
 }
-function be(t, e, r) {
+function he(t, e, r) {
   const i = /* @__PURE__ */ new Set();
   let a = null, o = null;
   if (t.highlightIdentical && t.criterionKey && e.length > 1) {
-    const c = r.find((n) => n.key === t.criterionKey);
-    if (c) {
-      const n = e.map((l) => O(l, c).trim().toLowerCase()).filter(Boolean);
-      n.length === e.length && n.every((l) => l === n[0]) && e.forEach((l) => i.add(l.id));
+    const s = r.find((c) => c.key === t.criterionKey);
+    if (s) {
+      const c = e.map((l) => N(l, s).trim().toLowerCase()).filter(Boolean);
+      c.length === e.length && c.every((l) => l === c[0]) && e.forEach((l) => i.add(l.id));
     }
   }
   if (t.isPrice) {
-    const c = e.filter((n) => n.price > 0);
-    if (c.length) {
-      const n = Math.min(...c.map((p) => p.price)), l = c.filter((p) => p.price === n);
+    const s = e.filter((c) => c.price > 0);
+    if (s.length) {
+      const c = Math.min(...s.map((p) => p.price)), l = s.filter((p) => p.price === c);
       l.length === 1 && (a = l[0].id);
     }
   }
   if (t.isDiscount) {
-    const c = e.map((n) => ({
-      id: n.id,
-      pct: V(n.price, n.old_price)
-    })).filter((n) => n.pct > 0);
-    if (c.length) {
-      const n = Math.max(...c.map((p) => p.pct)), l = c.filter((p) => p.pct === n);
+    const s = e.map((c) => ({
+      id: c.id,
+      pct: V(c.price, c.old_price)
+    })).filter((c) => c.pct > 0);
+    if (s.length) {
+      const c = Math.max(...s.map((p) => p.pct)), l = s.filter((p) => p.pct === c);
       l.length === 1 && (o = l[0].id);
     }
   }
   return { identical: i, bestPriceId: a, bestDiscountId: o };
 }
 var ge = Object.defineProperty, k = (t, e, r, i) => {
-  for (var a = void 0, o = t.length - 1, c; o >= 0; o--)
-    (c = t[o]) && (a = c(e, r, a) || a);
+  for (var a = void 0, o = t.length - 1, s; o >= 0; o--)
+    (s = t[o]) && (a = s(e, r, a) || a);
   return a && ge(e, r, a), a;
 };
 const I = 3, P = 2, T = class T extends K {
@@ -607,7 +609,7 @@ const I = 3, P = 2, T = class T extends K {
   }
   get criteria() {
     var e;
-    return ue((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
+    return pe((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
   }
   get selected() {
     return this.selectedIds.map((e) => this.products.find((r) => r.id === e)).filter((e) => !!e);
@@ -618,11 +620,11 @@ const I = 3, P = 2, T = class T extends K {
   }
   async loadProducts() {
     var a, o;
-    const e = ++this.loadToken, r = le((a = this.config) == null ? void 0 : a.acm_products);
+    const e = ++this.loadToken, r = de((a = this.config) == null ? void 0 : a.acm_products);
     r.length ? (this.products = r, this.productsLoading = !1) : this.productsLoading = !0;
-    const i = await me((o = this.config) == null ? void 0 : o.acm_products);
+    const i = await ue((o = this.config) == null ? void 0 : o.acm_products);
     e === this.loadToken && (this.products = i, this.productsLoading = !1, this.selectedIds = this.selectedIds.filter(
-      (c) => i.some((n) => n.id === c)
+      (s) => i.some((c) => c.id === s)
     ), this.selectedIds.length < P && (this.showTable = !1));
   }
   toggleProduct(e) {
@@ -640,7 +642,7 @@ const I = 3, P = 2, T = class T extends K {
   }
   formatCellValue(e, r, i) {
     if (e === "price")
-      return r.price > 0 ? Y(r.price, this.currency) : "—";
+      return r.price > 0 ? Q(r.price, this.currency) : "—";
     if (e === "discount") {
       const a = V(r.price, r.old_price);
       return a > 0 ? `${a}%` : "—";
@@ -648,7 +650,7 @@ const I = 3, P = 2, T = class T extends K {
     if (i) {
       const a = this.criteria.find((o) => o.key === i);
       if (a)
-        return O(r, a) || "—";
+        return N(r, a) || "—";
     }
     return "—";
   }
@@ -672,7 +674,7 @@ const I = 3, P = 2, T = class T extends K {
                           alt=""
                           loading="lazy"
                           decoding="async"
-                        />` : b}
+                        />` : h}
                     <span class="acm-slot__meta">
                       <span class="acm-slot__name">${a.name}</span>
                     </span>
@@ -694,21 +696,23 @@ const I = 3, P = 2, T = class T extends K {
     `;
   }
   render() {
-    const e = this.config || {}, r = G(e, "acm_"), i = r.animate && !J(), a = this.products, o = this.selected, c = this.currency, n = this.selectedIds.length >= I, l = o.length >= P, p = u(e.acm_title), h = u(e.acm_desc), f = this.criteria, w = pe(f);
+    const e = this.config || {}, r = W(e, "acm_"), i = r.animate && !Z(), a = this.products, o = this.selected, s = this.currency, c = this.selectedIds.length >= I, l = o.length >= P, p = u(e.acm_title), g = u(e.acm_desc), b = this.criteria, w = fe(b);
     return d`
       <section
         class=${$({
       "fs-section": !0,
       "fs-animate": i
     })}
-        style=${R(Q(r))}
+        style=${R(ee(r))}
         aria-label=${p || m("مقارنة العبايات", "Compare abayas")}
       >
         <div class="fs-container">
-          ${p || h ? d`<div class="fs-header">
-                ${p ? d`<h2 class="fs-title">${p}</h2>` : b}
-                ${h ? d`<p class="fs-desc">${h}</p>` : b}
-              </div>` : b}
+          ${p || g ? d`<div class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${m("مقارنة ذكية", "Smart compare")}</p>
+                ${p ? d`<h2 class="fs-title">${p}</h2>` : h}
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${g ? d`<p class="fs-desc">${g}</p>` : h}
+              </div>` : h}
 
           ${this.productsLoading ? d`<div class="fs-empty" role="status">
                 ${m("جاري تحميل المنتجات...", "Loading products...")}
@@ -716,7 +720,7 @@ const I = 3, P = 2, T = class T extends K {
                   <div class="acm-toolbar">
                     <p class="acm-hint">
                       ${u(e.acm_select_hint) || m(
-      "اختاري من 2 إلى 3 عبايات ثم اضغطي قارني",
+      "اختر من 2 إلى 3 عبايات ثم اضغط قارن",
       "Pick 2 to 3 abayas, then tap Compare"
     )}
                     </p>
@@ -729,33 +733,33 @@ const I = 3, P = 2, T = class T extends K {
                   ${this._renderSlots(o)}
 
                   <div class="acm-picker" role="list">
-                    ${a.map((s) => {
-      const x = this.selectedIds.includes(s.id), _ = !x && n;
+                    ${a.map((n) => {
+      const y = this.selectedIds.includes(n.id), v = !y && c;
       return d`
                         <div
                           class=${$({
         "acm-pick-slot": !0,
-        "is-disabled": _
+        "is-disabled": v
       })}
                           role="listitem"
                         >
-                          ${te(
+                          ${re(
         {
-          id: s.product_id,
-          name: s.name,
-          image: s.image,
-          url: s.url,
-          price: s.price,
-          old_price: s.old_price,
-          rating: s.rating
+          id: n.product_id,
+          name: n.name,
+          image: n.image,
+          url: n.url,
+          price: n.price,
+          old_price: n.old_price,
+          rating: n.rating
         },
         {
-          currency: c,
+          currency: s,
           selectable: !0,
-          selected: x,
+          selected: y,
           wishlist: !0,
           onSelect: () => {
-            _ || this.toggleProduct(s.id);
+            v || this.toggleProduct(n.id);
           }
         }
       )}
@@ -808,20 +812,20 @@ const I = 3, P = 2, T = class T extends K {
                               <tr>
                                 <th class="acm-table__label">${m("الخاصية", "Attribute")}</th>
                                 ${o.map(
-      (s) => d`
+      (n) => d`
                                     <th>
                                       <div class="acm-product-head">
-                                        ${s.image ? d`<img
+                                        ${n.image ? d`<img
                                               class="acm-product-head__img"
-                                              src=${s.image}
-                                              alt=${s.name}
+                                              src=${n.image}
+                                              alt=${n.name}
                                               loading="lazy"
                                               decoding="async"
-                                            />` : b}
-                                        <span class="acm-product-head__name">${s.name}</span>
-                                        ${s.url ? d`<a class="fs-btn fs-btn--ghost" href=${s.url}>
-                                              ${s.btn_text || m("عرض", "View")}
-                                            </a>` : b}
+                                            />` : h}
+                                        <span class="acm-product-head__name">${n.name}</span>
+                                        ${n.url ? d`<a class="fs-btn fs-btn--ghost" href=${n.url}>
+                                              ${n.btn_text || m("عرض", "View")}
+                                            </a>` : h}
                                       </div>
                                     </th>
                                   `
@@ -829,18 +833,18 @@ const I = 3, P = 2, T = class T extends K {
                               </tr>
                             </thead>
                             <tbody>
-                              ${w.map((s) => {
-      const x = be(s, o, f);
+                              ${w.map((n) => {
+      const y = he(n, o, b);
       return d`
                                   <tr>
                                     <th class="acm-table__label" scope="row">
-                                      ${m(s.labelAr, s.labelEn)}
+                                      ${m(n.labelAr, n.labelEn)}
                                     </th>
-                                    ${o.map((_) => {
-        const U = x.identical.has(_.id), E = x.bestPriceId === _.id || x.bestDiscountId === _.id, F = this.formatCellValue(
-          s.key,
-          _,
-          s.criterionKey
+                                    ${o.map((v) => {
+        const U = y.identical.has(v.id), E = y.bestPriceId === v.id || y.bestDiscountId === v.id, F = this.formatCellValue(
+          n.key,
+          v,
+          n.criterionKey
         );
         return d`
                                         <td
@@ -852,7 +856,7 @@ const I = 3, P = 2, T = class T extends K {
                                           ${F}
                                           ${E ? d`<span class="acm-cell__badge">
                                                 ${m("الأفضل", "Best")}
-                                              </span>` : b}
+                                              </span>` : h}
                                         </td>
                                       `;
       })}
@@ -862,39 +866,45 @@ const I = 3, P = 2, T = class T extends K {
                             </tbody>
                           </table>
                         </div>
-                      ` : b}
-                </div>` : b}
+                      ` : h}
+                </div>` : d`<div class="fs-empty" role="status">
+                  ${m(
+      "أضف منتجات المقارنة من إعدادات العنصر لعرضها هنا.",
+      "Add comparison products from the element settings to show them here."
+    )}
+                </div>`}
         </div>
+        ${te(this.config || {}, "acm_")}
       </section>
     `;
   }
 };
 T.styles = [
-  X,
-  re,
+  J,
+  ae,
   D`
       :host {
         direction: inherit;
       }
     `
 ];
-let g = T;
+let f = T;
 k([
   q({ type: Object })
-], g.prototype, "config");
+], f.prototype, "config");
 k([
   C()
-], g.prototype, "products");
+], f.prototype, "products");
 k([
   C()
-], g.prototype, "productsLoading");
+], f.prototype, "productsLoading");
 k([
   C()
-], g.prototype, "selectedIds");
+], f.prototype, "selectedIds");
 k([
   C()
-], g.prototype, "showTable");
-typeof g < "u" && g.registerSallaComponent("salla-abaya-comparison-arena");
+], f.prototype, "showTable");
+typeof f < "u" && f.registerSallaComponent("salla-abaya-comparison-arena");
 export {
-  g as default
+  f as default
 };

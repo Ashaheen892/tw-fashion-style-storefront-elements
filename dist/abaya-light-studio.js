@@ -2,8 +2,8 @@ import { css as P, LitElement as D, nothing as d, html as i } from "lit";
 import { property as Y, state as m, query as I } from "lit/decorators.js";
 import { classMap as _ } from "lit/directives/class-map.js";
 import { styleMap as x } from "lit/directives/style-map.js";
-import { n as j, e as y, l as f, b as L, u, i as g, d as F, q as O, s as Z, r as k, a as R, t as n, w as C, p as M } from "./sharedStyles-BGb_aVO_.js";
-const V = P`
+import { n as j, e as w, l as u, d as L, y as f, i as g, f as F, x as O, s as Z, r as k, a as R, t as n, A as C, p as M, b as V } from "./sharedStyles-BYm1OK6w.js";
+const N = P`
   .als-shell {
     display: grid;
     gap: 1.5rem;
@@ -144,9 +144,9 @@ const V = P`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;
-    min-height: 40px;
-    padding: 0.4rem 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.45rem 0.85rem;
     border: 1px solid var(--border-color, #e8ddd6);
     border-radius: calc(var(--section-radius, 16px) * 0.4);
     background: var(--card-bg, #fff);
@@ -156,23 +156,29 @@ const V = P`
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .als-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
+    transform: translateY(-1px);
+  }
+
+  .als-btn:focus-visible {
+    outline: 2px solid var(--accent-color, var(--fs-store-primary));
+    outline-offset: 2px;
   }
 
   .als-btn--primary {
-    background: var(--button-bg, #8b5e4b);
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
     color: var(--button-color, #fff);
     border-color: transparent;
   }
 
   .als-btn--accent {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, #fff);
-    color: var(--accent-color, #8b5e4b);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, #fff);
+    color: var(--accent-color, var(--fs-store-primary));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e8ddd6));
   }
 
   .als-btn:disabled {
@@ -228,13 +234,13 @@ const V = P`
   }
 
   .als-mode:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
   }
 
   .als-mode--active,
   .als-mode[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow: 0 0 0 1px var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
+    box-shadow: 0 0 0 1px var(--accent-color, var(--fs-store-primary));
     background: #fff;
   }
 
@@ -321,8 +327,8 @@ const V = P`
     width: 0;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--als-meter-color, var(--accent-color, #8b5e4b)) 75%, #fff),
-      var(--als-meter-color, var(--accent-color, #8b5e4b))
+      color-mix(in srgb, var(--als-meter-color, var(--accent-color, var(--fs-store-primary))) 75%, #fff),
+      var(--als-meter-color, var(--accent-color, var(--fs-store-primary)))
     );
     border-radius: inherit;
     transition: width 0.45s ease;
@@ -355,7 +361,7 @@ const V = P`
     gap: 0.5rem;
     padding: 0.75rem 0.95rem;
     border: none;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
     color: var(--text-color, #2b211c);
     font: inherit;
     font-weight: 700;
@@ -498,7 +504,7 @@ const V = P`
     transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 2px solid #fff;
-    background: var(--als-handle-color, var(--accent-color, #8b5e4b));
+    background: var(--als-handle-color, var(--accent-color, var(--fs-store-primary)));
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     pointer-events: none;
   }
@@ -574,49 +580,49 @@ const V = P`
       display: none !important;
     }
   }
-`, N = [1.5, 2, 2.5, 3];
-function T(o) {
+`, T = [1.5, 2, 2.5, 3];
+function H(o) {
   const e = O(o, "3/4").replace(/\s/g, "");
   return e === "1/1" || e === "4/5" || e === "16/9" || e === "3/4" ? e : "3/4";
 }
 function q(o) {
   const e = F(O(o, "2") || o, 2);
-  return N.includes(e) ? e : 2;
+  return T.includes(e) ? e : 2;
 }
 function v(o) {
   return Math.max(0, Math.min(100, o));
 }
-function H(o) {
+function K(o) {
   return j(o).map((e, t) => {
-    const a = y(e.image) || String(e.image || "").trim(), r = y(e.thumb) || y(e.thumbnail) || a, s = f(e.name).trim();
+    const a = w(e.image) || String(e.image || "").trim(), r = w(e.thumb) || w(e.thumbnail) || a, s = u(e.name).trim();
     return {
       index: t,
       name: s || `Mode ${t + 1}`,
-      desc: f(e.desc).trim(),
+      desc: u(e.desc).trim(),
       image: a,
       thumb: r,
-      alt: f(e.alt).trim() || s || `Lighting mode ${t + 1}`,
+      alt: u(e.alt).trim() || s || `Lighting mode ${t + 1}`,
       is_default: g(e.is_default, !1),
-      shine: v(u(e.shine, 50)),
-      embroidery: v(u(e.embroidery, 50)),
-      color_depth: v(u(e.color_depth, 50)),
-      flow: v(u(e.flow, 50)),
-      transparency: v(u(e.transparency, 20)),
-      day_fit: v(u(e.day_fit, 50)),
-      night_fit: v(u(e.night_fit, 50)),
-      color_name: f(e.color_name).trim(),
-      notes: f(e.notes).trim(),
+      shine: v(f(e.shine, 50)),
+      embroidery: v(f(e.embroidery, 50)),
+      color_depth: v(f(e.color_depth, 50)),
+      flow: v(f(e.flow, 50)),
+      transparency: v(f(e.transparency, 20)),
+      day_fit: v(f(e.day_fit, 50)),
+      night_fit: v(f(e.night_fit, 50)),
+      color_name: u(e.color_name).trim(),
+      notes: u(e.notes).trim(),
       product_url: L(e.product_url),
-      btn_text: f(e.btn_text).trim()
+      btn_text: u(e.btn_text).trim()
     };
   }).filter((e) => !!e.image);
 }
-function K(o) {
+function G(o) {
   if (!o.length) return 0;
   const e = o.find((t) => t.is_default);
   return e ? e.index : o[0].index;
 }
-function G(o) {
+function J(o) {
   return [
     { key: "shine", labelAr: "اللمعان", labelEn: "Shine", value: o.shine },
     {
@@ -652,7 +658,7 @@ function G(o) {
     }
   ];
 }
-function J(o) {
+function Q(o) {
   return o < 34 ? { ar: "منخفض", en: "Low" } : o < 67 ? { ar: "متوسط", en: "Medium" } : { ar: "مرتفع", en: "High" };
 }
 async function S(o) {
@@ -673,10 +679,10 @@ function E(o, e, t) {
   const a = o.map((c) => c.index), s = (a.indexOf(e) + t + a.length) % a.length;
   return a[s];
 }
-var Q = Object.defineProperty, p = (o, e, t, a) => {
+var W = Object.defineProperty, p = (o, e, t, a) => {
   for (var r = void 0, s = o.length - 1, c; s >= 0; s--)
     (c = o[s]) && (r = c(e, t, r) || r);
-  return r && Q(e, t, r), r;
+  return r && W(e, t, r), r;
 };
 const $ = class $ extends D {
   constructor() {
@@ -724,7 +730,7 @@ const $ = class $ extends D {
   }
   get modes() {
     var e;
-    return H((e = this.config) == null ? void 0 : e.als_modes);
+    return K((e = this.config) == null ? void 0 : e.als_modes);
   }
   get active() {
     return this.modes.find((e) => e.index === this.activeIndex) || this.modes[0] || null;
@@ -772,7 +778,7 @@ const $ = class $ extends D {
       this.displaySrc = "";
       return;
     }
-    const t = K(e);
+    const t = G(e);
     this.activeIndex = t, this.compareA = t, this.compareB = ((c = e.find((h) => h.index !== t)) == null ? void 0 : c.index) ?? t, this.compareOn = !1, this.zoom = 1, this.panX = 0, this.panY = 0;
     const a = e.find((h) => h.index === t) || e[0];
     this.displaySrc = a.image, this.ensureImage(a.image, !0);
@@ -817,12 +823,12 @@ const $ = class $ extends D {
       this.lensOn = !1;
       return;
     }
-    const h = 144, b = h / 2, X = Math.max(0, Math.min(r.width - h, s - b)), A = Math.max(0, Math.min(r.height - h, c - b)), w = this.lensZoom, B = -(s * w - b), U = -(c * w - b);
+    const h = 144, b = h / 2, X = Math.max(0, Math.min(r.width - h, s - b)), A = Math.max(0, Math.min(r.height - h, c - b)), y = this.lensZoom, B = -(s * y - b), U = -(c * y - b);
     this.lensOn = !0, this.lensStyle = {
       left: `${X}px`,
       top: `${A}px`,
       backgroundImage: `url("${a}")`,
-      backgroundSize: `${r.width * w}px ${r.height * w}px`,
+      backgroundSize: `${r.width * y}px ${r.height * y}px`,
       backgroundPosition: `${B}px ${U}px`
     };
   }
@@ -882,7 +888,7 @@ const $ = class $ extends D {
     e.key === "ArrowRight" || e.key === "ArrowUp" ? (e.preventDefault(), this.comparePct = Math.min(100, this.comparePct + 2)) : e.key === "ArrowLeft" || e.key === "ArrowDown" ? (e.preventDefault(), this.comparePct = Math.max(0, this.comparePct - 2)) : e.key === "Home" ? (e.preventDefault(), this.comparePct = 0) : e.key === "End" && (e.preventDefault(), this.comparePct = 100);
   }
   designVars() {
-    const e = this.config || {}, t = k(e, "als_"), a = Math.max(0, Math.min(3, u(e.als_shadow, 1))), r = [
+    const e = this.config || {}, t = k(e, "als_"), a = Math.max(0, Math.min(3, f(e.als_shadow, 1))), r = [
       "none",
       "0 10px 28px rgba(43, 33, 28, 0.08)",
       "0 16px 40px rgba(43, 33, 28, 0.12)",
@@ -896,8 +902,8 @@ const $ = class $ extends D {
       "--als-handle-color": String(e.als_handle_color || "#ffffff"),
       "--als-thumb-border": String(e.als_thumb_border || t.border),
       "--als-shadow": r[a] || r[1],
-      "--als-aspect": T(e.als_aspect),
-      "--als-max-width": `${u(e.als_max_width, 720)}px`,
+      "--als-aspect": H(e.als_aspect),
+      "--als-max-width": `${f(e.als_max_width, 720)}px`,
       "--als-compare": `${this.comparePct}%`
     };
   }
@@ -907,13 +913,13 @@ const $ = class $ extends D {
   }
   productBtn(e) {
     var t;
-    return (e == null ? void 0 : e.btn_text) || f((t = this.config) == null ? void 0 : t.als_default_btn) || n("مشاهدة المنتج", "View product");
+    return (e == null ? void 0 : e.btn_text) || u((t = this.config) == null ? void 0 : t.als_default_btn) || n("مشاهدة المنتج", "View product");
   }
   renderMetrics(e) {
     return this.showMetrics ? i`
       <div class="als-metrics" aria-label=${n("مؤشرات الخامة", "Fabric metrics")}>
-        ${G(e).map((t) => {
-      const a = J(t.value);
+        ${J(e).map((t) => {
+      const a = Q(t.value);
       return i`
             <div class="als-metric">
               <div class="als-metric__head">
@@ -1226,7 +1232,7 @@ const $ = class $ extends D {
     if (!this.modes.length) return d;
     const t = this.active;
     if (!t) return d;
-    const a = this.config || {}, s = k(a, "als_").animate && !M(), c = g(a.als_full_width, !1), h = f(a.als_title), b = f(a.als_desc);
+    const a = this.config || {}, s = k(a, "als_").animate && !M(), c = g(a.als_full_width, !1), h = u(a.als_title), b = u(a.als_desc);
     return i`
       <section
         class=${_({
@@ -1248,13 +1254,14 @@ const $ = class $ extends D {
             ${this.renderPanel(t)}
           </div>
         </div>
+        ${V(this.config || {}, "als_")}
       </section>
     `;
   }
 };
 $.styles = [
   Z,
-  V,
+  N,
   P`
       :host {
         direction: inherit;

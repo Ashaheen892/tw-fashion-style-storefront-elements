@@ -10,6 +10,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
@@ -215,8 +216,10 @@ export default class AbayaComparisonArena extends LitElement {
       >
         <div class="fs-container">
           ${title || desc
-            ? html`<div class="fs-header">
+            ? html`<div class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('مقارنة ذكية', 'Smart compare')}</p>
                 ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                <span class="fs-title-line" aria-hidden="true"></span>
                 ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </div>`
             : nothing}
@@ -225,13 +228,19 @@ export default class AbayaComparisonArena extends LitElement {
             ? html`<div class="fs-empty" role="status">
                 ${t('جاري تحميل المنتجات...', 'Loading products...')}
               </div>`
-            : products.length
-              ? html`<div class="acm-studio">
+            : !products.length
+              ? html`<div class="fs-empty" role="status">
+                  ${t(
+                    'أضف منتجات المقارنة من إعدادات العنصر لعرضها هنا.',
+                    'Add comparison products from the element settings to show them here.'
+                  )}
+                </div>`
+              : html`<div class="acm-studio">
                   <div class="acm-toolbar">
                     <p class="acm-hint">
                       ${localizedString(c.acm_select_hint as string) ||
                       t(
-                        'اختاري من 2 إلى 3 عبايات ثم اضغطي قارني',
+                        'اختر من 2 إلى 3 عبايات ثم اضغط قارن',
                         'Pick 2 to 3 abayas, then tap Compare'
                       )}
                     </p>
@@ -394,9 +403,9 @@ export default class AbayaComparisonArena extends LitElement {
                         </div>
                       `
                     : nothing}
-                </div>`
-              : nothing}
+                </div>`}
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'acm_')}
       </section>
     `;
   }

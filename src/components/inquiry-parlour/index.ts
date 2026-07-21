@@ -10,6 +10,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -73,7 +74,7 @@ export default class InquiryParlour extends LitElement {
 
     if (!items.length) {
       return html`<div class="fs-empty" role="status">
-        ${t('أضيفي أسئلة وأجوبة في الإعدادات', 'Add questions and answers in settings')}
+        ${t('أضف أسئلة وأجوبة في الإعدادات', 'Add questions and answers in settings')}
       </div>`;
     }
 
@@ -88,8 +89,10 @@ export default class InquiryParlour extends LitElement {
       >
         <div class="fs-container">
           ${title || desc
-            ? html`<header class="fs-header">
+            ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('أسئلة شائعة', 'FAQ')}</p>
                 ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                <span class="fs-title-line" aria-hidden="true"></span>
                 ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>`
             : nothing}
@@ -102,7 +105,7 @@ export default class InquiryParlour extends LitElement {
                         class="ip-search"
                         type="search"
                         .value=${this.query}
-                        placeholder=${t('ابحثي في الأسئلة…', 'Search questions…')}
+                        placeholder=${t('ابحث في الأسئلة…', 'Search questions…')}
                         aria-label=${t('بحث', 'Search')}
                         @input=${(e: Event) => {
                           this.query = (e.target as HTMLInputElement).value;
@@ -173,11 +176,12 @@ export default class InquiryParlour extends LitElement {
                     `
                   )}
                 </div>`
-              : html`<div class="ip-empty" role="status">
+              : html`<div class="fs-empty" role="status">
                   ${t('لا توجد نتائج مطابقة', 'No matching results')}
                 </div>`}
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'ip_')}
       </section>
     `;
   }

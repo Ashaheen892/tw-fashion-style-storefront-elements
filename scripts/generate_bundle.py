@@ -37,8 +37,8 @@ IMG = {
     "base": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=900&q=80",
     "swipe": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=80",
     "duel": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80",
-    "care": "https://images.unsplash.com/photo-1582735686739-59b3e394b3a5?auto=format&fit=crop&w=800&q=80",
-    "compare": "https://images.unsplash.com/photo-1551488831-00afeb5a9965?auto=format&fit=crop&w=800&q=80",
+    "care": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+    "compare": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
     "look": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80",
     "config": "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=80",
 }
@@ -386,17 +386,18 @@ def product_source_fields(
     *,
     chosen_id="chosen_products",
     category_id="category",
+    brands_id="brands",
     limit_id="products_limit",
     limit_default=6,
     include_none=False,
-    default_source="selected",
+    default_source="latest",
     extra_when_active=None,
+    collection_id=None,
 ):
     """
     Raed/Saji product source + conditional dependent fields for the theme editor.
-    - chosen_products → only when source = selected
-    - category → only when source = categories
-    - limit (+ extras) → when source is active (not none)
+    Nested collection conditions MUST include collection_id + value_index="."
+    (Saji/Rayhana official pattern) or the editor shows all pickers at once.
     """
     options = []
     if include_none:
@@ -407,12 +408,25 @@ def product_source_fields(
             ("الأكثر مبيعا", "sales"),
             ("أحدث المنتجات", "latest"),
             ("منتجات مختارة", "selected"),
+            ("الماركات التجارية", "brands"),
         ]
     )
     if include_none and default_source not in {v for _, v in options}:
         default_source = "none"
 
+    def nest_cond(field_id, value):
+        cond = {"id": field_id, "value": value, "operation": "="}
+        if collection_id:
+            cond["collection_id"] = collection_id
+            cond["value_index"] = "."
+        return [cond]
+
     active = cond_neq(source_id, "none") if include_none else None
+    if active and collection_id:
+        for c in active:
+            c["collection_id"] = collection_id
+            c["value_index"] = "."
+
     fields = [
         dropdown_manual(
             source_id,
@@ -426,12 +440,29 @@ def product_source_fields(
             "المنتجات المختارة",
             multichoice=True,
             max_length=24,
-            conditions=cond_eq(source_id, "selected"),
+            conditions=nest_cond(source_id, "selected"),
         ),
         categories_picker(
             category_id,
             "التصنيف",
-            conditions=cond_eq(source_id, "categories"),
+            conditions=nest_cond(source_id, "categories"),
+        ),
+        with_conditions(
+            {
+                "id": brands_id,
+                "icon": "sicon-keyboard_arrow_down",
+                "type": "items",
+                "label": "الماركات التجارية",
+                "format": "dropdown-list",
+                "source": "brands",
+                "options": [],
+                "required": False,
+                "selected": [],
+                "searchable": True,
+                "description": "عرض منتجات من الماركات التجارية.",
+                "key": u(),
+            },
+            nest_cond(source_id, "brands"),
         ),
         number(
             limit_id,
@@ -446,7 +477,6 @@ def product_source_fields(
     ]
     if extra_when_active:
         for field in extra_when_active:
-            # Merge active condition with any existing conditions on the field
             existing = field.get("conditions") or []
             field["conditions"] = cond_all(active, existing) if active else existing
             fields.append(field)
@@ -465,13 +495,141 @@ def theme_fields(p):
         color(f"{p}button_bg", "خلفية الأزرار", "#8b5e4b"),
         color(f"{p}button_color", "لون نص الأزرار", "#ffffff"),
         number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
-        static_title(f"{p}space_title", "المسافة الخارجية أعلى وأسفل"),
-        number(f"{p}space_desktop", "الكمبيوتر", 48, 0, 250, "px"),
-        number(f"{p}space_mobile", "الجوال", 28, 0, 120, "px"),
     ]
 
 
+def commerce_fields(p, include_products=True):
+    """Conversion outcome: real Salla product picker (Raed-style) + optional CTA.
+
+    No fake sample products. Merchant must enable the toggle and pick store products.
+    """
+    fields = [
+        static_title(f"{p}commerce_title", "التسوق والدعوة للعمل"),
+        boolean(
+            f"{p}show_products",
+            "عرض منتجات بعد النتيجة",
+            False,
+            "عند التفعيل: اختر منتجات حقيقية من متجرك لتظهر بعد الاختبار/النتيجة.",
+        ),
+    ]
+    if include_products:
+        fields.extend(
+            [
+                products_picker(
+                    f"{p}chosen_products",
+                    "المنتجات المختارة",
+                    multichoice=True,
+                    max_length=24,
+                    min_length=0,
+                    desc="منتجات سلة الحقيقية (مثل ثيم رائد) — بدون عينات وهمية.",
+                    conditions=cond_eq(f"{p}show_products", True),
+                ),
+                number(
+                    f"{p}products_limit",
+                    "عدد المنتجات المعروضة",
+                    8,
+                    1,
+                    24,
+                    "",
+                    "الحد الأقصى لعرض المنتجات المختارة",
+                    conditions=cond_eq(f"{p}show_products", True),
+                ),
+                multilang(
+                    f"{p}products_title",
+                    "عنوان قسم المنتجات",
+                    "منتجات مختارة لك",
+                    "Selected for you",
+                    conditions=cond_eq(f"{p}show_products", True),
+                ),
+            ]
+        )
+    fields.extend(
+        [
+            boolean(
+                f"{p}show_cta",
+                "عرض زر رابط بعد النتيجة",
+                False,
+                "زر يوجّه العميل لرابط تختاره (تصنيف، صفحة، منتج، رابط خارجي…).",
+            ),
+            variable_list(
+                f"{p}result_link",
+                "رابط زر التسوق",
+                conditions=cond_eq(f"{p}show_cta", True),
+            ),
+            multilang(
+                f"{p}cta_label",
+                "نص زر التسوق",
+                "تسوق الآن",
+                "Shop now",
+                conditions=cond_eq(f"{p}show_cta", True),
+            ),
+        ]
+    )
+    return fields
+
+
 def component(name, title, icon, image, fields):
+    prefixes = {
+        "abaya-length-calculator": "alc_",
+        "abaya-care-assistant": "aca_",
+        "abaya-fabric-lab": "afl_",
+        "abaya-style-duel": "asd_",
+        "abaya-style-swipe": "ass_",
+        "collection-reveal": "cr_",
+        "virtual-abaya-boutique": "vab_",
+        "abaya-comparison-arena": "acm_",
+        "abaya-look-builder": "alb_",
+        "abaya-configurator": "acfg_",
+        "abaya-embroidery-map": "aem_",
+        "new-arrivals-lookbook": "nal_",
+        "silhouette-fit-ritual": "sfr_",
+        "inquiry-parlour": "ip_",
+        "shine-videos": "sv_",
+        "abaya-motion-mirror": "amm_",
+        "abaya-light-studio": "als_",
+        "echo-salon": "es_",
+        "style-categories": "stc_",
+        "style-before-after": "stba_",
+        "style-promo-banners": "stpb_",
+    }
+    prefix = prefixes.get(name)
+    if prefix:
+        has_commerce = any(
+            field.get("id")
+            in {
+                f"{prefix}show_products",
+                f"{prefix}chosen_products",
+                f"{prefix}products",
+                f"{prefix}result_link",
+            }
+            for field in fields
+        )
+        if not has_commerce:
+            fields = [*fields, *commerce_fields(prefix, include_products=True)]
+        else:
+            # Ensure Raed-style picker fields exist even if older fake collection was present
+            existing = {field.get("id") for field in fields}
+            for field in commerce_fields(prefix, include_products=True):
+                if field.get("id") not in existing:
+                    fields.append(field)
+            # Drop legacy fake product collections — but keep collections that
+            # wrap a real Salla products picker (e.g. acm_products rows where the
+            # merchant picks a store product + sets comparison attributes).
+            def has_real_picker(field):
+                return any(
+                    sub.get("source") == "products"
+                    for sub in field.get("fields", [])
+                    if isinstance(sub, dict)
+                )
+
+            fields = [
+                field
+                for field in fields
+                if field.get("id") != f"{prefix}products"
+                or field.get("source") == "products"
+                or field.get("format") != "collection"
+                or has_real_picker(field)
+            ]
     return {
         "key": u(),
         "name": name,
@@ -988,6 +1146,7 @@ def build_vab():
             "products",
             default_source="latest",
             limit_default=6,
+            collection_id="vab_hotspots",
         )
 
     def demo_products(items):
@@ -1388,10 +1547,11 @@ def build_alb():
                 f"{p}products",
                 chosen_id=f"{p}chosen_products",
                 category_id=f"{p}category",
+                brands_id=f"{p}brands",
                 limit_id=f"{p}products_limit",
                 limit_default=12,
                 include_none=True,
-                default_source="none",
+                default_source="latest",
                 extra_when_active=[
                     multilang(
                         f"{p}import_group_name",
@@ -2131,9 +2291,6 @@ def build_amm():
             color(f"{p}button_color", "لون نص الأزرار", "#ffffff"),
             number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
             number(f"{p}shadow", "مستوى الظل", 1, 0, 3, ""),
-            static_title(f"{p}space_title", "المسافة أعلى وأسفل"),
-            number(f"{p}space_desktop", "الكمبيوتر", 48, 0, 250, "px"),
-            number(f"{p}space_mobile", "الجوال", 28, 0, 120, "px"),
         ],
     )
 
@@ -2331,9 +2488,6 @@ def build_als():
             number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
             number(f"{p}shadow", "مستوى الظل", 1, 0, 3, ""),
             boolean(f"{p}full_width", "عرض كامل", False),
-            static_title(f"{p}space_title", "المسافة أعلى وأسفل"),
-            number(f"{p}space_desktop", "الكمبيوتر", 48, 0, 250, "px"),
-            number(f"{p}space_mobile", "الجوال", 28, 0, 120, "px"),
         ],
     )
 
@@ -2590,9 +2744,311 @@ def build_aem():
             number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
             number(f"{p}shadow", "مستوى الظل", 1, 0, 3, ""),
             boolean(f"{p}full_width", "عرض كامل أو داخل Container", False),
-            static_title(f"{p}space_title", "المسافة أعلى وأسفل العنصر"),
-            number(f"{p}space_desktop", "الكمبيوتر", 48, 0, 250, "px"),
-            number(f"{p}space_mobile", "الجوال", 28, 0, 120, "px"),
+        ],
+    )
+
+
+def build_sv():
+    """تألقي — معرض فيديوهات عمودية (مستوحى من سيليا)."""
+    p = "sv_"
+    return component(
+        "shine-videos",
+        "تألقي",
+        "sicon-play",
+        IMG["look"],
+        [
+            static_title(f"{p}content_title", "محتوى العنصر"),
+            multilang(f"{p}title", "العنوان", "تألقي", "Shine"),
+            multilang(
+                f"{p}desc",
+                "الوصف",
+                "لحظات عبايات حقيقية — شاهدي القصة والحركة قبل الشراء.",
+                "Real abaya moments — watch the story and movement before you buy.",
+                "textarea",
+                "300",
+            ),
+            boolean(f"{p}show_title", "إظهار العنوان", True),
+            collection(
+                f"{p}videos",
+                "فيديو",
+                [
+                    image("poster", "صورة الغلاف", IMG["abaya1"]),
+                    text(
+                        "video_url",
+                        "رابط الفيديو (يوتيوب أو ملف مباشر)",
+                        "https://www.youtube.com/shorts/wVwiIyIsbEM",
+                        desc="رابط YouTube Shorts أو رابط ملف فيديو مباشر",
+                    ),
+                    multilang("caption", "عنوان المقطع", "عباية سهرة مطرزة", "Embroidered evening abaya"),
+                ],
+                [
+                    {
+                        "poster": IMG["abaya1"],
+                        "video_url": "https://www.youtube.com/shorts/wVwiIyIsbEM",
+                        "caption": {"ar": "عباية سهرة مطرزة", "en": "Embroidered evening abaya"},
+                    },
+                    {
+                        "poster": IMG["abaya2"],
+                        "video_url": "https://www.youtube.com/shorts/Zg-lXl8AFbM",
+                        "caption": {"ar": "عباية يومية انسيابية", "en": "Flowing daily abaya"},
+                    },
+                    {
+                        "poster": IMG["abaya3"],
+                        "video_url": "https://www.youtube.com/shorts/3ILHHXq2ag8",
+                        "caption": {"ar": "تطريز يدوي فاخر", "en": "Luxury hand embroidery"},
+                    },
+                    {
+                        "poster": IMG["look"],
+                        "video_url": "https://www.youtube.com/shorts/wVwiIyIsbEM",
+                        "caption": {"ar": "إطلالة مناسبة رسمية", "en": "Formal occasion look"},
+                    },
+                    {
+                        "poster": IMG["abaya4"],
+                        "video_url": "https://www.youtube.com/shorts/Zg-lXl8AFbM",
+                        "caption": {"ar": "عباية صيفية خفيفة", "en": "Light summer abaya"},
+                    },
+                    {
+                        "poster": IMG["swipe"],
+                        "video_url": "https://www.youtube.com/shorts/3ILHHXq2ag8",
+                        "caption": {"ar": "تنسيق مع الشيلة", "en": "Styled with a shayla"},
+                    },
+                ],
+                2,
+                24,
+                True,
+            ),
+            *theme_fields(p),
+        ],
+    )
+
+
+def build_nal():
+    """وصل حديثا — معرض لوكبوك تفاعلي (مستوحى من سيليا)."""
+    p = "nal_"
+    return component(
+        "new-arrivals-lookbook",
+        "وصل حديثا",
+        "sicon-t-shirt",
+        IMG["mystery"],
+        [
+            static_title(f"{p}content_title", "محتوى العنصر"),
+            multilang(f"{p}title", "العنوان", "وصل حديثا", "New Arrivals"),
+            multilang(
+                f"{p}desc",
+                "الوصف",
+                "أحدث العبايات والإطلالات — مرري لاختيار القطعة ثم افتحي المنتج.",
+                "Latest abayas and looks — hover to choose, then open the product.",
+                "textarea",
+                "300",
+            ),
+            boolean(f"{p}show_title", "إظهار العنوان", True),
+            collection(
+                f"{p}items",
+                "قطعة",
+                [
+                    image("image", "صورة القطعة", IMG["abaya1"]),
+                    multilang("label", "اسم القطعة", "عباية سهرية مطرزة", "Embroidered evening abaya"),
+                    variable_list("link", "رابط المنتج"),
+                    number("spot_x", "موضع النقطة أفقياً %", 50, 5, 95, "%"),
+                    number("spot_y", "موضع النقطة عمودياً %", 50, 5, 95, "%"),
+                ],
+                [
+                    {
+                        "image": IMG["abaya1"],
+                        "label": {"ar": "عباية سهرية مطرزة", "en": "Embroidered evening abaya"},
+                        "link": None,
+                        "spot_x": 50,
+                        "spot_y": 52,
+                    },
+                    {
+                        "image": IMG["abaya2"],
+                        "label": {"ar": "عباية كلاسيك يومية", "en": "Classic daily abaya"},
+                        "link": None,
+                        "spot_x": 62,
+                        "spot_y": 48,
+                    },
+                    {
+                        "image": IMG["look"],
+                        "label": {"ar": "شيلة حرير فاخرة", "en": "Luxury silk shayla"},
+                        "link": None,
+                        "spot_x": 48,
+                        "spot_y": 55,
+                    },
+                    {
+                        "image": IMG["abaya3"],
+                        "label": {"ar": "طقم مناسبات راقٍ", "en": "Elegant occasion set"},
+                        "link": None,
+                        "spot_x": 50,
+                        "spot_y": 50,
+                    },
+                ],
+                2,
+                12,
+                True,
+            ),
+            *theme_fields(p),
+        ],
+    )
+
+
+def build_stc():
+    """تصنيفات الأزياء — بلاطات لوكبوك بشريط أفقي أو شبكة."""
+    p = "stc_"
+    return component(
+        "style-categories",
+        "تصنيفات الأزياء",
+        "sicon-list",
+        IMG["abaya1"],
+        [
+            static_title(f"{p}content_title", "محتوى العنصر"),
+            multilang(f"{p}title", "العنوان", "تصنيفات الأزياء", "Style Categories"),
+            multilang(
+                f"{p}desc",
+                "الوصف",
+                "تصفحي مجموعاتنا حسب الأسلوب والمناسبة.",
+                "Browse our collections by style and occasion.",
+                "textarea",
+                "300",
+            ),
+            boolean(f"{p}show_title", "إظهار العنوان", True),
+            radio(
+                f"{p}layout",
+                "نوع العرض",
+                [("شبكة", "grid"), ("شريط أفقي", "slider")],
+                "grid",
+            ),
+            collection(
+                f"{p}items",
+                "تصنيف",
+                [
+                    image("image", "صورة التصنيف", IMG["abaya1"]),
+                    multilang("title", "عنوان التصنيف", "عبايات سهرة", "Evening Abayas"),
+                    variable_list("link", "رابط التصنيف"),
+                ],
+                [
+                    {
+                        "image": IMG["abaya1"],
+                        "title": {"ar": "عبايات سهرة", "en": "Evening Abayas"},
+                        "link": None,
+                    },
+                    {
+                        "image": IMG["abaya2"],
+                        "title": {"ar": "عبايات يومية", "en": "Daily Abayas"},
+                        "link": None,
+                    },
+                    {
+                        "image": IMG["look"],
+                        "title": {"ar": "شيلات وإكسسوارات", "en": "Shaylas & Accessories"},
+                        "link": None,
+                    },
+                ],
+                2,
+                20,
+                True,
+            ),
+            *theme_fields(p),
+        ],
+    )
+
+
+def build_stba():
+    """قبل وبعد — مقارنة تحريرية جنباً إلى جنب."""
+    p = "stba_"
+    return component(
+        "style-before-after",
+        "قبل وبعد الإطلالة",
+        "sicon-image",
+        IMG["compare"],
+        [
+            static_title(f"{p}content_title", "محتوى العنصر"),
+            multilang(f"{p}title", "العنوان", "قبل وبعد", "Before & After"),
+            multilang(
+                f"{p}desc",
+                "الوصف",
+                "شاهدي الفرق مع تنسيقاتنا المميزة.",
+                "See the difference with our signature styling.",
+                "textarea",
+                "300",
+            ),
+            boolean(f"{p}show_title", "إظهار العنوان", True),
+            collection(
+                f"{p}items",
+                "مقارنة",
+                [
+                    image("before_image", "صورة قبل", IMG["abaya3"]),
+                    image("after_image", "صورة بعد", IMG["abaya1"]),
+                    multilang("before_label", "تسمية قبل", "قبل", "Before"),
+                    multilang("after_label", "تسمية بعد", "بعد", "After"),
+                    multilang("caption", "وصف المقارنة", "تنسيق مع حزام وشيلة مطرزة", "Styled with a belt and embroidered shayla", "textarea", "200"),
+                ],
+                [
+                    {
+                        "before_image": IMG["abaya3"],
+                        "after_image": IMG["abaya1"],
+                        "before_label": {"ar": "قبل التنسيق", "en": "Before styling"},
+                        "after_label": {"ar": "بعد التنسيق", "en": "After styling"},
+                        "caption": {"ar": "تنسيق مع حزام وشيلة مطرزة", "en": "Styled with a belt and embroidered shayla"},
+                    },
+                    {
+                        "before_image": IMG["abaya2"],
+                        "after_image": IMG["look"],
+                        "before_label": {"ar": "بدون إكسسوارات", "en": "Without accessories"},
+                        "after_label": {"ar": "مع إكسسوارات", "en": "With accessories"},
+                        "caption": {"ar": "إضافة بروش وحقيبة تكمّل الإطلالة", "en": "A brooch and bag complete the look"},
+                    },
+                ],
+                1,
+                10,
+                True,
+            ),
+            *theme_fields(p),
+        ],
+    )
+
+
+def build_stpb():
+    """بانرات ترويجية — بانرات بملء الشاشة بأسلوب المجلات."""
+    p = "stpb_"
+    return component(
+        "style-promo-banners",
+        "بانرات ترويجية",
+        "sicon-image",
+        IMG["boutique"],
+        [
+            static_title(f"{p}content_title", "محتوى العنصر"),
+            multilang(f"{p}title", "العنوان", "عروض مميزة", "Featured Promotions"),
+            boolean(f"{p}show_title", "إظهار العنوان", True),
+            collection(
+                f"{p}items",
+                "بانر",
+                [
+                    image("image", "صورة البانر", IMG["boutique"]),
+                    multilang("headline", "العنوان الرئيسي", "تشكيلة الموسم الجديدة", "New Season Collection"),
+                    multilang("subtitle", "العنوان الفرعي", "اكتشفي أحدث الإطلالات المصممة بعناية.", "Discover our latest curated looks.", "textarea", "200"),
+                    multilang("cta_label", "نص الزر", "اكتشفي الآن", "Discover now"),
+                    variable_list("cta_link", "رابط الزر"),
+                ],
+                [
+                    {
+                        "image": IMG["boutique"],
+                        "headline": {"ar": "تشكيلة الموسم الجديدة", "en": "New Season Collection"},
+                        "subtitle": {"ar": "اكتشفي أحدث الإطلالات المصممة بعناية.", "en": "Discover our latest curated looks."},
+                        "cta_label": {"ar": "اكتشفي الآن", "en": "Discover now"},
+                        "cta_link": None,
+                    },
+                    {
+                        "image": IMG["mystery"],
+                        "headline": {"ar": "خصم حصري ٣٠٪", "en": "Exclusive 30% Off"},
+                        "subtitle": {"ar": "على جميع العبايات المطرزة لفترة محدودة.", "en": "On all embroidered abayas for a limited time."},
+                        "cta_label": {"ar": "تسوقي العرض", "en": "Shop the offer"},
+                        "cta_link": None,
+                    },
+                ],
+                1,
+                8,
+                True,
+            ),
+            *theme_fields(p),
         ],
     )
 
@@ -2615,6 +3071,11 @@ def build_components():
         build_amm(),
         build_als(),
         build_aem(),
+        build_sv(),
+        build_nal(),
+        build_stc(),
+        build_stba(),
+        build_stpb(),
     ]
 
 
@@ -2631,7 +3092,7 @@ def validate(bundle):
     components = bundle["components"]
     names = [c["name"] for c in components]
     assert len(names) == len(set(names)), "duplicate component names"
-    assert len(components) == 16, f"expected 16 components, got {len(components)}"
+    assert len(components) == 21, f"expected 21 components, got {len(components)}"
 
     for comp in components:
         assert comp.get("key"), f"missing component key: {comp['name']}"
@@ -2640,6 +3101,47 @@ def validate(bundle):
 
     json.dumps(bundle)
     return True
+
+
+def fill_missing_default_images(components):
+    """Every image option ships with a valid, niche-appropriate visual default."""
+    media_pool = [
+        IMG["abaya1"],
+        IMG["abaya2"],
+        IMG["abaya3"],
+        IMG["abaya4"],
+        IMG["fabric"],
+        IMG["boutique"],
+    ]
+
+    for component_index, comp in enumerate(components):
+        component_image = str(
+            comp.get("image")
+            or comp.get("preview_image")
+            or media_pool[component_index % len(media_pool)]
+        )
+        for field in comp.get("fields") or []:
+            if field.get("format") == "image" and not field.get("value"):
+                field["value"] = component_image
+            if field.get("type") != "collection":
+                continue
+            rows = field.get("value") or []
+            nested_fields = field.get("fields") or []
+            for row_index, row in enumerate(rows):
+                if not isinstance(row, dict):
+                    continue
+                for nested in nested_fields:
+                    if nested.get("format") != "image":
+                        continue
+                    leaf = str(nested.get("id") or "").rsplit(".", 1)[-1]
+                    if row.get(leaf):
+                        continue
+                    if leaf.endswith("image_mobile") and row.get("image"):
+                        row[leaf] = row["image"]
+                    else:
+                        row[leaf] = media_pool[
+                            (component_index + row_index) % len(media_pool)
+                        ]
 
 
 def main():
@@ -2652,7 +3154,22 @@ def main():
             "en": "Interactive fashion storefront elements for abayas — calculators, comparisons, and look builders.",
         }
 
-    bundle["components"] = build_components()
+    previous = {c.get("name"): c for c in bundle.get("components") or [] if c.get("name")}
+    components = build_components()
+    for comp in components:
+        old = previous.get(comp["name"])
+        if not old:
+            continue
+        # Keep hosted preview WebPs / custom covers when regenerating fields
+        if old.get("image") and "images.unsplash.com" not in str(old["image"]):
+            comp["image"] = old["image"]
+        if old.get("preview_image") and "images.unsplash.com" not in str(old["preview_image"]):
+            comp["preview_image"] = old["preview_image"]
+        if old.get("key"):
+            comp["key"] = old["key"]
+
+    fill_missing_default_images(components)
+    bundle["components"] = components
     validate(bundle)
 
     with BUNDLE_PATH.open("w", encoding="utf-8") as fh:

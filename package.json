@@ -4,14 +4,18 @@
     "description": "Creative Twilight components for abaya and modest fashion stores",
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "node scripts/clear-chrome-cache.mjs && node --import ./scripts/ignore-tty-eio.mjs ./node_modules/vite/bin/vite.js",
         "build": "vite build",
-        "preview": "vite preview",
-        "typecheck": "tsc --noEmit"
+        "preview": "node scripts/clear-chrome-cache.mjs && node --import ./scripts/ignore-tty-eio.mjs ./node_modules/vite/bin/vite.js preview",
+        "typecheck": "tsc --noEmit",
+        "cache:clear": "node scripts/clear-chrome-cache.mjs"
     },
     "devDependencies": {
         "@salla.sa/twilight-bundles": "^0.1.0",
+        "gifenc": "^1.0.3",
         "playwright": "^1.61.1",
+        "pngjs": "^7.0.0",
+        "sharp": "^0.35.3",
         "typescript": "^5.6.3",
         "vite": "^5.0.0"
     },
@@ -22,6 +26,7 @@
     },
     "private": true,
     "dependencies": {
-        "lit": "^3.3.2"
+        "lit": "^3.3.2",
+        "swiper": "^11.2.10"
     }
 }

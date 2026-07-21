@@ -10,6 +10,7 @@ import {
   t,
   themeStyleMap,
 } from '../../utils/helpers.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import { isPlayableVideo, parseFabrics } from './utils.js';
@@ -230,6 +231,7 @@ export default class AbayaFabricLab extends LitElement {
               : this._renderDetail(this.activeFabric, animate)}
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'afl_')}
       </section>
     `;
   }

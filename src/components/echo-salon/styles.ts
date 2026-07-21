@@ -3,37 +3,49 @@ import { css } from 'lit';
 export const componentStyles = css`
   .es-shell {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.35rem;
   }
 
   .es-featured {
     position: relative;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
+    padding: clamp(1.6rem, 4vw, 2.65rem);
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 42%),
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
       linear-gradient(165deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 40px rgba(43, 33, 28, 0.07);
+    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.07);
     overflow: hidden;
+    animation: es-swap 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes es-swap {
+    from {
+      opacity: 0.35;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .es-featured__mark {
     position: absolute;
-    top: 0.6rem;
+    top: 0.4rem;
     inset-inline-end: 1rem;
-    font-size: clamp(4rem, 12vw, 7rem);
+    font-size: clamp(4.5rem, 14vw, 8rem);
     line-height: 1;
-    color: color-mix(in srgb, var(--accent-color, #8b5e4b) 16%, transparent);
+    color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 18%, transparent);
     font-family: Georgia, 'Times New Roman', serif;
     pointer-events: none;
     user-select: none;
   }
 
   .es-featured__quote {
-    margin: 0 0 1.25rem;
+    margin: 0 0 1.35rem;
     max-width: 40rem;
-    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    font-size: clamp(1.2rem, 2.5vw, 1.65rem);
     line-height: 1.75;
     font-weight: 500;
     color: var(--text-color, #2b211c);
@@ -47,24 +59,26 @@ export const componentStyles = css`
   }
 
   .es-avatar {
-    width: 3.25rem;
-    height: 3.25rem;
-    border-radius: 10px;
+    width: 3.35rem;
+    height: 3.35rem;
+    border-radius: 999px;
     object-fit: cover;
+    border: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, #fff);
     background: color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
+    box-shadow: 0 8px 18px rgba(43, 33, 28, 0.1);
   }
 
   .es-avatar--placeholder {
     display: grid;
     place-items: center;
-    font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
+    font-weight: 800;
+    color: var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
   }
 
   .es-person {
     display: grid;
-    gap: 0.15rem;
+    gap: 0.12rem;
   }
 
   .es-person strong {
@@ -78,8 +92,8 @@ export const componentStyles = css`
 
   .es-stars {
     display: inline-flex;
-    gap: 0.15rem;
-    color: var(--accent-color, #8b5e4b);
+    gap: 0.12rem;
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.95rem;
     letter-spacing: 0.04em;
   }
@@ -93,22 +107,26 @@ export const componentStyles = css`
     align-items: baseline;
     gap: 0.4rem;
     margin-inline-start: auto;
-    font-size: 0.82rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
+    font-size: 0.8rem;
     color: var(--muted-color, #7a6a62);
   }
 
   .es-score strong {
-    font-size: 1.35rem;
-    color: var(--accent-color, #8b5e4b);
+    font-size: 1.25rem;
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .es-rail {
     display: flex;
     gap: 0.85rem;
     overflow-x: auto;
-    padding: 0.15rem 0.1rem 0.55rem;
+    padding: 0.2rem 0.1rem 0.65rem;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
   }
 
   .es-rail::-webkit-scrollbar {
@@ -116,52 +134,81 @@ export const componentStyles = css`
   }
 
   .es-rail::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, transparent);
     border-radius: 999px;
   }
 
   .es-card {
-    flex: 0 0 min(17.5rem, 78vw);
+    flex: 0 0 min(78vw, 17.5rem);
     scroll-snap-align: start;
     display: grid;
-    gap: 0.75rem;
-    padding: 1rem;
-    border-radius: calc(var(--section-radius, 18px) * 0.7);
+    gap: 0.65rem;
+    min-height: 11.5rem;
+    padding: 1rem 1.05rem;
+    border-radius: calc(var(--section-radius, 16px) * 0.85);
     border: 1px solid var(--border-color, #e8ddd6);
     background: var(--card-bg, #fff);
-    text-align: start;
     color: inherit;
     font: inherit;
+    text-align: start;
     cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.05);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .fs-animate .es-card {
+    animation: es-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .fs-animate .es-card:nth-child(1) { animation-delay: 0.05s; }
+  .fs-animate .es-card:nth-child(2) { animation-delay: 0.12s; }
+  .fs-animate .es-card:nth-child(3) { animation-delay: 0.19s; }
+  .fs-animate .es-card:nth-child(4) { animation-delay: 0.26s; }
+
+  @keyframes es-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .es-card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, var(--border-color, #e8ddd6));
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
   }
 
   .es-card--active {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow: 0 12px 28px rgba(43, 33, 28, 0.1);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, var(--card-bg, #fff));
+    border-color: var(--accent-color, var(--fs-store-primary));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent),
+      0 16px 34px rgba(43, 33, 28, 0.1);
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff)),
+        var(--card-bg, #fff)
+      );
   }
 
   .es-card__quote {
     margin: 0;
     font-size: 0.9rem;
-    line-height: 1.65;
-    color: var(--text-color, #2b211c);
+    line-height: 1.6;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
   .es-card__note {
     margin: 0;
-    font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    font-size: 0.75rem;
+    color: var(--accent-color, var(--fs-store-primary));
+    font-weight: 700;
   }
 
   .es-card__foot {
@@ -171,65 +218,17 @@ export const componentStyles = css`
     margin-top: auto;
   }
 
-  .es-card__foot .es-avatar {
+  .es-card .es-avatar {
     width: 2.35rem;
     height: 2.35rem;
-    border-radius: 8px;
-  }
-
-  @media (max-width: 959px) {
-    .es-shell {
-      gap: 1.2rem;
-    }
-
-    .es-featured {
-      padding: 1.25rem 1.1rem;
-    }
-
-    .es-rail {
-      margin-inline: -16px;
-      padding-inline: 16px;
-    }
-  }
-
-  @media (max-width: 639px) {
-    .es-shell {
-      gap: 1rem;
-    }
-
-    .es-featured {
-      padding: 1.05rem 0.9rem;
-    }
-
-    .es-featured__mark {
-      font-size: 3.1rem;
-      top: 0.2rem;
-      inset-inline-end: 0.55rem;
-    }
-
-    .es-featured__quote {
-      margin-bottom: 0.9rem;
-      font-size: 1rem;
-      line-height: 1.65;
-    }
-
-    .es-rail {
-      margin-inline: -12px;
-      padding-inline: 12px;
-      gap: 0.65rem;
-    }
-
-    .es-card {
-      flex-basis: min(15.5rem, 84vw);
-      padding: 0.85rem;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .es-card,
-    .es-card:hover {
-      transition: none;
-      transform: none;
+    .es-featured,
+    .es-card {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
     }
   }
 `;

@@ -9,6 +9,9 @@ export type SallaProductApi = {
   api?: {
     fetch?: (params: Record<string, unknown>) => Promise<unknown>;
     getDetails?: (id: string | number) => Promise<unknown>;
+    fetchOptions?: (
+      ids: Array<string | number>
+    ) => Promise<{ data?: Array<{ id?: string | number; options?: unknown[] }> }>;
   };
   getDetails?: (id: string | number, includes?: string[]) => Promise<unknown>;
 };
@@ -146,6 +149,55 @@ export function toSourceIds(ids: string[]): Array<number | string> {
     });
 }
 
+/** Build a safe product-list query for the Salla SDK. */
+export function buildProductFetchParams(
+  source: string,
+  sourceValue: string,
+  limit: number
+): Record<string, unknown> | null {
+  const src = String(source || '')
+    .toLowerCase()
+    .trim();
+  if (!src) return null;
+
+  const lim = Math.max(1, Math.min(40, Number(limit) || 8));
+  const params: Record<string, unknown> = {
+    source: src,
+    per_page: lim,
+    limit: lim,
+  };
+
+  const raw = String(sourceValue ?? '').trim();
+  let parsed: unknown = raw;
+  if (!raw || raw === '[]') {
+    parsed = src === 'sales' ? 'sales' : [];
+  } else {
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = raw;
+    }
+  }
+
+  if (src === 'latest') {
+    // Omit empty source_value — demo/SDK often rejects `[]` and throws.
+    return params;
+  }
+
+  if (src === 'sales') {
+    params.source_value = parsed || 'sales';
+    return canFetchProducts(params) ? params : null;
+  }
+
+  if (src === 'selected' || src === 'categories' || src === 'brands' || src === 'tags') {
+    params.source_value = parsed;
+    return canFetchProducts(params) ? params : null;
+  }
+
+  params.source_value = parsed;
+  return canFetchProducts(params) ? params : null;
+}
+
 /** Fetch product list silently; tries product.fetch then product.api.fetch. */
 export async function fetchSallaProducts(
   params: Record<string, unknown>
@@ -172,9 +224,24 @@ export async function fetchSallaProducts(
           const list = unwrapList(await fetchFn(params));
           if (list.length) return list;
         } catch {
-          // try next
+          // try next fetcher / shape
         }
       }
+
+      // One more attempt for latest without any extra keys
+      if (String(params.source) === 'latest') {
+        for (const fetchFn of fetchers) {
+          try {
+            const list = unwrapList(
+              await fetchFn({ source: 'latest', limit: params.limit, per_page: params.per_page })
+            );
+            if (list.length) return list;
+          } catch {
+            // continue
+          }
+        }
+      }
+
       return [];
     });
   } catch {

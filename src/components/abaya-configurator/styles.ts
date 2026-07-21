@@ -113,9 +113,9 @@ export const componentStyles = css`
 
   .acfg-recommend {
     appearance: none;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, transparent);
     background: transparent;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     min-height: 44px;
     padding: 0.45rem 0.9rem;
     font: inherit;
@@ -127,7 +127,7 @@ export const componentStyles = css`
   }
 
   .acfg-recommend:hover {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
   }
 
   .acfg-flash {
@@ -192,12 +192,12 @@ export const componentStyles = css`
   }
 
   .acfg-option:hover {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 6%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, transparent);
   }
 
   .acfg-option[aria-pressed='true'] {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, #fff);
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, #fff);
   }
 
   .acfg-option__media,
@@ -209,7 +209,7 @@ export const componentStyles = css`
   }
 
   .acfg-option__swatch {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, #ddd);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, #ddd);
   }
 
   .acfg-option__name {
@@ -302,7 +302,7 @@ export const componentStyles = css`
     margin: 0;
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     text-align: center;
     animation: acfg-pop 0.3s ease both;
   }

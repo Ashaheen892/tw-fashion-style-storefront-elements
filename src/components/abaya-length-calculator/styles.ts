@@ -66,7 +66,7 @@ export const componentStyles = css`
   }
 
   .alc-slider {
-    accent-color: var(--accent-color, #8b5e4b);
+    accent-color: var(--accent-color, var(--fs-store-primary));
     min-height: 44px;
     cursor: pointer;
     /* Match guide + size chips: min at inline-start (right in Arabic) */
@@ -79,7 +79,7 @@ export const componentStyles = css`
     padding: 0.9rem;
     border: 1px dashed var(--border-color, #e8ddd6);
     border-radius: calc(var(--section-radius, 16px) * 0.45);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 4%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 4%, var(--card-bg, #fff));
   }
 
   .alc-guide__track {
@@ -114,7 +114,7 @@ export const componentStyles = css`
     height: 16px;
     border-radius: 50%;
     border: 2px solid #fff;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     transform: translateY(-50%);
     /* Negative inline margin centers the dot on the percentage edge in RTL + LTR */
     margin-inline-start: -8px;
@@ -228,8 +228,8 @@ export const componentStyles = css`
   }
 
   .alc-option[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
+    border-color: var(--accent-color, var(--fs-store-primary));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
     font-weight: 600;
   }
 
@@ -264,8 +264,8 @@ export const componentStyles = css`
     min-height: 2rem;
     padding: 0.25rem 0.8rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent);
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
     font-size: 0.88rem;
   }
@@ -275,7 +275,7 @@ export const componentStyles = css`
     text-align: center;
     font-size: clamp(2.4rem, 6vw, 3.4rem);
     font-weight: 700;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     line-height: 1.1;
   }
 
@@ -310,7 +310,7 @@ export const componentStyles = css`
   .alc-confidence__bar > span {
     display: block;
     height: 100%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     border-radius: inherit;
     transition: width 0.35s ease;
   }
@@ -376,7 +376,7 @@ export const componentStyles = css`
   }
 
   .alc-nearby__card strong {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .alc-error {

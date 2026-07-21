@@ -16,6 +16,7 @@ import {
   toNumber,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -183,8 +184,10 @@ export default class AbayaConfigurator extends LitElement {
       >
         <div class="fs-container">
           ${title || desc
-            ? html`<div class="fs-header">
+            ? html`<div class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('صمّم إطلالتك', 'Design your look')}</p>
                 ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                <span class="fs-title-line" aria-hidden="true"></span>
                 ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </div>`
             : nothing}
@@ -358,6 +361,7 @@ export default class AbayaConfigurator extends LitElement {
               </div>`
             : nothing}
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'acfg_')}
       </section>
     `;
   }

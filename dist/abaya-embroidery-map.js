@@ -1,10 +1,10 @@
 import { css as C, LitElement as R, html as i, nothing as s } from "lit";
-import { property as N, state as f, query as E } from "lit/decorators.js";
+import { property as N, state as b, query as O } from "lit/decorators.js";
 import { classMap as x } from "lit/directives/class-map.js";
 import { ifDefined as _ } from "lit/directives/if-defined.js";
 import { styleMap as k } from "lit/directives/style-map.js";
-import { n as H, l as u, u as S, i as g, b as O, e as T, q as w, v as q, d as P, s as Z, p as $, r as z, a as j, t as l, w as I } from "./sharedStyles-BGb_aVO_.js";
-const V = C`
+import { n as H, l as u, y as S, i as f, d as E, e as T, x as y, z as q, f as P, s as Z, p as $, r as z, a as j, t as l, A as I, b as V } from "./sharedStyles-BYm1OK6w.js";
+const B = C`
   .aem-shell {
     display: grid;
     gap: 1.25rem;
@@ -80,8 +80,8 @@ const V = C`
     color: var(--muted-color, #7a6a62);
     line-height: 1.5;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
-    border: 1px dashed color-mix(in srgb, var(--accent-color, #8b5e4b) 30%, transparent);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
+    border: 1px dashed color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 30%, transparent);
   }
 
   .aem-pick-hint::before {
@@ -90,7 +90,7 @@ const V = C`
     width: 0.55rem;
     height: 0.55rem;
     border-radius: 50%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     opacity: 0.7;
   }
 
@@ -143,7 +143,7 @@ const V = C`
   .aem-stage__ornament {
     position: absolute;
     inset: 7%;
-    border: 1px solid color-mix(in srgb, var(--accent-color, #8b5e4b) 26%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 26%, transparent);
     border-radius: calc(var(--section-radius, 16px) * 0.7);
     pointer-events: none;
     opacity: 0.6;
@@ -156,7 +156,7 @@ const V = C`
     position: absolute;
     width: 14px;
     height: 14px;
-    border: 0 solid color-mix(in srgb, var(--accent-color, #8b5e4b) 55%, transparent);
+    border: 0 solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent);
     pointer-events: none;
   }
 
@@ -218,7 +218,7 @@ const V = C`
     z-index: 2;
     display: grid;
     place-items: center;
-    color: var(--aem-spot-color, var(--accent-color, #8b5e4b));
+    color: var(--aem-spot-color, var(--accent-color, var(--fs-store-primary)));
   }
 
   .aem-spot:focus {
@@ -226,7 +226,7 @@ const V = C`
   }
 
   .aem-spot:focus-visible .aem-spot__ring {
-    outline: 2px solid var(--aem-active, var(--accent-color, #8b5e4b));
+    outline: 2px solid var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     outline-offset: 3px;
   }
 
@@ -283,10 +283,10 @@ const V = C`
   .aem-spot--active .aem-spot__ring,
   .aem-spot--hover .aem-spot__ring {
     transform: scale(1.16);
-    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    border-color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
+    background: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     box-shadow: 0 8px 22px color-mix(in srgb, var(--aem-active, #8b5e4b) 42%, transparent);
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
   }
 
   .aem-spot--active .aem-spot__num,
@@ -357,7 +357,7 @@ const V = C`
 
   .aem-line--active,
   .aem-line--hover {
-    stroke: var(--aem-active, var(--accent-color, #8b5e4b));
+    stroke: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     stroke-width: 2.1;
     opacity: 1;
   }
@@ -394,7 +394,7 @@ const V = C`
     inset-inline-start: 0;
     width: 3px;
     border-radius: 999px;
-    background: var(--aem-active, var(--accent-color, #8b5e4b));
+    background: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     opacity: 0;
     transition: opacity 0.24s ease;
   }
@@ -404,7 +404,7 @@ const V = C`
   }
 
   .aem-card:focus-visible {
-    outline: 2px solid var(--aem-active, var(--accent-color, #8b5e4b));
+    outline: 2px solid var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     outline-offset: 2px;
   }
 
@@ -513,11 +513,11 @@ const V = C`
     letter-spacing: 0.01em;
     background: linear-gradient(
       135deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 22%, #fff),
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, #fff)
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, #fff)
     );
-    color: var(--accent-color, #8b5e4b);
-    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color, #8b5e4b) 18%, transparent);
+    color: var(--accent-color, var(--fs-store-primary));
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 18%, transparent);
   }
 
   .aem-card__title {
@@ -593,7 +593,7 @@ const V = C`
 
   .aem-clear:hover {
     border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--border-color, #e8ddd6));
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     background: color-mix(in srgb, var(--aem-active, #8b5e4b) 7%, var(--card-bg, #fff));
   }
 
@@ -611,8 +611,8 @@ const V = C`
     text-align: center;
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 9%, var(--card-bg, #fff));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #fff));
     border-radius: 999px;
   }
 
@@ -639,8 +639,8 @@ const V = C`
   }
 
   .aem-nav button:hover:not(:disabled) {
-    border-color: var(--aem-active, var(--accent-color, #8b5e4b));
-    color: var(--aem-active, var(--accent-color, #8b5e4b));
+    border-color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
+    color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     background: color-mix(in srgb, var(--aem-active, #8b5e4b) 8%, var(--card-bg, #fff));
   }
 
@@ -864,22 +864,22 @@ function L(o, e = 50) {
   const t = P(o, Number.NaN);
   return Number.isFinite(t) ? q(t, 0, 100) : e;
 }
-function B(o) {
-  const e = w(o, "auto").toLowerCase();
+function K(o) {
+  const e = y(o, "auto").toLowerCase();
   return e === "right" || e === "left" || e === "auto" ? e : "auto";
 }
-function K(o) {
-  const e = w(o, "3/4").replace(/\s/g, "").replace(":", "/");
+function Y(o) {
+  const e = y(o, "3/4").replace(/\s/g, "").replace(":", "/");
   return e === "2/3" || e === "4/5" || e === "1/1" || e === "3/4" ? e : "3/4";
 }
-function Y(o) {
-  const e = w(o, "").toLowerCase();
+function U(o) {
+  const e = y(o, "").toLowerCase();
   return e === "hand" || e === "machine" || e === "both" ? e : "";
 }
 function M(o) {
   return o === "hand" ? { ar: "يدوي", en: "Hand" } : o === "machine" ? { ar: "آلي", en: "Machine" } : o === "both" ? { ar: "يدوي وآلي", en: "Hand & machine" } : { ar: "", en: "" };
 }
-function U(o) {
+function X(o) {
   return H(o).map((e, t) => {
     const r = u(e.name).trim(), a = S(e.sort_order, t + 1);
     return {
@@ -891,17 +891,17 @@ function U(o) {
       alt: u(e.alt).trim() || r || `Embroidery detail ${t + 1}`,
       pos_x: L(e.pos_x ?? e.x, 50),
       pos_y: L(e.pos_y ?? e.y, 50),
-      card_side: B(e.card_side),
+      card_side: K(e.card_side),
       stitch_type: u(e.stitch_type).trim(),
       thread: u(e.thread).trim(),
-      method: Y(e.method),
+      method: U(e.method),
       duration: u(e.duration).trim(),
       extra: u(e.extra).trim(),
-      product_url: O(e.product_url),
+      product_url: E(e.product_url),
       btn_text: u(e.btn_text).trim(),
-      show_number: g(e.show_number, !0),
+      show_number: f(e.show_number, !0),
       spot_color: String(e.spot_color || "").trim(),
-      is_featured: g(e.is_featured, !1),
+      is_featured: f(e.is_featured, !1),
       badge: u(e.badge).trim()
     };
   }).sort((e, t) => e.sort - t.sort || e.index - t.index).map((e, t) => ({
@@ -926,24 +926,24 @@ function U(o) {
     badge: e.badge
   }));
 }
-function F(o) {
+function A(o) {
   return o.card_side === "left" || o.card_side === "right" ? o.card_side : o.pos_x >= 50 ? "right" : "left";
 }
-function X(o) {
+function G(o) {
   const e = /* @__PURE__ */ new Set();
   for (const t of o)
     if (t.is_featured && (e.add(t.index), e.size >= 2))
       break;
   return e;
 }
-function G(o, e, t, r) {
+function J(o, e, t, r) {
   const a = o.left + o.width / 2 - t.left, d = o.top + o.height / 2 - t.top, c = e.top + e.height / 2 - t.top, m = 14;
   let n, p;
   r === "right" ? (n = e.left - t.left, p = n - m) : (n = e.right - t.left, p = n + m);
   const v = (a + p) / 2;
   return `M ${a.toFixed(1)} ${d.toFixed(1)} L ${v.toFixed(1)} ${d.toFixed(1)} L ${p.toFixed(1)} ${d.toFixed(1)} L ${p.toFixed(1)} ${c.toFixed(1)} L ${n.toFixed(1)} ${c.toFixed(1)}`;
 }
-function J(o, e, t, r) {
+function Q(o, e, t, r) {
   const a = e.getBoundingClientRect();
   if (!a.width || !a.height) return [];
   const d = [];
@@ -953,16 +953,16 @@ function J(o, e, t, r) {
       if (!m || !n) continue;
       const p = m.getBoundingClientRect(), v = n.getBoundingClientRect();
       if (!p.width || !v.width) continue;
-      const y = F(c);
+      const w = A(c);
       d.push({
         index: c.index,
-        d: G(p, v, a, y)
+        d: J(p, v, a, w)
       });
     } catch {
     }
   return d;
 }
-function Q(o) {
+function W(o) {
   const e = [
     "none",
     "0 10px 28px rgba(43, 33, 28, 0.08)",
@@ -971,10 +971,10 @@ function Q(o) {
   ];
   return e[q(o, 0, 3)] || e[1];
 }
-var W = Object.defineProperty, b = (o, e, t, r) => {
+var ee = Object.defineProperty, g = (o, e, t, r) => {
   for (var a = void 0, d = o.length - 1, c; d >= 0; d--)
     (c = o[d]) && (a = c(e, t, a) || a);
-  return a && W(e, t, a), a;
+  return a && ee(e, t, a), a;
 };
 const D = class D extends R {
   constructor() {
@@ -996,38 +996,38 @@ const D = class D extends R {
   }
   get details() {
     var e;
-    return U((e = this.config) == null ? void 0 : e.aem_details);
+    return X((e = this.config) == null ? void 0 : e.aem_details);
   }
   get mainImage() {
     const e = this.config || {};
     return T(e.aem_image) || String(e.aem_image || "").trim();
   }
   get featuredSet() {
-    return X(this.details);
+    return G(this.details);
   }
   get enableLines() {
     var e;
-    return g((e = this.config) == null ? void 0 : e.aem_enable_lines, !0);
+    return f((e = this.config) == null ? void 0 : e.aem_enable_lines, !0);
   }
   get enablePulse() {
     var e;
-    return g((e = this.config) == null ? void 0 : e.aem_enable_pulse, !0) && !$();
+    return f((e = this.config) == null ? void 0 : e.aem_enable_pulse, !0) && !$();
   }
   get showNumbers() {
     var e;
-    return g((e = this.config) == null ? void 0 : e.aem_show_numbers, !0);
+    return f((e = this.config) == null ? void 0 : e.aem_show_numbers, !0);
   }
   get enableDetailImages() {
     var e;
-    return g((e = this.config) == null ? void 0 : e.aem_enable_detail_images, !0);
+    return f((e = this.config) == null ? void 0 : e.aem_enable_detail_images, !0);
   }
   get enableZoom() {
     var e;
-    return g((e = this.config) == null ? void 0 : e.aem_enable_zoom, !0);
+    return f((e = this.config) == null ? void 0 : e.aem_enable_zoom, !0);
   }
   get openNewTab() {
     var e;
-    return g((e = this.config) == null ? void 0 : e.aem_open_new_tab, !0);
+    return f((e = this.config) == null ? void 0 : e.aem_open_new_tab, !0);
   }
   teardownObservers() {
     var e, t;
@@ -1071,7 +1071,7 @@ const D = class D extends R {
       this.lines.length && (this.lines = []);
       return;
     }
-    const e = this.focusIndex(), t = e == null ? [] : this.details.filter((a) => a.index === e), r = J(
+    const e = this.focusIndex(), t = e == null ? [] : this.details.filter((a) => a.index === e), r = Q(
       t,
       this.deskEl,
       (a) => this.renderRoot.querySelector(
@@ -1154,8 +1154,8 @@ const D = class D extends R {
       "--aem-line-color": String(e.aem_line_color || "#c4a99a"),
       "--aem-active": String(e.aem_active_color || t.accent),
       "--aem-card-border": String(e.aem_card_border || t.border),
-      "--aem-shadow": Q(r),
-      "--aem-aspect": K(e.aem_aspect).replace("/", " / "),
+      "--aem-shadow": W(r),
+      "--aem-aspect": Y(e.aem_aspect).replace("/", " / "),
       "--aem-max-width": `${S(e.aem_max_width, 420)}px`
     };
   }
@@ -1325,7 +1325,7 @@ const D = class D extends R {
     `;
   }
   renderColSlot(e, t) {
-    const r = t && F(t) === e;
+    const r = t && A(t) === e;
     return i`
       <div class="aem-col aem-col--${e}">
         ${r && t ? i`<div class="aem-card-slot aem-card-slot--in">
@@ -1342,7 +1342,7 @@ const D = class D extends R {
         class=${x({
       "aem-desk": !0,
       "aem-desk--dim": r != null,
-      "aem-desk--compact": w((a = this.config) == null ? void 0 : a.aem_layout, "map") === "compact",
+      "aem-desk--compact": y((a = this.config) == null ? void 0 : a.aem_layout, "map") === "compact",
       "aem-desk--focus": t != null
     })}
       >
@@ -1465,7 +1465,7 @@ const D = class D extends R {
   }
   render() {
     if (!this.mainImage) return s;
-    const e = this.config || {}, r = z(e, "aem_").animate && !$(), a = g(e.aem_full_width, !1), d = g(e.aem_show_title, !0), c = g(e.aem_show_desc, !0), m = g(e.aem_show_btn, !0), n = d ? u(e.aem_title).trim() : "", p = c ? u(e.aem_desc).trim() : "", v = O(e.aem_product_url), y = u(e.aem_btn_text).trim() || l("عرض العباية", "View abaya"), A = m && I(v);
+    const e = this.config || {}, r = z(e, "aem_").animate && !$(), a = f(e.aem_full_width, !1), d = f(e.aem_show_title, !0), c = f(e.aem_show_desc, !0), m = f(e.aem_show_btn, !0), n = d ? u(e.aem_title).trim() : "", p = c ? u(e.aem_desc).trim() : "", v = E(e.aem_product_url), w = u(e.aem_btn_text).trim() || l("عرض العباية", "View abaya"), F = m && I(v);
     return i`
       <section
         class=${x({
@@ -1494,7 +1494,7 @@ const D = class D extends R {
                     ${l("مسح التحديد", "Clear selection")}
                   </button>
                 </div>` : s}
-            ${A ? i`<div class="aem-cta">
+            ${F ? i`<div class="aem-cta">
                   <a
                     class="fs-btn"
                     href=${v}
@@ -1502,19 +1502,20 @@ const D = class D extends R {
                     rel=${_(
       this.openNewTab ? "noopener noreferrer" : void 0
     )}
-                    >${y}</a
+                    >${w}</a
                   >
                 </div>` : s}
           </div>
         </div>
         ${this.renderZoom()}
+        ${V(this.config || {}, "aem_")}
       </section>
     `;
   }
 };
 D.styles = [
   Z,
-  V,
+  B,
   C`
       :host {
         direction: inherit;
@@ -1522,44 +1523,44 @@ D.styles = [
     `
 ];
 let h = D;
-b([
+g([
   N({ type: Object })
 ], h.prototype, "config");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "activeIndex");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "hoverIndex");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "lines");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "entered");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "zoomOpen");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "zoomIndex");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "useFallbackDialog");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "brokenMain");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "brokenDetail");
-b([
-  f()
+g([
+  b()
 ], h.prototype, "isDesktop");
-b([
-  E(".aem-desk")
+g([
+  O(".aem-desk")
 ], h.prototype, "deskEl");
-b([
-  E("dialog.aem-dialog")
+g([
+  O("dialog.aem-dialog")
 ], h.prototype, "dialogEl");
 typeof h < "u" && h.registerSallaComponent("salla-abaya-embroidery-map");
 export {

@@ -141,9 +141,9 @@ export const componentStyles = css`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;
-    min-height: 40px;
-    padding: 0.4rem 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.45rem 0.85rem;
     border: 1px solid var(--border-color, #e8ddd6);
     border-radius: calc(var(--section-radius, 16px) * 0.4);
     background: var(--card-bg, #fff);
@@ -153,23 +153,29 @@ export const componentStyles = css`
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .als-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
+    transform: translateY(-1px);
+  }
+
+  .als-btn:focus-visible {
+    outline: 2px solid var(--accent-color, var(--fs-store-primary));
+    outline-offset: 2px;
   }
 
   .als-btn--primary {
-    background: var(--button-bg, #8b5e4b);
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
     color: var(--button-color, #fff);
     border-color: transparent;
   }
 
   .als-btn--accent {
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, #fff);
-    color: var(--accent-color, #8b5e4b);
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 35%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, #fff);
+    color: var(--accent-color, var(--fs-store-primary));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e8ddd6));
   }
 
   .als-btn:disabled {
@@ -225,13 +231,13 @@ export const componentStyles = css`
   }
 
   .als-mode:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
   }
 
   .als-mode--active,
   .als-mode[aria-pressed='true'] {
-    border-color: var(--accent-color, #8b5e4b);
-    box-shadow: 0 0 0 1px var(--accent-color, #8b5e4b);
+    border-color: var(--accent-color, var(--fs-store-primary));
+    box-shadow: 0 0 0 1px var(--accent-color, var(--fs-store-primary));
     background: #fff;
   }
 
@@ -318,8 +324,8 @@ export const componentStyles = css`
     width: 0;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--als-meter-color, var(--accent-color, #8b5e4b)) 75%, #fff),
-      var(--als-meter-color, var(--accent-color, #8b5e4b))
+      color-mix(in srgb, var(--als-meter-color, var(--accent-color, var(--fs-store-primary))) 75%, #fff),
+      var(--als-meter-color, var(--accent-color, var(--fs-store-primary)))
     );
     border-radius: inherit;
     transition: width 0.45s ease;
@@ -352,7 +358,7 @@ export const componentStyles = css`
     gap: 0.5rem;
     padding: 0.75rem 0.95rem;
     border: none;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 7%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
     color: var(--text-color, #2b211c);
     font: inherit;
     font-weight: 700;
@@ -495,7 +501,7 @@ export const componentStyles = css`
     transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 2px solid #fff;
-    background: var(--als-handle-color, var(--accent-color, #8b5e4b));
+    background: var(--als-handle-color, var(--accent-color, var(--fs-store-primary)));
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     pointer-events: none;
   }

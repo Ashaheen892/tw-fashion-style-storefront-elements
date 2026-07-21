@@ -1,8 +1,8 @@
 import { css as S, LitElement as C, html as a, nothing as d } from "lit";
 import { property as L, state as u } from "lit/decorators.js";
-import { styleMap as b } from "lit/directives/style-map.js";
-import { n as $, l as n, b as I, B as P, s as z, r as X, i as M, z as E, A as j, t as i, a as U, w as D } from "./sharedStyles-BGb_aVO_.js";
-const Y = S`
+import { styleMap as f } from "lit/directives/style-map.js";
+import { n as $, l as n, d as I, J as P, s as z, r as X, i as M, H as E, I as j, t as i, a as U, b as D, A as Y } from "./sharedStyles-BYm1OK6w.js";
+const O = S`
   .ass-studio {
     position: relative;
     overflow: hidden;
@@ -12,8 +12,8 @@ const Y = S`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent-color, #8b5e4b) 16%, transparent), transparent 42%),
-      radial-gradient(circle at 90% 100%, color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, transparent), transparent 38%),
+      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
+      radial-gradient(circle at 90% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 38%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
   }
@@ -33,8 +33,8 @@ const Y = S`
     gap: 0.4rem;
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 10%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
   }
@@ -53,8 +53,8 @@ const Y = S`
     border-radius: inherit;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 70%, #c4a484),
-      var(--accent-color, #8b5e4b)
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #c4a484),
+      var(--accent-color, var(--fs-store-primary))
     );
     transition: width 0.35s ease;
   }
@@ -203,15 +203,15 @@ const Y = S`
 
   .ass-indicator--like {
     inset-inline-start: 1rem;
-    color: #2f7a58;
-    border-color: #2f7a58;
+    color: var(--fs-success, #2f7a58);
+    border-color: var(--fs-success, #2f7a58);
     transform: rotate(-14deg);
   }
 
   .ass-indicator--skip {
     inset-inline-end: 1rem;
-    color: #b33a3a;
-    border-color: #b33a3a;
+    color: var(--fs-danger, #b33a3a);
+    border-color: var(--fs-danger, #b33a3a);
     transform: rotate(14deg);
   }
 
@@ -254,14 +254,14 @@ const Y = S`
 
   .ass-btn-round--like {
     color: #fff;
-    background: linear-gradient(145deg, #3d9a72, #2f7a58);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--fs-success, #2f7a58) 75%, #fff), var(--fs-success, #2f7a58));
     border-color: transparent;
   }
 
   .ass-btn-round--skip {
-    color: #b33a3a;
-    background: color-mix(in srgb, #b33a3a 8%, var(--card-bg, #fff));
-    border-color: color-mix(in srgb, #b33a3a 28%, var(--border-color, #e8ddd6));
+    color: var(--fs-danger, #b33a3a);
+    background: color-mix(in srgb, var(--fs-danger, #b33a3a) 8%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, var(--fs-danger, #b33a3a) 28%, var(--border-color, #e8ddd6));
   }
 
   .ass-btn-labels {
@@ -276,7 +276,7 @@ const Y = S`
   }
 
   .ass-btn-labels span:last-child {
-    color: #2f7a58;
+    color: var(--fs-success, #2f7a58);
   }
 
   .ass-undo {
@@ -295,7 +295,7 @@ const Y = S`
     border-radius: var(--section-radius, 18px);
     border: 1px solid var(--border-color, #e8ddd6);
     background:
-      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, transparent), transparent 45%),
+      radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 45%),
       linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
     box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
     animation: ass-reveal 0.45s ease both;
@@ -308,8 +308,8 @@ const Y = S`
     margin-bottom: 0.85rem;
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 12%, var(--card-bg, #fff));
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -447,30 +447,30 @@ function T(l) {
 }
 function K(l) {
   const s = /* @__PURE__ */ new Map(), e = /* @__PURE__ */ new Map();
-  l.forEach((r, o) => {
-    r.tags.forEach((c) => {
+  l.forEach((t, o) => {
+    t.tags.forEach((c) => {
       const h = c.toLowerCase();
       s.set(h, (s.get(h) ?? 0) + 1), e.has(h) || e.set(h, o);
     });
   });
-  let t = null;
-  for (const [r, o] of s) {
-    const c = e.get(r) ?? 0;
-    (!t || o > t.count || o === t.count && c < t.order) && (t = { tag: r, count: o, order: c });
+  let r = null;
+  for (const [t, o] of s) {
+    const c = e.get(t) ?? 0;
+    (!r || o > r.count || o === r.count && c < r.order) && (r = { tag: t, count: o, order: c });
   }
-  return t ? { tag: t.tag, count: t.count } : null;
+  return r ? { tag: r.tag, count: r.count } : null;
 }
-function O(l, s) {
+function H(l, s) {
   const e = s.toLowerCase();
-  return l.find((t) => t.tag_name === e) ?? null;
+  return l.find((r) => r.tag_name === e) ?? null;
 }
 function V(l, s) {
   return n(l, s).trim() || s;
 }
-var H = Object.defineProperty, p = (l, s, e, t) => {
-  for (var r = void 0, o = l.length - 1, c; o >= 0; o--)
-    (c = l[o]) && (r = c(s, e, r) || r);
-  return r && H(s, e, r), r;
+var N = Object.defineProperty, p = (l, s, e, r) => {
+  for (var t = void 0, o = l.length - 1, c; o >= 0; o--)
+    (c = l[o]) && (t = c(s, e, t) || t);
+  return t && N(s, e, t), t;
 };
 const v = 80, x = class x extends C {
   constructor() {
@@ -554,33 +554,34 @@ const v = 80, x = class x extends C {
     this.cardIndex = 0, this.likedIds = [], this.history = [], this.finished = !1, this.dragX = 0, this._saveState();
   }
   render() {
-    var m, f, _, k, y, w;
+    var m, b, _, y, k, w;
     if (!this.cards.length)
       return a`<div class="fs-empty" role="status">
         ${i("لا توجد بطاقات للعرض", "No cards to display")}
       </div>`;
-    const s = this.theme, e = n((m = this.config) == null ? void 0 : m.ass_title), t = n((f = this.config) == null ? void 0 : f.ass_desc), r = n((_ = this.config) == null ? void 0 : _.ass_like_label) || i("أعجبني", "Like"), o = n((k = this.config) == null ? void 0 : k.ass_skip_label) || i("تخطي", "Skip"), c = n((y = this.config) == null ? void 0 : y.ass_undo_label) || i("تراجع", "Undo"), h = n((w = this.config) == null ? void 0 : w.ass_restart_label) || i("ابدئي من جديد", "Restart");
+    const s = this.theme, e = n((m = this.config) == null ? void 0 : m.ass_title), r = n((b = this.config) == null ? void 0 : b.ass_desc), t = n((_ = this.config) == null ? void 0 : _.ass_like_label) || i("أعجبني", "Like"), o = n((y = this.config) == null ? void 0 : y.ass_skip_label) || i("تخطي", "Skip"), c = n((k = this.config) == null ? void 0 : k.ass_undo_label) || i("تراجع", "Undo"), h = n((w = this.config) == null ? void 0 : w.ass_restart_label) || i("ابدئي من جديد", "Restart");
     return a`
       <section
         class="fs-section"
-        style=${b(U(s))}
+        style=${f(U(s))}
         aria-label=${e || i("اكتشفي أسلوبك", "Discover your style")}
       >
         <div class="fs-container">
-          ${e || t ? a`<header class="fs-header">
+          ${e || r ? a`<header class="fs-header">
                 ${e ? a`<h2 class="fs-title">${e}</h2>` : d}
-                ${t ? a`<p class="fs-desc">${t}</p>` : d}
+                ${r ? a`<p class="fs-desc">${r}</p>` : d}
               </header>` : d}
 
-          ${this.finished ? this._renderResult(h) : this._renderDeck(r, o, c)}
+          ${this.finished ? this._renderResult(h) : this._renderDeck(t, o, c)}
         </div>
+        ${D(this.config || {}, "ass_")}
       </section>
     `;
   }
-  _renderDeck(s, e, t) {
-    const r = this.currentCard;
-    if (!r) return d;
-    const o = Math.min(1, Math.max(0, this.dragX / v)), c = Math.min(1, Math.max(0, -this.dragX / v)), h = this.dragX * 0.06, m = this.cards.length - this.cardIndex, f = Math.round(this.cardIndex / this.cards.length * 100);
+  _renderDeck(s, e, r) {
+    const t = this.currentCard;
+    if (!t) return d;
+    const o = Math.min(1, Math.max(0, this.dragX / v)), c = Math.min(1, Math.max(0, -this.dragX / v)), h = this.dragX * 0.06, m = this.cards.length - this.cardIndex, b = Math.round(this.cardIndex / this.cards.length * 100);
     return a`
       <div class="ass-studio">
         <div class="ass-progress" aria-live="polite">
@@ -599,7 +600,7 @@ const v = 80, x = class x extends C {
           >
             <div
               class="ass-progress__fill"
-              style=${b({ width: `${f}%` })}
+              style=${f({ width: `${b}%` })}
             ></div>
           </div>
         </div>
@@ -614,33 +615,33 @@ const v = 80, x = class x extends C {
 
           <div
             class="ass-card ${this.dragging ? "ass-card--dragging" : ""}"
-            style=${b({
+            style=${f({
       transform: `translateX(${this.dragX}px) rotate(${h}deg)`
     })}
             @pointerdown=${this._onPointerDown}
             role="article"
-            aria-label=${r.look_name}
+            aria-label=${t.look_name}
           >
             <span
               class="ass-indicator ass-indicator--like ${o > 0.2 ? "ass-indicator--visible" : ""}"
-              style=${b({ opacity: String(o) })}
+              style=${f({ opacity: String(o) })}
               aria-hidden="true"
             >
               ${s}
             </span>
             <span
               class="ass-indicator ass-indicator--skip ${c > 0.2 ? "ass-indicator--visible" : ""}"
-              style=${b({ opacity: String(c) })}
+              style=${f({ opacity: String(c) })}
               aria-hidden="true"
             >
               ${e}
             </span>
 
             <div class="ass-card__media">
-              ${r.image ? a`<img
+              ${t.image ? a`<img
                     class="ass-card__img"
-                    src=${r.image}
-                    alt=${r.look_name}
+                    src=${t.image}
+                    alt=${t.look_name}
                     loading="lazy"
                     draggable="false"
                   />` : d}
@@ -648,10 +649,10 @@ const v = 80, x = class x extends C {
             </div>
 
             <div class="ass-card__body">
-              <h3 class="ass-card__name">${r.look_name}</h3>
-              ${r.look_desc ? a`<p class="ass-card__desc">${r.look_desc}</p>` : d}
-              ${r.tags.length ? a`<div class="ass-card__tags">
-                    ${r.tags.map((_) => a`<span class="ass-tag">${_}</span>`)}
+              <h3 class="ass-card__name">${t.look_name}</h3>
+              ${t.look_desc ? a`<p class="ass-card__desc">${t.look_desc}</p>` : d}
+              ${t.tags.length ? a`<div class="ass-card__tags">
+                    ${t.tags.map((_) => a`<span class="ass-tag">${_}</span>`)}
                   </div>` : d}
             </div>
           </div>
@@ -681,37 +682,37 @@ const v = 80, x = class x extends C {
         </div>
         ${this.history.length ? a`<div class="ass-controls ass-undo">
               <button type="button" class="fs-btn fs-btn--ghost" @click=${this._undo}>
-                ${t}
+                ${r}
               </button>
             </div>` : d}
       </div>
     `;
   }
   _renderResult(s) {
-    const e = K(this.likedCards), t = e ? O(this.results, e.tag) : null, r = this.likedIds.length;
+    const e = K(this.likedCards), r = e ? H(this.results, e.tag) : null, t = this.likedIds.length;
     return a`
       <div class="ass-result">
         <span class="ass-result__badge">
           ${i("نتيجة ذوقك", "Your taste result")}
-          ${r ? a`<span aria-hidden="true">·</span>
-                ${r}
+          ${t ? a`<span aria-hidden="true">·</span>
+                ${t}
                 ${i("إعجاب", "likes")}` : d}
         </span>
 
-        ${t != null && t.result_image ? a`<div class="ass-result__frame">
+        ${r != null && r.result_image ? a`<div class="ass-result__frame">
               <img
                 class="ass-result__img"
-                src=${t.result_image}
-                alt=${t.result_title}
+                src=${r.result_image}
+                alt=${r.result_title}
                 loading="lazy"
               />
             </div>` : d}
 
         <h3 class="ass-result__title">
-          ${(t == null ? void 0 : t.result_title) || i("أسلوبك المميز", "Your signature style")}
+          ${(r == null ? void 0 : r.result_title) || i("أسلوبك المميز", "Your signature style")}
         </h3>
 
-        ${t != null && t.result_desc ? a`<p class="ass-result__desc">${t.result_desc}</p>` : e ? a`<p class="ass-result__desc">
+        ${r != null && r.result_desc ? a`<p class="ass-result__desc">${r.result_desc}</p>` : e ? a`<p class="ass-result__desc">
                 ${i("الوسم الأبرز في اختياراتك", "Your top style tag")}
               </p>
               <span class="ass-result__tag">${e.tag}</span>` : a`<p class="ass-result__desc">
@@ -719,8 +720,8 @@ const v = 80, x = class x extends C {
               </p>`}
 
         <div class="ass-result__actions">
-          ${t && D(t.result_url) ? a`<a class="fs-btn" href=${t.result_url}>
-                ${t.result_btn || i("تسوقي الإطلالة", "Shop the look")}
+          ${r && Y(r.result_url) ? a`<a class="fs-btn" href=${r.result_url}>
+                ${r.result_btn || i("تسوقي الإطلالة", "Shop the look")}
               </a>` : d}
           <button type="button" class="fs-btn fs-btn--ghost" @click=${this._restart}>
             ${s}
@@ -730,7 +731,7 @@ const v = 80, x = class x extends C {
     `;
   }
 };
-x.styles = [z, Y];
+x.styles = [z, O];
 let g = x;
 p([
   L({ type: Object })

@@ -13,6 +13,7 @@ import {
   t,
   themeStyleMap,
 } from '../../utils/helpers.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -209,6 +210,7 @@ export default class AbayaStyleDuel extends LitElement {
             </p>
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'asd_')}
       </section>
     `;
   }

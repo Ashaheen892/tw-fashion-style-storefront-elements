@@ -9,6 +9,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import { parseSizeRows, parseSteps } from './utils.js';
@@ -84,7 +85,11 @@ export default class SilhouetteFitRitual extends LitElement {
                 decoding="async"
               />
             </div>`
-          : html`<div class="sfr-detail__media sfr-detail__media--empty" aria-hidden="true"></div>`}
+          : html`<div
+              class="sfr-detail__media sfr-detail__media--empty"
+              data-label=${t('معاينة الخطوة', 'Step preview')}
+              aria-hidden="true"
+            ></div>`}
         <h4 class="sfr-detail__title">${active.title}</h4>
         ${active.desc
           ? html`<p class="sfr-detail__desc">${active.desc}</p>`
@@ -155,7 +160,7 @@ export default class SilhouetteFitRitual extends LitElement {
       <div class="sfr-panel">
         <h3 class="sfr-panel__title">
           ${localizedString(c.sfr_steps_title as string) ||
-          t('كيف تأخذين مقاساتك', 'How to take your measurements')}
+          t('كيف تأخذ مقاساتك', 'How to take your measurements')}
         </h3>
         <div class="sfr-steps" role="tablist">
           ${steps.map(
@@ -196,9 +201,12 @@ export default class SilhouetteFitRitual extends LitElement {
 
     if (!steps.length && !sizes.length) {
       return html`<div class="fs-empty" role="status">
-        ${t('أضيفي خطوات القياس أو جدول المقاسات', 'Add measure steps or a size chart')}
+        ${t('أضف خطوات القياس أو جدول المقاسات', 'Add measure steps or a size chart')}
       </div>`;
     }
+
+    const stepIndex = Math.max(0, steps.findIndex((s) => s.id === this.activeStepId));
+    const stepPct = steps.length ? Math.round(((stepIndex + 1) / steps.length) * 100) : 0;
 
     return html`
       <section
@@ -211,10 +219,21 @@ export default class SilhouetteFitRitual extends LitElement {
       >
         <div class="fs-container">
           ${title || desc
-            ? html`<header class="fs-header">
+            ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('دليل المقاس', 'Fit guide')}</p>
                 ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                <span class="fs-title-line" aria-hidden="true"></span>
                 ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>`
+            : nothing}
+
+          ${steps.length
+            ? html`<div class="fs-progress" aria-hidden="true">
+                <span class="fs-progress__label">${t('الخطوة', 'Step')} ${stepIndex + 1} / ${steps.length}</span>
+                <div class="fs-progress__track">
+                  <div class="fs-progress__bar" style=${styleMap({ width: `${stepPct}%` })}></div>
+                </div>
+              </div>`
             : nothing}
 
           <div
@@ -230,6 +249,7 @@ export default class SilhouetteFitRitual extends LitElement {
             ${steps.length ? this.renderPreview() : nothing}
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'sfr_')}
       </section>
     `;
   }

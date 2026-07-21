@@ -1,9 +1,9 @@
-import { css as q, LitElement as A, html as n, nothing as m } from "lit";
+import { css as q, LitElement as z, html as n, nothing as m } from "lit";
 import { property as D, state as f, query as P } from "lit/decorators.js";
 import { classMap as v } from "lit/directives/class-map.js";
 import { styleMap as T } from "lit/directives/style-map.js";
-import { q as _, n as B, e as O, l as p, b as z, i as d, d as S, u as k, s as H, p as y, r as M, a as U, w as I, t as c } from "./sharedStyles-BGb_aVO_.js";
-const N = q`
+import { x as _, n as A, e as O, l as p, d as B, i as d, f as S, y as k, s as H, p as b, r as M, a as U, A as I, t as c, b as N } from "./sharedStyles-BYm1OK6w.js";
+const j = q`
   .amm-shell {
     display: grid;
     gap: 1.35rem;
@@ -246,7 +246,7 @@ const N = q`
     margin-top: 0.45rem;
     font-size: 0.78rem;
     font-weight: 600;
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     text-decoration: none;
   }
 
@@ -297,7 +297,7 @@ const N = q`
     display: block;
     height: 100%;
     width: var(--amm-progress, 0%);
-    background: var(--amm-progress-color, var(--accent-color, #8b5e4b));
+    background: var(--amm-progress-color, var(--accent-color, var(--fs-store-primary)));
     border-radius: inherit;
   }
 
@@ -337,11 +337,11 @@ const N = q`
   }
 
   .amm-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, #8b5e4b) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
   }
 
   .amm-btn--primary {
-    background: var(--button-bg, #8b5e4b);
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
     color: var(--button-color, #fff);
     border-color: transparent;
   }
@@ -428,7 +428,7 @@ const N = q`
   .amm-meter__bar > span {
     display: block;
     height: 100%;
-    background: var(--accent-color, #8b5e4b);
+    background: var(--accent-color, var(--fs-store-primary));
     border-radius: inherit;
   }
 
@@ -522,33 +522,33 @@ const N = q`
       animation: none !important;
     }
   }
-`, j = [1, 2, 3, 4], X = [0.5, 0.75, 1], V = {
+`, X = [1, 2, 3, 4], K = [0.5, 0.75, 1], V = {
   6: 2,
   8: 1,
   12: 2,
   15: 2
 };
-function K(a) {
-  return _(a, "sequence").toLowerCase() === "video" ? "video" : "sequence";
-}
 function W(a) {
-  const e = S(_(a, "1") || a, 1);
-  return j.includes(e) ? e : V[e] ? V[e] : 1;
+  return _(a, "sequence").toLowerCase() === "video" ? "video" : "sequence";
 }
 function G(a) {
   const e = S(_(a, "1") || a, 1);
-  return X.includes(e) ? e : 1;
+  return X.includes(e) ? e : V[e] ? V[e] : 1;
 }
 function Y(a) {
+  const e = S(_(a, "1") || a, 1);
+  return K.includes(e) ? e : 1;
+}
+function J(a) {
   const e = _(a, "right").toLowerCase();
   return e === "left" || e === "bottom" ? e : "right";
 }
-function J(a) {
+function Q(a) {
   const e = _(a, "3/4").replace(/\s/g, "");
   return e === "1/1" || e === "4/5" || e === "16/9" || e === "3/4" ? e : "3/4";
 }
-function Q(a) {
-  return B(a).map((e, t) => {
+function Z(a) {
+  return A(a).map((e, t) => {
     const i = O(e.image) || String(e.image || "").trim(), s = p(e.title).trim(), r = p(e.desc).trim(), o = p(e.alt).trim() || s || `Frame ${t + 1}`;
     return {
       index: t,
@@ -557,13 +557,13 @@ function Q(a) {
       title: s,
       desc: r,
       show_info: d(e.show_info, !!(s || r)),
-      url: z(e.url),
+      url: B(e.url),
       btn_text: p(e.btn_text).trim()
     };
   }).filter((e) => !!e.image);
 }
-function Z(a) {
-  return B(a).map((e) => {
+function ee(a) {
+  return A(a).map((e) => {
     const t = p(e.name).trim(), i = Math.max(
       0,
       Math.min(100, k(e.value ?? e.grade ?? e.degree, 0))
@@ -571,7 +571,7 @@ function Z(a) {
     return { name: t, value: i };
   }).filter((e) => !!e.name).slice(0, 10);
 }
-function ee(a) {
+function te(a) {
   const e = [];
   return a.amm_flow != null && a.amm_flow !== "" && e.push({
     name: "الانسيابية",
@@ -581,20 +581,20 @@ function ee(a) {
     value: Math.max(0, Math.min(100, k(a.amm_width, 55)))
   }), e;
 }
-function te(a) {
-  const e = Z(a.amm_meters);
+function ie(a) {
+  const e = ee(a.amm_meters);
   return {
     name: p(a.amm_name).trim(),
     desc: p(a.amm_desc).trim(),
     fabric: p(a.amm_fabric).trim(),
     cut: p(a.amm_cut).trim(),
-    meters: e.length ? e : ee(a),
+    meters: e.length ? e : te(a),
     sleeves: p(a.amm_sleeves).trim(),
-    product_url: z(a.amm_product_url),
+    product_url: B(a.amm_product_url),
     product_btn: p(a.amm_product_btn).trim()
   };
 }
-function ie(a) {
+function se(a) {
   if (!a) return !1;
   const e = a.toLowerCase();
   return e.includes("youtube.com") || e.includes("youtu.be") || e.includes("vimeo.com/") ? !1 : /\.(mp4|webm|ogg|mov)(\?|$)/i.test(a) || e.startsWith("blob:") || e.startsWith("data:video") || e.includes("/video") || e.startsWith("https://") || e.startsWith("http://") || e.startsWith("/");
@@ -602,7 +602,7 @@ function ie(a) {
 function C(a, e, t) {
   return e <= 0 ? 0 : t ? (a % e + e) % e : Math.max(0, Math.min(e - 1, a));
 }
-function se(a) {
+function ae(a) {
   return a ? new Promise((e) => {
     const t = new Image();
     t.decoding = "async", t.onload = () => e(!0), t.onerror = () => e(!1), t.src = a;
@@ -624,7 +624,7 @@ class L {
     if (this.failed.has(e)) return !1;
     const t = this.inflight.get(e);
     if (t) return t;
-    const i = se(e).then((s) => (this.inflight.delete(e), s ? this.ready.add(e) : this.failed.add(e), s));
+    const i = ae(e).then((s) => (this.inflight.delete(e), s ? this.ready.add(e) : this.failed.add(e), s));
     return this.inflight.set(e, i), i;
   }
   async loadMany(e) {
@@ -642,12 +642,12 @@ class L {
     return e.length ? e.filter((i) => this.failed.has(i.image)).length / e.length : 1;
   }
 }
-var ae = Object.defineProperty, h = (a, e, t, i) => {
+var re = Object.defineProperty, h = (a, e, t, i) => {
   for (var s = void 0, r = a.length - 1, o; r >= 0; r--)
     (o = a[r]) && (s = o(e, t, s) || s);
-  return s && ae(e, t, s), s;
+  return s && re(e, t, s), s;
 };
-const R = 18, E = class E extends A {
+const R = 18, E = class E extends z {
   constructor() {
     super(...arguments), this.config = {}, this.frameIndex = 0, this.displaySrc = "", this.playing = !1, this.dragging = !1, this.hintHidden = !1, this.inView = !1, this.videoTime = 0, this.videoDuration = 0, this.fullscreenOpen = !1, this.framesReady = !1, this.mediaFront = "", this.mediaBack = "", this.frontIsA = !0, this.loader = new L(), this.boundLang = () => this.requestUpdate(), this.io = null, this.playRaf = 0, this.dragRaf = 0, this.lastPlayTs = 0, this.playBusy = !1, this.boundFsChange = () => this.syncFullscreenState(), this.pointerId = null, this.dragStartX = 0, this.dragStartIndex = 0, this.dragStartVideoTime = 0, this.wasPlayingBeforeDrag = !1, this.userStopped = !1, this.pendingIndex = null, this.preloadStarted = !1, this.boundVisibility = () => this.onVisibilityChange(), this.boundKeydown = (e) => this.onGlobalKey(e), this.onPointerMove = (e) => {
       !this.dragging || e.pointerId !== this.pointerId || this.dragRaf || (this.dragRaf = requestAnimationFrame(() => {
@@ -660,8 +660,8 @@ const R = 18, E = class E extends A {
         } else {
           const r = this.stageEl, o = this.videoEl;
           if (!r || !o || !this.videoDuration) return;
-          const u = r.getBoundingClientRect(), g = Math.max(0, Math.min(1, (e.clientX - u.left) / u.width)), b = this.videoStartSec(), w = this.videoEndSec(), x = Math.max(0.01, w - b);
-          o.currentTime = b + g * x, this.videoTime = o.currentTime;
+          const u = r.getBoundingClientRect(), g = Math.max(0, Math.min(1, (e.clientX - u.left) / u.width)), y = this.videoStartSec(), w = this.videoEndSec(), x = Math.max(0.01, w - y);
+          o.currentTime = y + g * x, this.videoTime = o.currentTime;
         }
       }));
     }, this.onPointerUp = (e) => {
@@ -683,14 +683,14 @@ const R = 18, E = class E extends A {
   }
   get mode() {
     var e;
-    return K((e = this.config) == null ? void 0 : e.amm_mode);
+    return W((e = this.config) == null ? void 0 : e.amm_mode);
   }
   get frames() {
     var e;
-    return Q((e = this.config) == null ? void 0 : e.amm_frames);
+    return Z((e = this.config) == null ? void 0 : e.amm_frames);
   }
   get info() {
-    return te(this.config || {});
+    return ie(this.config || {});
   }
   get loop() {
     var e;
@@ -698,11 +698,11 @@ const R = 18, E = class E extends A {
   }
   get fps() {
     var e;
-    return W((e = this.config) == null ? void 0 : e.amm_fps);
+    return G((e = this.config) == null ? void 0 : e.amm_fps);
   }
   get autoplay() {
     var t, i;
-    return (this.mode === "video" ? d((t = this.config) == null ? void 0 : t.amm_video_autoplay, !1) : d((i = this.config) == null ? void 0 : i.amm_autoplay, !1)) && !y();
+    return (this.mode === "video" ? d((t = this.config) == null ? void 0 : t.amm_video_autoplay, !1) : d((i = this.config) == null ? void 0 : i.amm_autoplay, !1)) && !b();
   }
   get stopOnInteract() {
     var e;
@@ -739,7 +739,7 @@ const R = 18, E = class E extends A {
   get videoUrl() {
     var t;
     const e = String(((t = this.config) == null ? void 0 : t.amm_video_url) || "").trim();
-    return ie(e) ? e : "";
+    return se(e) ? e : "";
   }
   get poster() {
     var e;
@@ -813,7 +813,7 @@ const R = 18, E = class E extends A {
     this.stopPlaybackLoop(), this.playing = !1, this.pauseVideo();
   }
   startPlayback() {
-    if (!this.interactiveSequence || y()) return;
+    if (!this.interactiveSequence || b()) return;
     this.playing = !0, this.userStopped = !1, this.lastPlayTs = 0, this.playBusy = !1, this.stopPlaybackLoop();
     const e = (t) => {
       if (!this.playing || !this.inView || document.hidden) {
@@ -865,7 +865,7 @@ const R = 18, E = class E extends A {
     if (this.pendingIndex === s) {
       if (!u)
         return t.force ? void 0 : this.goToFrame(s + 1, t);
-      this.frameIndex = s, this.setDisplayImage(o.image, !y());
+      this.frameIndex = s, this.setDisplayImage(o.image, !b());
     }
   }
   setDisplayImage(e, t = !1) {
@@ -874,7 +874,7 @@ const R = 18, E = class E extends A {
       return;
     }
     const i = this.displaySrc;
-    this.displaySrc = e, t && i && !y() ? this.frontIsA ? (this.mediaBack = e, this.frontIsA = !1) : (this.mediaFront = e, this.frontIsA = !0) : (this.mediaFront = e, this.mediaBack = "", this.frontIsA = !0);
+    this.displaySrc = e, t && i && !b() ? this.frontIsA ? (this.mediaBack = e, this.frontIsA = !1) : (this.mediaFront = e, this.frontIsA = !0) : (this.mediaFront = e, this.mediaBack = "", this.frontIsA = !0);
   }
   resetToStart() {
     if (this.hideHint(), this.mode === "video") {
@@ -921,7 +921,7 @@ const R = 18, E = class E extends A {
   setupVideo() {
     var t, i, s;
     const e = this.videoEl;
-    e && (e.playsInline = !0, e.muted = d((t = this.config) == null ? void 0 : t.amm_video_muted, !0) || this.autoplay, e.loop = d((i = this.config) == null ? void 0 : i.amm_video_loop, !0), e.playbackRate = G((s = this.config) == null ? void 0 : s.amm_video_speed), this.poster && (e.poster = this.poster));
+    e && (e.playsInline = !0, e.muted = d((t = this.config) == null ? void 0 : t.amm_video_muted, !0) || this.autoplay, e.loop = d((i = this.config) == null ? void 0 : i.amm_video_loop, !0), e.playbackRate = Y((s = this.config) == null ? void 0 : s.amm_video_speed), this.poster && (e.poster = this.poster));
   }
   async playVideo() {
     const e = this.videoEl;
@@ -1046,7 +1046,7 @@ const R = 18, E = class E extends A {
       "--amm-info-bg": String(e.amm_info_bg || t.card),
       "--amm-viewer-border": String(e.amm_viewer_border || t.border),
       "--amm-shadow": s[i] || s[1],
-      "--amm-aspect": J(e.amm_aspect),
+      "--amm-aspect": Q(e.amm_aspect),
       "--amm-progress": `${this.progressPercent()}%`
     };
   }
@@ -1083,8 +1083,8 @@ const R = 18, E = class E extends A {
     `;
   }
   renderStage() {
-    var u, g, b, w, x, F;
-    const e = this.mode, t = e === "sequence" && this.interactiveSequence || e === "video" && d((u = this.config) == null ? void 0 : u.amm_video_scrub, !0) && this.videoDuration > 0, i = p((g = this.config) == null ? void 0 : g.amm_hint) || c("اسحبي لرؤية الحركة", "Drag to explore the motion"), s = ((b = this.currentFrame) == null ? void 0 : b.alt) || this.info.name || c("حركة العباية", "Abaya motion"), r = this.mediaFront || this.displaySrc || this.placeholder || ((w = this.frames[0]) == null ? void 0 : w.image) || "", o = this.mediaBack;
+    var u, g, y, w, x, F;
+    const e = this.mode, t = e === "sequence" && this.interactiveSequence || e === "video" && d((u = this.config) == null ? void 0 : u.amm_video_scrub, !0) && this.videoDuration > 0, i = p((g = this.config) == null ? void 0 : g.amm_hint) || c("اسحبي لرؤية الحركة", "Drag to explore the motion"), s = ((y = this.currentFrame) == null ? void 0 : y.alt) || this.info.name || c("حركة العباية", "Abaya motion"), r = this.mediaFront || this.displaySrc || this.placeholder || ((w = this.frames[0]) == null ? void 0 : w.image) || "", o = this.mediaBack;
     return n`
       <div
         class=${v({
@@ -1278,7 +1278,7 @@ const R = 18, E = class E extends A {
   }
   render() {
     if (!this.hasContent) return m;
-    const e = this.config || {}, i = M(e, "amm_").animate && !y(), s = Y(e.amm_panel_side), r = p(e.amm_title), o = p(e.amm_section_desc), u = {
+    const e = this.config || {}, i = M(e, "amm_").animate && !b(), s = J(e.amm_panel_side), r = p(e.amm_title), o = p(e.amm_section_desc), u = {
       "amm-shell": !0,
       "amm-shell--side": this.showPanel && s !== "bottom",
       "amm-shell--side-left": this.showPanel && s === "left"
@@ -1304,13 +1304,14 @@ const R = 18, E = class E extends A {
               </header>` : m}
           ${g}
         </div>
+        ${N(this.config || {}, "amm_")}
       </section>
     `;
   }
 };
 E.styles = [
   H,
-  N,
+  j,
   q`
       :host {
         direction: inherit;

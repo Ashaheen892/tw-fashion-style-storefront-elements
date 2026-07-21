@@ -13,6 +13,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
+import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import type { LightMode } from './types.js';
@@ -844,6 +845,7 @@ export default class AbayaLightStudio extends LitElement {
             ${this.renderPanel(mode)}
           </div>
         </div>
+        ${renderCommerceOutcome(this.config || {}, 'als_')}
       </section>
     `;
   }

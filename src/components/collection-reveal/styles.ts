@@ -84,7 +84,7 @@ export const componentStyles = css`
     font-size: 1.65rem;
     font-weight: 700;
     line-height: 1.1;
-    color: var(--timer-color, var(--accent-color, #8b5e4b));
+    color: var(--timer-color, var(--accent-color, var(--fs-store-primary)));
   }
 
   .cr-timer__label {
@@ -102,7 +102,7 @@ export const componentStyles = css`
     z-index: 5;
     background: linear-gradient(
       180deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 92%, #000) 0%,
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 92%, #000) 0%,
       color-mix(in srgb, var(--text-color, #2b211c) 88%, #000) 100%
     );
     transform: translateY(0);

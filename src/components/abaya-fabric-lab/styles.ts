@@ -30,7 +30,7 @@ export const componentStyles = css`
       linear-gradient(180deg, #fffdf9 0%, #fff 48%),
       radial-gradient(
         circle at 12% 0%,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 11%, transparent),
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 11%, transparent),
         transparent 42%
       );
     box-shadow:
@@ -50,7 +50,7 @@ export const componentStyles = css`
     border: 1px solid color-mix(in srgb, #c9a86c 26%, var(--border-color, #e8ddd6));
     background: linear-gradient(
       120deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, #fff),
       #fff
     );
   }
@@ -62,7 +62,7 @@ export const componentStyles = css`
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: color-mix(in srgb, #c9a86c 70%, var(--accent-color, #8b5e4b));
+    color: color-mix(in srgb, #c9a86c 70%, var(--accent-color, var(--fs-store-primary)));
   }
 
   .afl-toolbar__hint {
@@ -111,7 +111,7 @@ export const componentStyles = css`
     background: linear-gradient(
       145deg,
       #c9a86c,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 70%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #fff),
       #e8ddd6
     );
     box-shadow: 0 10px 22px rgba(43, 33, 28, 0.09);
@@ -141,8 +141,8 @@ export const componentStyles = css`
     height: 100%;
     display: grid;
     place-items: center;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, #fffaf4);
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, #fffaf4);
+    color: var(--accent-color, var(--fs-store-primary));
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
     font-size: 1.25rem;
@@ -165,7 +165,7 @@ export const componentStyles = css`
     height: 1.35rem;
     padding: 0 0.3rem;
     border-radius: 1px;
-    background: linear-gradient(145deg, #b08d57, var(--accent-color, #8b5e4b));
+    background: linear-gradient(145deg, #b08d57, var(--accent-color, var(--fs-store-primary)));
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;
@@ -182,16 +182,16 @@ export const componentStyles = css`
 
   .afl-swatch[aria-selected='true'] .afl-swatch__ring,
   .afl-swatch[aria-pressed='true'] .afl-swatch__ring {
-    background: linear-gradient(145deg, #c9a86c, var(--accent-color, #8b5e4b));
+    background: linear-gradient(145deg, #c9a86c, var(--accent-color, var(--fs-store-primary)));
     box-shadow:
       0 0 0 1px color-mix(in srgb, #c9a86c 55%, transparent),
-      0 14px 28px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent);
+      0 14px 28px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
     transform: scale(1.04);
   }
 
   .afl-swatch[aria-selected='true'] .afl-swatch__name,
   .afl-swatch[aria-pressed='true'] .afl-swatch__name {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .afl-swatch[aria-pressed='true'] .afl-swatch__badge {
@@ -278,7 +278,7 @@ export const componentStyles = css`
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, #8b5e4b));
+    color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, var(--fs-store-primary)));
   }
 
   .afl-info__title {
@@ -336,7 +336,7 @@ export const componentStyles = css`
   }
 
   .afl-meter__value {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
@@ -349,7 +349,7 @@ export const componentStyles = css`
 
   .afl-meter .fs-meter > span {
     border-radius: 1px;
-    background: linear-gradient(90deg, #b08d57, var(--accent-color, #8b5e4b));
+    background: linear-gradient(90deg, #b08d57, var(--accent-color, var(--fs-store-primary)));
   }
 
   .afl-care {
@@ -375,7 +375,7 @@ export const componentStyles = css`
   }
 
   .afl-care__item strong {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
   }
 

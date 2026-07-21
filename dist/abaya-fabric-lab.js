@@ -1,9 +1,9 @@
 import { css as M, LitElement as E, html as i, nothing as n } from "lit";
-import { property as F, state as u } from "lit/decorators.js";
-import { classMap as v } from "lit/directives/class-map.js";
+import { property as F, state as _ } from "lit/decorators.js";
+import { classMap as x } from "lit/directives/class-map.js";
 import { styleMap as w } from "lit/directives/style-map.js";
-import { n as S, v as d, u as m, l as p, e as O, x as V, s as G, r as A, i as j, t as s, p as L, a as R } from "./sharedStyles-BGb_aVO_.js";
-const T = M`
+import { n as S, z as d, y as m, l as p, e as O, B as V, s as G, r as A, i as j, t as s, p as L, a as R, b as T } from "./sharedStyles-BYm1OK6w.js";
+const U = M`
   .fs-header {
     margin-bottom: 2rem;
   }
@@ -33,7 +33,7 @@ const T = M`
       linear-gradient(180deg, #fffdf9 0%, #fff 48%),
       radial-gradient(
         circle at 12% 0%,
-        color-mix(in srgb, var(--accent-color, #8b5e4b) 11%, transparent),
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 11%, transparent),
         transparent 42%
       );
     box-shadow:
@@ -53,7 +53,7 @@ const T = M`
     border: 1px solid color-mix(in srgb, #c9a86c 26%, var(--border-color, #e8ddd6));
     background: linear-gradient(
       120deg,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 8%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, #fff),
       #fff
     );
   }
@@ -65,7 +65,7 @@ const T = M`
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: color-mix(in srgb, #c9a86c 70%, var(--accent-color, #8b5e4b));
+    color: color-mix(in srgb, #c9a86c 70%, var(--accent-color, var(--fs-store-primary)));
   }
 
   .afl-toolbar__hint {
@@ -114,7 +114,7 @@ const T = M`
     background: linear-gradient(
       145deg,
       #c9a86c,
-      color-mix(in srgb, var(--accent-color, #8b5e4b) 70%, #fff),
+      color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #fff),
       #e8ddd6
     );
     box-shadow: 0 10px 22px rgba(43, 33, 28, 0.09);
@@ -144,8 +144,8 @@ const T = M`
     height: 100%;
     display: grid;
     place-items: center;
-    background: color-mix(in srgb, var(--accent-color, #8b5e4b) 14%, #fffaf4);
-    color: var(--accent-color, #8b5e4b);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, #fffaf4);
+    color: var(--accent-color, var(--fs-store-primary));
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
     font-size: 1.25rem;
@@ -168,7 +168,7 @@ const T = M`
     height: 1.35rem;
     padding: 0 0.3rem;
     border-radius: 1px;
-    background: linear-gradient(145deg, #b08d57, var(--accent-color, #8b5e4b));
+    background: linear-gradient(145deg, #b08d57, var(--accent-color, var(--fs-store-primary)));
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;
@@ -185,16 +185,16 @@ const T = M`
 
   .afl-swatch[aria-selected='true'] .afl-swatch__ring,
   .afl-swatch[aria-pressed='true'] .afl-swatch__ring {
-    background: linear-gradient(145deg, #c9a86c, var(--accent-color, #8b5e4b));
+    background: linear-gradient(145deg, #c9a86c, var(--accent-color, var(--fs-store-primary)));
     box-shadow:
       0 0 0 1px color-mix(in srgb, #c9a86c 55%, transparent),
-      0 14px 28px color-mix(in srgb, var(--accent-color, #8b5e4b) 28%, transparent);
+      0 14px 28px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
     transform: scale(1.04);
   }
 
   .afl-swatch[aria-selected='true'] .afl-swatch__name,
   .afl-swatch[aria-pressed='true'] .afl-swatch__name {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
   }
 
   .afl-swatch[aria-pressed='true'] .afl-swatch__badge {
@@ -281,7 +281,7 @@ const T = M`
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, #8b5e4b));
+    color: color-mix(in srgb, #c9a86c 55%, var(--accent-color, var(--fs-store-primary)));
   }
 
   .afl-info__title {
@@ -339,7 +339,7 @@ const T = M`
   }
 
   .afl-meter__value {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
@@ -352,7 +352,7 @@ const T = M`
 
   .afl-meter .fs-meter > span {
     border-radius: 1px;
-    background: linear-gradient(90deg, #b08d57, var(--accent-color, #8b5e4b));
+    background: linear-gradient(90deg, #b08d57, var(--accent-color, var(--fs-store-primary)));
   }
 
   .afl-care {
@@ -378,7 +378,7 @@ const T = M`
   }
 
   .afl-care__item strong {
-    color: var(--accent-color, #8b5e4b);
+    color: var(--accent-color, var(--fs-store-primary));
     font-weight: 700;
   }
 
@@ -568,7 +568,7 @@ function f(o) {
   }
   return y(r) ? "" : r;
 }
-function U(o) {
+function B(o) {
   return S(o).map((e, a) => ({
     id: `fabric-${a}`,
     fabric_name: f(e.fabric_name),
@@ -586,7 +586,7 @@ function U(o) {
     best_use: f(e.best_use)
   })).filter((e) => e.fabric_name.trim() !== "");
 }
-function B(o) {
+function N(o) {
   return V(o) && /\.(mp4|webm|ogg)(\?|$)/i.test(o);
 }
 const $ = [
@@ -597,10 +597,10 @@ const $ = [
   { key: "wrinkle", labelAr: "مقاومة التجاعيد", labelEn: "Wrinkle resist" },
   { key: "transparency", labelAr: "شفافية", labelEn: "Transparency" }
 ];
-var N = Object.defineProperty, b = (o, e, a, r) => {
+var P = Object.defineProperty, b = (o, e, a, r) => {
   for (var t = void 0, l = o.length - 1, h; l >= 0; l--)
     (h = o[l]) && (t = h(e, a, t) || t);
-  return t && N(e, a, t), t;
+  return t && P(e, a, t), t;
 }, c;
 const g = (c = class extends E {
   constructor() {
@@ -635,7 +635,7 @@ const g = (c = class extends E {
   }
   get fabrics() {
     var e;
-    return U((e = this.config) == null ? void 0 : e.afl_fabrics);
+    return B((e = this.config) == null ? void 0 : e.afl_fabrics);
   }
   get theme() {
     return A(this.config, "afl_");
@@ -697,15 +697,15 @@ const g = (c = class extends E {
     return a ? a.slice(0, 1) : "أ";
   }
   render() {
-    var _, x;
+    var u, v;
     if (!this.fabrics.length)
       return i`<div class="fs-empty" role="status">
         ${s("لا توجد أقمشة للعرض", "No fabrics to display")}
       </div>`;
-    const e = this.theme, a = e.animate && !L(), r = p((_ = this.config) == null ? void 0 : _.afl_title), t = p((x = this.config) == null ? void 0 : x.afl_desc), l = this._label("afl_compare_btn", "قارني خامتين", "Compare two fabrics"), h = this._label("afl_exit_compare", "إنهاء المقارنة", "Exit compare");
+    const e = this.theme, a = e.animate && !L(), r = p((u = this.config) == null ? void 0 : u.afl_title), t = p((v = this.config) == null ? void 0 : v.afl_desc), l = this._label("afl_compare_btn", "قارني خامتين", "Compare two fabrics"), h = this._label("afl_exit_compare", "إنهاء المقارنة", "Exit compare");
     return i`
       <section
-        class=${v({
+        class=${x({
       "fs-section": !0,
       "fs-animate": a
     })}
@@ -746,6 +746,7 @@ const g = (c = class extends E {
             ${this.compareMode ? this._renderCompare(a) : this._renderDetail(this.activeFabric, a)}
           </div>
         </div>
+        ${T(this.config || {}, "afl_")}
       </section>
     `;
   }
@@ -782,7 +783,7 @@ const g = (c = class extends E {
     return e ? i`
       <div class="afl-stage" aria-live="polite">
         <div class="afl-media">
-          ${B(e.video_url) ? i`<video
+          ${N(e.video_url) ? i`<video
                 src=${e.video_url}
                 muted
                 playsinline
@@ -863,24 +864,24 @@ const g = (c = class extends E {
           <span>${s(a.labelAr, a.labelEn)}</span>
           <span class="afl-meter__value">${t}%</span>
         </div>
-        <div class=${v({ "fs-meter": !0, "fs-animate": r })}>
+        <div class=${x({ "fs-meter": !0, "fs-animate": r })}>
           <span style=${w({ width: `${t}%` })}></span>
         </div>
       </div>
     `;
   }
-}, c.fontsReady = !1, c.styles = [G, T], c);
+}, c.fontsReady = !1, c.styles = [G, U], c);
 b([
   F({ type: Object })
 ], g.prototype, "config");
 b([
-  u()
+  _()
 ], g.prototype, "activeIndex");
 b([
-  u()
+  _()
 ], g.prototype, "compareMode");
 b([
-  u()
+  _()
 ], g.prototype, "compareIds");
 let k = g;
 typeof k < "u" && k.registerSallaComponent("salla-abaya-fabric-lab");
