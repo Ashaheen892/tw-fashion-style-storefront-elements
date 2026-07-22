@@ -4,7 +4,7 @@ import { css, LitElement, nothing, html } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { j as groupByKey, k as sortByOrder, n as normalizeCollection, l as localizedString, e as extractImageUrl, i as isTruthy, f as toNumber, m as buildWhatsAppUrl, s as sharedSectionCss, p as prefersReducedMotion, c as copyText, t, r as readSectionTheme, d as extractLink, o as getRadioValue, a as themeStyleMap, h as formatPrice, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { j as groupByKey, k as sortByOrder, n as normalizeCollection, l as localizedString, e as extractImageUrl, i as isTruthy, f as toNumber, m as buildWhatsAppUrl, s as sharedSectionCss, p as prefersReducedMotion, c as copyText, t, r as readSectionTheme, d as extractLink, o as getRadioValue, a as themeStyleMap, h as formatPrice, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .fs-header {
     margin-bottom: 1.5rem;
@@ -22,7 +22,7 @@ const componentStyles = css`
     margin-inline: auto;
     font-size: 0.92rem;
     line-height: 1.75;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-studio {
@@ -138,14 +138,14 @@ const componentStyles = css`
   .acfg-flash {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-group {
     display: grid;
     gap: 0.7rem;
     padding-bottom: 1.15rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
   }
 
   .acfg-group:last-of-type {
@@ -166,13 +166,13 @@ const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .acfg-group__pick {
     font-size: 0.78rem;
     font-weight: 500;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-options {
@@ -222,7 +222,7 @@ const componentStyles = css`
     font-weight: 600;
     line-height: 1.3;
     text-align: center;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     max-width: 100%;
     overflow: hidden;
     display: -webkit-box;
@@ -233,7 +233,7 @@ const componentStyles = css`
   .acfg-option__delta {
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-summary {
@@ -247,7 +247,7 @@ const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.75rem, 2.8vw, 2.15rem);
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.15;
   }
 
@@ -259,7 +259,7 @@ const componentStyles = css`
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-summary__list {
@@ -279,14 +279,14 @@ const componentStyles = css`
   }
 
   .acfg-summary__list span {
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     flex: 0 0 auto;
   }
 
   .acfg-summary__list strong {
     font-weight: 600;
     text-align: end;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .acfg-actions {

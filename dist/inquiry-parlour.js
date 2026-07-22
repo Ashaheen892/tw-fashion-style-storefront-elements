@@ -4,7 +4,7 @@ import { css, LitElement, html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, s as sharedSectionCss, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, s as sharedSectionCss, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .ip-shell {
     display: grid;
@@ -18,12 +18,12 @@ const componentStyles = css`
     gap: 0.75rem;
     padding: 0.95rem 1rem;
     border-radius: calc(var(--section-radius, 16px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff)),
-        var(--card-bg, #fff) 55%
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #ffffff)),
+        var(--card-bg, #ffffff) 55%
       );
     box-shadow: 0 10px 26px rgba(43, 33, 28, 0.04);
   }
@@ -40,10 +40,10 @@ const componentStyles = css`
     min-height: 46px;
     box-sizing: border-box;
     padding: 0.7rem 1rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: 999px;
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
@@ -64,9 +64,9 @@ const componentStyles = css`
     min-height: 40px;
     padding: 0.4rem 0.9rem;
     border-radius: 999px;
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    color: var(--muted-color, #7a6a62);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    color: var(--muted-color, #666666);
     font: inherit;
     font-size: 0.8rem;
     font-weight: 700;
@@ -76,7 +76,7 @@ const componentStyles = css`
 
   .ip-cat:hover {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e5e7eb));
   }
 
   .ip-cat[aria-pressed='true'] {
@@ -112,17 +112,17 @@ const componentStyles = css`
   }
 
   .ip-item {
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.75);
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
     overflow: hidden;
     box-shadow: 0 8px 22px rgba(43, 33, 28, 0.04);
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
   .ip-item--open {
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 42%, var(--border-color, #e8ddd6));
-    box-shadow: 0 14px 32px rgba(43, 33, 28, 0.09);
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 42%, var(--border-color, #e5e7eb));
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--text-color, #000) 11%, transparent);
   }
 
   .ip-q {
@@ -184,7 +184,7 @@ const componentStyles = css`
 
   .ip-a {
     padding: 0 1.1rem 1.15rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.92rem;
     line-height: 1.8;
     animation: ip-reveal 0.3s ease;
@@ -193,7 +193,7 @@ const componentStyles = css`
   .ip-a p {
     margin: 0;
     padding-top: 0.15rem;
-    border-top: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
   }
 
   @keyframes ip-reveal {

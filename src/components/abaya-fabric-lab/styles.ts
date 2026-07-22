@@ -17,7 +17,7 @@ export const componentStyles = css`
     margin-inline: auto;
     font-size: 0.98rem;
     line-height: 1.8;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .afl-studio {
@@ -25,7 +25,7 @@ export const componentStyles = css`
     gap: 1.35rem;
     padding: 1.35rem 1.15rem 1.5rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 34%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 34%, var(--border-color, #e5e7eb));
     background:
       linear-gradient(180deg, #fffdf9 0%, #fff 48%),
       radial-gradient(
@@ -35,7 +35,7 @@ export const componentStyles = css`
       );
     box-shadow:
       0 1px 0 rgba(201, 168, 108, 0.22),
-      0 24px 52px rgba(43, 33, 28, 0.08);
+      0 24px 52px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     font-family: Manrope, 'Avenir Next', 'Segoe UI', sans-serif;
   }
 
@@ -47,7 +47,7 @@ export const componentStyles = css`
     gap: 0.75rem;
     padding: 0.95rem 1rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 26%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 26%, var(--border-color, #e5e7eb));
     background: linear-gradient(
       120deg,
       color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, #fff),
@@ -70,7 +70,7 @@ export const componentStyles = css`
     flex: 1 1 14rem;
     font-size: 0.9rem;
     line-height: 1.65;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .afl-toolbar .fs-btn {
@@ -93,7 +93,7 @@ export const componentStyles = css`
     padding: 0.4rem;
     border: none;
     background: transparent;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font: inherit;
     cursor: pointer;
     transition: transform 0.22s ease;
@@ -109,9 +109,9 @@ export const componentStyles = css`
       145deg,
       #c9a86c,
       color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 70%, #fff),
-      #e8ddd6
+      #e5e7eb
     );
-    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.09);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--text-color, #000) 11%, transparent);
     transition:
       transform 0.22s ease,
       box-shadow 0.22s ease;
@@ -122,7 +122,7 @@ export const componentStyles = css`
     height: 100%;
     border-radius: 1px;
     overflow: hidden;
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
     border: 2px solid #fffefb;
   }
 
@@ -174,7 +174,7 @@ export const componentStyles = css`
 
   .afl-swatch:hover .afl-swatch__ring {
     transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(43, 33, 28, 0.12);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--text-color, #000) 14%, transparent);
   }
 
   .afl-swatch[aria-selected='true'] .afl-swatch__ring,
@@ -200,12 +200,12 @@ export const componentStyles = css`
     gap: 1.25rem;
     padding: 1.15rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 30%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 30%, var(--border-color, #e5e7eb));
     background:
       linear-gradient(180deg, #fffaf3 0%, #fff 55%);
     box-shadow:
       0 1px 0 rgba(201, 168, 108, 0.18),
-      0 18px 40px rgba(43, 33, 28, 0.07);
+      0 18px 40px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
   }
 
   @media (min-width: 960px) {
@@ -224,7 +224,7 @@ export const componentStyles = css`
     background: linear-gradient(160deg, #3a2c26, #1c1613);
     aspect-ratio: 4 / 5;
     border: 1px solid color-mix(in srgb, #c9a86c 40%, transparent);
-    box-shadow: 0 22px 44px rgba(43, 33, 28, 0.14);
+    box-shadow: 0 22px 44px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
   }
 
   @media (min-width: 960px) {
@@ -283,13 +283,13 @@ export const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.75rem, 3vw, 2.35rem);
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.15;
   }
 
   .afl-info__desc {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.8;
     font-size: 0.96rem;
   }
@@ -299,7 +299,7 @@ export const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .afl-meters {
@@ -318,7 +318,7 @@ export const componentStyles = css`
     padding: 0.8rem 0.85rem;
     border-radius: 2px;
     background: linear-gradient(180deg, #fffaf4, #fff);
-    border: 1px solid color-mix(in srgb, #c9a86c 24%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 24%, var(--border-color, #e5e7eb));
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
   }
 
@@ -329,7 +329,7 @@ export const componentStyles = css`
     margin-bottom: 0.45rem;
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .afl-meter__value {
@@ -341,7 +341,7 @@ export const componentStyles = css`
   .afl-meter .fs-meter {
     height: 6px;
     border-radius: 1px;
-    background: color-mix(in srgb, #c9a86c 18%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, #c9a86c 18%, var(--border-color, #e5e7eb));
   }
 
   .afl-meter .fs-meter > span {
@@ -359,8 +359,8 @@ export const componentStyles = css`
     padding: 0.9rem 1rem;
     border-radius: 2px;
     border-inline-start: 2px solid #c9a86c;
-    border-block: 1px solid color-mix(in srgb, #c9a86c 20%, var(--border-color, #e8ddd6));
-    border-inline-end: 1px solid color-mix(in srgb, #c9a86c 20%, var(--border-color, #e8ddd6));
+    border-block: 1px solid color-mix(in srgb, #c9a86c 20%, var(--border-color, #e5e7eb));
+    border-inline-end: 1px solid color-mix(in srgb, #c9a86c 20%, var(--border-color, #e5e7eb));
     background: linear-gradient(
       90deg,
       color-mix(in srgb, #c9a86c 8%, #fffefb),
@@ -368,7 +368,7 @@ export const componentStyles = css`
     );
     font-size: 0.9rem;
     line-height: 1.7;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .afl-care__item strong {
@@ -391,11 +391,11 @@ export const componentStyles = css`
   .afl-compare__card {
     padding: 1.1rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 30%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 30%, var(--border-color, #e5e7eb));
     background: linear-gradient(180deg, #fffaf3, #fff);
     box-shadow:
       0 1px 0 rgba(201, 168, 108, 0.18),
-      0 16px 34px rgba(43, 33, 28, 0.07);
+      0 16px 34px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
     display: grid;
     gap: 0.95rem;
   }
@@ -427,9 +427,9 @@ export const componentStyles = css`
     margin: 0;
     padding: 1.75rem 1.15rem;
     text-align: center;
-    border: 1px dashed color-mix(in srgb, #c9a86c 40%, var(--border-color, #e8ddd6));
+    border: 1px dashed color-mix(in srgb, #c9a86c 40%, var(--border-color, #e5e7eb));
     border-radius: 2px;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     background: linear-gradient(180deg, #fffaf4, #fff);
     font-size: 0.92rem;
     line-height: 1.7;

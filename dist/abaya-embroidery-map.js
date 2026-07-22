@@ -5,7 +5,7 @@ import { property, state, query } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, q as getUnitValue, i as isTruthy, d as extractLink, e as extractImageUrl, o as getRadioValue, u as clamp, f as toNumber, s as sharedSectionCss, p as prefersReducedMotion, r as readSectionTheme, a as themeStyleMap, t, v as isValidHref, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, q as getUnitValue, i as isTruthy, d as extractLink, e as extractImageUrl, o as getRadioValue, u as clamp, f as toNumber, s as sharedSectionCss, p as prefersReducedMotion, r as readSectionTheme, a as themeStyleMap, t, v as isValidHref, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .aem-shell {
     display: grid;
@@ -79,10 +79,10 @@ const componentStyles = css`
     text-align: center;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.5;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #ffffff));
     border: 1px dashed color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 30%, transparent);
   }
 
@@ -132,12 +132,12 @@ const componentStyles = css`
     background:
       radial-gradient(
         120% 90% at 50% 0%,
-        color-mix(in srgb, var(--card-bg, #fff) 65%, transparent),
+        color-mix(in srgb, var(--card-bg, #ffffff) 65%, transparent),
         transparent 60%
       ),
       var(--aem-stage-bg, #f3ece7);
-    border: 1px solid var(--border-color, #e8ddd6);
-    box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08)),
+    border: 1px solid var(--border-color, #e5e7eb);
+    box-shadow: var(--aem-shadow, 0 10px 28px color-mix(in srgb, var(--text-color, #000) 10%, transparent)),
       inset 0 1px 0 rgba(255, 255, 255, 0.5);
     overflow: hidden;
   }
@@ -238,10 +238,10 @@ const componentStyles = css`
     height: 28px;
     border-radius: 50%;
     border: 2px solid currentColor;
-    background: color-mix(in srgb, var(--card-bg, #fff) 92%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, transparent);
     display: grid;
     place-items: center;
-    box-shadow: 0 4px 14px rgba(43, 33, 28, 0.18),
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--text-color, #000) 20%, transparent),
       inset 0 0 0 1px rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(2px);
     transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
@@ -263,7 +263,7 @@ const componentStyles = css`
     place-items: center;
     font-size: 0.72rem;
     font-weight: 800;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1;
     transition: color 0.22s ease;
   }
@@ -313,12 +313,12 @@ const componentStyles = css`
     text-overflow: ellipsis;
     padding: 0.28rem 0.55rem;
     border-radius: 999px;
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
-    border: 1px solid var(--border-color, #e8ddd6);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
+    border: 1px solid var(--border-color, #e5e7eb);
     font-size: 0.72rem;
     font-weight: 600;
-    box-shadow: 0 6px 16px rgba(43, 33, 28, 0.1);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
@@ -371,10 +371,10 @@ const componentStyles = css`
 
   .aem-card {
     position: relative;
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--aem-card-border, var(--border-color, #e8ddd6));
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--aem-card-border, var(--border-color, #e5e7eb));
     border-radius: var(--section-radius, 16px);
-    box-shadow: var(--aem-shadow, 0 10px 28px rgba(43, 33, 28, 0.08));
+    box-shadow: var(--aem-shadow, 0 10px 28px color-mix(in srgb, var(--text-color, #000) 10%, transparent));
     padding: 0.85rem;
     display: grid;
     gap: 0.6rem;
@@ -412,7 +412,7 @@ const componentStyles = css`
 
   .aem-card--active,
   .aem-card--hover {
-    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--aem-card-border, #e8ddd6));
+    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--aem-card-border, #e5e7eb));
     box-shadow: 0 16px 36px color-mix(in srgb, var(--aem-active, #8b5e4b) 20%, transparent);
   }
 
@@ -482,10 +482,10 @@ const componentStyles = css`
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--card-bg, #fff) 82%, transparent);
-    color: var(--text-color, #2b211c);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 82%, transparent);
+    color: var(--text-color, #000000);
     font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(43, 33, 28, 0.2);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--text-color, #000) 22%, transparent);
     backdrop-filter: blur(4px);
     opacity: 0;
     transform: translateY(4px) scale(0.9);
@@ -527,14 +527,14 @@ const componentStyles = css`
     font-size: 0.98rem;
     font-weight: 800;
     line-height: 1.35;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .aem-card__desc {
     margin: 0;
     font-size: 0.82rem;
     line-height: 1.6;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .aem-meta {
@@ -542,11 +542,11 @@ const componentStyles = css`
     gap: 0.35rem;
     padding: 0.6rem 0.7rem;
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: color-mix(in srgb, var(--aem-stage-bg, #f3ece7) 45%, var(--card-bg, #fff));
-    border: 1px solid color-mix(in srgb, var(--aem-card-border, #e8ddd6) 65%, transparent);
+    background: color-mix(in srgb, var(--aem-stage-bg, #f3ece7) 45%, var(--card-bg, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--aem-card-border, #e5e7eb) 65%, transparent);
     font-size: 0.78rem;
     line-height: 1.5;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .aem-meta > div {
@@ -557,11 +557,11 @@ const componentStyles = css`
 
   .aem-meta > div + div {
     padding-top: 0.35rem;
-    border-top: 1px dashed color-mix(in srgb, var(--aem-card-border, #e8ddd6) 70%, transparent);
+    border-top: 1px dashed color-mix(in srgb, var(--aem-card-border, #e5e7eb) 70%, transparent);
   }
 
   .aem-meta strong {
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font-weight: 700;
   }
 
@@ -582,10 +582,10 @@ const componentStyles = css`
     margin-inline: auto;
     min-height: 40px;
     padding: 0.4rem 1.1rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: 999px;
-    background: var(--card-bg, #fff);
-    color: var(--muted-color, #7a6a62);
+    background: var(--card-bg, #ffffff);
+    color: var(--muted-color, #666666);
     font: inherit;
     font-size: 0.85rem;
     font-weight: 600;
@@ -594,9 +594,9 @@ const componentStyles = css`
   }
 
   .aem-clear:hover {
-    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--aem-active, #8b5e4b) 55%, var(--border-color, #e5e7eb));
     color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
-    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 7%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 7%, var(--card-bg, #ffffff));
   }
 
   .aem-clear:focus-visible {
@@ -614,7 +614,7 @@ const componentStyles = css`
     font-size: 0.9rem;
     font-weight: 700;
     color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #ffffff));
     border-radius: 999px;
   }
 
@@ -628,14 +628,14 @@ const componentStyles = css`
     min-width: 44px;
     min-height: 44px;
     border-radius: 50%;
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
     font-size: 1.1rem;
     line-height: 1;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(43, 33, 28, 0.08);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease,
       transform 0.2s ease;
   }
@@ -643,7 +643,7 @@ const componentStyles = css`
   .aem-nav button:hover:not(:disabled) {
     border-color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
     color: var(--aem-active, var(--accent-color, var(--fs-store-primary)));
-    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 8%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--aem-active, #8b5e4b) 8%, var(--card-bg, #ffffff));
   }
 
   .aem-nav button:active:not(:disabled) {
@@ -675,12 +675,12 @@ const componentStyles = css`
   }
 
   .aem-dialog__inner {
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
     border-radius: var(--section-radius, 16px);
     padding: 1rem;
     display: grid;
     gap: 0.75rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
     animation: aem-card-in 0.28s ease both;
   }
@@ -691,8 +691,8 @@ const componentStyles = css`
     min-height: 40px;
     border: none;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--muted-color, #7a6a62) 12%, #fff);
-    color: var(--text-color, #2b211c);
+    background: color-mix(in srgb, var(--muted-color, #666666) 12%, #fff);
+    color: var(--text-color, #000000);
     font: inherit;
     cursor: pointer;
   }
@@ -717,7 +717,7 @@ const componentStyles = css`
 
   .aem-dialog__desc {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.6;
   }
 

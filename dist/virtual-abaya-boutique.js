@@ -4,7 +4,7 @@ import { css, LitElement, html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, d as extractLink, u as clamp, q as getUnitValue, o as getRadioValue, s as sharedSectionCss, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, i as isTruthy, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, u as clamp, q as getUnitValue, o as getRadioValue, s as sharedSectionCss, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, i as isTruthy, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .vab-shell {
     display: grid;
@@ -25,9 +25,9 @@ const componentStyles = css`
     overflow: hidden;
     background:
       radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 46%),
-      var(--card-bg, #fff);
-    border: 1px solid var(--border-color, #e8ddd6);
-    box-shadow: 0 16px 40px rgba(43, 33, 28, 0.08);
+      var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     min-height: 280px;
   }
 
@@ -55,7 +55,7 @@ const componentStyles = css`
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(43, 33, 28, 0.08) 0%,
+      color-mix(in srgb, var(--text-color, #000) 10%, transparent) 0%,
       rgba(43, 33, 28, 0.02) 35%,
       rgba(43, 33, 28, 0.28) 100%
     );
@@ -153,12 +153,12 @@ const componentStyles = css`
     margin: 0;
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .vab-gallery__count {
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .vab-cards {
@@ -172,9 +172,9 @@ const componentStyles = css`
     grid-template-columns: 5.5rem minmax(0, 1fr);
     gap: 0.85rem;
     padding: 0.85rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 18px) * 0.75);
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
     box-shadow: 0 8px 24px rgba(43, 33, 28, 0.05);
     cursor: pointer;
     text-align: start;
@@ -189,7 +189,7 @@ const componentStyles = css`
 
   .vab-card:hover {
     transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e5e7eb));
   }
 
   .vab-card--active {
@@ -197,10 +197,10 @@ const componentStyles = css`
     background:
       linear-gradient(
         135deg,
-        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff)),
-        var(--card-bg, #fff) 55%
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #ffffff)),
+        var(--card-bg, #ffffff) 55%
       );
-    box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
   }
 
   .vab-card__media {
@@ -209,7 +209,7 @@ const componentStyles = css`
     aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: calc(var(--section-radius, 18px) * 0.55);
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 55%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 55%, transparent);
   }
 
   .vab-card__media img {
@@ -248,14 +248,14 @@ const componentStyles = css`
     margin: 0;
     font-size: 0.98rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .vab-card__desc {
     margin: 0;
     font-size: 0.82rem;
     line-height: 1.55;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -280,7 +280,7 @@ const componentStyles = css`
     border: none;
     border-radius: 0;
     background: transparent;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -325,8 +325,8 @@ const componentStyles = css`
     margin-top: 0.25rem;
     padding: 1rem;
     border-radius: calc(var(--section-radius, 18px) * 0.8);
-    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, var(--border-color, #e5e7eb));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #ffffff));
     display: grid;
     gap: 0.65rem;
     animation: vab-fade 0.35s ease;
@@ -336,7 +336,7 @@ const componentStyles = css`
     border-radius: calc(var(--section-radius, 18px) * 0.6);
     overflow: hidden;
     aspect-ratio: 16 / 10;
-    background: var(--border-color, #e8ddd6);
+    background: var(--border-color, #e5e7eb);
   }
 
   .vab-detail__media img {
@@ -354,7 +354,7 @@ const componentStyles = css`
 
   .vab-detail__desc {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.65;
     font-size: 0.9rem;
   }
@@ -381,14 +381,14 @@ const componentStyles = css`
   .vab-detail__title {
     font-size: 0.98rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .vab-detail__count {
     flex: 0 0 auto;
     padding: 0.18rem 0.6rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
@@ -412,12 +412,12 @@ const componentStyles = css`
     width: 2rem;
     height: 2rem;
     padding: 0;
-    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e5e7eb));
     border-radius: 999px;
-    background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
-    color: var(--text-color, #2b211c);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 88%, transparent);
+    color: var(--text-color, #000000);
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(43, 33, 28, 0.16);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--text-color, #000) 18%, transparent);
     backdrop-filter: blur(8px);
     transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
   }
@@ -430,7 +430,7 @@ const componentStyles = css`
   .vab-rail__nav:hover {
     background: var(--accent-color, var(--fs-store-primary));
     color: #fff;
-    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.24);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--text-color, #000) 26%, transparent);
   }
 
   .vab-rail__nav:active {
@@ -456,15 +456,12 @@ const componentStyles = css`
   }
 
   .vab-products {
-    display: flex;
+    display: none; /* product rail retired — commerce outcome handles recommendations */
     gap: 0.7rem;
-    overflow-x: auto;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
     padding: 0.2rem 0.15rem 0.5rem;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 0.15rem;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
     scrollbar-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, transparent) transparent;
   }
 
@@ -501,7 +498,7 @@ const componentStyles = css`
   .vab-products__status {
     margin: 0;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   @keyframes vab-fade {

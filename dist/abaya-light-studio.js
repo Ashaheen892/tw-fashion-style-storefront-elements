@@ -4,7 +4,7 @@ import { css, LitElement, nothing, html } from "lit";
 import { property, state, query } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, e as extractImageUrl, l as localizedString, d as extractLink, q as getUnitValue, i as isTruthy, f as toNumber, o as getRadioValue, s as sharedSectionCss, r as readSectionTheme, a as themeStyleMap, t, v as isValidHref, p as prefersReducedMotion, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, e as extractImageUrl, l as localizedString, d as extractLink, q as getUnitValue, i as isTruthy, f as toNumber, o as getRadioValue, s as sharedSectionCss, r as readSectionTheme, a as themeStyleMap, t, v as isValidHref, p as prefersReducedMotion, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .als-shell {
     display: grid;
@@ -39,9 +39,9 @@ const componentStyles = css`
     max-height: min(40rem, 76vh);
     overflow: hidden;
     border-radius: var(--section-radius, 16px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background: var(--als-stage-bg, #1a1614);
-    box-shadow: var(--als-shadow, 0 12px 36px rgba(43, 33, 28, 0.1));
+    box-shadow: var(--als-shadow, 0 12px 36px color-mix(in srgb, var(--text-color, #000) 12%, transparent));
     touch-action: pan-y;
     user-select: none;
     cursor: crosshair;
@@ -95,8 +95,8 @@ const componentStyles = css`
     gap: 0.75rem;
     padding: 0.85rem 1rem;
     border-radius: calc(var(--section-radius, 16px) * 0.75);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: color-mix(in srgb, var(--card-bg, #fff) 92%, var(--section-bg, #faf7f5));
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--section-bg, var(--fs-surface, #f3f4f6)));
   }
 
   @media (min-width: 640px) {
@@ -115,7 +115,7 @@ const componentStyles = css`
     margin: 0 0 0.2rem;
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.35;
   }
 
@@ -123,7 +123,7 @@ const componentStyles = css`
     margin: 0;
     font-size: 0.86rem;
     line-height: 1.6;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .als-tools {
@@ -139,7 +139,7 @@ const componentStyles = css`
     gap: 0.3rem;
     padding: 0.2rem;
     border-radius: calc(var(--section-radius, 16px) * 0.45);
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 35%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 35%, transparent);
   }
 
   .als-btn {
@@ -150,10 +150,10 @@ const componentStyles = css`
     min-width: 44px;
     min-height: 44px;
     padding: 0.45rem 0.95rem;
-    border: 1.5px solid var(--border-color, #e8ddd6);
+    border: 1.5px solid var(--border-color, #e5e7eb);
     border-radius: 999px;
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
     font-size: 0.9rem;
     font-weight: 700;
@@ -164,7 +164,7 @@ const componentStyles = css`
   }
 
   .als-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e5e7eb));
     transform: translateY(-1px);
   }
 
@@ -183,7 +183,7 @@ const componentStyles = css`
   .als-btn--accent {
     background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, #fff);
     color: var(--accent-color, var(--fs-store-primary));
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e5e7eb));
   }
 
   .als-btn:disabled {
@@ -196,8 +196,8 @@ const componentStyles = css`
     gap: 1.15rem;
     padding: 1.2rem 1.1rem 1.3rem;
     border-radius: var(--section-radius, 16px);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--als-panel-bg, var(--card-bg, #fff));
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--als-panel-bg, var(--card-bg, #ffffff));
     box-shadow: 0 8px 24px rgba(43, 33, 28, 0.04);
     min-width: 0;
   }
@@ -213,7 +213,7 @@ const componentStyles = css`
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .als-modes {
@@ -227,9 +227,9 @@ const componentStyles = css`
     gap: 0.4rem;
     justify-items: center;
     padding: 0.4rem;
-    border: 1px solid var(--als-thumb-border, var(--border-color, #e8ddd6));
+    border: 1px solid var(--als-thumb-border, var(--border-color, #e5e7eb));
     border-radius: calc(var(--section-radius, 16px) * 0.45);
-    background: color-mix(in srgb, var(--section-bg, #faf7f5) 65%, #fff);
+    background: color-mix(in srgb, var(--section-bg, var(--fs-surface, #f3f4f6)) 65%, #fff);
     color: inherit;
     font: inherit;
     cursor: pointer;
@@ -239,7 +239,7 @@ const componentStyles = css`
   }
 
   .als-mode:hover {
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e5e7eb));
   }
 
   .als-mode--active,
@@ -262,7 +262,7 @@ const componentStyles = css`
     font-size: 0.72rem;
     font-weight: 700;
     line-height: 1.3;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .als-info {
@@ -281,7 +281,7 @@ const componentStyles = css`
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     margin-bottom: 0.2rem;
   }
 
@@ -289,7 +289,7 @@ const componentStyles = css`
     margin: 0;
     font-size: 0.92rem;
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.6;
   }
 
@@ -311,7 +311,7 @@ const componentStyles = css`
     font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .als-metric__val {
@@ -322,7 +322,7 @@ const componentStyles = css`
   .als-metric__bar {
     height: 0.35rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
     overflow: hidden;
   }
 
@@ -341,7 +341,7 @@ const componentStyles = css`
 
   .als-metric__level {
     margin-inline-start: 0.35rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 500;
     font-size: 0.72rem;
   }
@@ -352,7 +352,7 @@ const componentStyles = css`
   }
 
   .als-accordion {
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
     overflow: hidden;
   }
@@ -366,8 +366,8 @@ const componentStyles = css`
     gap: 0.5rem;
     padding: 0.75rem 0.95rem;
     border: none;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
-    color: var(--text-color, #2b211c);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #ffffff));
+    color: var(--text-color, #000000);
     font: inherit;
     font-weight: 700;
     font-size: 0.9rem;
@@ -379,7 +379,7 @@ const componentStyles = css`
     padding: 0.85rem 0.95rem 1rem;
     display: grid;
     gap: 0.75rem;
-    border-top: 1px solid var(--border-color, #e8ddd6);
+    border-top: 1px solid var(--border-color, #e5e7eb);
   }
 
   .als-compare-bar {
@@ -406,16 +406,16 @@ const componentStyles = css`
     gap: 0.35rem;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .als-compare-pick select {
     min-height: 44px;
     padding: 0.5rem 0.7rem;
     border-radius: calc(var(--section-radius, 16px) * 0.4);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
     font-weight: 600;
   }
@@ -427,14 +427,14 @@ const componentStyles = css`
     max-height: min(40rem, 76vh);
     overflow: hidden;
     border-radius: var(--section-radius, 16px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background: #111;
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
     cursor: col-resize;
     direction: ltr;
-    box-shadow: var(--als-shadow, 0 12px 36px rgba(43, 33, 28, 0.1));
+    box-shadow: var(--als-shadow, 0 12px 36px color-mix(in srgb, var(--text-color, #000) 12%, transparent));
   }
 
   .als-compare--dragging {
@@ -536,6 +536,8 @@ const componentStyles = css`
     .als-modes {
       display: flex;
       flex-wrap: nowrap;
+      max-width: 100%;
+      min-width: 0;
       overflow-x: auto;
       gap: 0.55rem;
       -webkit-overflow-scrolling: touch;

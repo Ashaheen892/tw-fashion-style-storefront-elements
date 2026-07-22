@@ -1,5 +1,5 @@
 import { css, html, LitElement, nothing } from 'lit';
-import { property, state, query } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import {
@@ -11,6 +11,14 @@ import {
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
 import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
+import {
+  destroyFsSwiper,
+  fsSwiperCss,
+  mountFsSwiper,
+  Navigation,
+  Pagination,
+  type Swiper,
+} from '../../utils/fsSwiper.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import { parseVideos, youtubeEmbedUrl } from './utils.js';
@@ -23,10 +31,14 @@ export default class ShineVideos extends LitElement {
   @state() private active: ShineVideoItem | null = null;
   @state() private focusId = '';
 
-  @query('.sv-track') private trackEl?: HTMLElement;
+  private swiper?: Swiper;
+  private remountTimer: ReturnType<typeof setTimeout> | null = null;
 
-  private observer?: IntersectionObserver;
-  private boundLang = () => this.requestUpdate();
+  private boundLang = () => {
+    this.requestUpdate();
+    this.scheduleRemount();
+  };
+
   private boundKey = (e: KeyboardEvent) => {
     if (!this.active) return;
     if (e.key === 'Escape') this.closeModal();
@@ -36,6 +48,7 @@ export default class ShineVideos extends LitElement {
 
   static styles = [
     sharedSectionCss,
+    fsSwiperCss,
     componentStyles,
     css`
       :host {
@@ -53,19 +66,21 @@ export default class ShineVideos extends LitElement {
   disconnectedCallback(): void {
     window.removeEventListener('language-changed', this.boundLang);
     window.removeEventListener('keydown', this.boundKey);
-    this.observer?.disconnect();
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
     super.disconnectedCallback();
   }
 
   firstUpdated(): void {
-    this.setupObserver();
     this.ensureFocus();
+    this.remountSwiper();
   }
 
   updated(changed: Map<string, unknown>): void {
     if (changed.has('config')) {
       this.ensureFocus();
-      this.setupObserver();
+      this.scheduleRemount();
     }
   }
 
@@ -84,47 +99,54 @@ export default class ShineVideos extends LitElement {
     }
   }
 
-  private setupObserver(): void {
-    this.observer?.disconnect();
-    const track = this.trackEl;
-    if (!track) return;
-
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        const id = (visible?.target as HTMLElement | undefined)?.dataset?.id;
-        if (id) this.focusId = id;
-      },
-      { root: track, threshold: [0.45, 0.7, 0.9] }
-    );
-
-    track.querySelectorAll<HTMLElement>('.sv-card').forEach((card) => this.observer?.observe(card));
+  private scheduleRemount(): void {
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
   }
 
-  private scrollToIndex(index: number): void {
-    const track = this.trackEl;
-    const card = track?.querySelectorAll<HTMLElement>('.sv-card')[index];
-    card?.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+  private remountSwiper(): void {
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
+
+    const root = this.renderRoot.querySelector('.sv-swiper') as HTMLElement | null;
+    const videos = this.videos;
+    if (!root || !videos.length) return;
+
+    const start = Math.max(0, videos.findIndex((v) => v.id === this.focusId));
+
+    this.swiper = mountFsSwiper(root, {
+      modules: [Navigation, Pagination],
+      slidesPerView: 'auto',
+      spaceBetween: 14,
+      centeredSlides: true,
+      initialSlide: start,
+      navigation: {
+        prevEl: this.renderRoot.querySelector('.sv-nav--prev') as HTMLElement,
+        nextEl: this.renderRoot.querySelector('.sv-nav--next') as HTMLElement,
+      },
+      pagination: {
+        el: this.renderRoot.querySelector('.sv-pagination') as HTMLElement,
+        clickable: true,
+      },
+      on: {
+        slideChange: (sw) => {
+          const item = videos[sw.activeIndex];
+          if (item) this.focusId = item.id;
+        },
+      },
+    });
   }
 
   private focusIndex(): number {
     return Math.max(0, this.videos.findIndex((v) => v.id === this.focusId));
   }
 
-  private shiftFocus(delta: number): void {
-    const list = this.videos;
-    if (!list.length) return;
-    const next = Math.min(list.length - 1, Math.max(0, this.focusIndex() + delta));
-    this.focusId = list[next].id;
-    this.scrollToIndex(next);
-  }
-
   private openModal(item: ShineVideoItem): void {
     if (!item.videoUrl && !item.poster) return;
     this.active = item;
     this.focusId = item.id;
+    const idx = this.videos.findIndex((v) => v.id === item.id);
+    if (idx >= 0) this.swiper?.slideTo(idx);
   }
 
   private closeModal(): void {
@@ -134,12 +156,11 @@ export default class ShineVideos extends LitElement {
   private shiftModal(dir: number): void {
     const list = this.videos;
     if (!this.active || list.length < 2) return;
-    // RTL-friendly: ArrowLeft advances in Arabic LTR visual next
     const idx = list.findIndex((v) => v.id === this.active!.id);
     const next = (idx + dir + list.length) % list.length;
     this.active = list[next];
     this.focusId = list[next].id;
-    this.scrollToIndex(next);
+    this.swiper?.slideTo(next);
   }
 
   private renderModal() {
@@ -216,11 +237,11 @@ export default class ShineVideos extends LitElement {
       >
         <div class="fs-container">
           ${showTitle
-            ? html`<header class="sv-header">
-                <p class="sv-eyebrow">${t('لحظات الأناقة', 'Style moments')}</p>
-                <h2 class="sv-title">${title}</h2>
-                <span class="sv-title-line" aria-hidden="true"></span>
-                ${desc ? html`<p class="sv-desc">${desc}</p>` : nothing}
+            ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('لحظات الأناقة', 'Style moments')}</p>
+                <h2 class="fs-title">${title}</h2>
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>`
             : nothing}
 
@@ -231,7 +252,6 @@ export default class ShineVideos extends LitElement {
                   class="sv-nav sv-nav--prev"
                   aria-label=${t('السابق', 'Previous')}
                   ?disabled=${focusIdx <= 0}
-                  @click=${() => this.shiftFocus(-1)}
                 >
                   ‹
                 </button>
@@ -240,60 +260,54 @@ export default class ShineVideos extends LitElement {
                   class="sv-nav sv-nav--next"
                   aria-label=${t('التالي', 'Next')}
                   ?disabled=${focusIdx >= videos.length - 1}
-                  @click=${() => this.shiftFocus(1)}
                 >
                   ›
                 </button>
 
-                <div class="sv-track" role="list">
-                  ${videos.map(
-                    (item, i) => html`
-                      <article
-                        class=${classMap({ 'sv-card': true, 'is-focus': item.id === this.focusId })}
-                        role="listitem"
-                        data-id=${item.id}
-                      >
-                        <button
-                          type="button"
-                          class="sv-thumb"
-                          aria-label=${item.caption || t('تشغيل الفيديو', 'Play video')}
-                          @click=${() => this.openModal(item)}
-                          @focus=${() => {
-                            this.focusId = item.id;
-                          }}
+                <div class="swiper sv-swiper" aria-roledescription="carousel">
+                  <div class="swiper-wrapper">
+                    ${videos.map(
+                      (item, i) => html`
+                        <div
+                          class=${classMap({
+                            'swiper-slide': true,
+                            'sv-slide': true,
+                            'is-focus': item.id === this.focusId,
+                          })}
+                          data-id=${item.id}
                         >
-                          ${item.poster
-                            ? html`<img src=${item.poster} alt=${item.caption || ''} loading="lazy" />`
-                            : nothing}
-                          <span class="sv-film" aria-hidden="true"></span>
-                          <span class="sv-index">${String(i + 1).padStart(2, '0')}</span>
-                          <span class="sv-play" aria-hidden="true">
-                            <span class="sv-play__btn"><i class="sicon-play"></i></span>
-                          </span>
-                        </button>
-                        ${item.caption ? html`<p class="sv-caption">${item.caption}</p>` : nothing}
-                      </article>
-                    `
-                  )}
+                          <article class="sv-card" role="group">
+                            <button
+                              type="button"
+                              class="sv-thumb"
+                              aria-label=${item.caption || t('تشغيل الفيديو', 'Play video')}
+                              @click=${() => this.openModal(item)}
+                            >
+                              ${item.poster
+                                ? html`<img
+                                    src=${item.poster}
+                                    alt=${item.caption || ''}
+                                    loading="lazy"
+                                    draggable="false"
+                                  />`
+                                : nothing}
+                              <span class="sv-film" aria-hidden="true"></span>
+                              <span class="sv-index">${String(i + 1).padStart(2, '0')}</span>
+                              <span class="sv-play" aria-hidden="true">
+                                <span class="sv-play__btn"><i class="sicon-play"></i></span>
+                              </span>
+                            </button>
+                            ${item.caption ? html`<p class="sv-caption">${item.caption}</p>` : nothing}
+                          </article>
+                        </div>
+                      `
+                    )}
+                  </div>
                 </div>
 
-                <div class="sv-dots" role="tablist" aria-label=${t('التنقل بين المقاطع', 'Browse clips')}>
-                  ${videos.map(
-                    (item, i) => html`
-                      <button
-                        type="button"
-                        class=${classMap({ 'sv-dot': true, 'is-active': item.id === this.focusId })}
-                        aria-label=${t(`مقطع ${i + 1}`, `Clip ${i + 1}`)}
-                        @click=${() => {
-                          this.focusId = item.id;
-                          this.scrollToIndex(i);
-                        }}
-                      ></button>
-                    `
-                  )}
-                </div>
+                <div class="sv-pagination" aria-hidden=${videos.length < 2 ? 'true' : 'false'}></div>
               </div>`
-            : html`<div class="sv-empty">${t('أضف مقاطع فيديو من إعدادات العنصر', 'Add videos from the element settings')}</div>`}
+            : html`<div class="fs-empty">${t('أضف مقاطع فيديو من إعدادات العنصر', 'Add videos from the element settings')}</div>`}
         </div>
         ${renderCommerceOutcome(this.config || {}, 'sv_')}
         ${this.renderModal()}

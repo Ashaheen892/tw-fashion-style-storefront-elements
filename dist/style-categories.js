@@ -4,8 +4,8 @@ import { css, LitElement, nothing, html } from "lit";
 import { property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper } from "./fsSwiper-BQLtGSuN.js";
-import { t, n as normalizeCollection, l as localizedString, d as extractLink, s as sharedSectionCss, v as isValidHref, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper } from "./fsSwiper-CvtD0NsZ.js";
+import { t, n as normalizeCollection, l as localizedString, d as extractLink, s as sharedSectionCss, v as isValidHref, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .stc-shell {
     position: relative;
@@ -32,7 +32,7 @@ const componentStyles = css`
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .stc-title-line {
@@ -51,7 +51,7 @@ const componentStyles = css`
   .stc-desc {
     margin: 0.9rem auto 0;
     max-width: 34rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.75;
   }
@@ -90,7 +90,7 @@ const componentStyles = css`
     text-decoration: none;
     cursor: pointer;
     background: #1a1210;
-    box-shadow: 0 12px 28px rgba(43, 33, 28, 0.08);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     transition:
       transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.35s ease;
@@ -124,7 +124,7 @@ const componentStyles = css`
     transform: translateY(-4px);
     box-shadow:
       0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 30%, transparent),
-      0 20px 44px rgba(43, 33, 28, 0.14);
+      0 20px 44px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
   }
 
   .stc-tile:focus-visible {
@@ -177,8 +177,8 @@ const componentStyles = css`
   .stc-empty {
     padding: 2.25rem 1rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
-    border: 1px dashed var(--border-color, #e8ddd6);
+    color: var(--muted-color, #666666);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
   }
 
@@ -255,18 +255,26 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
 }, "__decorateClass");
 const _StyleCategories = class _StyleCategories extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.boundLang = () => {
-      this.requestUpdate(), queueMicrotask(() => this.remountSwiper());
+    super(...arguments), this.config = {}, this.remountTimer = null, this.boundLang = () => {
+      this.requestUpdate(), this.scheduleRemount();
     };
   }
   connectedCallback() {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLang);
   }
   disconnectedCallback() {
-    window.removeEventListener("language-changed", this.boundLang), destroyFsSwiper(this.swiper), this.swiper = void 0, super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), this.remountTimer && clearTimeout(this.remountTimer), destroyFsSwiper(this.swiper), this.swiper = void 0, super.disconnectedCallback();
   }
-  updated() {
-    this.updateComplete.then(() => this.remountSwiper());
+  firstUpdated() {
+    this.scheduleRemount();
+  }
+  updated(changed) {
+    changed.has("config") && this.scheduleRemount();
+  }
+  scheduleRemount() {
+    this.remountTimer && clearTimeout(this.remountTimer), this.remountTimer = setTimeout(() => {
+      this.isConnected && this.remountSwiper();
+    }, 0);
   }
   remountSwiper() {
     var _a;

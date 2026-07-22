@@ -54,44 +54,65 @@ function fsThemeVars(mode = detectFsTheme()) {
     "--button-color": "#ffffff",
     "--text-color": dark ? "#ffffff" : "#000000",
     "--muted-color": dark ? "#aaaaaa" : "#666666",
-    "--card-bg": dark ? "#0f0f0f" : "#ffffff",
-    "--fs-surface": dark ? "#0a0a0a" : "#f0f0f0",
-    "--border-color": dark ? "rgba(255, 255, 255, 0.12)" : "#e5e7eb",
-    "--section-bg": "transparent"
+    "--card-bg": dark ? "#141414" : "#ffffff",
+    "--fs-surface": dark ? "#1a1a1a" : "#f3f4f6",
+    "--border-color": dark ? "rgba(255, 255, 255, 0.14)" : "#e5e7eb",
+    "--section-bg": "transparent",
+    colorScheme: dark ? "dark" : "light"
   };
 }
 __name(fsThemeVars, "fsThemeVars");
-function applyVars(el, vars) {
-  for (const [key, value] of Object.entries(vars))
+function applyVars(el, vars, mode) {
+  for (const [key, value] of Object.entries(vars)) {
+    if (key === "colorScheme") {
+      el.style.colorScheme = value;
+      continue;
+    }
     el.style.setProperty(key, value);
-  el.setAttribute("data-fs-theme", detectFsTheme());
+  }
+  el.setAttribute("data-fs-theme", mode);
 }
 __name(applyVars, "applyVars");
-function walkAndApply(root, vars) {
+function walkAndApply(root, vars, mode) {
   root.querySelectorAll(".fs-section").forEach((node) => {
-    applyVars(node, vars);
+    applyVars(node, vars, mode);
   });
 }
 __name(walkAndApply, "walkAndApply");
+function refreshLitHosts() {
+  document.querySelectorAll("*").forEach((node) => {
+    const el = node, shadow = el.shadowRoot;
+    shadow != null && shadow.querySelector(".fs-section") && typeof el.requestUpdate == "function" && el.requestUpdate();
+  });
+}
+__name(refreshLitHosts, "refreshLitHosts");
 function applyFsThemeToDocument(mode = detectFsTheme()) {
   if (typeof document > "u") return;
   const vars = fsThemeVars(mode);
-  walkAndApply(document, vars), document.querySelectorAll("*").forEach((node) => {
+  document.documentElement.setAttribute("data-fs-theme", mode), walkAndApply(document, vars, mode), document.querySelectorAll("*").forEach((node) => {
     const el = node, shadow = el.shadowRoot;
-    shadow && shadow.querySelector(".fs-section") && (applyVars(el, vars), walkAndApply(shadow, vars));
+    shadow && shadow.querySelector(".fs-section") && (applyVars(el, vars, mode), walkAndApply(shadow, vars, mode));
   });
+  try {
+    window.dispatchEvent(
+      new CustomEvent("fs-theme-changed", { detail: { mode } })
+    );
+  } catch {
+  }
 }
 __name(applyFsThemeToDocument, "applyFsThemeToDocument");
-let watching = !1, syncTimer = null;
+let watching = !1, syncTimer = null, lastMode = null;
 function scheduleSync() {
   syncTimer && clearTimeout(syncTimer), syncTimer = setTimeout(() => {
-    syncTimer = null, applyFsThemeToDocument();
-  }, 50);
+    syncTimer = null;
+    const mode = detectFsTheme();
+    applyFsThemeToDocument(mode), lastMode !== mode && (lastMode = mode, refreshLitHosts());
+  }, 40);
 }
 __name(scheduleSync, "scheduleSync");
 function ensureFsThemeWatch() {
   if (!(watching || typeof document > "u")) {
-    watching = !0, scheduleSync();
+    watching = !0, lastMode = detectFsTheme(), scheduleSync();
     try {
       new MutationObserver(scheduleSync).observe(document.documentElement, {
         attributes: !0,
@@ -114,6 +135,11 @@ function ensureFsThemeWatch() {
   }
 }
 __name(ensureFsThemeWatch, "ensureFsThemeWatch");
+function fsAccentTone(index, steps = 5) {
+  const stops = [28, 40, 52, 64, 78];
+  return `color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) ${stops[index % Math.max(steps, stops.length)] ?? 45}%, var(--fs-surface, #f3f4f6))`;
+}
+__name(fsAccentTone, "fsAccentTone");
 function normalizeItem(item) {
   return Object.entries(item || {}).reduce((acc, [key, value]) => {
     const normalizedKey = key.includes(".") ? key.split(".").pop() : key;
@@ -355,8 +381,11 @@ function readSectionTheme(config, prefix, defaults) {
 __name(readSectionTheme, "readSectionTheme");
 function themeStyleMap(theme) {
   const useContainer = theme.hasContainer !== !1;
-  return ensureFsThemeWatch(), {
-    ...fsThemeVars(),
+  ensureFsThemeWatch();
+  const mode = detectFsTheme(), vars = fsThemeVars(mode), { colorScheme, ...cssVars } = vars;
+  return {
+    ...cssVars,
+    "color-scheme": colorScheme,
     "--section-radius": theme.radius,
     "--space-desktop": `${theme.spaceDesktop}px`,
     "--space-mobile": `${theme.spaceMobile}px`,
@@ -481,7 +510,7 @@ const sharedSectionCss = css`
     --card-bg: #ffffff;
     --border-color: #e5e7eb;
     --section-bg: transparent;
-    --fs-surface: #f0f0f0;
+    --fs-surface: #f3f4f6;
     --fs-success: #2f9e63;
     --fs-caution: #e0a100;
     --fs-danger: #cf4b4b;
@@ -495,7 +524,7 @@ const sharedSectionCss = css`
     --card-bg: #ffffff;
     --border-color: #e5e7eb;
     --section-bg: transparent;
-    --fs-surface: #f0f0f0;
+    --fs-surface: #f3f4f6;
     --button-bg: var(--fs-store-primary);
     --button-color: #ffffff;
   }
@@ -506,10 +535,10 @@ const sharedSectionCss = css`
     /* Dark: titles white · subtitle/desc muted · secondary surfaces darker */
     --text-color: #ffffff;
     --muted-color: #aaaaaa;
-    --card-bg: #0f0f0f;
-    --border-color: rgba(255, 255, 255, 0.12);
+    --card-bg: #141414;
+    --border-color: rgba(255, 255, 255, 0.14);
     --section-bg: transparent;
-    --fs-surface: #0a0a0a;
+    --fs-surface: #1a1a1a;
     --button-bg: var(--fs-store-primary);
     --button-color: #ffffff;
   }
@@ -547,6 +576,8 @@ const sharedSectionCss = css`
     margin: 0 auto;
     padding: 0 16px;
     box-sizing: border-box;
+    min-width: 0;
+    overflow-x: clip;
   }
 
   .fs-section--full .fs-container {
@@ -766,10 +797,12 @@ const sharedSectionCss = css`
   :host-context([data-mode='dark']) .fs-card,
   :host-context([data-theme='dark']) .fs-stage,
   :host-context(.dark) .fs-stage,
-  :host-context([data-mode='dark']) .fs-stage {
-    background: var(--card-bg, #0f0f0f);
+  :host-context([data-mode='dark']) .fs-stage,
+  :host([data-fs-theme='dark']) .fs-card,
+  :host([data-fs-theme='dark']) .fs-stage {
+    background: var(--card-bg, #141414);
     border-color: var(--border-color, rgba(255, 255, 255, 0.14));
-    color: #ffffff;
+    color: var(--text-color, #ffffff);
   }
 
   :host-context([data-theme='dark']) .fs-commerce,
@@ -785,10 +818,15 @@ const sharedSectionCss = css`
 
   .fs-card {
     background: var(--card-bg, #ffffff);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
-    box-shadow: 0 12px 32px rgba(43, 33, 28, 0.06);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--text-color, #000000) 8%, transparent);
+    color: var(--text-color, #000000);
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  :host([data-fs-theme='dark']) .fs-card {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   }
 
   .fs-stage {
@@ -1161,6 +1199,8 @@ const sharedSectionCss = css`
   .fs-scroll-x {
     display: flex;
     gap: 0.65rem;
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
@@ -2110,6 +2150,7 @@ const sharedSectionCss = css`
   }
 `;
 export {
+  parseTags as A,
   themeStyleMap as a,
   renderCommerceOutcome as b,
   copyText as c,
@@ -2133,7 +2174,7 @@ export {
   clamp as u,
   isValidHref as v,
   isDirectMediaUrl as w,
-  safeStorageGet as x,
-  safeStorageSet as y,
-  parseTags as z
+  fsAccentTone as x,
+  safeStorageGet as y,
+  safeStorageSet as z
 };

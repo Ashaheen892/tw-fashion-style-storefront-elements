@@ -6,12 +6,12 @@ export const componentStyles = css`
     overflow: hidden;
     padding: 1.25rem 1rem 1.4rem;
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 42%),
       radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 40%),
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 90%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
   }
 
   .acm-toolbar {
@@ -25,7 +25,7 @@ export const componentStyles = css`
 
   .acm-hint {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.9rem;
     line-height: 1.55;
   }
@@ -36,7 +36,7 @@ export const componentStyles = css`
     gap: 0.35rem;
     padding: 0.3rem 0.75rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
@@ -57,15 +57,15 @@ export const componentStyles = css`
     min-height: 3.4rem;
     padding: 0.45rem 0.55rem;
     border-radius: calc(var(--section-radius, 18px) * 0.55);
-    border: 1px dashed color-mix(in srgb, var(--border-color, #e8ddd6) 90%, transparent);
-    background: color-mix(in srgb, var(--card-bg, #fff) 70%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--border-color, #e5e7eb) 90%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 70%, transparent);
     transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
   }
 
   .acm-slot--filled {
     border-style: solid;
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, var(--border-color, #e5e7eb));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #ffffff));
     box-shadow: 0 8px 18px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
   }
 
@@ -76,7 +76,7 @@ export const componentStyles = css`
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
@@ -106,7 +106,7 @@ export const componentStyles = css`
   }
 
   .acm-slot__empty {
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.75rem;
   }
 
@@ -117,15 +117,15 @@ export const componentStyles = css`
     border: none;
     border-radius: 50%;
     background: transparent;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     cursor: pointer;
     font-size: 1rem;
     line-height: 1;
   }
 
   .acm-slot__remove:hover {
-    color: var(--text-color, #2b211c);
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 55%, transparent);
+    color: var(--text-color, #000000);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 55%, transparent);
   }
 
   .acm-picker {
@@ -170,7 +170,7 @@ export const componentStyles = css`
     justify-content: center;
     margin: 0 0 0.85rem;
     font-size: 0.75rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acm-legend__item {
@@ -183,15 +183,15 @@ export const componentStyles = css`
     width: 0.85rem;
     height: 0.85rem;
     border-radius: 0.25rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
   }
 
   .acm-legend__swatch--same {
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
   }
 
   .acm-legend__swatch--best {
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--card-bg, #ffffff));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent);
   }
 
@@ -199,16 +199,16 @@ export const componentStyles = css`
     margin-top: 1.35rem;
     overflow-x: auto;
     border-radius: calc(var(--section-radius, 18px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    box-shadow: 0 14px 34px rgba(43, 33, 28, 0.07);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
     animation: acm-reveal 0.4s ease both;
   }
 
   .acm-user-hint {
     margin: 0;
     padding: 0.85rem 1rem 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.82rem;
     line-height: 1.55;
     text-align: center;
@@ -223,10 +223,10 @@ export const componentStyles = css`
     min-height: 44px;
     box-sizing: border-box;
     padding: 0.45rem 0.65rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: 8px;
-    background: color-mix(in srgb, var(--card-bg, #fff) 88%, var(--section-bg, #faf7f5));
-    color: var(--text-color, #2b211c);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 88%, var(--section-bg, var(--fs-surface, #f3f4f6)));
+    color: var(--text-color, #000000);
     font: inherit;
     font-size: 0.85rem;
   }
@@ -238,7 +238,7 @@ export const componentStyles = css`
   }
 
   .acm-input::placeholder {
-    color: color-mix(in srgb, var(--muted-color, #7a6a62) 75%, transparent);
+    color: color-mix(in srgb, var(--muted-color, #666666) 75%, transparent);
   }
 
   .acm-table {
@@ -251,7 +251,7 @@ export const componentStyles = css`
   .acm-table th,
   .acm-table td {
     padding: 0.85rem 0.95rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
     text-align: start;
     vertical-align: middle;
     font-size: 0.9rem;
@@ -267,31 +267,31 @@ export const componentStyles = css`
     top: 0;
     z-index: 2;
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
     font-weight: 700;
   }
 
   .acm-table__label {
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 600;
     white-space: nowrap;
     width: 9rem;
-    background: color-mix(in srgb, var(--section-bg, #faf7f5) 55%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--section-bg, var(--fs-surface, #f3f4f6)) 55%, var(--card-bg, #ffffff));
   }
 
   .acm-table tbody tr:nth-child(even) td {
-    background: color-mix(in srgb, var(--section-bg, #faf7f5) 35%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--section-bg, var(--fs-surface, #f3f4f6)) 35%, var(--card-bg, #ffffff));
   }
 
   .acm-cell--same {
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff)) !important;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #ffffff)) !important;
   }
 
   .acm-cell--best {
     position: relative;
     font-weight: 700;
     color: var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, var(--card-bg, #fff)) !important;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, var(--card-bg, #ffffff)) !important;
   }
 
   .acm-cell__badge {
@@ -319,7 +319,7 @@ export const componentStyles = css`
     height: 6.5rem;
     object-fit: cover;
     border-radius: calc(var(--section-radius, 18px) * 0.45);
-    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.14);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
   }
 
   .acm-product-head__name {

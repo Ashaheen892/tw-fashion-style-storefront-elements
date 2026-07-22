@@ -23,7 +23,7 @@ export const sharedSectionCss = css`
     --card-bg: #ffffff;
     --border-color: #e5e7eb;
     --section-bg: transparent;
-    --fs-surface: #f0f0f0;
+    --fs-surface: #f3f4f6;
     --fs-success: #2f9e63;
     --fs-caution: #e0a100;
     --fs-danger: #cf4b4b;
@@ -37,7 +37,7 @@ export const sharedSectionCss = css`
     --card-bg: #ffffff;
     --border-color: #e5e7eb;
     --section-bg: transparent;
-    --fs-surface: #f0f0f0;
+    --fs-surface: #f3f4f6;
     --button-bg: var(--fs-store-primary);
     --button-color: #ffffff;
   }
@@ -48,10 +48,10 @@ export const sharedSectionCss = css`
     /* Dark: titles white · subtitle/desc muted · secondary surfaces darker */
     --text-color: #ffffff;
     --muted-color: #aaaaaa;
-    --card-bg: #0f0f0f;
-    --border-color: rgba(255, 255, 255, 0.12);
+    --card-bg: #141414;
+    --border-color: rgba(255, 255, 255, 0.14);
     --section-bg: transparent;
-    --fs-surface: #0a0a0a;
+    --fs-surface: #1a1a1a;
     --button-bg: var(--fs-store-primary);
     --button-color: #ffffff;
   }
@@ -89,6 +89,8 @@ export const sharedSectionCss = css`
     margin: 0 auto;
     padding: 0 16px;
     box-sizing: border-box;
+    min-width: 0;
+    overflow-x: clip;
   }
 
   .fs-section--full .fs-container {
@@ -308,10 +310,12 @@ export const sharedSectionCss = css`
   :host-context([data-mode='dark']) .fs-card,
   :host-context([data-theme='dark']) .fs-stage,
   :host-context(.dark) .fs-stage,
-  :host-context([data-mode='dark']) .fs-stage {
-    background: var(--card-bg, #0f0f0f);
+  :host-context([data-mode='dark']) .fs-stage,
+  :host([data-fs-theme='dark']) .fs-card,
+  :host([data-fs-theme='dark']) .fs-stage {
+    background: var(--card-bg, #141414);
     border-color: var(--border-color, rgba(255, 255, 255, 0.14));
-    color: #ffffff;
+    color: var(--text-color, #ffffff);
   }
 
   :host-context([data-theme='dark']) .fs-commerce,
@@ -327,10 +331,15 @@ export const sharedSectionCss = css`
 
   .fs-card {
     background: var(--card-bg, #ffffff);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
-    box-shadow: 0 12px 32px rgba(43, 33, 28, 0.06);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--text-color, #000000) 8%, transparent);
+    color: var(--text-color, #000000);
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  :host([data-fs-theme='dark']) .fs-card {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   }
 
   .fs-stage {
@@ -703,6 +712,8 @@ export const sharedSectionCss = css`
   .fs-scroll-x {
     display: flex;
     gap: 0.65rem;
+    max-width: 100%;
+    min-width: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;

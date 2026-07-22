@@ -11,6 +11,13 @@ import {
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
 import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
+import {
+  Autoplay,
+  destroyFsSwiper,
+  fsSwiperCss,
+  mountFsSwiper,
+  type Swiper,
+} from '../../utils/fsSwiper.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import { averageRating, parseReviews } from './utils.js';
@@ -22,11 +29,17 @@ export default class EchoSalon extends LitElement {
 
   @state() private activeId = '';
 
-  private boundLang = () => this.requestUpdate();
-  private autoTimer: ReturnType<typeof setInterval> | null = null;
+  private swiper?: Swiper;
+  private remountTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private boundLang = () => {
+    this.requestUpdate();
+    this.scheduleRemount();
+  };
 
   static styles = [
     sharedSectionCss,
+    fsSwiperCss,
     componentStyles,
     css`
       :host {
@@ -39,19 +52,24 @@ export default class EchoSalon extends LitElement {
     super.connectedCallback();
     window.addEventListener('language-changed', this.boundLang);
     this.ensureActive();
-    this.syncAutoplay();
   }
 
   disconnectedCallback(): void {
     window.removeEventListener('language-changed', this.boundLang);
-    this.clearAutoplay();
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
     super.disconnectedCallback();
+  }
+
+  firstUpdated(): void {
+    this.remountSwiper();
   }
 
   updated(changed: Map<string, unknown>): void {
     if (changed.has('config')) {
       this.ensureActive();
-      this.syncAutoplay();
+      this.scheduleRemount();
     }
   }
 
@@ -74,31 +92,49 @@ export default class EchoSalon extends LitElement {
     }
   }
 
-  private clearAutoplay(): void {
-    if (this.autoTimer) {
-      clearInterval(this.autoTimer);
-      this.autoTimer = null;
-    }
+  private scheduleRemount(): void {
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
   }
 
-  private syncAutoplay(): void {
-    this.clearAutoplay();
-    const auto = isTruthy(this.config?.es_autoplay, true) && !prefersReducedMotion();
-    if (!auto || this.reviews.length < 2) return;
-    this.autoTimer = setInterval(() => this.next(), 5500);
-  }
+  private remountSwiper(): void {
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
 
-  private next(): void {
-    const list = this.reviews;
-    if (list.length < 2) return;
-    const idx = list.findIndex((r) => r.id === this.activeId);
-    const next = list[(idx + 1) % list.length];
-    this.activeId = next.id;
+    const root = this.renderRoot.querySelector('.es-swiper') as HTMLElement | null;
+    const reviews = this.reviews;
+    if (!root || reviews.length < 1) return;
+
+    const auto = isTruthy(this.config?.es_autoplay, true) && !prefersReducedMotion() && reviews.length > 1;
+    const start = Math.max(0, reviews.findIndex((r) => r.id === this.activeId));
+
+    this.swiper = mountFsSwiper(root, {
+      modules: auto ? [Autoplay] : [],
+      slidesPerView: 'auto',
+      spaceBetween: 14,
+      initialSlide: start,
+      ...(auto
+        ? {
+            autoplay: {
+              delay: 5500,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            },
+          }
+        : {}),
+      on: {
+        slideChange: (sw) => {
+          const item = reviews[sw.activeIndex];
+          if (item) this.activeId = item.id;
+        },
+      },
+    });
   }
 
   private select(id: string): void {
     this.activeId = id;
-    this.syncAutoplay();
+    const idx = this.reviews.findIndex((r) => r.id === id);
+    if (idx >= 0) this.swiper?.slideTo(idx);
   }
 
   private renderStars(rating: number) {
@@ -111,10 +147,9 @@ export default class EchoSalon extends LitElement {
     `;
   }
 
-  private renderAvatar(review: EchoReview, large = false) {
-    const cls = large ? 'es-avatar' : 'es-avatar';
+  private renderAvatar(review: EchoReview) {
     if (review.avatar) {
-      return html`<img class=${cls} src=${review.avatar} alt="" loading="lazy" decoding="async" />`;
+      return html`<img class="es-avatar" src=${review.avatar} alt="" loading="lazy" decoding="async" draggable="false" />`;
     }
     const initial = (review.name || '?').trim().charAt(0);
     return html`<span class="es-avatar es-avatar--placeholder" aria-hidden="true">${initial}</span>`;
@@ -161,15 +196,11 @@ export default class EchoSalon extends LitElement {
                   <span class="es-featured__mark" aria-hidden="true">”</span>
                   <p class="es-featured__quote">${active.quote}</p>
                   <div class="es-featured__meta">
-                    ${this.renderAvatar(active, true)}
+                    ${this.renderAvatar(active)}
                     <div class="es-person">
                       <strong>${active.name}</strong>
-                      ${active.role
-                        ? html`<span>${active.role}</span>`
-                        : nothing}
-                      ${active.product_note
-                        ? html`<span>${active.product_note}</span>`
-                        : nothing}
+                      ${active.role ? html`<span>${active.role}</span>` : nothing}
+                      ${active.product_note ? html`<span>${active.product_note}</span>` : nothing}
                     </div>
                     ${this.renderStars(active.rating)}
                     ${avg > 0
@@ -182,50 +213,38 @@ export default class EchoSalon extends LitElement {
                 </article>`
               : nothing}
 
-            <div class="es-rail" role="list">
-              ${reviews.map(
-                (review) => html`
-                  <button
-                    type="button"
-                    class=${classMap({
-                      'es-card': true,
-                      'es-card--active': review.id === this.activeId,
-                    })}
-                    role="listitem"
-                    aria-pressed=${review.id === this.activeId ? 'true' : 'false'}
-                    @click=${() => this.select(review.id)}
-                  >
-                    ${this.renderStars(review.rating)}
-                    <p class="es-card__quote">${review.quote}</p>
-                    ${review.product_note
-                      ? html`<p class="es-card__note">${review.product_note}</p>`
-                      : nothing}
-                    <div class="es-card__foot">
-                      ${this.renderAvatar(review)}
-                      <div class="es-person">
-                        <strong>${review.name}</strong>
-                        ${review.role ? html`<span>${review.role}</span>` : nothing}
-                      </div>
-                    </div>
-                  </button>
-                `
-              )}
-            </div>
-
-            ${reviews.length > 1
-              ? html`<div class="fs-dots" role="tablist" aria-label=${t('التنقل بين الشهادات', 'Browse reviews')}>
-                  ${reviews.map(
-                    (review) => html`
+            <div class="swiper es-swiper" aria-roledescription="carousel">
+              <div class="swiper-wrapper">
+                ${reviews.map(
+                  (review) => html`
+                    <div class="swiper-slide es-slide">
                       <button
                         type="button"
-                        class=${classMap({ 'fs-dot': true, 'is-active': review.id === this.activeId })}
-                        aria-label=${review.name || t('شهادة', 'Review')}
+                        class=${classMap({
+                          'es-card': true,
+                          'es-card--active': review.id === this.activeId,
+                        })}
+                        aria-pressed=${review.id === this.activeId ? 'true' : 'false'}
                         @click=${() => this.select(review.id)}
-                      ></button>
-                    `
-                  )}
-                </div>`
-              : nothing}
+                      >
+                        ${this.renderStars(review.rating)}
+                        <p class="es-card__quote">${review.quote}</p>
+                        ${review.product_note
+                          ? html`<p class="es-card__note">${review.product_note}</p>`
+                          : nothing}
+                        <div class="es-card__foot">
+                          ${this.renderAvatar(review)}
+                          <div class="es-person">
+                            <strong>${review.name}</strong>
+                            ${review.role ? html`<span>${review.role}</span>` : nothing}
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  `
+                )}
+              </div>
+            </div>
           </div>
         </div>
         ${renderCommerceOutcome(this.config || {}, 'es_')}

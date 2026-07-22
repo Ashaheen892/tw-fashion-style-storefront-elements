@@ -23,7 +23,7 @@ export const componentStyles = css`
     margin-inline: auto;
     font-size: 0.98rem;
     line-height: 1.8;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   @media (min-width: 960px) {
@@ -37,7 +37,7 @@ export const componentStyles = css`
   .aca-sidebar {
     padding: 1.35rem 1.2rem 1.45rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 35%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 35%, var(--border-color, #e5e7eb));
     background:
       linear-gradient(180deg, rgba(255, 252, 247, 0.98), #fff 55%),
       linear-gradient(
@@ -47,7 +47,7 @@ export const componentStyles = css`
       );
     box-shadow:
       0 1px 0 rgba(201, 168, 108, 0.25),
-      0 22px 44px rgba(43, 33, 28, 0.07);
+      0 22px 44px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
   }
 
   .aca-sidebar__label {
@@ -57,17 +57,17 @@ export const componentStyles = css`
     font-size: 1.28rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .aca-search {
     width: 100%;
     min-height: 46px;
     padding: 0.7rem 0.95rem;
-    border: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e5e7eb));
     border-radius: 2px;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font: inherit;
     box-sizing: border-box;
     margin-bottom: 1.05rem;
@@ -98,7 +98,7 @@ export const componentStyles = css`
     border: 1px solid transparent;
     border-radius: 2px;
     background: rgba(255, 255, 255, 0.7);
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font: inherit;
     text-align: start;
     cursor: pointer;
@@ -110,7 +110,7 @@ export const componentStyles = css`
   }
 
   .aca-list__item:hover {
-    border-color: color-mix(in srgb, #c9a86c 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, #c9a86c 40%, var(--border-color, #e5e7eb));
     background: var(--fs-surface, var(--card-bg, #f0f0f0));
     transform: translateY(-1px);
   }
@@ -122,7 +122,7 @@ export const componentStyles = css`
       color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, #fff),
       #fff
     );
-    box-shadow: 0 12px 24px rgba(43, 33, 28, 0.08);
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
   }
 
   .aca-list__thumb {
@@ -130,7 +130,7 @@ export const componentStyles = css`
     height: 56px;
     border-radius: 2px;
     object-fit: cover;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 50%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 50%, transparent);
     box-shadow: 0 0 0 1px rgba(201, 168, 108, 0.28);
   }
 
@@ -151,7 +151,7 @@ export const componentStyles = css`
 
   .aca-list__hint {
     font-size: 0.74rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -177,11 +177,11 @@ export const componentStyles = css`
     position: relative;
     overflow: hidden;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 32%, var(--border-color, #e8ddd6));
-    background: linear-gradient(180deg, #fffdf9 0%, var(--card-bg, #fff) 40%);
+    border: 1px solid color-mix(in srgb, #c9a86c 32%, var(--border-color, #e5e7eb));
+    background: linear-gradient(180deg, #fffdf9 0%, var(--card-bg, #ffffff) 40%);
     box-shadow:
       0 1px 0 rgba(201, 168, 108, 0.22),
-      0 28px 56px rgba(43, 33, 28, 0.09);
+      0 28px 56px color-mix(in srgb, var(--text-color, #000) 11%, transparent);
   }
 
   .aca-panel__hero {
@@ -270,7 +270,7 @@ export const componentStyles = css`
   .aca-block + .aca-actions {
     margin-top: 1.5rem;
     padding-top: 1.45rem;
-    border-top: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e8ddd6));
+    border-top: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e5e7eb));
   }
 
   .aca-block--allows {
@@ -284,23 +284,18 @@ export const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.42rem;
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
-  .aca-journey {
-    display: grid;
-    gap: 0.8rem;
+  .aca-journey-swiper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     overflow: hidden;
-    padding-inline-end: 0.15rem;
   }
 
-  @media (min-width: 820px) {
-    .aca-journey {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 0.85rem;
-      overflow: visible;
-      padding-inline-end: 0;
-    }
+  .aca-journey-swiper .swiper-slide {
+    height: auto;
   }
 
   .aca-step {
@@ -311,9 +306,9 @@ export const componentStyles = css`
     gap: 0.65rem;
     padding: 1.05rem 0.95rem 1.15rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e5e7eb));
     background:
-      linear-gradient(180deg, #fffaf4 0%, #fff 70%);
+      linear-gradient(180deg, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 6%, var(--card-bg, #ffffff)) 0%, var(--card-bg, #ffffff) 70%);
     min-height: 100%;
     min-width: 0;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -324,7 +319,7 @@ export const componentStyles = css`
     transform: translateY(-2px);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      0 14px 28px rgba(43, 33, 28, 0.07);
+      0 14px 28px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
   }
 
   @media (min-width: 820px) {
@@ -359,12 +354,12 @@ export const componentStyles = css`
     margin: 0;
     font-weight: 700;
     font-size: 0.9rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .aca-step__text {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.8rem;
     line-height: 1.7;
   }
@@ -388,7 +383,7 @@ export const componentStyles = css`
     align-items: center;
     padding: 0.9rem 0.95rem;
     border-radius: 2px;
-    border: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e8ddd6));
+    border: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e5e7eb));
     background: var(--fs-surface, var(--card-bg, #f0f0f0));
   }
 
@@ -409,16 +404,16 @@ export const componentStyles = css`
 
   .aca-allow__label strong {
     font-size: 0.88rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .aca-allow__label span {
     font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .aca-allow--yes {
-    border-color: color-mix(in srgb, #3d6b55 30%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, #3d6b55 30%, var(--border-color, #e5e7eb));
     background: color-mix(in srgb, #3d6b55 5%, var(--fs-surface, var(--card-bg, #f0f0f0)));
   }
 
@@ -428,7 +423,7 @@ export const componentStyles = css`
   }
 
   .aca-allow--no {
-    border-color: color-mix(in srgb, #8f4a45 24%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, #8f4a45 24%, var(--border-color, #e5e7eb));
     background: color-mix(in srgb, #8f4a45 4%, var(--fs-surface, var(--card-bg, #f0f0f0)));
   }
 
@@ -447,8 +442,8 @@ export const componentStyles = css`
     padding: 0.95rem 1.05rem;
     border-radius: 2px;
     border-inline-start: 2px solid #c9a86c;
-    border-block: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e8ddd6));
-    border-inline-end: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e8ddd6));
+    border-block: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e5e7eb));
+    border-inline-end: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e5e7eb));
     background: linear-gradient(
       90deg,
       color-mix(in srgb, #c9a86c 8%, #fffefb),
@@ -456,7 +451,7 @@ export const componentStyles = css`
     );
     font-size: 0.9rem;
     line-height: 1.75;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .aca-extra strong {
@@ -488,7 +483,7 @@ export const componentStyles = css`
     text-align: center;
     font-size: 0.9rem;
     z-index: 100;
-    box-shadow: 0 16px 32px rgba(43, 33, 28, 0.26);
+    box-shadow: 0 16px 32px color-mix(in srgb, var(--text-color, #000) 28%, transparent);
     animation: aca-toast-in 0.3s ease;
   }
 
@@ -507,7 +502,7 @@ export const componentStyles = css`
     margin: 0.25rem 0 0;
     padding: 0.85rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.86rem;
   }
 
@@ -542,22 +537,9 @@ export const componentStyles = css`
       font-size: clamp(1.55rem, 6.5vw, 2rem);
     }
 
-    .aca-journey {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 0.55rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior-x: contain;
-      padding-bottom: 0.2rem;
-      scroll-snap-type: x proximity;
-    }
-
     .aca-step {
-      flex: 0 0 min(11.5rem, 72vw);
       min-height: 0;
       padding: 0.85rem 0.8rem 0.95rem;
-      scroll-snap-align: start;
     }
 
     .aca-step:hover {

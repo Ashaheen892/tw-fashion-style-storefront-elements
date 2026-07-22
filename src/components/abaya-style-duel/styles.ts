@@ -6,11 +6,11 @@ export const componentStyles = css`
     overflow: hidden;
     padding: 1.25rem 1rem 1.4rem;
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 40%),
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
   }
 
   .asd-progress {
@@ -28,7 +28,7 @@ export const componentStyles = css`
     gap: 0.45rem;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
@@ -43,7 +43,7 @@ export const componentStyles = css`
     width: 0.45rem;
     height: 0.45rem;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
   }
 
   .asd-dot--active {
@@ -59,7 +59,7 @@ export const componentStyles = css`
     font-size: clamp(1.15rem, 2.2vw, 1.45rem);
     font-weight: 700;
     line-height: 1.45;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .asd-options {
@@ -90,8 +90,8 @@ export const componentStyles = css`
     font-size: 0.82rem;
     letter-spacing: 0.04em;
     box-shadow:
-      0 0 0 6px color-mix(in srgb, var(--card-bg, #fff) 92%, transparent),
-      0 10px 24px rgba(43, 33, 28, 0.2);
+      0 0 0 6px color-mix(in srgb, var(--card-bg, #ffffff) 92%, transparent),
+      0 10px 24px color-mix(in srgb, var(--text-color, #000) 22%, transparent);
     z-index: 3;
   }
 
@@ -116,16 +116,16 @@ export const componentStyles = css`
     flex-direction: column;
     min-height: 100%;
     padding: 0;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 18px) * 0.8);
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
     overflow: hidden;
     cursor: pointer;
     text-align: center;
     color: inherit;
     font: inherit;
     text-decoration: none;
-    box-shadow: 0 10px 26px rgba(43, 33, 28, 0.06);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--text-color, #000) 8%, transparent);
     transition:
       border-color 0.25s ease,
       transform 0.25s ease,
@@ -134,7 +134,7 @@ export const componentStyles = css`
 
   .asd-option:hover:not(:disabled) {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e5e7eb));
   }
 
   .asd-option:disabled {
@@ -145,7 +145,7 @@ export const componentStyles = css`
     border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow:
       0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, transparent),
-      0 16px 34px rgba(43, 33, 28, 0.12);
+      0 16px 34px color-mix(in srgb, var(--text-color, #000) 14%, transparent);
   }
 
   .asd-option--picked {
@@ -174,7 +174,7 @@ export const componentStyles = css`
     position: relative;
     aspect-ratio: 3 / 4;
     overflow: hidden;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 45%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 45%, transparent);
     flex: 0 0 auto;
   }
 
@@ -226,7 +226,7 @@ export const componentStyles = css`
     font-size: 0.7rem;
     font-weight: 700;
     white-space: nowrap;
-    box-shadow: 0 6px 14px rgba(43, 33, 28, 0.22);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color, #000) 24%, transparent);
   }
 
   .asd-option__body {
@@ -242,14 +242,14 @@ export const componentStyles = css`
     font-weight: 700;
     font-size: 1.05rem;
     line-height: 1.35;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     text-align: center;
   }
 
   .asd-option__cta {
     margin: 0;
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     text-align: center;
   }
 
@@ -270,14 +270,14 @@ export const componentStyles = css`
 
   .asd-pct-label {
     font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .asd-bar {
     position: relative;
     height: 8px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
     overflow: hidden;
     /* Keep fill growing left→right in RTL pages */
     direction: ltr;
@@ -299,12 +299,12 @@ export const componentStyles = css`
     margin-top: 1.25rem;
     padding: 1rem 1.05rem;
     border-radius: calc(var(--section-radius, 18px) * 0.65);
-    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, var(--border-color, #e5e7eb));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #ffffff));
     line-height: 1.7;
     font-size: 0.92rem;
     text-align: center;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .asd-nav {
@@ -321,7 +321,7 @@ export const componentStyles = css`
     margin: 0.85rem 0 0;
     text-align: center;
     font-size: 0.78rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.6;
   }
 

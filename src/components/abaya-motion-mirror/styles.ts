@@ -36,9 +36,9 @@ export const componentStyles = css`
     max-height: min(42rem, 78vh);
     overflow: hidden;
     border-radius: var(--section-radius, 16px);
-    border: 1px solid var(--amm-viewer-border, var(--border-color, #e8ddd6));
+    border: 1px solid var(--amm-viewer-border, var(--border-color, #e5e7eb));
     background: var(--amm-viewer-bg, #1a1614);
-    box-shadow: var(--amm-shadow, 0 12px 36px rgba(43, 33, 28, 0.1));
+    box-shadow: var(--amm-shadow, 0 12px 36px color-mix(in srgb, var(--text-color, #000) 12%, transparent));
     touch-action: pan-y;
     user-select: none;
     -webkit-user-select: none;
@@ -219,9 +219,9 @@ export const componentStyles = css`
     max-width: min(20rem, calc(100% - 1.5rem));
     padding: 0.7rem 0.85rem;
     border-radius: calc(var(--section-radius, 16px) * 0.55);
-    background: var(--amm-info-bg, color-mix(in srgb, var(--card-bg, #fff) 92%, transparent));
-    color: var(--text-color, #2b211c);
-    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.14);
+    background: var(--amm-info-bg, color-mix(in srgb, var(--card-bg, #ffffff) 92%, transparent));
+    color: var(--text-color, #000000);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
     animation: amm-fade 0.28s ease both;
   }
 
@@ -235,7 +235,7 @@ export const componentStyles = css`
     margin: 0;
     font-size: 0.78rem;
     line-height: 1.55;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .amm-caption__link {
@@ -286,7 +286,7 @@ export const componentStyles = css`
     position: relative;
     height: 0.35rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
     overflow: hidden;
   }
 
@@ -304,7 +304,7 @@ export const componentStyles = css`
     gap: 0.5rem;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .amm-toolbar {
@@ -322,10 +322,10 @@ export const componentStyles = css`
     min-width: 44px;
     min-height: 44px;
     padding: 0.45rem 0.75rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.45);
-    background: var(--amm-control-bg, var(--card-bg, #fff));
-    color: var(--text-color, #2b211c);
+    background: var(--amm-control-bg, var(--card-bg, #ffffff));
+    color: var(--text-color, #000000);
     font: inherit;
     font-size: 0.82rem;
     font-weight: 600;
@@ -334,7 +334,7 @@ export const componentStyles = css`
   }
 
   .amm-btn:hover {
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 45%, var(--border-color, #e5e7eb));
   }
 
   .amm-btn--primary {
@@ -353,8 +353,8 @@ export const componentStyles = css`
     gap: 0.85rem;
     padding: 1.15rem 1.1rem 1.25rem;
     border-radius: var(--section-radius, 16px);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
     min-width: 0;
   }
 
@@ -363,14 +363,14 @@ export const componentStyles = css`
     font-size: clamp(1.35rem, 2.5vw, 1.75rem);
     font-weight: 700;
     line-height: 1.3;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .amm-panel__desc {
     margin: 0;
     font-size: 0.92rem;
     line-height: 1.7;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .amm-meta {
@@ -388,13 +388,13 @@ export const componentStyles = css`
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .amm-meta__value {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .amm-meters {
@@ -418,7 +418,7 @@ export const componentStyles = css`
   .amm-meter__bar {
     height: 0.4rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
     overflow: hidden;
   }
 
@@ -471,7 +471,7 @@ export const componentStyles = css`
       max-width: none;
       margin-top: 0.15rem;
       box-shadow: none;
-      border: 1px solid var(--border-color, #e8ddd6);
+      border: 1px solid var(--border-color, #e5e7eb);
     }
 
     .amm-stage-nav {

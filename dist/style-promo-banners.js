@@ -4,8 +4,8 @@ import { css, LitElement, nothing, html } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { t, n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, i as isTruthy, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
-import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper, A as Autoplay } from "./fsSwiper-BQLtGSuN.js";
+import { t, n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, i as isTruthy, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper, A as Autoplay } from "./fsSwiper-CvtD0NsZ.js";
 const componentStyles = css`
   :host {
     direction: inherit;
@@ -38,7 +38,7 @@ const componentStyles = css`
     min-height: min(55vw, 420px);
     overflow: hidden;
     background: #1a1210;
-    box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
   }
 
   .fs-animate .stpb-banner {

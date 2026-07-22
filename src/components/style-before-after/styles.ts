@@ -13,9 +13,9 @@ export const componentStyles = css`
   .stba-compare {
     border-radius: calc(var(--section-radius, 16px) * 0.95);
     overflow: hidden;
-    background: var(--card-bg, #fff);
-    border: 1px solid var(--border-color, #e8ddd6);
-    box-shadow: 0 14px 34px rgba(43, 33, 28, 0.07);
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
   }
 
   .fs-animate .stba-compare {
@@ -92,7 +92,7 @@ export const componentStyles = css`
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -153,9 +153,9 @@ export const componentStyles = css`
     padding: 0.9rem 1.15rem;
     text-align: center;
     font-size: 0.9rem;
-    color: var(--muted-color, #7a6a62);
-    border-top: 1px solid var(--border-color, #e8ddd6);
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 5%, var(--card-bg, #fff));
+    color: var(--muted-color, #666666);
+    border-top: 1px solid var(--border-color, #e5e7eb);
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 5%, var(--card-bg, #ffffff));
   }
 
   @media (max-width: 639px) {

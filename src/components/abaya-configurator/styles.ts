@@ -17,7 +17,7 @@ export const componentStyles = css`
     margin-inline: auto;
     font-size: 0.92rem;
     line-height: 1.75;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-studio {
@@ -133,14 +133,14 @@ export const componentStyles = css`
   .acfg-flash {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-group {
     display: grid;
     gap: 0.7rem;
     padding-bottom: 1.15rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
   }
 
   .acfg-group:last-of-type {
@@ -161,13 +161,13 @@ export const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .acfg-group__pick {
     font-size: 0.78rem;
     font-weight: 500;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-options {
@@ -217,7 +217,7 @@ export const componentStyles = css`
     font-weight: 600;
     line-height: 1.3;
     text-align: center;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     max-width: 100%;
     overflow: hidden;
     display: -webkit-box;
@@ -228,7 +228,7 @@ export const componentStyles = css`
   .acfg-option__delta {
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-summary {
@@ -242,7 +242,7 @@ export const componentStyles = css`
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.75rem, 2.8vw, 2.15rem);
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.15;
   }
 
@@ -254,7 +254,7 @@ export const componentStyles = css`
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .acfg-summary__list {
@@ -274,14 +274,14 @@ export const componentStyles = css`
   }
 
   .acfg-summary__list span {
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     flex: 0 0 auto;
   }
 
   .acfg-summary__list strong {
     font-weight: 600;
     text-align: end;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .acfg-actions {

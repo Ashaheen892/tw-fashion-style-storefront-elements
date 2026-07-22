@@ -4,7 +4,8 @@ import { css, LitElement, html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, u as clamp, f as toNumber, s as sharedSectionCss, i as isTruthy, p as prefersReducedMotion, r as readSectionTheme, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, u as clamp, f as toNumber, s as sharedSectionCss, i as isTruthy, p as prefersReducedMotion, r as readSectionTheme, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper, A as Autoplay } from "./fsSwiper-CvtD0NsZ.js";
 const componentStyles = css`
   .es-shell {
     display: grid;
@@ -15,11 +16,11 @@ const componentStyles = css`
     position: relative;
     padding: clamp(1.6rem, 4vw, 2.65rem);
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
-      linear-gradient(165deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.07);
+      linear-gradient(165deg, color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
     overflow: hidden;
     animation: es-swap 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -53,7 +54,7 @@ const componentStyles = css`
     font-size: clamp(1.2rem, 2.5vw, 1.65rem);
     line-height: 1.75;
     font-weight: 500;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .es-featured__meta {
@@ -69,8 +70,8 @@ const componentStyles = css`
     border-radius: 999px;
     object-fit: cover;
     border: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, #fff);
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
-    box-shadow: 0 8px 18px rgba(43, 33, 28, 0.1);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 70%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
   }
 
   .es-avatar--placeholder {
@@ -78,7 +79,7 @@ const componentStyles = css`
     place-items: center;
     font-weight: 800;
     color: var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
   }
 
   .es-person {
@@ -92,7 +93,7 @@ const componentStyles = css`
 
   .es-person span {
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .es-stars {
@@ -116,7 +117,7 @@ const componentStyles = css`
     border-radius: 999px;
     background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .es-score strong {
@@ -124,35 +125,29 @@ const componentStyles = css`
     color: var(--accent-color, var(--fs-store-primary));
   }
 
-  .es-rail {
-    display: flex;
-    gap: 0.85rem;
-    overflow-x: auto;
-    padding: 0.2rem 0.1rem 0.65rem;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+  .es-swiper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.2rem 0 0.35rem;
   }
 
-  .es-rail::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .es-rail::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, transparent);
-    border-radius: 999px;
+  .es-slide {
+    width: min(78vw, 17.5rem);
+    height: auto;
   }
 
   .es-card {
-    flex: 0 0 min(78vw, 17.5rem);
-    scroll-snap-align: start;
+
+    width: 100%;
     display: grid;
     gap: 0.65rem;
     min-height: 11.5rem;
     padding: 1rem 1.05rem;
     border-radius: calc(var(--section-radius, 16px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
     color: inherit;
     font: inherit;
     text-align: start;
@@ -183,19 +178,19 @@ const componentStyles = css`
 
   .es-card:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e5e7eb));
   }
 
   .es-card--active {
     border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent),
-      0 16px 34px rgba(43, 33, 28, 0.1);
+      0 16px 34px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
     background:
       linear-gradient(
         160deg,
-        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff)),
-        var(--card-bg, #fff)
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #ffffff)),
+        var(--card-bg, #ffffff)
       );
   }
 
@@ -262,16 +257,21 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
 }, "__decorateClass");
 const _EchoSalon = class _EchoSalon extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.activeId = "", this.boundLang = () => this.requestUpdate(), this.autoTimer = null;
+    super(...arguments), this.config = {}, this.activeId = "", this.remountTimer = null, this.boundLang = () => {
+      this.requestUpdate(), this.scheduleRemount();
+    };
   }
   connectedCallback() {
-    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.ensureActive(), this.syncAutoplay();
+    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.ensureActive();
   }
   disconnectedCallback() {
-    window.removeEventListener("language-changed", this.boundLang), this.clearAutoplay(), super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), this.remountTimer && clearTimeout(this.remountTimer), destroyFsSwiper(this.swiper), this.swiper = void 0, super.disconnectedCallback();
+  }
+  firstUpdated() {
+    this.remountSwiper();
   }
   updated(changed) {
-    changed.has("config") && (this.ensureActive(), this.syncAutoplay());
+    changed.has("config") && (this.ensureActive(), this.scheduleRemount());
   }
   get reviews() {
     var _a;
@@ -288,21 +288,40 @@ const _EchoSalon = class _EchoSalon extends LitElement {
     }
     list.some((r) => r.id === this.activeId) || (this.activeId = list[0].id);
   }
-  clearAutoplay() {
-    this.autoTimer && (clearInterval(this.autoTimer), this.autoTimer = null);
+  scheduleRemount() {
+    this.remountTimer && clearTimeout(this.remountTimer), this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
   }
-  syncAutoplay() {
+  remountSwiper() {
     var _a;
-    this.clearAutoplay(), !(!(isTruthy((_a = this.config) == null ? void 0 : _a.es_autoplay, !0) && !prefersReducedMotion()) || this.reviews.length < 2) && (this.autoTimer = setInterval(() => this.next(), 5500));
-  }
-  next() {
-    const list = this.reviews;
-    if (list.length < 2) return;
-    const idx = list.findIndex((r) => r.id === this.activeId), next = list[(idx + 1) % list.length];
-    this.activeId = next.id;
+    destroyFsSwiper(this.swiper), this.swiper = void 0;
+    const root = this.renderRoot.querySelector(".es-swiper"), reviews = this.reviews;
+    if (!root || reviews.length < 1) return;
+    const auto = isTruthy((_a = this.config) == null ? void 0 : _a.es_autoplay, !0) && !prefersReducedMotion() && reviews.length > 1, start = Math.max(0, reviews.findIndex((r) => r.id === this.activeId));
+    this.swiper = mountFsSwiper(root, {
+      modules: auto ? [Autoplay] : [],
+      slidesPerView: "auto",
+      spaceBetween: 14,
+      initialSlide: start,
+      ...auto ? {
+        autoplay: {
+          delay: 5500,
+          disableOnInteraction: !1,
+          pauseOnMouseEnter: !0
+        }
+      } : {},
+      on: {
+        slideChange: /* @__PURE__ */ __name((sw) => {
+          const item = reviews[sw.activeIndex];
+          item && (this.activeId = item.id);
+        }, "slideChange")
+      }
+    });
   }
   select(id) {
-    this.activeId = id, this.syncAutoplay();
+    var _a;
+    this.activeId = id;
+    const idx = this.reviews.findIndex((r) => r.id === id);
+    idx >= 0 && ((_a = this.swiper) == null || _a.slideTo(idx));
   }
   renderStars(rating) {
     return html`
@@ -313,10 +332,9 @@ const _EchoSalon = class _EchoSalon extends LitElement {
       </span>
     `;
   }
-  renderAvatar(review, large = !1) {
-    const cls = "es-avatar";
+  renderAvatar(review) {
     if (review.avatar)
-      return html`<img class=${cls} src=${review.avatar} alt="" loading="lazy" decoding="async" />`;
+      return html`<img class="es-avatar" src=${review.avatar} alt="" loading="lazy" decoding="async" draggable="false" />`;
     const initial = (review.name || "?").trim().charAt(0);
     return html`<span class="es-avatar es-avatar--placeholder" aria-hidden="true">${initial}</span>`;
   }
@@ -344,7 +362,7 @@ const _EchoSalon = class _EchoSalon extends LitElement {
                   <span class="es-featured__mark" aria-hidden="true">”</span>
                   <p class="es-featured__quote">${active.quote}</p>
                   <div class="es-featured__meta">
-                    ${this.renderAvatar(active, !0)}
+                    ${this.renderAvatar(active)}
                     <div class="es-person">
                       <strong>${active.name}</strong>
                       ${active.role ? html`<span>${active.role}</span>` : nothing}
@@ -358,46 +376,36 @@ const _EchoSalon = class _EchoSalon extends LitElement {
                   </div>
                 </article>` : nothing}
 
-            <div class="es-rail" role="list">
-              ${reviews.map(
+            <div class="swiper es-swiper" aria-roledescription="carousel">
+              <div class="swiper-wrapper">
+                ${reviews.map(
       (review) => html`
-                  <button
-                    type="button"
-                    class=${classMap({
+                    <div class="swiper-slide es-slide">
+                      <button
+                        type="button"
+                        class=${classMap({
         "es-card": !0,
         "es-card--active": review.id === this.activeId
       })}
-                    role="listitem"
-                    aria-pressed=${review.id === this.activeId ? "true" : "false"}
-                    @click=${() => this.select(review.id)}
-                  >
-                    ${this.renderStars(review.rating)}
-                    <p class="es-card__quote">${review.quote}</p>
-                    ${review.product_note ? html`<p class="es-card__note">${review.product_note}</p>` : nothing}
-                    <div class="es-card__foot">
-                      ${this.renderAvatar(review)}
-                      <div class="es-person">
-                        <strong>${review.name}</strong>
-                        ${review.role ? html`<span>${review.role}</span>` : nothing}
-                      </div>
-                    </div>
-                  </button>
-                `
-    )}
-            </div>
-
-            ${reviews.length > 1 ? html`<div class="fs-dots" role="tablist" aria-label=${t("التنقل بين الشهادات", "Browse reviews")}>
-                  ${reviews.map(
-      (review) => html`
-                      <button
-                        type="button"
-                        class=${classMap({ "fs-dot": !0, "is-active": review.id === this.activeId })}
-                        aria-label=${review.name || t("شهادة", "Review")}
+                        aria-pressed=${review.id === this.activeId ? "true" : "false"}
                         @click=${() => this.select(review.id)}
-                      ></button>
-                    `
+                      >
+                        ${this.renderStars(review.rating)}
+                        <p class="es-card__quote">${review.quote}</p>
+                        ${review.product_note ? html`<p class="es-card__note">${review.product_note}</p>` : nothing}
+                        <div class="es-card__foot">
+                          ${this.renderAvatar(review)}
+                          <div class="es-person">
+                            <strong>${review.name}</strong>
+                            ${review.role ? html`<span>${review.role}</span>` : nothing}
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  `
     )}
-                </div>` : nothing}
+              </div>
+            </div>
           </div>
         </div>
         ${renderCommerceOutcome(this.config || {}, "es_")}
@@ -409,6 +417,7 @@ const _EchoSalon = class _EchoSalon extends LitElement {
 };
 __name(_EchoSalon, "EchoSalon"), _EchoSalon.styles = [
   sharedSectionCss,
+  fsSwiperCss,
   componentStyles,
   css`
       :host {

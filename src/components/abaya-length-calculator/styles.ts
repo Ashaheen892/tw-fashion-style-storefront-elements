@@ -28,7 +28,7 @@ export const componentStyles = css`
   .alc-field legend {
     font-weight: 600;
     font-size: 0.92rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-field legend {
@@ -52,16 +52,16 @@ export const componentStyles = css`
   .alc-input {
     min-height: 44px;
     padding: 0.65rem 0.85rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
   }
 
   .alc-height-unit {
     min-width: 2.5rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 600;
   }
 
@@ -77,9 +77,9 @@ export const componentStyles = css`
     display: grid;
     gap: 0.65rem;
     padding: 0.9rem;
-    border: 1px dashed var(--border-color, #e8ddd6);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.45);
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 4%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 4%, var(--fs-surface, var(--card-bg, #ffffff)));
   }
 
   .alc-guide__track {
@@ -88,7 +88,7 @@ export const componentStyles = css`
     border-radius: 6px;
     /* Logical positioning so marker moves with size direction in RTL/LTR */
     direction: inherit;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 70%, transparent);
   }
 
   .alc-guide__segment {
@@ -113,12 +113,12 @@ export const componentStyles = css`
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    border: 2px solid #fff;
+    border: 2px solid var(--card-bg, #ffffff);
     background: var(--accent-color, var(--fs-store-primary));
     transform: translateY(-50%);
     /* Negative inline margin centers the dot on the percentage edge in RTL + LTR */
     margin-inline-start: -8px;
-    box-shadow: 0 2px 8px rgba(43, 33, 28, 0.25);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent);
     pointer-events: none;
     z-index: 2;
   }
@@ -127,7 +127,7 @@ export const componentStyles = css`
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.75rem;
   }
 
@@ -145,9 +145,9 @@ export const componentStyles = css`
     min-height: 44px;
     padding: 0.55rem 0.7rem;
     border-radius: 8px;
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    color: var(--muted-color, #7a6a62);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    color: var(--muted-color, #666666);
     font: inherit;
     font-size: 0.74rem;
     cursor: pointer;
@@ -156,13 +156,13 @@ export const componentStyles = css`
   }
 
   .alc-chip:hover {
-    border-color: color-mix(in srgb, currentColor 40%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, currentColor 5%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, currentColor 40%, var(--border-color, #e5e7eb));
+    background: color-mix(in srgb, currentColor 5%, var(--card-bg, #ffffff));
   }
 
   .alc-chip--active {
     border-color: currentColor;
-    background: color-mix(in srgb, currentColor 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, currentColor 12%, var(--card-bg, #ffffff));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 25%, transparent);
     font-weight: 600;
   }
@@ -185,7 +185,7 @@ export const componentStyles = css`
 
   .alc-chip__name {
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-chip--active .alc-chip__name {
@@ -209,10 +209,10 @@ export const componentStyles = css`
     min-width: 5.5rem;
     min-height: 44px;
     padding: 0.55rem 0.75rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s, transform 0.2s;
@@ -223,13 +223,13 @@ export const componentStyles = css`
     display: block;
     margin-top: 0.15rem;
     font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 400;
   }
 
   .alc-option[aria-pressed='true'] {
     border-color: var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
     font-weight: 600;
   }
 
@@ -283,7 +283,7 @@ export const componentStyles = css`
     display: inline;
     margin-inline-start: 0.25rem;
     font-size: 1rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 500;
   }
 
@@ -297,14 +297,14 @@ export const componentStyles = css`
     justify-content: space-between;
     gap: 0.75rem;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .alc-confidence__bar {
     height: 8px;
     border-radius: 999px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
   }
 
   .alc-confidence__bar > span {
@@ -318,7 +318,7 @@ export const componentStyles = css`
   .alc-result__reason,
   .alc-result__note {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.9rem;
     line-height: 1.65;
     text-align: center;
@@ -329,7 +329,7 @@ export const componentStyles = css`
     gap: 0.35rem;
     padding: 0.85rem;
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--fs-surface, #f3f4f6) 85%, var(--card-bg, #ffffff));
     font-size: 0.85rem;
   }
 
@@ -337,7 +337,7 @@ export const componentStyles = css`
     display: flex;
     justify-content: space-between;
     gap: 0.75rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-nearby {
@@ -349,7 +349,7 @@ export const componentStyles = css`
     margin: 0;
     font-size: 0.88rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-nearby__list {
@@ -367,12 +367,12 @@ export const componentStyles = css`
     display: grid;
     gap: 0.25rem;
     padding: 0.75rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
     text-align: start;
     text-decoration: none;
     color: inherit;
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
   }
 
   .alc-nearby__card strong {
@@ -383,8 +383,8 @@ export const componentStyles = css`
     margin: 0;
     padding: 0.75rem 1rem;
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: color-mix(in srgb, #c0392b 10%, var(--card-bg, #fff));
-    color: #8b2e24;
+    background: color-mix(in srgb, var(--fs-danger, #cf4b4b) 12%, var(--fs-surface, var(--card-bg, #ffffff)));
+    color: var(--fs-danger, #cf4b4b);
     font-size: 0.9rem;
     text-align: center;
   }
@@ -393,7 +393,7 @@ export const componentStyles = css`
     margin-top: 0.25rem;
     text-align: center;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.6;
   }
 
@@ -401,7 +401,7 @@ export const componentStyles = css`
     margin: 0;
     text-align: center;
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .fs-animate .alc-result {

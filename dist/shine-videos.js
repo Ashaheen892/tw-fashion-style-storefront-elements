@@ -1,10 +1,11 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
 import { css, LitElement, nothing, html } from "lit";
-import { property, state, query } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, p as prefersReducedMotion, t, r as readSectionTheme, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, t, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper, N as Navigation, P as Pagination } from "./fsSwiper-CvtD0NsZ.js";
 const componentStyles = css`
   .sv-shell {
     position: relative;
@@ -48,7 +49,7 @@ const componentStyles = css`
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .sv-title-line {
@@ -67,13 +68,17 @@ const componentStyles = css`
   .sv-desc {
     margin: 0.9rem auto 0;
     max-width: 34rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.75;
   }
 
   .sv-stage {
     position: relative;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    padding-inline: 2.75rem;
   }
 
   .sv-nav {
@@ -83,13 +88,13 @@ const componentStyles = css`
     transform: translateY(-50%);
     width: 2.6rem;
     height: 2.6rem;
-    border: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: color-mix(in srgb, var(--card-bg, #fff) 92%, transparent);
-    color: var(--text-color, #2b211c);
-    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.1);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, transparent);
+    color: var(--text-color, #000000);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     cursor: pointer;
     backdrop-filter: blur(8px);
     transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
@@ -97,71 +102,92 @@ const componentStyles = css`
 
   .sv-nav:hover {
     transform: translateY(-50%) scale(1.06);
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
   }
 
-  .sv-nav:disabled {
+  .sv-nav:disabled,
+  .sv-nav.swiper-button-disabled {
     opacity: 0.35;
     cursor: default;
     transform: translateY(-50%);
+    pointer-events: none;
   }
 
   .sv-nav--prev {
-    inset-inline-start: -0.35rem;
+    inset-inline-start: 0;
   }
 
   .sv-nav--next {
-    inset-inline-end: -0.35rem;
+    inset-inline-end: 0;
   }
 
-  .sv-track {
-    display: flex;
-    gap: 0.85rem;
-    overflow-x: auto;
-    padding: 1.1rem 0.35rem 1.35rem;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  .sv-swiper {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 1.1rem 0 0.35rem;
   }
 
-  .sv-track::-webkit-scrollbar {
-    display: none;
+  .sv-slide {
+    width: clamp(148px, 30vw, 210px);
+    height: auto;
   }
 
   .sv-card {
     --sv-tilt: 0deg;
-    flex: 0 0 clamp(148px, 30vw, 210px);
-    scroll-snap-align: center;
+    width: 100%;
     transform: perspective(900px) rotateY(var(--sv-tilt));
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
     opacity: 0.72;
   }
 
-  .sv-card.is-focus {
+  .sv-slide.is-focus .sv-card,
+  .sv-slide.swiper-slide-active .sv-card {
     --sv-tilt: 0deg;
     opacity: 1;
     z-index: 1;
   }
 
-  .sv-card:not(.is-focus) {
+  .sv-slide:not(.is-focus):not(.swiper-slide-active) .sv-card {
     --sv-tilt: -4deg;
   }
 
-  .sv-card:nth-child(even):not(.is-focus) {
+  .sv-slide:nth-child(even):not(.is-focus):not(.swiper-slide-active) .sv-card {
     --sv-tilt: 4deg;
+  }
+
+  .sv-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.55rem;
+    min-height: 0.7rem;
+  }
+
+  .sv-pagination .swiper-pagination-bullet {
+    width: 0.45rem;
+    height: 0.45rem;
+    margin: 0 !important;
+    opacity: 1;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, #ddd);
+  }
+
+  .sv-pagination .swiper-pagination-bullet-active {
+    width: 1.35rem;
+    border-radius: 999px;
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .fs-animate .sv-card {
     animation: sv-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .fs-animate .sv-card:nth-child(1) { animation-delay: 0.05s; }
-  .fs-animate .sv-card:nth-child(2) { animation-delay: 0.12s; }
-  .fs-animate .sv-card:nth-child(3) { animation-delay: 0.19s; }
-  .fs-animate .sv-card:nth-child(4) { animation-delay: 0.26s; }
-  .fs-animate .sv-card:nth-child(5) { animation-delay: 0.33s; }
-  .fs-animate .sv-card:nth-child(6) { animation-delay: 0.4s; }
+  .fs-animate .sv-slide:nth-child(1) .sv-card { animation-delay: 0.05s; }
+  .fs-animate .sv-slide:nth-child(2) .sv-card { animation-delay: 0.12s; }
+  .fs-animate .sv-slide:nth-child(3) .sv-card { animation-delay: 0.19s; }
+  .fs-animate .sv-slide:nth-child(4) .sv-card { animation-delay: 0.26s; }
+  .fs-animate .sv-slide:nth-child(5) .sv-card { animation-delay: 0.33s; }
+  .fs-animate .sv-slide:nth-child(6) .sv-card { animation-delay: 0.4s; }
 
   @keyframes sv-rise {
     from {
@@ -185,15 +211,16 @@ const componentStyles = css`
     overflow: hidden;
     cursor: pointer;
     background: #1a1210;
-    box-shadow: 0 16px 34px rgba(43, 33, 28, 0.14);
+    box-shadow: 0 16px 34px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
     transition: box-shadow 0.35s ease, transform 0.35s ease;
   }
 
-  .sv-card.is-focus .sv-thumb {
+  .sv-card.is-focus .sv-thumb,
+  .sv-slide.swiper-slide-active .sv-thumb {
     transform: translateY(-6px) scale(1.03);
     box-shadow:
       0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent),
-      0 22px 44px rgba(43, 33, 28, 0.22);
+      0 22px 44px color-mix(in srgb, var(--text-color, #000) 18%, transparent);
   }
 
   .sv-thumb img {
@@ -206,7 +233,8 @@ const componentStyles = css`
 
   .sv-thumb:hover img,
   .sv-thumb:focus-visible img,
-  .sv-card.is-focus .sv-thumb img {
+  .sv-slide.is-focus .sv-thumb img,
+  .sv-slide.swiper-slide-active .sv-thumb img {
     transform: scale(1.06);
   }
 
@@ -323,45 +351,23 @@ const componentStyles = css`
     font-size: 0.88rem;
     font-weight: 700;
     text-align: center;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.35;
     transition: color 0.25s ease;
   }
 
-  .sv-card.is-focus .sv-caption {
+  .sv-slide.is-focus .sv-caption,
+  .sv-slide.swiper-slide-active .sv-caption {
     color: var(--accent-color, var(--fs-store-primary));
-  }
-
-  .sv-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.4rem;
-    margin-top: 0.15rem;
-  }
-
-  .sv-dot {
-    width: 0.45rem;
-    height: 0.45rem;
-    border: 0;
-    padding: 0;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, #ddd);
-    cursor: pointer;
-    transition: width 0.25s ease, background 0.25s ease;
-  }
-
-  .sv-dot.is-active {
-    width: 1.35rem;
-    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .sv-empty {
     padding: 2.25rem 1rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
-    border: 1px dashed var(--border-color, #e8ddd6);
+    color: var(--muted-color, #666666);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
-    background: color-mix(in srgb, var(--card-bg, #fff) 70%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 70%, transparent);
   }
 
   .sv-modal {
@@ -424,7 +430,7 @@ const componentStyles = css`
     border: 0;
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: #2b211c;
+    color: #000000;
     cursor: pointer;
     font-size: 1.15rem;
     line-height: 1;
@@ -456,7 +462,7 @@ const componentStyles = css`
     display: grid;
     place-items: center;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: #2b211c;
+    color: #000000;
     cursor: pointer;
   }
 
@@ -469,12 +475,16 @@ const componentStyles = css`
   }
 
   @media (max-width: 767px) {
+    .sv-stage {
+      padding-inline: 0;
+    }
+
     .sv-nav {
       display: none;
     }
 
-    .sv-card {
-      flex-basis: clamp(150px, 58vw, 210px);
+    .sv-slide {
+      width: clamp(150px, 58vw, 210px);
     }
   }
 
@@ -537,7 +547,9 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
 }, "__decorateClass");
 const _ShineVideos = class _ShineVideos extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.active = null, this.focusId = "", this.boundLang = () => this.requestUpdate(), this.boundKey = (e) => {
+    super(...arguments), this.config = {}, this.active = null, this.focusId = "", this.remountTimer = null, this.boundLang = () => {
+      this.requestUpdate(), this.scheduleRemount();
+    }, this.boundKey = (e) => {
       this.active && (e.key === "Escape" && this.closeModal(), e.key === "ArrowRight" && this.shiftModal(-1), e.key === "ArrowLeft" && this.shiftModal(1));
     };
   }
@@ -545,14 +557,13 @@ const _ShineVideos = class _ShineVideos extends LitElement {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), window.addEventListener("keydown", this.boundKey);
   }
   disconnectedCallback() {
-    var _a;
-    window.removeEventListener("language-changed", this.boundLang), window.removeEventListener("keydown", this.boundKey), (_a = this.observer) == null || _a.disconnect(), super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), window.removeEventListener("keydown", this.boundKey), this.remountTimer && clearTimeout(this.remountTimer), destroyFsSwiper(this.swiper), this.swiper = void 0, super.disconnectedCallback();
   }
   firstUpdated() {
-    this.setupObserver(), this.ensureFocus();
+    this.ensureFocus(), this.remountSwiper();
   }
   updated(changed) {
-    changed.has("config") && (this.ensureFocus(), this.setupObserver());
+    changed.has("config") && (this.ensureFocus(), this.scheduleRemount());
   }
   get videos() {
     var _a;
@@ -566,46 +577,55 @@ const _ShineVideos = class _ShineVideos extends LitElement {
     }
     list.some((v) => v.id === this.focusId) || (this.focusId = list[0].id);
   }
-  setupObserver() {
-    var _a;
-    (_a = this.observer) == null || _a.disconnect();
-    const track = this.trackEl;
-    track && (this.observer = new IntersectionObserver(
-      (entries) => {
-        var _a2, _b;
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0], id = (_b = (_a2 = visible == null ? void 0 : visible.target) == null ? void 0 : _a2.dataset) == null ? void 0 : _b.id;
-        id && (this.focusId = id);
-      },
-      { root: track, threshold: [0.45, 0.7, 0.9] }
-    ), track.querySelectorAll(".sv-card").forEach((card) => {
-      var _a2;
-      return (_a2 = this.observer) == null ? void 0 : _a2.observe(card);
-    }));
+  scheduleRemount() {
+    this.remountTimer && clearTimeout(this.remountTimer), this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
   }
-  scrollToIndex(index) {
-    const track = this.trackEl, card = track == null ? void 0 : track.querySelectorAll(".sv-card")[index];
-    card == null || card.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", inline: "center", block: "nearest" });
+  remountSwiper() {
+    destroyFsSwiper(this.swiper), this.swiper = void 0;
+    const root = this.renderRoot.querySelector(".sv-swiper"), videos = this.videos;
+    if (!root || !videos.length) return;
+    const start = Math.max(0, videos.findIndex((v) => v.id === this.focusId));
+    this.swiper = mountFsSwiper(root, {
+      modules: [Navigation, Pagination],
+      slidesPerView: "auto",
+      spaceBetween: 14,
+      centeredSlides: !0,
+      initialSlide: start,
+      navigation: {
+        prevEl: this.renderRoot.querySelector(".sv-nav--prev"),
+        nextEl: this.renderRoot.querySelector(".sv-nav--next")
+      },
+      pagination: {
+        el: this.renderRoot.querySelector(".sv-pagination"),
+        clickable: !0
+      },
+      on: {
+        slideChange: /* @__PURE__ */ __name((sw) => {
+          const item = videos[sw.activeIndex];
+          item && (this.focusId = item.id);
+        }, "slideChange")
+      }
+    });
   }
   focusIndex() {
     return Math.max(0, this.videos.findIndex((v) => v.id === this.focusId));
   }
-  shiftFocus(delta) {
-    const list = this.videos;
-    if (!list.length) return;
-    const next = Math.min(list.length - 1, Math.max(0, this.focusIndex() + delta));
-    this.focusId = list[next].id, this.scrollToIndex(next);
-  }
   openModal(item) {
-    !item.videoUrl && !item.poster || (this.active = item, this.focusId = item.id);
+    var _a;
+    if (!item.videoUrl && !item.poster) return;
+    this.active = item, this.focusId = item.id;
+    const idx = this.videos.findIndex((v) => v.id === item.id);
+    idx >= 0 && ((_a = this.swiper) == null || _a.slideTo(idx));
   }
   closeModal() {
     this.active = null;
   }
   shiftModal(dir) {
+    var _a;
     const list = this.videos;
     if (!this.active || list.length < 2) return;
     const next = (list.findIndex((v) => v.id === this.active.id) + dir + list.length) % list.length;
-    this.active = list[next], this.focusId = list[next].id, this.scrollToIndex(next);
+    this.active = list[next], this.focusId = list[next].id, (_a = this.swiper) == null || _a.slideTo(next);
   }
   renderModal() {
     if (!this.active) return nothing;
@@ -659,11 +679,11 @@ const _ShineVideos = class _ShineVideos extends LitElement {
         aria-label=${title}
       >
         <div class="fs-container">
-          ${showTitle ? html`<header class="sv-header">
-                <p class="sv-eyebrow">${t("لحظات الأناقة", "Style moments")}</p>
-                <h2 class="sv-title">${title}</h2>
-                <span class="sv-title-line" aria-hidden="true"></span>
-                ${desc ? html`<p class="sv-desc">${desc}</p>` : nothing}
+          ${showTitle ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("لحظات الأناقة", "Style moments")}</p>
+                <h2 class="fs-title">${title}</h2>
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>` : nothing}
 
           ${videos.length ? html`<div class="sv-stage">
@@ -672,7 +692,6 @@ const _ShineVideos = class _ShineVideos extends LitElement {
                   class="sv-nav sv-nav--prev"
                   aria-label=${t("السابق", "Previous")}
                   ?disabled=${focusIdx <= 0}
-                  @click=${() => this.shiftFocus(-1)}
                 >
                   ‹
                 </button>
@@ -681,56 +700,51 @@ const _ShineVideos = class _ShineVideos extends LitElement {
                   class="sv-nav sv-nav--next"
                   aria-label=${t("التالي", "Next")}
                   ?disabled=${focusIdx >= videos.length - 1}
-                  @click=${() => this.shiftFocus(1)}
                 >
                   ›
                 </button>
 
-                <div class="sv-track" role="list">
-                  ${videos.map(
+                <div class="swiper sv-swiper" aria-roledescription="carousel">
+                  <div class="swiper-wrapper">
+                    ${videos.map(
       (item, i) => html`
-                      <article
-                        class=${classMap({ "sv-card": !0, "is-focus": item.id === this.focusId })}
-                        role="listitem"
-                        data-id=${item.id}
-                      >
-                        <button
-                          type="button"
-                          class="sv-thumb"
-                          aria-label=${item.caption || t("تشغيل الفيديو", "Play video")}
-                          @click=${() => this.openModal(item)}
-                          @focus=${() => {
-        this.focusId = item.id;
-      }}
+                        <div
+                          class=${classMap({
+        "swiper-slide": !0,
+        "sv-slide": !0,
+        "is-focus": item.id === this.focusId
+      })}
+                          data-id=${item.id}
                         >
-                          ${item.poster ? html`<img src=${item.poster} alt=${item.caption || ""} loading="lazy" />` : nothing}
-                          <span class="sv-film" aria-hidden="true"></span>
-                          <span class="sv-index">${String(i + 1).padStart(2, "0")}</span>
-                          <span class="sv-play" aria-hidden="true">
-                            <span class="sv-play__btn"><i class="sicon-play"></i></span>
-                          </span>
-                        </button>
-                        ${item.caption ? html`<p class="sv-caption">${item.caption}</p>` : nothing}
-                      </article>
-                    `
+                          <article class="sv-card" role="group">
+                            <button
+                              type="button"
+                              class="sv-thumb"
+                              aria-label=${item.caption || t("تشغيل الفيديو", "Play video")}
+                              @click=${() => this.openModal(item)}
+                            >
+                              ${item.poster ? html`<img
+                                    src=${item.poster}
+                                    alt=${item.caption || ""}
+                                    loading="lazy"
+                                    draggable="false"
+                                  />` : nothing}
+                              <span class="sv-film" aria-hidden="true"></span>
+                              <span class="sv-index">${String(i + 1).padStart(2, "0")}</span>
+                              <span class="sv-play" aria-hidden="true">
+                                <span class="sv-play__btn"><i class="sicon-play"></i></span>
+                              </span>
+                            </button>
+                            ${item.caption ? html`<p class="sv-caption">${item.caption}</p>` : nothing}
+                          </article>
+                        </div>
+                      `
     )}
+                  </div>
                 </div>
 
-                <div class="sv-dots" role="tablist" aria-label=${t("التنقل بين المقاطع", "Browse clips")}>
-                  ${videos.map(
-      (item, i) => html`
-                      <button
-                        type="button"
-                        class=${classMap({ "sv-dot": !0, "is-active": item.id === this.focusId })}
-                        aria-label=${t(`مقطع ${i + 1}`, `Clip ${i + 1}`)}
-                        @click=${() => {
-        this.focusId = item.id, this.scrollToIndex(i);
-      }}
-                      ></button>
-                    `
-    )}
-                </div>
-              </div>` : html`<div class="sv-empty">${t("أضف مقاطع فيديو من إعدادات العنصر", "Add videos from the element settings")}</div>`}
+                <div class="sv-pagination" aria-hidden=${videos.length < 2 ? "true" : "false"}></div>
+              </div>` : html`<div class="fs-empty">${t("أضف مقاطع فيديو من إعدادات العنصر", "Add videos from the element settings")}</div>`}
         </div>
         ${renderCommerceOutcome(this.config || {}, "sv_")}
         ${this.renderModal()}
@@ -740,6 +754,7 @@ const _ShineVideos = class _ShineVideos extends LitElement {
 };
 __name(_ShineVideos, "ShineVideos"), _ShineVideos.styles = [
   sharedSectionCss,
+  fsSwiperCss,
   componentStyles,
   css`
       :host {
@@ -757,9 +772,6 @@ __decorateClass([
 __decorateClass([
   state()
 ], ShineVideos.prototype, "focusId");
-__decorateClass([
-  query(".sv-track")
-], ShineVideos.prototype, "trackEl");
 typeof ShineVideos < "u" && ShineVideos.registerSallaComponent("salla-shine-videos");
 export {
   ShineVideos as default

@@ -26,7 +26,7 @@ export const componentStyles = css`
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .nal-title-line {
@@ -45,21 +45,34 @@ export const componentStyles = css`
   .nal-desc {
     margin: 0.9rem auto 0;
     max-width: 34rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.75;
   }
 
-  .nal-gallery {
-    display: flex;
-    gap: 0.65rem;
+  .nal-swiper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .nal-slide {
+    width: 18%;
     height: min(68vw, 460px);
     max-height: 560px;
+    transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nal-slide.is-active,
+  .nal-slide.swiper-slide-active {
+    width: 42%;
   }
 
   .nal-item {
     position: relative;
-    flex: 1 1 0;
+    width: 100%;
+    height: 100%;
     min-width: 0;
     border: 0;
     padding: 0;
@@ -71,7 +84,7 @@ export const componentStyles = css`
       flex 0.55s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.4s ease,
       filter 0.4s ease;
-    box-shadow: 0 14px 30px rgba(43, 33, 28, 0.1);
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
     filter: saturate(0.92) brightness(0.94);
     outline: none;
   }
@@ -98,11 +111,10 @@ export const componentStyles = css`
   }
 
   .nal-item.is-active {
-    flex: 3.2 1 0;
     filter: none;
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent),
-      0 22px 48px rgba(43, 33, 28, 0.18);
+      0 22px 48px color-mix(in srgb, var(--text-color, #000) 20%, transparent);
   }
 
   .nal-item:focus-visible {
@@ -272,7 +284,7 @@ export const componentStyles = css`
     padding: 0.35rem 0.65rem;
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font-size: 0.72rem;
     font-weight: 700;
     white-space: nowrap;
@@ -296,14 +308,14 @@ export const componentStyles = css`
     margin-top: 1.15rem;
     padding: 1rem 1.15rem;
     border-radius: calc(var(--section-radius, 16px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       linear-gradient(
         120deg,
-        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff)),
-        var(--card-bg, #fff) 55%
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #ffffff)),
+        var(--card-bg, #ffffff) 55%
       );
-    box-shadow: 0 12px 28px rgba(43, 33, 28, 0.06);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--text-color, #000) 8%, transparent);
     animation: nal-dock-in 0.35s ease;
   }
 
@@ -337,13 +349,13 @@ export const componentStyles = css`
     margin: 0;
     font-size: 1.1rem;
     font-weight: 800;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .nal-dock__hint {
     margin: 0;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .nal-dock__cta {
@@ -399,31 +411,17 @@ export const componentStyles = css`
   .nal-empty {
     padding: 2.25rem 1rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
-    border: 1px dashed var(--border-color, #e8ddd6);
+    color: var(--muted-color, #666666);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
   }
 
   @media (max-width: 767px) {
-    .nal-gallery {
-      height: auto;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      padding: 0.2rem 0.1rem 0.45rem;
-      scrollbar-width: none;
-    }
-
-    .nal-gallery::-webkit-scrollbar {
-      display: none;
-    }
-
-    .nal-item,
-    .nal-item.is-active {
-      flex: 0 0 82%;
+    .nal-slide,
+    .nal-slide.is-active,
+    .nal-slide.swiper-slide-active {
+      width: 82%;
       height: 400px;
-      scroll-snap-align: center;
-      filter: none;
     }
 
     .nal-item:not(.is-active) .nal-item__label {

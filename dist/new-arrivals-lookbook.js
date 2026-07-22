@@ -1,10 +1,11 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
 import { css, LitElement, nothing, html } from "lit";
-import { property, state, query } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, d as extractLink, u as clamp, q as getUnitValue, s as sharedSectionCss, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, t, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, u as clamp, q as getUnitValue, s as sharedSectionCss, v as isValidHref, r as readSectionTheme, p as prefersReducedMotion, t, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper } from "./fsSwiper-CvtD0NsZ.js";
 const componentStyles = css`
   .nal-shell {
     position: relative;
@@ -31,7 +32,7 @@ const componentStyles = css`
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .nal-title-line {
@@ -50,21 +51,34 @@ const componentStyles = css`
   .nal-desc {
     margin: 0.9rem auto 0;
     max-width: 34rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.75;
   }
 
-  .nal-gallery {
-    display: flex;
-    gap: 0.65rem;
+  .nal-swiper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .nal-slide {
+    width: 18%;
     height: min(68vw, 460px);
     max-height: 560px;
+    transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nal-slide.is-active,
+  .nal-slide.swiper-slide-active {
+    width: 42%;
   }
 
   .nal-item {
     position: relative;
-    flex: 1 1 0;
+    width: 100%;
+    height: 100%;
     min-width: 0;
     border: 0;
     padding: 0;
@@ -76,7 +90,7 @@ const componentStyles = css`
       flex 0.55s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.4s ease,
       filter 0.4s ease;
-    box-shadow: 0 14px 30px rgba(43, 33, 28, 0.1);
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
     filter: saturate(0.92) brightness(0.94);
     outline: none;
   }
@@ -103,11 +117,10 @@ const componentStyles = css`
   }
 
   .nal-item.is-active {
-    flex: 3.2 1 0;
     filter: none;
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent),
-      0 22px 48px rgba(43, 33, 28, 0.18);
+      0 22px 48px color-mix(in srgb, var(--text-color, #000) 20%, transparent);
   }
 
   .nal-item:focus-visible {
@@ -277,7 +290,7 @@ const componentStyles = css`
     padding: 0.35rem 0.65rem;
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     font-size: 0.72rem;
     font-weight: 700;
     white-space: nowrap;
@@ -301,14 +314,14 @@ const componentStyles = css`
     margin-top: 1.15rem;
     padding: 1rem 1.15rem;
     border-radius: calc(var(--section-radius, 16px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       linear-gradient(
         120deg,
-        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff)),
-        var(--card-bg, #fff) 55%
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #ffffff)),
+        var(--card-bg, #ffffff) 55%
       );
-    box-shadow: 0 12px 28px rgba(43, 33, 28, 0.06);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--text-color, #000) 8%, transparent);
     animation: nal-dock-in 0.35s ease;
   }
 
@@ -342,13 +355,13 @@ const componentStyles = css`
     margin: 0;
     font-size: 1.1rem;
     font-weight: 800;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .nal-dock__hint {
     margin: 0;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .nal-dock__cta {
@@ -404,31 +417,17 @@ const componentStyles = css`
   .nal-empty {
     padding: 2.25rem 1rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
-    border: 1px dashed var(--border-color, #e8ddd6);
+    color: var(--muted-color, #666666);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
   }
 
   @media (max-width: 767px) {
-    .nal-gallery {
-      height: auto;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      padding: 0.2rem 0.1rem 0.45rem;
-      scrollbar-width: none;
-    }
-
-    .nal-gallery::-webkit-scrollbar {
-      display: none;
-    }
-
-    .nal-item,
-    .nal-item.is-active {
-      flex: 0 0 82%;
+    .nal-slide,
+    .nal-slide.is-active,
+    .nal-slide.swiper-slide-active {
+      width: 82%;
       height: 400px;
-      scroll-snap-align: center;
-      filter: none;
     }
 
     .nal-item:not(.is-active) .nal-item__label {
@@ -502,20 +501,23 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
 }, "__decorateClass");
 const _NewArrivalsLookbook = class _NewArrivalsLookbook extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.activeId = "", this.boundLang = () => this.requestUpdate();
+    super(...arguments), this.config = {}, this.activeId = "", this.remountTimer = null, this.boundLang = () => {
+      this.requestUpdate(), this.scheduleRemount();
+    }, this.boundResize = () => this.scheduleRemount();
   }
   connectedCallback() {
-    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.ensureActive();
+    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), window.addEventListener("resize", this.boundResize), this.ensureActive();
   }
   disconnectedCallback() {
-    var _a;
-    window.removeEventListener("language-changed", this.boundLang), (_a = this.observer) == null || _a.disconnect(), super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), window.removeEventListener("resize", this.boundResize), this.remountTimer && clearTimeout(this.remountTimer), destroyFsSwiper(this.swiper), this.swiper = void 0, super.disconnectedCallback();
   }
   firstUpdated() {
-    this.setupMobileObserver();
+    this.remountSwiper();
   }
   updated(changed) {
-    changed.has("config") && (this.ensureActive(), this.setupMobileObserver());
+    changed.has("config") && (this.ensureActive(), this.scheduleRemount()), changed.has("activeId") && this.updateComplete.then(() => {
+      !this.isConnected || !this.swiper || this.swiper.destroyed || this.swiper.update();
+    });
   }
   get items() {
     var _a;
@@ -532,36 +534,38 @@ const _NewArrivalsLookbook = class _NewArrivalsLookbook extends LitElement {
     }
     list.some((i) => i.id === this.activeId) || (this.activeId = list[0].id);
   }
-  setupMobileObserver() {
-    var _a;
-    (_a = this.observer) == null || _a.disconnect();
-    const gallery = this.galleryEl;
-    !gallery || window.matchMedia("(min-width: 768px)").matches || (this.observer = new IntersectionObserver(
-      (entries) => {
-        var _a2, _b;
-        const best = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0], id = (_b = (_a2 = best == null ? void 0 : best.target) == null ? void 0 : _a2.dataset) == null ? void 0 : _b.id;
-        id && (this.activeId = id);
-      },
-      { root: gallery, threshold: [0.55, 0.75] }
-    ), gallery.querySelectorAll(".nal-item").forEach((el) => {
-      var _a2;
-      return (_a2 = this.observer) == null ? void 0 : _a2.observe(el);
-    }));
+  scheduleRemount() {
+    this.remountTimer && clearTimeout(this.remountTimer), this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
   }
-  selectItem(item, scroll = !1) {
-    if (this.activeId = item.id, !scroll || !this.galleryEl) return;
-    const el = this.galleryEl.querySelector(`[data-id="${item.id}"]`);
-    el == null || el.scrollIntoView({
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-      inline: "center",
-      block: "nearest"
+  remountSwiper() {
+    destroyFsSwiper(this.swiper), this.swiper = void 0;
+    const root = this.renderRoot.querySelector(".nal-swiper"), items = this.items;
+    if (!root || !items.length) return;
+    const start = Math.max(0, items.findIndex((i) => i.id === this.activeId));
+    this.swiper = mountFsSwiper(root, {
+      slidesPerView: "auto",
+      spaceBetween: 10,
+      centeredSlides: window.matchMedia("(max-width: 767px)").matches,
+      initialSlide: start,
+      on: {
+        slideChange: /* @__PURE__ */ __name((sw) => {
+          const item = items[sw.activeIndex];
+          item && (this.activeId = item.id);
+        }, "slideChange")
+      }
     });
+  }
+  selectItem(item) {
+    var _a;
+    this.activeId = item.id;
+    const idx = this.items.findIndex((i) => i.id === item.id);
+    idx >= 0 && ((_a = this.swiper) == null || _a.slideTo(idx));
   }
   shift(delta) {
     const list = this.items;
     if (!list.length) return;
     const idx = Math.max(0, list.findIndex((i) => i.id === this.activeId)), next = Math.min(list.length - 1, Math.max(0, idx + delta));
-    this.selectItem(list[next], !0);
+    this.selectItem(list[next]);
   }
   openLink(item, e) {
     e == null || e.stopPropagation(), isValidHref(item.url) && window.open(item.url, "_blank", "noopener,noreferrer");
@@ -578,62 +582,77 @@ const _NewArrivalsLookbook = class _NewArrivalsLookbook extends LitElement {
         aria-label=${title}
       >
         <div class="fs-container">
-          ${showTitle ? html`<header class="nal-header">
-                <p class="nal-eyebrow">${t("تشكيلة الموسم", "Season edit")}</p>
-                <h2 class="nal-title">${title}</h2>
-                <span class="nal-title-line" aria-hidden="true"></span>
-                ${desc ? html`<p class="nal-desc">${desc}</p>` : nothing}
+          ${showTitle ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("تشكيلة الموسم", "Season edit")}</p>
+                <h2 class="fs-title">${title}</h2>
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>` : nothing}
 
           ${items.length ? html`
                 <div
-                  class="nal-gallery"
-                  role="list"
+                  class="swiper nal-swiper"
+                  aria-roledescription="carousel"
                   tabindex="0"
                   aria-label=${t("معرض الوصل حديثاً — استخدم الأسهم للتنقل", "New arrivals gallery — use arrow keys")}
                   @keydown=${(e) => this.onGalleryKey(e)}
                 >
-                  ${items.map((item) => {
+                  <div class="swiper-wrapper">
+                    ${items.map((item) => {
       const isActive = item.id === this.activeId;
       return html`
-                      <article
-                        class=${classMap({ "nal-item": !0, "is-active": isActive })}
-                        role="listitem"
-                        tabindex="0"
-                        data-id=${item.id}
-                        aria-current=${isActive ? "true" : "false"}
-                        aria-label=${item.label || t("قطعة جديدة", "New piece")}
-                        @click=${() => this.selectItem(item)}
-                        @mouseenter=${() => this.selectItem(item)}
-                        @focus=${() => this.selectItem(item)}
-                        @keydown=${(e) => {
+                        <div
+                          class=${classMap({
+        "swiper-slide": !0,
+        "nal-slide": !0,
+        "is-active": isActive
+      })}
+                        >
+                          <article
+                            class=${classMap({ "nal-item": !0, "is-active": isActive })}
+                            data-id=${item.id}
+                            tabindex="0"
+                            aria-current=${isActive ? "true" : "false"}
+                            aria-label=${item.label || t("قطعة جديدة", "New piece")}
+                            @click=${() => this.selectItem(item)}
+                            @mouseenter=${() => this.selectItem(item)}
+                            @focus=${() => this.selectItem(item)}
+                            @keydown=${(e) => {
         (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.selectItem(item), isValidHref(item.url) && this.openLink(item));
       }}
-                      >
-                        <img class="nal-item__img" src=${item.image} alt=${item.label || ""} loading="lazy" />
-                        <div class="nal-item__shade" aria-hidden="true"></div>
-                        <span class="nal-badge">${t("جديد", "New")}</span>
-                        ${item.label ? html`<h3 class="nal-item__label">${item.label}</h3>` : nothing}
-                        ${isValidHref(item.url) ? html`
-                              <span
-                                class="nal-tip"
-                                style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
-                              >
-                                ${t("اكتشف التفاصيل", "Discover details")}
-                              </span>
-                              <button
-                                type="button"
-                                class="nal-spot"
-                                style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
-                                aria-label=${t("عرض المنتج", "View product")}
-                                @click=${(e) => this.openLink(item, e)}
-                              >
-                                <i class="sicon-add" aria-hidden="true"></i>
-                              </button>
-                            ` : nothing}
-                      </article>
-                    `;
+                          >
+                            <img
+                              class="nal-item__img"
+                              src=${item.image}
+                              alt=${item.label || ""}
+                              loading="lazy"
+                              draggable="false"
+                            />
+                            <div class="nal-item__shade" aria-hidden="true"></div>
+                            <span class="nal-badge">${t("جديد", "New")}</span>
+                            ${item.label ? html`<h3 class="nal-item__label">${item.label}</h3>` : nothing}
+                            ${isValidHref(item.url) ? html`
+                                  <span
+                                    class="nal-tip"
+                                    style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
+                                  >
+                                    ${t("اكتشف التفاصيل", "Discover details")}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    class="nal-spot"
+                                    style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
+                                    aria-label=${t("عرض المنتج", "View product")}
+                                    @click=${(e) => this.openLink(item, e)}
+                                  >
+                                    <i class="sicon-add" aria-hidden="true"></i>
+                                  </button>
+                                ` : nothing}
+                          </article>
+                        </div>
+                      `;
     })}
+                  </div>
                 </div>
 
                 ${active ? html`<div class="nal-dock">
@@ -662,12 +681,12 @@ const _NewArrivalsLookbook = class _NewArrivalsLookbook extends LitElement {
                         type="button"
                         class=${classMap({ "nal-step": !0, "is-active": item.id === this.activeId })}
                         aria-label=${item.label || t(`قطعة ${i + 1}`, `Look ${i + 1}`)}
-                        @click=${() => this.selectItem(item, !0)}
+                        @click=${() => this.selectItem(item)}
                       ></button>
                     `
     )}
                 </div>
-              ` : html`<div class="nal-empty">${t("أضف قطع «وصل حديثا» من إعدادات العنصر", "Add new-arrival looks from the element settings")}</div>`}
+              ` : html`<div class="fs-empty">${t("أضف قطع «وصل حديثا» من إعدادات العنصر", "Add new-arrival looks from the element settings")}</div>`}
           ${renderCommerceOutcome(this.config || {}, "nal_")}
         </div>
       </section>
@@ -676,6 +695,7 @@ const _NewArrivalsLookbook = class _NewArrivalsLookbook extends LitElement {
 };
 __name(_NewArrivalsLookbook, "NewArrivalsLookbook"), _NewArrivalsLookbook.styles = [
   sharedSectionCss,
+  fsSwiperCss,
   componentStyles,
   css`
       :host {
@@ -690,9 +710,6 @@ __decorateClass([
 __decorateClass([
   state()
 ], NewArrivalsLookbook.prototype, "activeId");
-__decorateClass([
-  query(".nal-gallery")
-], NewArrivalsLookbook.prototype, "galleryEl");
 typeof NewArrivalsLookbook < "u" && NewArrivalsLookbook.registerSallaComponent("salla-new-arrivals-lookbook");
 export {
   NewArrivalsLookbook as default

@@ -32,7 +32,7 @@ export const componentStyles = css`
     min-height: min(55vw, 420px);
     overflow: hidden;
     background: #1a1210;
-    box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
   }
 
   .fs-animate .stpb-banner {

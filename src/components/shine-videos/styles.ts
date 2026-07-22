@@ -43,7 +43,7 @@ export const componentStyles = css`
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .sv-title-line {
@@ -62,13 +62,17 @@ export const componentStyles = css`
   .sv-desc {
     margin: 0.9rem auto 0;
     max-width: 34rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.75;
   }
 
   .sv-stage {
     position: relative;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    padding-inline: 2.75rem;
   }
 
   .sv-nav {
@@ -78,13 +82,13 @@ export const componentStyles = css`
     transform: translateY(-50%);
     width: 2.6rem;
     height: 2.6rem;
-    border: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: color-mix(in srgb, var(--card-bg, #fff) 92%, transparent);
-    color: var(--text-color, #2b211c);
-    box-shadow: 0 10px 24px rgba(43, 33, 28, 0.1);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, transparent);
+    color: var(--text-color, #000000);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     cursor: pointer;
     backdrop-filter: blur(8px);
     transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
@@ -92,71 +96,92 @@ export const componentStyles = css`
 
   .sv-nav:hover {
     transform: translateY(-50%) scale(1.06);
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
   }
 
-  .sv-nav:disabled {
+  .sv-nav:disabled,
+  .sv-nav.swiper-button-disabled {
     opacity: 0.35;
     cursor: default;
     transform: translateY(-50%);
+    pointer-events: none;
   }
 
   .sv-nav--prev {
-    inset-inline-start: -0.35rem;
+    inset-inline-start: 0;
   }
 
   .sv-nav--next {
-    inset-inline-end: -0.35rem;
+    inset-inline-end: 0;
   }
 
-  .sv-track {
-    display: flex;
-    gap: 0.85rem;
-    overflow-x: auto;
-    padding: 1.1rem 0.35rem 1.35rem;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  .sv-swiper {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 1.1rem 0 0.35rem;
   }
 
-  .sv-track::-webkit-scrollbar {
-    display: none;
+  .sv-slide {
+    width: clamp(148px, 30vw, 210px);
+    height: auto;
   }
 
   .sv-card {
     --sv-tilt: 0deg;
-    flex: 0 0 clamp(148px, 30vw, 210px);
-    scroll-snap-align: center;
+    width: 100%;
     transform: perspective(900px) rotateY(var(--sv-tilt));
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
     opacity: 0.72;
   }
 
-  .sv-card.is-focus {
+  .sv-slide.is-focus .sv-card,
+  .sv-slide.swiper-slide-active .sv-card {
     --sv-tilt: 0deg;
     opacity: 1;
     z-index: 1;
   }
 
-  .sv-card:not(.is-focus) {
+  .sv-slide:not(.is-focus):not(.swiper-slide-active) .sv-card {
     --sv-tilt: -4deg;
   }
 
-  .sv-card:nth-child(even):not(.is-focus) {
+  .sv-slide:nth-child(even):not(.is-focus):not(.swiper-slide-active) .sv-card {
     --sv-tilt: 4deg;
+  }
+
+  .sv-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.55rem;
+    min-height: 0.7rem;
+  }
+
+  .sv-pagination .swiper-pagination-bullet {
+    width: 0.45rem;
+    height: 0.45rem;
+    margin: 0 !important;
+    opacity: 1;
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, #ddd);
+  }
+
+  .sv-pagination .swiper-pagination-bullet-active {
+    width: 1.35rem;
+    border-radius: 999px;
+    background: var(--accent-color, var(--fs-store-primary));
   }
 
   .fs-animate .sv-card {
     animation: sv-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .fs-animate .sv-card:nth-child(1) { animation-delay: 0.05s; }
-  .fs-animate .sv-card:nth-child(2) { animation-delay: 0.12s; }
-  .fs-animate .sv-card:nth-child(3) { animation-delay: 0.19s; }
-  .fs-animate .sv-card:nth-child(4) { animation-delay: 0.26s; }
-  .fs-animate .sv-card:nth-child(5) { animation-delay: 0.33s; }
-  .fs-animate .sv-card:nth-child(6) { animation-delay: 0.4s; }
+  .fs-animate .sv-slide:nth-child(1) .sv-card { animation-delay: 0.05s; }
+  .fs-animate .sv-slide:nth-child(2) .sv-card { animation-delay: 0.12s; }
+  .fs-animate .sv-slide:nth-child(3) .sv-card { animation-delay: 0.19s; }
+  .fs-animate .sv-slide:nth-child(4) .sv-card { animation-delay: 0.26s; }
+  .fs-animate .sv-slide:nth-child(5) .sv-card { animation-delay: 0.33s; }
+  .fs-animate .sv-slide:nth-child(6) .sv-card { animation-delay: 0.4s; }
 
   @keyframes sv-rise {
     from {
@@ -180,15 +205,16 @@ export const componentStyles = css`
     overflow: hidden;
     cursor: pointer;
     background: #1a1210;
-    box-shadow: 0 16px 34px rgba(43, 33, 28, 0.14);
+    box-shadow: 0 16px 34px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
     transition: box-shadow 0.35s ease, transform 0.35s ease;
   }
 
-  .sv-card.is-focus .sv-thumb {
+  .sv-card.is-focus .sv-thumb,
+  .sv-slide.swiper-slide-active .sv-thumb {
     transform: translateY(-6px) scale(1.03);
     box-shadow:
       0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 55%, transparent),
-      0 22px 44px rgba(43, 33, 28, 0.22);
+      0 22px 44px color-mix(in srgb, var(--text-color, #000) 18%, transparent);
   }
 
   .sv-thumb img {
@@ -201,7 +227,8 @@ export const componentStyles = css`
 
   .sv-thumb:hover img,
   .sv-thumb:focus-visible img,
-  .sv-card.is-focus .sv-thumb img {
+  .sv-slide.is-focus .sv-thumb img,
+  .sv-slide.swiper-slide-active .sv-thumb img {
     transform: scale(1.06);
   }
 
@@ -318,45 +345,23 @@ export const componentStyles = css`
     font-size: 0.88rem;
     font-weight: 700;
     text-align: center;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     line-height: 1.35;
     transition: color 0.25s ease;
   }
 
-  .sv-card.is-focus .sv-caption {
+  .sv-slide.is-focus .sv-caption,
+  .sv-slide.swiper-slide-active .sv-caption {
     color: var(--accent-color, var(--fs-store-primary));
-  }
-
-  .sv-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.4rem;
-    margin-top: 0.15rem;
-  }
-
-  .sv-dot {
-    width: 0.45rem;
-    height: 0.45rem;
-    border: 0;
-    padding: 0;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, #ddd);
-    cursor: pointer;
-    transition: width 0.25s ease, background 0.25s ease;
-  }
-
-  .sv-dot.is-active {
-    width: 1.35rem;
-    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .sv-empty {
     padding: 2.25rem 1rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
-    border: 1px dashed var(--border-color, #e8ddd6);
+    color: var(--muted-color, #666666);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
-    background: color-mix(in srgb, var(--card-bg, #fff) 70%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 70%, transparent);
   }
 
   .sv-modal {
@@ -419,7 +424,7 @@ export const componentStyles = css`
     border: 0;
     border-radius: 999px;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: #2b211c;
+    color: #000000;
     cursor: pointer;
     font-size: 1.15rem;
     line-height: 1;
@@ -451,7 +456,7 @@ export const componentStyles = css`
     display: grid;
     place-items: center;
     background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
-    color: #2b211c;
+    color: #000000;
     cursor: pointer;
   }
 
@@ -464,12 +469,16 @@ export const componentStyles = css`
   }
 
   @media (max-width: 767px) {
+    .sv-stage {
+      padding-inline: 0;
+    }
+
     .sv-nav {
       display: none;
     }
 
-    .sv-card {
-      flex-basis: clamp(150px, 58vw, 210px);
+    .sv-slide {
+      width: clamp(150px, 58vw, 210px);
     }
   }
 

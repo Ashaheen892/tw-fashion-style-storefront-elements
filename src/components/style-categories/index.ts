@@ -21,9 +21,11 @@ export default class StyleCategories extends LitElement {
   @property({ type: Object })
   config: Record<string, unknown> = {};
 
+  private remountTimer: ReturnType<typeof setTimeout> | null = null;
+
   private boundLang = () => {
     this.requestUpdate();
-    queueMicrotask(() => this.remountSwiper());
+    this.scheduleRemount();
   };
   private swiper?: Swiper;
 
@@ -45,13 +47,26 @@ export default class StyleCategories extends LitElement {
 
   disconnectedCallback(): void {
     window.removeEventListener('language-changed', this.boundLang);
+    if (this.remountTimer) clearTimeout(this.remountTimer);
     destroyFsSwiper(this.swiper);
     this.swiper = undefined;
     super.disconnectedCallback();
   }
 
-  updated(): void {
-    this.updateComplete.then(() => this.remountSwiper());
+  firstUpdated(): void {
+    this.scheduleRemount();
+  }
+
+  updated(changed: Map<string, unknown>): void {
+    if (changed.has('config')) this.scheduleRemount();
+  }
+
+  private scheduleRemount(): void {
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    this.remountTimer = setTimeout(() => {
+      if (!this.isConnected) return;
+      this.remountSwiper();
+    }, 0);
   }
 
   private remountSwiper(): void {

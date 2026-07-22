@@ -1,5 +1,5 @@
 import { css, html, LitElement, nothing } from 'lit';
-import { property, state, query } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import {
@@ -12,6 +12,12 @@ import {
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
 import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
+import {
+  destroyFsSwiper,
+  fsSwiperCss,
+  mountFsSwiper,
+  type Swiper,
+} from '../../utils/fsSwiper.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import { parseLookbookItems } from './utils.js';
@@ -23,13 +29,17 @@ export default class NewArrivalsLookbook extends LitElement {
 
   @state() private activeId = '';
 
-  @query('.nal-gallery') private galleryEl?: HTMLElement;
-
-  private boundLang = () => this.requestUpdate();
-  private observer?: IntersectionObserver;
+  private swiper?: Swiper;
+  private remountTimer: ReturnType<typeof setTimeout> | null = null;
+  private boundLang = () => {
+    this.requestUpdate();
+    this.scheduleRemount();
+  };
+  private boundResize = () => this.scheduleRemount();
 
   static styles = [
     sharedSectionCss,
+    fsSwiperCss,
     componentStyles,
     css`
       :host {
@@ -41,23 +51,33 @@ export default class NewArrivalsLookbook extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     window.addEventListener('language-changed', this.boundLang);
+    window.addEventListener('resize', this.boundResize);
     this.ensureActive();
   }
 
   disconnectedCallback(): void {
     window.removeEventListener('language-changed', this.boundLang);
-    this.observer?.disconnect();
+    window.removeEventListener('resize', this.boundResize);
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
     super.disconnectedCallback();
   }
 
   firstUpdated(): void {
-    this.setupMobileObserver();
+    this.remountSwiper();
   }
 
   updated(changed: Map<string, unknown>): void {
     if (changed.has('config')) {
       this.ensureActive();
-      this.setupMobileObserver();
+      this.scheduleRemount();
+    }
+    if (changed.has('activeId')) {
+      this.updateComplete.then(() => {
+        if (!this.isConnected || !this.swiper || this.swiper.destroyed) return;
+        this.swiper.update();
+      });
     }
   }
 
@@ -80,34 +100,39 @@ export default class NewArrivalsLookbook extends LitElement {
     }
   }
 
-  private setupMobileObserver(): void {
-    this.observer?.disconnect();
-    const gallery = this.galleryEl;
-    if (!gallery || window.matchMedia('(min-width: 768px)').matches) return;
-
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        const best = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        const id = (best?.target as HTMLElement | undefined)?.dataset?.id;
-        if (id) this.activeId = id;
-      },
-      { root: gallery, threshold: [0.55, 0.75] }
-    );
-
-    gallery.querySelectorAll<HTMLElement>('.nal-item').forEach((el) => this.observer?.observe(el));
+  private scheduleRemount(): void {
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
   }
 
-  private selectItem(item: LookbookItem, scroll = false): void {
-    this.activeId = item.id;
-    if (!scroll || !this.galleryEl) return;
-    const el = this.galleryEl.querySelector<HTMLElement>(`[data-id="${item.id}"]`);
-    el?.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      inline: 'center',
-      block: 'nearest',
+  private remountSwiper(): void {
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
+
+    const root = this.renderRoot.querySelector('.nal-swiper') as HTMLElement | null;
+    const items = this.items;
+    if (!root || !items.length) return;
+
+    const start = Math.max(0, items.findIndex((i) => i.id === this.activeId));
+
+    this.swiper = mountFsSwiper(root, {
+      slidesPerView: 'auto',
+      spaceBetween: 10,
+      centeredSlides: window.matchMedia('(max-width: 767px)').matches,
+      initialSlide: start,
+      on: {
+        slideChange: (sw) => {
+          const item = items[sw.activeIndex];
+          if (item) this.activeId = item.id;
+        },
+      },
     });
+  }
+
+  private selectItem(item: LookbookItem): void {
+    this.activeId = item.id;
+    const idx = this.items.findIndex((i) => i.id === item.id);
+    if (idx >= 0) this.swiper?.slideTo(idx);
   }
 
   private shift(delta: number): void {
@@ -115,7 +140,7 @@ export default class NewArrivalsLookbook extends LitElement {
     if (!list.length) return;
     const idx = Math.max(0, list.findIndex((i) => i.id === this.activeId));
     const next = Math.min(list.length - 1, Math.max(0, idx + delta));
-    this.selectItem(list[next], true);
+    this.selectItem(list[next]);
   }
 
   private openLink(item: LookbookItem, e?: Event): void {
@@ -152,70 +177,85 @@ export default class NewArrivalsLookbook extends LitElement {
       >
         <div class="fs-container">
           ${showTitle
-            ? html`<header class="nal-header">
-                <p class="nal-eyebrow">${t('تشكيلة الموسم', 'Season edit')}</p>
-                <h2 class="nal-title">${title}</h2>
-                <span class="nal-title-line" aria-hidden="true"></span>
-                ${desc ? html`<p class="nal-desc">${desc}</p>` : nothing}
+            ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t('تشكيلة الموسم', 'Season edit')}</p>
+                <h2 class="fs-title">${title}</h2>
+                <span class="fs-title-line" aria-hidden="true"></span>
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>`
             : nothing}
 
           ${items.length
             ? html`
                 <div
-                  class="nal-gallery"
-                  role="list"
+                  class="swiper nal-swiper"
+                  aria-roledescription="carousel"
                   tabindex="0"
                   aria-label=${t('معرض الوصل حديثاً — استخدم الأسهم للتنقل', 'New arrivals gallery — use arrow keys')}
                   @keydown=${(e: KeyboardEvent) => this.onGalleryKey(e)}
                 >
-                  ${items.map((item) => {
-                    const isActive = item.id === this.activeId;
-                    return html`
-                      <article
-                        class=${classMap({ 'nal-item': true, 'is-active': isActive })}
-                        role="listitem"
-                        tabindex="0"
-                        data-id=${item.id}
-                        aria-current=${isActive ? 'true' : 'false'}
-                        aria-label=${item.label || t('قطعة جديدة', 'New piece')}
-                        @click=${() => this.selectItem(item)}
-                        @mouseenter=${() => this.selectItem(item)}
-                        @focus=${() => this.selectItem(item)}
-                        @keydown=${(e: KeyboardEvent) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            this.selectItem(item);
-                            if (isValidHref(item.url)) this.openLink(item);
-                          }
-                        }}
-                      >
-                        <img class="nal-item__img" src=${item.image} alt=${item.label || ''} loading="lazy" />
-                        <div class="nal-item__shade" aria-hidden="true"></div>
-                        <span class="nal-badge">${t('جديد', 'New')}</span>
-                        ${item.label ? html`<h3 class="nal-item__label">${item.label}</h3>` : nothing}
-                        ${isValidHref(item.url)
-                          ? html`
-                              <span
-                                class="nal-tip"
-                                style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
-                              >
-                                ${t('اكتشف التفاصيل', 'Discover details')}
-                              </span>
-                              <button
-                                type="button"
-                                class="nal-spot"
-                                style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
-                                aria-label=${t('عرض المنتج', 'View product')}
-                                @click=${(e: Event) => this.openLink(item, e)}
-                              >
-                                <i class="sicon-add" aria-hidden="true"></i>
-                              </button>
-                            `
-                          : nothing}
-                      </article>
-                    `;
-                  })}
+                  <div class="swiper-wrapper">
+                    ${items.map((item) => {
+                      const isActive = item.id === this.activeId;
+                      return html`
+                        <div
+                          class=${classMap({
+                            'swiper-slide': true,
+                            'nal-slide': true,
+                            'is-active': isActive,
+                          })}
+                        >
+                          <article
+                            class=${classMap({ 'nal-item': true, 'is-active': isActive })}
+                            data-id=${item.id}
+                            tabindex="0"
+                            aria-current=${isActive ? 'true' : 'false'}
+                            aria-label=${item.label || t('قطعة جديدة', 'New piece')}
+                            @click=${() => this.selectItem(item)}
+                            @mouseenter=${() => this.selectItem(item)}
+                            @focus=${() => this.selectItem(item)}
+                            @keydown=${(e: KeyboardEvent) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                this.selectItem(item);
+                                if (isValidHref(item.url)) this.openLink(item);
+                              }
+                            }}
+                          >
+                            <img
+                              class="nal-item__img"
+                              src=${item.image}
+                              alt=${item.label || ''}
+                              loading="lazy"
+                              draggable="false"
+                            />
+                            <div class="nal-item__shade" aria-hidden="true"></div>
+                            <span class="nal-badge">${t('جديد', 'New')}</span>
+                            ${item.label ? html`<h3 class="nal-item__label">${item.label}</h3>` : nothing}
+                            ${isValidHref(item.url)
+                              ? html`
+                                  <span
+                                    class="nal-tip"
+                                    style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
+                                  >
+                                    ${t('اكتشف التفاصيل', 'Discover details')}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    class="nal-spot"
+                                    style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
+                                    aria-label=${t('عرض المنتج', 'View product')}
+                                    @click=${(e: Event) => this.openLink(item, e)}
+                                  >
+                                    <i class="sicon-add" aria-hidden="true"></i>
+                                  </button>
+                                `
+                              : nothing}
+                          </article>
+                        </div>
+                      `;
+                    })}
+                  </div>
                 </div>
 
                 ${active
@@ -246,13 +286,13 @@ export default class NewArrivalsLookbook extends LitElement {
                         type="button"
                         class=${classMap({ 'nal-step': true, 'is-active': item.id === this.activeId })}
                         aria-label=${item.label || t(`قطعة ${i + 1}`, `Look ${i + 1}`)}
-                        @click=${() => this.selectItem(item, true)}
+                        @click=${() => this.selectItem(item)}
                       ></button>
                     `
                   )}
                 </div>
               `
-            : html`<div class="nal-empty">${t('أضف قطع «وصل حديثا» من إعدادات العنصر', 'Add new-arrival looks from the element settings')}</div>`}
+            : html`<div class="fs-empty">${t('أضف قطع «وصل حديثا» من إعدادات العنصر', 'Add new-arrival looks from the element settings')}</div>`}
           ${renderCommerceOutcome(this.config || {}, 'nal_')}
         </div>
       </section>

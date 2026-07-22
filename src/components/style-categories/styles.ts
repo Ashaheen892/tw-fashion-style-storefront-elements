@@ -26,7 +26,7 @@ export const componentStyles = css`
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .stc-title-line {
@@ -45,7 +45,7 @@ export const componentStyles = css`
   .stc-desc {
     margin: 0.9rem auto 0;
     max-width: 34rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.75;
   }
@@ -84,7 +84,7 @@ export const componentStyles = css`
     text-decoration: none;
     cursor: pointer;
     background: #1a1210;
-    box-shadow: 0 12px 28px rgba(43, 33, 28, 0.08);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     transition:
       transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.35s ease;
@@ -118,7 +118,7 @@ export const componentStyles = css`
     transform: translateY(-4px);
     box-shadow:
       0 0 0 2px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 30%, transparent),
-      0 20px 44px rgba(43, 33, 28, 0.14);
+      0 20px 44px color-mix(in srgb, var(--text-color, #000) 16%, transparent);
   }
 
   .stc-tile:focus-visible {
@@ -171,8 +171,8 @@ export const componentStyles = css`
   .stc-empty {
     padding: 2.25rem 1rem;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
-    border: 1px dashed var(--border-color, #e8ddd6);
+    color: var(--muted-color, #666666);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: var(--section-radius, 16px);
   }
 

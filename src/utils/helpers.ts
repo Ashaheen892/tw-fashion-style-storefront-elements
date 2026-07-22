@@ -1,5 +1,5 @@
 import { localizedString, type LocaleValue } from './localizedString.js';
-import { ensureFsThemeWatch, fsThemeVars } from './fsTheme.js';
+import { detectFsTheme, ensureFsThemeWatch, fsThemeVars } from './fsTheme.js';
 
 export type ConfigValue = Record<string, unknown> | null | undefined;
 
@@ -388,8 +388,14 @@ export function readSectionTheme(
 export function themeStyleMap(theme: SectionTheme): Record<string, string> {
   const useContainer = theme.hasContainer !== false;
   ensureFsThemeWatch();
+  const mode = detectFsTheme();
+  const vars = fsThemeVars(mode);
+  const { colorScheme, ...cssVars } = vars as Record<string, string> & {
+    colorScheme?: string;
+  };
   return {
-    ...fsThemeVars(),
+    ...cssVars,
+    ...(colorScheme ? { 'color-scheme': colorScheme } : {}),
     '--section-radius': theme.radius,
     '--space-desktop': `${theme.spaceDesktop}px`,
     '--space-mobile': `${theme.spaceMobile}px`,

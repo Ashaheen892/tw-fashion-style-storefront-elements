@@ -27,8 +27,7 @@ import type {
   Preference,
   ShoeType,
 } from './types.js';
-
-const SEGMENT_COLORS = ['#8b5e4b', '#a6775f', '#6b4a3d', '#c4a18a', '#5a3d32'];
+import { fsAccentTone } from '../../utils/fsTheme.js';
 
 export default class AbayaLengthCalculator extends LitElement {
   @property({ type: Object })
@@ -431,7 +430,7 @@ export default class AbayaLengthCalculator extends LitElement {
                           style=${styleMap({
                             insetInlineStart: `${seg.start}%`,
                             width: `${seg.width}%`,
-                            background: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
+                            background: fsAccentTone(index),
                           })}
                           title=${`${range.alt_size || range.range_label || ''} (${range.min_height}–${range.max_height} ${t('سم', 'cm')})`.trim()}
                         ></div>`;
@@ -463,7 +462,7 @@ export default class AbayaLengthCalculator extends LitElement {
                           type="button"
                           class="alc-chip ${active ? 'alc-chip--active' : ''}"
                           style=${styleMap({
-                            color: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
+                            color: fsAccentTone(index),
                           })}
                           aria-pressed=${active ? 'true' : 'false'}
                           title=${`${range.min_height}–${range.max_height} ${t('سم', 'cm')}`}

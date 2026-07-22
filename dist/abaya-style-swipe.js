@@ -3,7 +3,7 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 import { css, LitElement, html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, d as extractLink, z as parseTags, s as sharedSectionCss, r as readSectionTheme, i as isTruthy, x as safeStorageGet, y as safeStorageSet, t, a as themeStyleMap, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, A as parseTags, s as sharedSectionCss, r as readSectionTheme, i as isTruthy, y as safeStorageGet, z as safeStorageSet, t, a as themeStyleMap, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .ass-studio {
     position: relative;
@@ -12,12 +12,12 @@ const componentStyles = css`
     margin: 0 auto;
     padding: 1.15rem 1rem 1.35rem;
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
       radial-gradient(circle at 90% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 38%),
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 90%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
   }
 
   .ass-progress {
@@ -35,7 +35,7 @@ const componentStyles = css`
     gap: 0.4rem;
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.78rem;
     font-weight: 700;
@@ -46,7 +46,7 @@ const componentStyles = css`
     min-width: 7rem;
     height: 0.35rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 75%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 75%, transparent);
     overflow: hidden;
   }
 
@@ -65,7 +65,7 @@ const componentStyles = css`
     margin: 0 0 0.85rem;
     text-align: center;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .ass-deck {
@@ -79,8 +79,8 @@ const componentStyles = css`
     position: absolute;
     inset: 0;
     border-radius: calc(var(--section-radius, 18px) * 0.85);
-    border: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
-    background: color-mix(in srgb, var(--card-bg, #fff) 88%, #eee4dc);
+    border: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 70%, transparent);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 88%, #eee4dc);
     pointer-events: none;
   }
 
@@ -102,9 +102,9 @@ const componentStyles = css`
     border-radius: calc(var(--section-radius, 18px) * 0.85);
     overflow: hidden;
     background: #1c1613;
-    border: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 55%, transparent);
+    border: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 55%, transparent);
     box-shadow:
-      0 22px 48px rgba(43, 33, 28, 0.18),
+      0 22px 48px color-mix(in srgb, var(--text-color, #000) 20%, transparent),
       0 2px 0 color-mix(in srgb, #fff 18%, transparent) inset;
     touch-action: none;
     user-select: none;
@@ -116,7 +116,7 @@ const componentStyles = css`
   .ass-card--dragging {
     transition: none;
     cursor: grabbing;
-    box-shadow: 0 28px 56px rgba(43, 33, 28, 0.24);
+    box-shadow: 0 28px 56px color-mix(in srgb, var(--text-color, #000) 26%, transparent);
   }
 
   .ass-card__media {
@@ -234,20 +234,20 @@ const componentStyles = css`
     width: 3.6rem;
     height: 3.6rem;
     border-radius: 50%;
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
     font-size: 1.2rem;
     line-height: 1;
     cursor: pointer;
     display: grid;
     place-items: center;
-    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.08);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     transition: border-color 0.2s, transform 0.2s, background 0.2s, box-shadow 0.2s;
   }
 
   .ass-btn-round:hover {
     transform: translateY(-2px) scale(1.04);
-    box-shadow: 0 14px 28px rgba(43, 33, 28, 0.12);
+    box-shadow: 0 14px 28px color-mix(in srgb, var(--text-color, #000) 14%, transparent);
   }
 
   .ass-btn-round:active {
@@ -262,8 +262,8 @@ const componentStyles = css`
 
   .ass-btn-round--skip {
     color: var(--fs-danger, #b33a3a);
-    background: color-mix(in srgb, var(--fs-danger, #b33a3a) 8%, var(--card-bg, #fff));
-    border-color: color-mix(in srgb, var(--fs-danger, #b33a3a) 28%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--fs-danger, #b33a3a) 8%, var(--card-bg, #ffffff));
+    border-color: color-mix(in srgb, var(--fs-danger, #b33a3a) 28%, var(--border-color, #e5e7eb));
   }
 
   .ass-btn-labels {
@@ -274,7 +274,7 @@ const componentStyles = css`
     margin: 0.55rem auto 0;
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .ass-btn-labels span:last-child {
@@ -295,11 +295,11 @@ const componentStyles = css`
     padding: 1.35rem 1.15rem 1.45rem;
     text-align: center;
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 45%),
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
     animation: ass-reveal 0.45s ease both;
   }
 
@@ -310,7 +310,7 @@ const componentStyles = css`
     margin-bottom: 0.85rem;
     padding: 0.28rem 0.7rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;
@@ -322,7 +322,7 @@ const componentStyles = css`
     margin: 0 auto 1rem;
     border-radius: calc(var(--section-radius, 18px) * 0.7);
     overflow: hidden;
-    box-shadow: 0 16px 36px rgba(43, 33, 28, 0.16);
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--text-color, #000) 18%, transparent);
   }
 
   .ass-result__img {
@@ -337,13 +337,13 @@ const componentStyles = css`
     font-size: clamp(1.2rem, 2.4vw, 1.45rem);
     font-weight: 700;
     line-height: 1.35;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .ass-result__desc {
     margin: 0 auto 1.1rem;
     max-width: 26rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.95rem;
     line-height: 1.7;
   }
@@ -353,8 +353,8 @@ const componentStyles = css`
     margin-bottom: 1rem;
     padding: 0.28rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid var(--border-color, #e8ddd6);
-    color: var(--text-color, #2b211c);
+    border: 1px solid var(--border-color, #e5e7eb);
+    color: var(--text-color, #000000);
     font-size: 0.8rem;
     font-weight: 600;
   }

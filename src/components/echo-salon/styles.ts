@@ -10,11 +10,11 @@ export const componentStyles = css`
     position: relative;
     padding: clamp(1.6rem, 4vw, 2.65rem);
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 16%, transparent), transparent 42%),
-      linear-gradient(165deg, color-mix(in srgb, var(--card-bg, #fff) 92%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.07);
+      linear-gradient(165deg, color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 9%, transparent);
     overflow: hidden;
     animation: es-swap 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -48,7 +48,7 @@ export const componentStyles = css`
     font-size: clamp(1.2rem, 2.5vw, 1.65rem);
     line-height: 1.75;
     font-weight: 500;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .es-featured__meta {
@@ -64,8 +64,8 @@ export const componentStyles = css`
     border-radius: 999px;
     object-fit: cover;
     border: 2px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 25%, #fff);
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
-    box-shadow: 0 8px 18px rgba(43, 33, 28, 0.1);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 70%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
   }
 
   .es-avatar--placeholder {
@@ -73,7 +73,7 @@ export const componentStyles = css`
     place-items: center;
     font-weight: 800;
     color: var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
   }
 
   .es-person {
@@ -87,7 +87,7 @@ export const componentStyles = css`
 
   .es-person span {
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .es-stars {
@@ -111,7 +111,7 @@ export const componentStyles = css`
     border-radius: 999px;
     background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent);
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .es-score strong {
@@ -119,35 +119,29 @@ export const componentStyles = css`
     color: var(--accent-color, var(--fs-store-primary));
   }
 
-  .es-rail {
-    display: flex;
-    gap: 0.85rem;
-    overflow-x: auto;
-    padding: 0.2rem 0.1rem 0.65rem;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+  .es-swiper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.2rem 0 0.35rem;
   }
 
-  .es-rail::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .es-rail::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, transparent);
-    border-radius: 999px;
+  .es-slide {
+    width: min(78vw, 17.5rem);
+    height: auto;
   }
 
   .es-card {
-    flex: 0 0 min(78vw, 17.5rem);
-    scroll-snap-align: start;
+
+    width: 100%;
     display: grid;
     gap: 0.65rem;
     min-height: 11.5rem;
     padding: 1rem 1.05rem;
     border-radius: calc(var(--section-radius, 16px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
     color: inherit;
     font: inherit;
     text-align: start;
@@ -178,19 +172,19 @@ export const componentStyles = css`
 
   .es-card:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e5e7eb));
   }
 
   .es-card--active {
     border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent),
-      0 16px 34px rgba(43, 33, 28, 0.1);
+      0 16px 34px color-mix(in srgb, var(--text-color, #000) 12%, transparent);
     background:
       linear-gradient(
         160deg,
-        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff)),
-        var(--card-bg, #fff)
+        color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #ffffff)),
+        var(--card-bg, #ffffff)
       );
   }
 

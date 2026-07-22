@@ -3166,6 +3166,8 @@ function destroyFsSwiper(instance) {
 __name(destroyFsSwiper, "destroyFsSwiper");
 export {
   Autoplay as A,
+  Navigation as N,
+  Pagination as P,
   destroyFsSwiper as d,
   fsSwiperCss as f,
   mountFsSwiper as m

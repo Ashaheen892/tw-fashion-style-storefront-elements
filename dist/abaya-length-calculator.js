@@ -3,7 +3,7 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 import { css, LitElement, html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, d as extractLink, q as getUnitValue, i as isTruthy, u as clamp, s as sharedSectionCss, r as readSectionTheme, t, a as themeStyleMap, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, q as getUnitValue, i as isTruthy, u as clamp, s as sharedSectionCss, r as readSectionTheme, t, a as themeStyleMap, x as fsAccentTone, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .alc-layout {
     display: grid;
@@ -32,7 +32,7 @@ const componentStyles = css`
   .alc-field legend {
     font-weight: 600;
     font-size: 0.92rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-field legend {
@@ -56,16 +56,16 @@ const componentStyles = css`
   .alc-input {
     min-height: 44px;
     padding: 0.65rem 0.85rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
   }
 
   .alc-height-unit {
     min-width: 2.5rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 600;
   }
 
@@ -81,9 +81,9 @@ const componentStyles = css`
     display: grid;
     gap: 0.65rem;
     padding: 0.9rem;
-    border: 1px dashed var(--border-color, #e8ddd6);
+    border: 1px dashed var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.45);
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 4%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 4%, var(--fs-surface, var(--card-bg, #ffffff)));
   }
 
   .alc-guide__track {
@@ -92,7 +92,7 @@ const componentStyles = css`
     border-radius: 6px;
     /* Logical positioning so marker moves with size direction in RTL/LTR */
     direction: inherit;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 70%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 70%, transparent);
   }
 
   .alc-guide__segment {
@@ -117,12 +117,12 @@ const componentStyles = css`
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    border: 2px solid #fff;
+    border: 2px solid var(--card-bg, #ffffff);
     background: var(--accent-color, var(--fs-store-primary));
     transform: translateY(-50%);
     /* Negative inline margin centers the dot on the percentage edge in RTL + LTR */
     margin-inline-start: -8px;
-    box-shadow: 0 2px 8px rgba(43, 33, 28, 0.25);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 35%, transparent);
     pointer-events: none;
     z-index: 2;
   }
@@ -131,7 +131,7 @@ const componentStyles = css`
     display: flex;
     justify-content: space-between;
     gap: 0.5rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.75rem;
   }
 
@@ -149,9 +149,9 @@ const componentStyles = css`
     min-height: 44px;
     padding: 0.55rem 0.7rem;
     border-radius: 8px;
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    color: var(--muted-color, #7a6a62);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    color: var(--muted-color, #666666);
     font: inherit;
     font-size: 0.74rem;
     cursor: pointer;
@@ -160,13 +160,13 @@ const componentStyles = css`
   }
 
   .alc-chip:hover {
-    border-color: color-mix(in srgb, currentColor 40%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, currentColor 5%, var(--card-bg, #fff));
+    border-color: color-mix(in srgb, currentColor 40%, var(--border-color, #e5e7eb));
+    background: color-mix(in srgb, currentColor 5%, var(--card-bg, #ffffff));
   }
 
   .alc-chip--active {
     border-color: currentColor;
-    background: color-mix(in srgb, currentColor 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, currentColor 12%, var(--card-bg, #ffffff));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 25%, transparent);
     font-weight: 600;
   }
@@ -189,7 +189,7 @@ const componentStyles = css`
 
   .alc-chip__name {
     font-weight: 600;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-chip--active .alc-chip__name {
@@ -213,10 +213,10 @@ const componentStyles = css`
     min-width: 5.5rem;
     min-height: 44px;
     padding: 0.55rem 0.75rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: var(--card-bg, #fff);
-    color: var(--text-color, #2b211c);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-color, #000000);
     font: inherit;
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s, transform 0.2s;
@@ -227,13 +227,13 @@ const componentStyles = css`
     display: block;
     margin-top: 0.15rem;
     font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 400;
   }
 
   .alc-option[aria-pressed='true'] {
     border-color: var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
     font-weight: 600;
   }
 
@@ -287,7 +287,7 @@ const componentStyles = css`
     display: inline;
     margin-inline-start: 0.25rem;
     font-size: 1rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 500;
   }
 
@@ -301,14 +301,14 @@ const componentStyles = css`
     justify-content: space-between;
     gap: 0.75rem;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .alc-confidence__bar {
     height: 8px;
     border-radius: 999px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--border-color, #e8ddd6) 85%, transparent);
+    background: color-mix(in srgb, var(--border-color, #e5e7eb) 85%, transparent);
   }
 
   .alc-confidence__bar > span {
@@ -322,7 +322,7 @@ const componentStyles = css`
   .alc-result__reason,
   .alc-result__note {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.9rem;
     line-height: 1.65;
     text-align: center;
@@ -333,7 +333,7 @@ const componentStyles = css`
     gap: 0.35rem;
     padding: 0.85rem;
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--fs-surface, #f3f4f6) 85%, var(--card-bg, #ffffff));
     font-size: 0.85rem;
   }
 
@@ -341,7 +341,7 @@ const componentStyles = css`
     display: flex;
     justify-content: space-between;
     gap: 0.75rem;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-nearby {
@@ -353,7 +353,7 @@ const componentStyles = css`
     margin: 0;
     font-size: 0.88rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alc-nearby__list {
@@ -371,12 +371,12 @@ const componentStyles = css`
     display: grid;
     gap: 0.25rem;
     padding: 0.75rem;
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     border-radius: calc(var(--section-radius, 16px) * 0.5);
     text-align: start;
     text-decoration: none;
     color: inherit;
-    background: var(--card-bg, #fff);
+    background: var(--card-bg, #ffffff);
   }
 
   .alc-nearby__card strong {
@@ -387,8 +387,8 @@ const componentStyles = css`
     margin: 0;
     padding: 0.75rem 1rem;
     border-radius: calc(var(--section-radius, 16px) * 0.5);
-    background: color-mix(in srgb, #c0392b 10%, var(--card-bg, #fff));
-    color: #8b2e24;
+    background: color-mix(in srgb, var(--fs-danger, #cf4b4b) 12%, var(--fs-surface, var(--card-bg, #ffffff)));
+    color: var(--fs-danger, #cf4b4b);
     font-size: 0.9rem;
     text-align: center;
   }
@@ -397,7 +397,7 @@ const componentStyles = css`
     margin-top: 0.25rem;
     text-align: center;
     font-size: 0.82rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.6;
   }
 
@@ -405,7 +405,7 @@ const componentStyles = css`
     margin: 0;
     text-align: center;
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .fs-animate .alc-result {
@@ -600,7 +600,7 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
     (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
   return result && __defProp2(target, key, result), result;
 }, "__decorateClass");
-const SEGMENT_COLORS = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], _AbayaLengthCalculator = class _AbayaLengthCalculator extends LitElement {
+const _AbayaLengthCalculator = class _AbayaLengthCalculator extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.heightInput = "", this.shoeType = "flat", this.preference = "exact", this.cutId = "", this.withScarf = !1, this.result = null, this.error = "", this.initialized = !1, this._onLangChange = () => this.requestUpdate(), this._liveTimer = null;
   }
@@ -841,7 +841,7 @@ const SEGMENT_COLORS = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], 
                           style=${styleMap({
         insetInlineStart: `${seg.start}%`,
         width: `${seg.width}%`,
-        background: SEGMENT_COLORS[index % SEGMENT_COLORS.length]
+        background: fsAccentTone(index)
       })}
                           title=${`${range.alt_size || range.range_label || ""} (${range.min_height}–${range.max_height} ${t("سم", "cm")})`.trim()}
                         ></div>`;
@@ -862,7 +862,7 @@ const SEGMENT_COLORS = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], 
                           type="button"
                           class="alc-chip ${active ? "alc-chip--active" : ""}"
                           style=${styleMap({
-        color: SEGMENT_COLORS[index % SEGMENT_COLORS.length]
+        color: fsAccentTone(index)
       })}
                           aria-pressed=${active ? "true" : "false"}
                           title=${`${range.min_height}–${range.max_height} ${t("سم", "cm")}`}

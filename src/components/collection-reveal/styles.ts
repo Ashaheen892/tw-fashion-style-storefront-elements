@@ -37,7 +37,7 @@ export const componentStyles = css`
     width: min(12rem, 55vw);
     margin: 0 auto;
     border-radius: calc(var(--section-radius, 16px) * 0.75);
-    box-shadow: 0 12px 36px rgba(43, 33, 28, 0.18);
+    box-shadow: 0 12px 36px color-mix(in srgb, var(--text-color, #000) 20%, transparent);
   }
 
   .cr-mystery--breath.fs-animate {
@@ -61,7 +61,7 @@ export const componentStyles = css`
     font-size: 0.88rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: color-mix(in srgb, #fff 88%, var(--muted-color, #7a6a62));
+    color: color-mix(in srgb, #fff 88%, var(--muted-color, #666666));
   }
 
   .cr-timer {
@@ -75,8 +75,8 @@ export const componentStyles = css`
     min-width: 4.5rem;
     padding: 0.75rem 0.5rem;
     border-radius: calc(var(--section-radius, 16px) * 0.55);
-    background: color-mix(in srgb, var(--card-bg, #fff) 88%, transparent);
-    border: 1px solid var(--border-color, #e8ddd6);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 88%, transparent);
+    border: 1px solid var(--border-color, #e5e7eb);
   }
 
   .cr-timer__value {
@@ -91,7 +91,7 @@ export const componentStyles = css`
     display: block;
     margin-top: 0.2rem;
     font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -103,7 +103,7 @@ export const componentStyles = css`
     background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 92%, #000) 0%,
-      color-mix(in srgb, var(--text-color, #2b211c) 88%, #000) 100%
+      color-mix(in srgb, var(--text-color, #000000) 88%, #000) 100%
     );
     transform: translateY(0);
     transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
@@ -170,7 +170,7 @@ export const componentStyles = css`
   .cr-product__desc {
     margin: 0;
     font-size: 0.88rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.55;
   }
 

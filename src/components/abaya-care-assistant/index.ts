@@ -11,6 +11,7 @@ import {
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
+import { destroyFsSwiper, fsSwiperCss, mountFsSwiper, type Swiper } from '../../utils/fsSwiper.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
 import { componentStyles } from './styles.js';
 import {
@@ -29,16 +30,22 @@ export default class AbayaCareAssistant extends LitElement {
   @state() private selectedKey = '';
   @state() private showToast = false;
 
-  private _onLangChange = () => this.requestUpdate();
+  private _onLangChange = () => {
+    this.requestUpdate();
+    this.scheduleJourneySwiper();
+  };
   private _toastTimer: ReturnType<typeof setTimeout> | null = null;
+  private journeySwiper?: Swiper;
+  private remountTimer: ReturnType<typeof setTimeout> | null = null;
   private static fontsReady = false;
 
-  static styles = [sharedSectionCss, componentStyles];
+  static styles = [sharedSectionCss, fsSwiperCss, componentStyles];
 
   connectedCallback(): void {
     super.connectedCallback();
     this._ensureFonts();
     document.addEventListener('language-changed', this._onLangChange);
+    window.addEventListener('resize', this.scheduleJourneySwiper);
     this._ensureSelection();
     this._syncVisibility();
   }
@@ -62,15 +69,48 @@ export default class AbayaCareAssistant extends LitElement {
   disconnectedCallback(): void {
     super.disconnectedCallback();
     document.removeEventListener('language-changed', this._onLangChange);
+    window.removeEventListener('resize', this.scheduleJourneySwiper);
     if (this._toastTimer) {
       clearTimeout(this._toastTimer);
       this._toastTimer = null;
     }
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    destroyFsSwiper(this.journeySwiper);
+    this.journeySwiper = undefined;
+  }
+
+  firstUpdated(): void {
+    this.scheduleJourneySwiper();
   }
 
   updated(changed: Map<string, unknown>): void {
-    if (changed.has('config')) this._ensureSelection();
+    if (changed.has('config')) {
+      this._ensureSelection();
+      this.scheduleJourneySwiper();
+    } else if (changed.has('selectedKey')) {
+      // Steps markup changes with fabric — remount journey carousel only.
+      this.scheduleJourneySwiper();
+    }
     this._syncVisibility();
+  }
+
+  private scheduleJourneySwiper = (): void => {
+    if (this.remountTimer) clearTimeout(this.remountTimer);
+    this.remountTimer = setTimeout(() => this.remountJourneySwiper(), 0);
+  };
+
+  private remountJourneySwiper(): void {
+    destroyFsSwiper(this.journeySwiper);
+    this.journeySwiper = undefined;
+    const root = this.renderRoot.querySelector('.aca-journey-swiper') as HTMLElement | null;
+    if (!root) return;
+    const mobile = window.matchMedia('(max-width: 819px)').matches;
+    this.journeySwiper = mountFsSwiper(root, {
+      slidesPerView: mobile ? 1.15 : 5,
+      spaceBetween: mobile ? 10 : 14,
+      allowTouchMove: mobile,
+      watchOverflow: true,
+    });
   }
 
   private get fabrics(): FabricCare[] {
@@ -257,16 +297,20 @@ export default class AbayaCareAssistant extends LitElement {
                         ${t('طقوس العناية بأناقة', 'An elegant care ritual')}
                       </h4>
                       ${steps.length
-                        ? html`<div class="aca-journey" aria-label=${t('خطوات العناية', 'Care steps')}>
-                            ${steps.map(
-                              (step: CareStep, i: number) => html`
-                                <div class="aca-step">
-                                  <span class="aca-step__num" aria-hidden="true">${i + 1}</span>
-                                  <p class="aca-step__title">${t(step.labelAr, step.labelEn)}</p>
-                                  <p class="aca-step__text">${step.value}</p>
-                                </div>
-                              `
-                            )}
+                        ? html`<div class="swiper aca-journey-swiper" aria-label=${t('خطوات العناية', 'Care steps')}>
+                            <div class="swiper-wrapper">
+                              ${steps.map(
+                                (step: CareStep, i: number) => html`
+                                  <div class="swiper-slide">
+                                    <div class="aca-step">
+                                      <span class="aca-step__num" aria-hidden="true">${i + 1}</span>
+                                      <p class="aca-step__title">${t(step.labelAr, step.labelEn)}</p>
+                                      <p class="aca-step__text">${step.value}</p>
+                                    </div>
+                                  </div>
+                                `
+                              )}
+                            </div>
                           </div>`
                         : html`<p class="aca-empty-inline">
                             ${t('لا توجد خطوات عناية لهذه الخامة', 'No care steps for this fabric')}

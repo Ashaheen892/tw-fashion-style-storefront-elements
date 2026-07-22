@@ -4,7 +4,7 @@ import { css, LitElement, nothing, html } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { n as normalizeCollection, l as localizedString, s as sharedSectionCss, t, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { n as normalizeCollection, l as localizedString, s as sharedSectionCss, t, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .sfr-layout {
     display: grid;
@@ -31,9 +31,9 @@ const componentStyles = css`
   .sfr-panel {
     padding: 1.2rem;
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
-    background: var(--card-bg, #fff);
-    box-shadow: 0 14px 34px rgba(43, 33, 28, 0.06);
+    border: 1px solid var(--border-color, #e5e7eb);
+    background: var(--card-bg, #ffffff);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--text-color, #000) 8%, transparent);
   }
 
   .fs-animate .sfr-panel {
@@ -74,7 +74,7 @@ const componentStyles = css`
     min-height: 52px;
     padding: 0.8rem 0.9rem;
     border-radius: calc(var(--section-radius, 16px) * 0.65);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background: transparent;
     color: inherit;
     font: inherit;
@@ -85,12 +85,12 @@ const componentStyles = css`
 
   .sfr-step-btn:hover {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e8ddd6));
+    border-color: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 40%, var(--border-color, #e5e7eb));
   }
 
   .sfr-step-btn--active {
     border-color: var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 9%, var(--card-bg, #ffffff));
     box-shadow: 0 10px 22px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, transparent);
   }
 
@@ -127,7 +127,7 @@ const componentStyles = css`
     display: block;
     margin-top: 0.18rem;
     font-size: 0.76rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.45;
   }
 
@@ -136,7 +136,7 @@ const componentStyles = css`
     gap: 0.9rem;
     background:
       radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, transparent), transparent 40%),
-      var(--card-bg, #fff);
+      var(--card-bg, #ffffff);
   }
 
   .sfr-detail__media {
@@ -145,7 +145,7 @@ const componentStyles = css`
     overflow: hidden;
     aspect-ratio: 4 / 3;
     background:
-      linear-gradient(145deg, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, #2b211c), #1c1613);
+      linear-gradient(145deg, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 22%, #000000), #1c1613);
   }
 
   .sfr-detail__media--empty {
@@ -184,7 +184,7 @@ const componentStyles = css`
 
   .sfr-detail__desc {
     margin: 0;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.7;
     font-size: 0.92rem;
   }
@@ -194,10 +194,10 @@ const componentStyles = css`
     padding: 0.8rem 0.95rem;
     border-radius: calc(var(--section-radius, 16px) * 0.55);
     border-inline-start: 3px solid var(--accent-color, var(--fs-store-primary));
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 7%, var(--card-bg, #ffffff));
     font-size: 0.85rem;
     line-height: 1.6;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .sfr-table-wrap {
@@ -217,7 +217,7 @@ const componentStyles = css`
   .sfr-table td {
     padding: 0.75rem 0.8rem;
     text-align: start;
-    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 88%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 88%, transparent);
   }
 
   .sfr-table thead th {
@@ -225,8 +225,8 @@ const componentStyles = css`
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--muted-color, #7a6a62);
-    background: color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
+    color: var(--muted-color, #666666);
+    background: color-mix(in srgb, var(--section-bg, var(--fs-surface, #f3f4f6)) 70%, var(--card-bg, #ffffff));
   }
 
   .sfr-table tbody tr {
@@ -245,13 +245,13 @@ const componentStyles = css`
   .sfr-table__note {
     font-size: 0.7rem;
     font-weight: 500;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .sfr-note {
     margin: 0.85rem 0 0;
     font-size: 0.8rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     line-height: 1.55;
   }
 

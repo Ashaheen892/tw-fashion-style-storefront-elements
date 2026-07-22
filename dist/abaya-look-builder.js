@@ -4,19 +4,19 @@ import { css, LitElement, nothing, html } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { j as groupByKey, k as sortByOrder, n as normalizeCollection, l as localizedString, f as toNumber, d as extractLink, i as isTruthy, e as extractImageUrl, s as sharedSectionCss, t, h as formatPrice, c as copyText, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { j as groupByKey, k as sortByOrder, n as normalizeCollection, l as localizedString, f as toNumber, d as extractLink, i as isTruthy, e as extractImageUrl, s as sharedSectionCss, t, h as formatPrice, c as copyText, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Cmm0noVj.js";
 const componentStyles = css`
   .alb-studio {
     position: relative;
     overflow: hidden;
     padding: 1.25rem 1rem 1.4rem;
     border-radius: var(--section-radius, 18px);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
       radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 14%, transparent), transparent 42%),
       radial-gradient(circle at 95% 100%, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, transparent), transparent 40%),
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 90%, #f4ebe4), var(--card-bg, #fff));
-    box-shadow: 0 18px 42px rgba(43, 33, 28, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 90%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 18px 42px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
   }
 
   .alb-layout {
@@ -40,7 +40,7 @@ const componentStyles = css`
     display: flex;
     gap: 0;
     margin: 0 0 1.1rem;
-    border-bottom: 1px solid var(--border-color, #e8ddd6);
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -58,7 +58,7 @@ const componentStyles = css`
     border: none;
     border-radius: 0;
     background: transparent;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font: inherit;
     font-size: 0.9rem;
     font-weight: 600;
@@ -79,7 +79,7 @@ const componentStyles = css`
   }
 
   .alb-tab:hover {
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alb-tab[aria-selected='true'] {
@@ -94,7 +94,7 @@ const componentStyles = css`
     margin: 0 0 0.75rem;
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
   }
 
   .alb-grid {
@@ -125,10 +125,10 @@ const componentStyles = css`
     gap: 1rem;
     padding: 1.15rem 1.05rem 1.2rem;
     border-radius: calc(var(--section-radius, 18px) * 0.85);
-    border: 1px solid var(--border-color, #e8ddd6);
+    border: 1px solid var(--border-color, #e5e7eb);
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #fff) 88%, #f3ebe4), var(--card-bg, #fff));
-    box-shadow: 0 14px 34px rgba(43, 33, 28, 0.08);
+      linear-gradient(180deg, color-mix(in srgb, var(--card-bg, #ffffff) 88%, var(--fs-surface, #f3f4f6)), var(--card-bg, #ffffff));
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--text-color, #000) 10%, transparent);
   }
 
   .alb-summary__head {
@@ -143,14 +143,14 @@ const componentStyles = css`
     margin: 0;
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alb-summary__badge {
     display: inline-flex;
     padding: 0.25rem 0.65rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.72rem;
     font-weight: 700;
@@ -164,16 +164,16 @@ const componentStyles = css`
     min-height: 10rem;
     padding: 0.55rem;
     border-radius: calc(var(--section-radius, 18px) * 0.65);
-    border: 1px dashed color-mix(in srgb, var(--border-color, #e8ddd6) 90%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--border-color, #e5e7eb) 90%, transparent);
     background:
       radial-gradient(circle at top, color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, transparent), transparent 55%),
-      color-mix(in srgb, var(--section-bg, #faf7f5) 70%, var(--card-bg, #fff));
+      color-mix(in srgb, var(--section-bg, var(--fs-surface, #f3f4f6)) 70%, var(--card-bg, #ffffff));
   }
 
   .alb-moodboard--empty {
     place-items: center;
     text-align: center;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-size: 0.85rem;
     line-height: 1.55;
   }
@@ -184,7 +184,7 @@ const componentStyles = css`
     border-radius: calc(var(--section-radius, 18px) * 0.45);
     aspect-ratio: 3 / 4;
     background: #1c1613;
-    box-shadow: 0 8px 18px rgba(43, 33, 28, 0.12);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--text-color, #000) 14%, transparent);
     animation: alb-pop 0.35s ease both;
   }
 
@@ -224,8 +224,8 @@ const componentStyles = css`
     align-items: center;
     padding: 0.45rem 0.5rem;
     border-radius: calc(var(--section-radius, 18px) * 0.45);
-    border: 1px solid color-mix(in srgb, var(--border-color, #e8ddd6) 80%, transparent);
-    background: var(--card-bg, #fff);
+    border: 1px solid color-mix(in srgb, var(--border-color, #e5e7eb) 80%, transparent);
+    background: var(--card-bg, #ffffff);
   }
 
   .alb-piece__thumb {
@@ -244,7 +244,7 @@ const componentStyles = css`
     display: block;
     font-size: 0.68rem;
     font-weight: 600;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     margin-bottom: 0.1rem;
   }
 
@@ -252,7 +252,7 @@ const componentStyles = css`
     display: block;
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -286,8 +286,8 @@ const componentStyles = css`
   .alb-stat {
     padding: 0.65rem 0.7rem;
     border-radius: calc(var(--section-radius, 18px) * 0.45);
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #fff));
-    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--border-color, #e8ddd6));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 8%, var(--card-bg, #ffffff));
+    border: 1px solid color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 12%, var(--border-color, #e5e7eb));
   }
 
   .alb-stat--wide {
@@ -298,14 +298,14 @@ const componentStyles = css`
     display: block;
     margin-bottom: 0.2rem;
     font-size: 0.72rem;
-    color: var(--muted-color, #7a6a62);
+    color: var(--muted-color, #666666);
     font-weight: 600;
   }
 
   .alb-stat__value {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--text-color, #2b211c);
+    color: var(--text-color, #000000);
   }
 
   .alb-stat--accent .alb-stat__value {
@@ -326,7 +326,7 @@ const componentStyles = css`
     margin: 0;
     padding: 0.45rem 0.65rem;
     border-radius: calc(var(--section-radius, 18px) * 0.4);
-    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #fff));
+    background: color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 10%, var(--card-bg, #ffffff));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.8rem;
     font-weight: 600;
