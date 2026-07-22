@@ -1,8 +1,10 @@
-import { css as R, LitElement as B, html as s, nothing as c } from "lit";
-import { property as E, state as $ } from "lit/decorators.js";
-import { styleMap as z } from "lit/directives/style-map.js";
-import { n as N, l as _, d as V, q as p, i as x, u as y, s as Y, r as W, t as o, a as G, b as q, v as P } from "./sharedStyles-Cd7RKVf-.js";
-const U = R`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, q as getUnitValue, i as isTruthy, u as clamp, s as sharedSectionCss, r as readSectionTheme, t, a as themeStyleMap, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .alc-layout {
     display: grid;
     gap: 1.25rem;
@@ -481,114 +483,124 @@ const U = R`
     }
   }
 `;
-function A(i) {
-  return N(i).map((e) => ({
-    min_height: p(e.min_height),
-    max_height: p(e.max_height),
-    flat_length: p(e.flat_length),
-    mid_heel_length: p(e.mid_heel_length),
-    high_heel_length: p(e.high_heel_length),
-    alt_size: _(e.alt_size),
-    note: _(e.note),
-    products_url: V(e.products_url),
-    range_label: _(e.range_label)
+function parseRanges(raw) {
+  return normalizeCollection(raw).map((item) => ({
+    min_height: getUnitValue(item.min_height),
+    max_height: getUnitValue(item.max_height),
+    flat_length: getUnitValue(item.flat_length),
+    mid_heel_length: getUnitValue(item.mid_heel_length),
+    high_heel_length: getUnitValue(item.high_heel_length),
+    alt_size: localizedString(item.alt_size),
+    note: localizedString(item.note),
+    products_url: extractLink(item.products_url),
+    range_label: localizedString(item.range_label)
   })).filter(
-    (e) => e.min_height > 0 && e.max_height >= e.min_height && (e.flat_length > 0 || e.mid_heel_length > 0 || e.high_heel_length > 0)
-  ).sort((e, a) => e.min_height - a.min_height);
+    (r) => r.min_height > 0 && r.max_height >= r.min_height && (r.flat_length > 0 || r.mid_heel_length > 0 || r.high_heel_length > 0)
+  ).sort((a, b) => a.min_height - b.min_height);
 }
-function J(i) {
-  return N(i).map((e, a) => ({
-    cut_id: _(e.cut_id) || _(e.cut_name) || `cut-${a}`,
-    cut_name: _(e.cut_name),
-    cut_desc: _(e.cut_desc),
-    length_delta: p(e.length_delta, 0),
-    is_default: x(e.is_default)
-  })).filter((e) => e.cut_name.trim() !== "");
+__name(parseRanges, "parseRanges");
+function parseCuts(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    cut_id: localizedString(item.cut_id) || localizedString(item.cut_name) || `cut-${index}`,
+    cut_name: localizedString(item.cut_name),
+    cut_desc: localizedString(item.cut_desc),
+    length_delta: getUnitValue(item.length_delta, 0),
+    is_default: isTruthy(item.is_default)
+  })).filter((c) => c.cut_name.trim() !== "");
 }
-function K(i, e) {
-  return i.find((a) => e >= a.min_height && e <= a.max_height) ?? null;
+__name(parseCuts, "parseCuts");
+function findRange(ranges, height) {
+  return ranges.find((r) => height >= r.min_height && height <= r.max_height) ?? null;
 }
-function j(i, e) {
-  return e === "mid" ? i.mid_heel_length || i.flat_length : e === "high" && (i.high_heel_length || i.mid_heel_length) || i.flat_length;
+__name(findRange, "findRange");
+function getBaseLength(range, shoe) {
+  return shoe === "mid" ? range.mid_heel_length || range.flat_length : shoe === "high" && (range.high_heel_length || range.mid_heel_length) || range.flat_length;
 }
-function Q(i, e) {
-  const a = e.max_height - e.min_height;
-  if (a <= 0) return 100;
-  const t = (e.min_height + e.max_height) / 2, r = Math.abs(i - t), n = y(r / (a / 2), 0, 1);
-  return Math.round((1 - n) * 100);
+__name(getBaseLength, "getBaseLength");
+function computeConfidence(height, range) {
+  const span = range.max_height - range.min_height;
+  if (span <= 0) return 100;
+  const mid = (range.min_height + range.max_height) / 2, distance = Math.abs(height - mid), edgeRatio = clamp(distance / (span / 2), 0, 1);
+  return Math.round((1 - edgeRatio) * 100);
 }
-function X(i, e, a, t, r, n, g, w) {
-  const m = i.findIndex(
-    (f) => f.min_height === e.min_height && f.max_height === e.max_height
+__name(computeConfidence, "computeConfidence");
+function findNearby(ranges, current, shoe, preference, shorterOffset, longerOffset, cutDelta, scarfDelta) {
+  const index = ranges.findIndex(
+    (r) => r.min_height === current.min_height && r.max_height === current.max_height
   );
-  if (m < 0) return [];
-  const b = [], h = (f, S) => {
-    const d = j(f, a);
-    let C = 0;
-    t === "shorter" && (C = -r), t === "longer" && (C = n), b.push({
-      alt_size: f.alt_size,
-      suggestedLength: y(d + C + g + w, 0, 999),
-      note: f.note,
-      products_url: f.products_url,
-      relation: S
+  if (index < 0) return [];
+  const out = [], build = /* @__PURE__ */ __name((range, relation) => {
+    const base = getBaseLength(range, shoe);
+    let prefDelta = 0;
+    preference === "shorter" && (prefDelta = -shorterOffset), preference === "longer" && (prefDelta = longerOffset), out.push({
+      alt_size: range.alt_size,
+      suggestedLength: clamp(base + prefDelta + cutDelta + scarfDelta, 0, 999),
+      note: range.note,
+      products_url: range.products_url,
+      relation
     });
-  };
-  return m > 0 && h(i[m - 1], "lower"), m < i.length - 1 && h(i[m + 1], "higher"), b;
+  }, "build");
+  return index > 0 && build(ranges[index - 1], "lower"), index < ranges.length - 1 && build(ranges[index + 1], "higher"), out;
 }
-function Z(i) {
-  const e = K(i.ranges, i.height);
-  if (!e) return null;
-  const a = j(e, i.shoe);
-  let t = 0;
-  i.preference === "shorter" && (t = -i.shorterOffset), i.preference === "longer" && (t = i.longerOffset);
-  const r = y(
-    a + t + i.cutDelta + i.scarfDelta,
+__name(findNearby, "findNearby");
+function calculateLength(params) {
+  const range = findRange(params.ranges, params.height);
+  if (!range) return null;
+  const baseLength = getBaseLength(range, params.shoe);
+  let preferenceDelta = 0;
+  params.preference === "shorter" && (preferenceDelta = -params.shorterOffset), params.preference === "longer" && (preferenceDelta = params.longerOffset);
+  const suggestedLength = clamp(
+    baseLength + preferenceDelta + params.cutDelta + params.scarfDelta,
     0,
     999
   );
   return {
-    range: e,
-    baseLength: a,
-    suggestedLength: r,
-    cutDelta: i.cutDelta,
-    scarfDelta: i.scarfDelta,
-    preferenceDelta: t,
-    confidence: Q(i.height, e),
-    reason: i.reasonParts.filter(Boolean).join(" · "),
-    nearby: X(
-      i.ranges,
-      e,
-      i.shoe,
-      i.preference,
-      i.shorterOffset,
-      i.longerOffset,
-      i.cutDelta,
-      i.scarfDelta
+    range,
+    baseLength,
+    suggestedLength,
+    cutDelta: params.cutDelta,
+    scarfDelta: params.scarfDelta,
+    preferenceDelta,
+    confidence: computeConfidence(params.height, range),
+    reason: params.reasonParts.filter(Boolean).join(" · "),
+    nearby: findNearby(
+      params.ranges,
+      range,
+      params.shoe,
+      params.preference,
+      params.shorterOffset,
+      params.longerOffset,
+      params.cutDelta,
+      params.scarfDelta
     )
   };
 }
-function ee(i, e, a) {
-  return i.length ? {
-    min: Math.min(...i.map((t) => t.min_height)),
-    max: Math.max(...i.map((t) => t.max_height))
-  } : { min: e, max: a };
+__name(calculateLength, "calculateLength");
+function overallBounds(ranges, fallbackMin, fallbackMax) {
+  return ranges.length ? {
+    min: Math.min(...ranges.map((r) => r.min_height)),
+    max: Math.max(...ranges.map((r) => r.max_height))
+  } : { min: fallbackMin, max: fallbackMax };
 }
-function te(i, e, a) {
-  return a <= e ? 0 : y((i - e) / (a - e) * 100, 0, 100);
+__name(overallBounds, "overallBounds");
+function heightToPercent(height, min, max) {
+  return max <= min ? 0 : clamp((height - min) / (max - min) * 100, 0, 100);
 }
-function ie(i, e, a) {
-  const t = Math.max(a - e, 1), r = (i.min_height - e) / t * 100, n = (i.max_height + 1 - e) / t * 100, g = Math.max(n - r, 0.5);
+__name(heightToPercent, "heightToPercent");
+function rangeSegmentStyle(range, boundsMin, boundsMax) {
+  const span = Math.max(boundsMax - boundsMin, 1), start = (range.min_height - boundsMin) / span * 100, end = (range.max_height + 1 - boundsMin) / span * 100, width = Math.max(end - start, 0.5);
   return {
-    start: y(r, 0, 100),
-    width: y(g, 0.5, 100 - y(r, 0, 100))
+    start: clamp(start, 0, 100),
+    width: clamp(width, 0.5, 100 - clamp(start, 0, 100))
   };
 }
-var ae = Object.defineProperty, v = (i, e, a, t) => {
-  for (var r = void 0, n = i.length - 1, g; n >= 0; n--)
-    (g = i[n]) && (r = g(e, a, r) || r);
-  return r && ae(e, a, r), r;
-};
-const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L extends B {
+__name(rangeSegmentStyle, "rangeSegmentStyle");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const SEGMENT_COLORS = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], _AbayaLengthCalculator = class _AbayaLengthCalculator extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.heightInput = "", this.shoeType = "flat", this.preference = "exact", this.cutId = "", this.withScarf = !1, this.result = null, this.error = "", this.initialized = !1, this._onLangChange = () => this.requestUpdate(), this._liveTimer = null;
   }
@@ -598,89 +610,89 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
   disconnectedCallback() {
     super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange), this._liveTimer && clearTimeout(this._liveTimer);
   }
-  updated(e) {
-    e.has("config") && (this.initialized = !1, this._ensureDefaults(), this.liveCalc && this._scheduleCalc()), this._syncVisibility();
+  updated(changed) {
+    changed.has("config") && (this.initialized = !1, this._ensureDefaults(), this.liveCalc && this._scheduleCalc()), this._syncVisibility();
   }
   get ranges() {
-    var e;
-    return A((e = this.config) == null ? void 0 : e.alc_ranges);
+    var _a;
+    return parseRanges((_a = this.config) == null ? void 0 : _a.alc_ranges);
   }
   get cuts() {
-    var e;
-    return J((e = this.config) == null ? void 0 : e.alc_cuts);
+    var _a;
+    return parseCuts((_a = this.config) == null ? void 0 : _a.alc_cuts);
   }
   get theme() {
-    return W(this.config, "alc_");
+    return readSectionTheme(this.config, "alc_");
   }
   get minHeight() {
-    var e;
-    return p((e = this.config) == null ? void 0 : e.alc_min_height, 150);
+    var _a;
+    return getUnitValue((_a = this.config) == null ? void 0 : _a.alc_min_height, 150);
   }
   get maxHeight() {
-    var e;
-    return p((e = this.config) == null ? void 0 : e.alc_max_height, 200);
+    var _a;
+    return getUnitValue((_a = this.config) == null ? void 0 : _a.alc_max_height, 200);
   }
   get shorterOffset() {
-    var e;
-    return p((e = this.config) == null ? void 0 : e.alc_shorter_offset, 2);
+    var _a;
+    return getUnitValue((_a = this.config) == null ? void 0 : _a.alc_shorter_offset, 2);
   }
   get longerOffset() {
-    var e;
-    return p((e = this.config) == null ? void 0 : e.alc_longer_offset, 2);
+    var _a;
+    return getUnitValue((_a = this.config) == null ? void 0 : _a.alc_longer_offset, 2);
   }
   get scarfDelta() {
-    var e;
-    return this.withScarf ? p((e = this.config) == null ? void 0 : e.alc_scarf_delta, 1) : 0;
+    var _a;
+    return this.withScarf ? getUnitValue((_a = this.config) == null ? void 0 : _a.alc_scarf_delta, 1) : 0;
   }
   get liveCalc() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.alc_live_calc, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.alc_live_calc, !0);
   }
   get showSlider() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.alc_show_slider, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.alc_show_slider, !0);
   }
   get showGuide() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.alc_show_guide, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.alc_show_guide, !0);
   }
   get showCut() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.alc_show_cut, !0) && this.cuts.length > 0;
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.alc_show_cut, !0) && this.cuts.length > 0;
   }
   get showScarf() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.alc_show_scarf, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.alc_show_scarf, !0);
   }
   get selectedCut() {
-    return this.cuts.find((e) => e.cut_id === this.cutId) || this.cuts[0] || null;
+    return this.cuts.find((c) => c.cut_id === this.cutId) || this.cuts[0] || null;
   }
   _syncVisibility() {
     this.style.display = this.ranges.length ? "" : "none";
   }
   _ensureDefaults() {
-    var n, g, w, m;
+    var _a, _b, _c, _d;
     if (this.initialized) return;
-    const e = Math.round((this.minHeight + this.maxHeight) / 2) || 165, a = p((n = this.config) == null ? void 0 : n.alc_default_height, e);
+    const midFallback = Math.round((this.minHeight + this.maxHeight) / 2) || 165, defaultHeight = getUnitValue((_a = this.config) == null ? void 0 : _a.alc_default_height, midFallback);
     if (!this.heightInput.trim()) {
-      const b = Math.min(
+      const clamped = Math.min(
         this.maxHeight,
-        Math.max(this.minHeight, a > 0 ? a : e)
+        Math.max(this.minHeight, defaultHeight > 0 ? defaultHeight : midFallback)
       );
-      this.heightInput = String(b);
+      this.heightInput = String(clamped);
     }
     if (this.cuts.length) {
-      const b = this.cuts.find((h) => h.is_default) || this.cuts[0];
-      this.cutId = b.cut_id;
+      const def = this.cuts.find((c) => c.is_default) || this.cuts[0];
+      this.cutId = def.cut_id;
     }
-    const t = _((g = this.config) == null ? void 0 : g.alc_default_shoe, "flat");
-    (t === "mid" || t === "high" || t === "flat") && (this.shoeType = t);
-    const r = _((w = this.config) == null ? void 0 : w.alc_default_preference, "exact");
-    (r === "shorter" || r === "exact" || r === "longer") && (this.preference = r), this.withScarf = x((m = this.config) == null ? void 0 : m.alc_scarf_default, !1), this.initialized = !0;
+    const defaultShoe = localizedString((_b = this.config) == null ? void 0 : _b.alc_default_shoe, "flat");
+    (defaultShoe === "mid" || defaultShoe === "high" || defaultShoe === "flat") && (this.shoeType = defaultShoe);
+    const defaultPref = localizedString((_c = this.config) == null ? void 0 : _c.alc_default_preference, "exact");
+    (defaultPref === "shorter" || defaultPref === "exact" || defaultPref === "longer") && (this.preference = defaultPref), this.withScarf = isTruthy((_d = this.config) == null ? void 0 : _d.alc_scarf_default, !1), this.initialized = !0;
   }
-  _label(e, a, t) {
-    var r;
-    return _((r = this.config) == null ? void 0 : r[e], "") || o(a, t);
+  _label(key, ar, en) {
+    var _a;
+    return localizedString((_a = this.config) == null ? void 0 : _a[key], "") || t(ar, en);
   }
   _scheduleCalc() {
     this._liveTimer && clearTimeout(this._liveTimer), this._liveTimer = setTimeout(() => {
@@ -693,63 +705,63 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
   _onSliderInput(e) {
     this.heightInput = e.target.value, this.error = "", this.liveCalc && this._scheduleCalc();
   }
-  _jumpToRange(e, a) {
-    const t = Math.round((e + a) / 2);
-    this.heightInput = String(t), this.error = "", this.liveCalc && this._scheduleCalc();
+  _jumpToRange(minHeight, maxHeight) {
+    const mid = Math.round((minHeight + maxHeight) / 2);
+    this.heightInput = String(mid), this.error = "", this.liveCalc && this._scheduleCalc();
   }
-  _setShoe(e) {
-    this.shoeType = e, this.liveCalc && this._scheduleCalc();
+  _setShoe(shoe) {
+    this.shoeType = shoe, this.liveCalc && this._scheduleCalc();
   }
-  _setPreference(e) {
-    this.preference = e, this.liveCalc && this._scheduleCalc();
+  _setPreference(pref) {
+    this.preference = pref, this.liveCalc && this._scheduleCalc();
   }
-  _setCut(e) {
-    this.cutId = e, this.liveCalc && this._scheduleCalc();
+  _setCut(cutId) {
+    this.cutId = cutId, this.liveCalc && this._scheduleCalc();
   }
-  _setScarf(e) {
-    this.withScarf = e, this.liveCalc && this._scheduleCalc();
+  _setScarf(value) {
+    this.withScarf = value, this.liveCalc && this._scheduleCalc();
   }
-  _buildReasonParts(e) {
-    const a = this.shoeType === "flat" ? this._label("alc_shoe_flat", "مسطح", "Flat") : this.shoeType === "mid" ? this._label("alc_shoe_mid", "كعب متوسط", "Mid heel") : this._label("alc_shoe_high", "كعب عالي", "High heel"), t = this.preference === "shorter" ? this._label("alc_pref_shorter", "أقصر قليلًا", "Slightly shorter") : this.preference === "longer" ? this._label("alc_pref_longer", "أطول قليلًا", "Slightly longer") : this._label("alc_pref_exact", "طول مضبوط", "Exact length"), r = [
-      `${this._label("alc_shoe_label", "الحذاء", "Shoe")}: ${a}`,
-      `${this._label("alc_pref_label", "التفضيل", "Preference")}: ${t}`
+  _buildReasonParts(cut) {
+    const shoeLabel = this.shoeType === "flat" ? this._label("alc_shoe_flat", "مسطح", "Flat") : this.shoeType === "mid" ? this._label("alc_shoe_mid", "كعب متوسط", "Mid heel") : this._label("alc_shoe_high", "كعب عالي", "High heel"), prefLabel = this.preference === "shorter" ? this._label("alc_pref_shorter", "أقصر قليلًا", "Slightly shorter") : this.preference === "longer" ? this._label("alc_pref_longer", "أطول قليلًا", "Slightly longer") : this._label("alc_pref_exact", "طول مضبوط", "Exact length"), parts = [
+      `${this._label("alc_shoe_label", "الحذاء", "Shoe")}: ${shoeLabel}`,
+      `${this._label("alc_pref_label", "التفضيل", "Preference")}: ${prefLabel}`
     ];
-    return e && r.push(
-      `${this._label("alc_cut_label", "القصة", "Silhouette")}: ${e.cut_name}`
-    ), this.showScarf && this.withScarf && r.push(this._label("alc_scarf_yes", "مع طرحة", "With scarf")), r;
+    return cut && parts.push(
+      `${this._label("alc_cut_label", "القصة", "Silhouette")}: ${cut.cut_name}`
+    ), this.showScarf && this.withScarf && parts.push(this._label("alc_scarf_yes", "مع طرحة", "With scarf")), parts;
   }
-  _calculate(e = !1) {
-    const a = Number(this.heightInput);
+  _calculate(silent = !1) {
+    const height = Number(this.heightInput);
     if (!this.heightInput.trim()) {
-      this.result = null, this.error = e ? "" : o("يرجى إدخال طولك بالسنتيمتر", "Please enter your height in centimeters");
+      this.result = null, this.error = silent ? "" : t("يرجى إدخال طولك بالسنتيمتر", "Please enter your height in centimeters");
       return;
     }
-    if (!Number.isFinite(a) || a <= 0) {
-      this.result = null, this.error = o(
+    if (!Number.isFinite(height) || height <= 0) {
+      this.result = null, this.error = t(
         "يرجى إدخال طول صحيح بالسنتيمتر",
         "Please enter a valid height in centimeters"
       );
       return;
     }
-    if (a < this.minHeight || a > this.maxHeight) {
-      this.result = null, this.error = o(
+    if (height < this.minHeight || height > this.maxHeight) {
+      this.result = null, this.error = t(
         `الطول يجب أن يكون بين ${this.minHeight} و ${this.maxHeight} سم`,
         `Height must be between ${this.minHeight} and ${this.maxHeight} cm`
       );
       return;
     }
-    const t = this.selectedCut, r = Z({
+    const cut = this.selectedCut, result = calculateLength({
       ranges: this.ranges,
-      height: a,
+      height,
       shoe: this.shoeType,
       preference: this.preference,
       shorterOffset: this.shorterOffset,
       longerOffset: this.longerOffset,
-      cutDelta: (t == null ? void 0 : t.length_delta) || 0,
+      cutDelta: (cut == null ? void 0 : cut.length_delta) || 0,
       scarfDelta: this.scarfDelta,
-      reasonParts: this._buildReasonParts(t)
+      reasonParts: this._buildReasonParts(cut)
     });
-    if (!r) {
+    if (!result) {
       this.result = null, this.error = this._label(
         "alc_no_match",
         "لا يوجد مقاس مناسب لطولك — تواصلي معنا للمساعدة",
@@ -757,116 +769,116 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
       );
       return;
     }
-    this.error = "", this.result = r;
+    this.error = "", this.result = result;
   }
   _reset() {
     this.initialized = !1, this.heightInput = "", this.shoeType = "flat", this.preference = "exact", this.cutId = "", this.withScarf = !1, this.result = null, this.error = "", this._ensureDefaults(), this.liveCalc && this._scheduleCalc();
   }
-  _formatDelta(e) {
-    return e ? e > 0 ? `+${e}` : String(e) : "0";
+  _formatDelta(value) {
+    return value ? value > 0 ? `+${value}` : String(value) : "0";
   }
   render() {
-    var O, H, M;
+    var _a, _b, _c;
     if (!this.ranges.length)
-      return s`<div class="fs-empty" role="status">
-        ${o("لا توجد بيانات مقاسات متاحة", "No size data available")}
+      return html`<div class="fs-empty" role="status">
+        ${t("لا توجد بيانات مقاسات متاحة", "No size data available")}
       </div>`;
-    const e = this.theme, a = e.animate ? "fs-animate" : "", t = _((O = this.config) == null ? void 0 : O.alc_title), r = _((H = this.config) == null ? void 0 : H.alc_desc), n = _((M = this.config) == null ? void 0 : M.alc_disclaimer), g = this._label("alc_calc_btn", "احسبي الطول", "Calculate"), w = this._label("alc_reset_btn", "إعادة الحساب", "Recalculate"), m = this._label("alc_shop_btn", "تسوّقي هذا المقاس", "Shop this size"), b = this._label("alc_height_label", "طولك (سم)", "Your height (cm)"), h = ee(this.ranges, this.minHeight, this.maxHeight), f = h.min, S = h.max, d = Number(this.heightInput), C = Number.isFinite(d) ? te(d, h.min, h.max) : 0, F = Number.isFinite(d) ? String(Math.min(S, Math.max(f, d))) : String(f);
-    return s`
+    const theme = this.theme, animateClass = theme.animate ? "fs-animate" : "", title = localizedString((_a = this.config) == null ? void 0 : _a.alc_title), desc = localizedString((_b = this.config) == null ? void 0 : _b.alc_desc), disclaimer = localizedString((_c = this.config) == null ? void 0 : _c.alc_disclaimer), calcBtn = this._label("alc_calc_btn", "احسبي الطول", "Calculate"), resetBtn = this._label("alc_reset_btn", "إعادة الحساب", "Recalculate"), shopBtn = this._label("alc_shop_btn", "تسوّقي هذا المقاس", "Shop this size"), heightLabel = this._label("alc_height_label", "طولك (سم)", "Your height (cm)"), bounds = overallBounds(this.ranges, this.minHeight, this.maxHeight), inputMin = bounds.min, inputMax = bounds.max, heightNum = Number(this.heightInput), markerPct = Number.isFinite(heightNum) ? heightToPercent(heightNum, bounds.min, bounds.max) : 0, sliderValue = Number.isFinite(heightNum) ? String(Math.min(inputMax, Math.max(inputMin, heightNum))) : String(inputMin);
+    return html`
       <section
-        class="fs-section ${a}"
-        style=${z(G(e))}
-        aria-label=${t || o("حاسبة طول العباية", "Abaya length calculator")}
+        class="fs-section ${animateClass}"
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("حاسبة طول العباية", "Abaya length calculator")}
       >
         <div class="fs-container">
-          ${t || r ? s`<header class="fs-header">
-                ${t ? s`<h2 class="fs-title">${t}</h2>` : c}
-                ${r ? s`<p class="fs-desc">${r}</p>` : c}
-              </header>` : c}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="alc-layout">
             <div class="alc-form fs-card">
               <div class="alc-field">
-                <label for="alc-height">${b}</label>
+                <label for="alc-height">${heightLabel}</label>
                 <div class="alc-height-row">
                   <input
                     id="alc-height"
                     class="alc-input"
                     type="number"
                     inputmode="decimal"
-                    min=${f}
-                    max=${S}
+                    min=${inputMin}
+                    max=${inputMax}
                     step="1"
                     .value=${this.heightInput}
                     @input=${this._onHeightInput}
                     aria-describedby=${this.error ? "alc-error" : "alc-guide-text"}
                   />
-                  <span class="alc-height-unit">${o("سم", "cm")}</span>
+                  <span class="alc-height-unit">${t("سم", "cm")}</span>
                 </div>
 
-                ${this.showSlider ? s`<input
+                ${this.showSlider ? html`<input
                       class="alc-slider"
                       type="range"
-                      min=${f}
-                      max=${S}
+                      min=${inputMin}
+                      max=${inputMax}
                       step="1"
-                      .value=${F}
+                      .value=${sliderValue}
                       @input=${this._onSliderInput}
-                      aria-label=${b}
-                    />` : c}
+                      aria-label=${heightLabel}
+                    />` : nothing}
               </div>
 
-              ${this.showGuide ? s`<div class="alc-guide" id="alc-guide-text">
+              ${this.showGuide ? html`<div class="alc-guide" id="alc-guide-text">
                     <div
                       class="alc-guide__track"
                       role="img"
-                      aria-label=${o("دليل نطاقات المقاسات", "Size range guide")}
+                      aria-label=${t("دليل نطاقات المقاسات", "Size range guide")}
                     >
-                      ${this.ranges.map((l, D) => {
-      const k = ie(l, h.min, h.max), I = Number.isFinite(d) && d >= l.min_height && d <= l.max_height;
-      return s`<div
-                          class="alc-guide__segment ${I ? "alc-guide__segment--active" : ""}"
-                          style=${z({
-        insetInlineStart: `${k.start}%`,
-        width: `${k.width}%`,
-        background: T[D % T.length]
+                      ${this.ranges.map((range, index) => {
+      const seg = rangeSegmentStyle(range, bounds.min, bounds.max), active = Number.isFinite(heightNum) && heightNum >= range.min_height && heightNum <= range.max_height;
+      return html`<div
+                          class="alc-guide__segment ${active ? "alc-guide__segment--active" : ""}"
+                          style=${styleMap({
+        insetInlineStart: `${seg.start}%`,
+        width: `${seg.width}%`,
+        background: SEGMENT_COLORS[index % SEGMENT_COLORS.length]
       })}
-                          title=${`${l.alt_size || l.range_label || ""} (${l.min_height}–${l.max_height} ${o("سم", "cm")})`.trim()}
+                          title=${`${range.alt_size || range.range_label || ""} (${range.min_height}–${range.max_height} ${t("سم", "cm")})`.trim()}
                         ></div>`;
     })}
-                      ${Number.isFinite(d) && d >= h.min && d <= h.max ? s`<span
+                      ${Number.isFinite(heightNum) && heightNum >= bounds.min && heightNum <= bounds.max ? html`<span
                             class="alc-guide__marker"
-                            style=${z({ insetInlineStart: `${C}%` })}
-                          ></span>` : c}
+                            style=${styleMap({ insetInlineStart: `${markerPct}%` })}
+                          ></span>` : nothing}
                     </div>
                     <div class="alc-guide__labels">
-                      <span>${h.min} ${o("سم", "cm")}</span>
-                      <span>${h.max} ${o("سم", "cm")}</span>
+                      <span>${bounds.min} ${t("سم", "cm")}</span>
+                      <span>${bounds.max} ${t("سم", "cm")}</span>
                     </div>
-                    <div class="alc-guide__chips" role="group" aria-label=${o("المقاسات", "Sizes")}>
-                      ${this.ranges.map((l, D) => {
-      const k = Number.isFinite(d) && d >= l.min_height && d <= l.max_height, I = l.alt_size || l.range_label || `${l.min_height}-${l.max_height}`;
-      return s`<button
+                    <div class="alc-guide__chips" role="group" aria-label=${t("المقاسات", "Sizes")}>
+                      ${this.ranges.map((range, index) => {
+      const active = Number.isFinite(heightNum) && heightNum >= range.min_height && heightNum <= range.max_height, label = range.alt_size || range.range_label || `${range.min_height}-${range.max_height}`;
+      return html`<button
                           type="button"
-                          class="alc-chip ${k ? "alc-chip--active" : ""}"
-                          style=${z({
-        color: T[D % T.length]
+                          class="alc-chip ${active ? "alc-chip--active" : ""}"
+                          style=${styleMap({
+        color: SEGMENT_COLORS[index % SEGMENT_COLORS.length]
       })}
-                          aria-pressed=${k ? "true" : "false"}
-                          title=${`${l.min_height}–${l.max_height} ${o("سم", "cm")}`}
-                          @click=${() => this._jumpToRange(l.min_height, l.max_height)}
+                          aria-pressed=${active ? "true" : "false"}
+                          title=${`${range.min_height}–${range.max_height} ${t("سم", "cm")}`}
+                          @click=${() => this._jumpToRange(range.min_height, range.max_height)}
                         >
                           <span class="alc-chip__swatch" aria-hidden="true"></span>
                           <span class="alc-chip__text">
-                            <span class="alc-chip__name">${I}</span>
+                            <span class="alc-chip__name">${label}</span>
                             <span class="alc-chip__range"
-                              >${l.min_height}–${l.max_height}</span
+                              >${range.min_height}–${range.max_height}</span
                             >
                           </span>
                         </button>`;
     })}
                     </div>
-                  </div>` : c}
+                  </div>` : nothing}
 
               <fieldset class="alc-field" style="border:none;margin:0;padding:0;">
                 <legend>${this._label("alc_shoe_label", "نوع الحذاء", "Shoe type")}</legend>
@@ -916,26 +928,26 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
                 </div>
               </fieldset>
 
-              ${this.showCut ? s`<fieldset class="alc-field" style="border:none;margin:0;padding:0;">
+              ${this.showCut ? html`<fieldset class="alc-field" style="border:none;margin:0;padding:0;">
                     <legend>${this._label("alc_cut_label", "قصة العباية", "Abaya silhouette")}</legend>
                     <div class="alc-options" role="group">
                       ${this.cuts.map(
-      (l) => s`
+      (cut) => html`
                           <button
                             type="button"
                             class="alc-option"
-                            aria-pressed=${this.cutId === l.cut_id ? "true" : "false"}
-                            @click=${() => this._setCut(l.cut_id)}
+                            aria-pressed=${this.cutId === cut.cut_id ? "true" : "false"}
+                            @click=${() => this._setCut(cut.cut_id)}
                           >
-                            ${l.cut_name}
-                            ${l.cut_desc ? s`<small>${l.cut_desc}</small>` : l.length_delta ? s`<small>${this._formatDelta(l.length_delta)} ${o("سم", "cm")}</small>` : c}
+                            ${cut.cut_name}
+                            ${cut.cut_desc ? html`<small>${cut.cut_desc}</small>` : cut.length_delta ? html`<small>${this._formatDelta(cut.length_delta)} ${t("سم", "cm")}</small>` : nothing}
                           </button>
                         `
     )}
                     </div>
-                  </fieldset>` : c}
+                  </fieldset>` : nothing}
 
-              ${this.showScarf ? s`<fieldset class="alc-field" style="border:none;margin:0;padding:0;">
+              ${this.showScarf ? html`<fieldset class="alc-field" style="border:none;margin:0;padding:0;">
                     <legend>${this._label("alc_scarf_label", "هل ستلبسين طرحة؟", "Will you wear a scarf?")}</legend>
                     <div class="alc-options" role="group">
                       ${this._renderOption(
@@ -951,107 +963,107 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
       () => this._setScarf(!0)
     )}
                     </div>
-                  </fieldset>` : c}
+                  </fieldset>` : nothing}
 
-              ${this.error ? s`<p id="alc-error" class="alc-error" role="alert">${this.error}</p>` : c}
+              ${this.error ? html`<p id="alc-error" class="alc-error" role="alert">${this.error}</p>` : nothing}
 
               <div class="alc-actions">
-                ${this.liveCalc ? c : s`<button type="button" class="fs-btn" @click=${() => this._calculate(!1)}>
-                      ${g}
+                ${this.liveCalc ? nothing : html`<button type="button" class="fs-btn" @click=${() => this._calculate(!1)}>
+                      ${calcBtn}
                     </button>`}
                 <button type="button" class="fs-btn fs-btn--ghost" @click=${this._reset}>
-                  ${w}
+                  ${resetBtn}
                 </button>
               </div>
 
-              ${this.liveCalc ? s`<p class="alc-live-hint">
+              ${this.liveCalc ? html`<p class="alc-live-hint">
                     ${this._label(
       "alc_live_hint",
       "النتيجة تتحدث تلقائيًا مع كل اختيار",
       "The result updates automatically with every choice"
     )}
-                  </p>` : c}
+                  </p>` : nothing}
             </div>
 
-            ${this.result ? this._renderResult(m, a) : c}
+            ${this.result ? this._renderResult(shopBtn, animateClass) : nothing}
           </div>
 
-          ${n ? s`<p class="alc-disclaimer">${n}</p>` : c}
+          ${disclaimer ? html`<p class="alc-disclaimer">${disclaimer}</p>` : nothing}
         </div>
-        ${q(this.config || {}, "alc_")}
+        ${renderCommerceOutcome(this.config || {}, "alc_")}
       </section>
     `;
   }
-  _renderResult(e, a) {
-    const t = this.result, r = this._label(
+  _renderResult(shopBtn, animateClass) {
+    const result = this.result, confidenceLabel = this._label(
       "alc_confidence_label",
       "مدى ملاءمة النطاق",
       "Range fit confidence"
     );
-    return s`
-      <div class="alc-result fs-card ${a}" aria-live="polite">
+    return html`
+      <div class="alc-result fs-card ${animateClass}" aria-live="polite">
         <div class="alc-result__top">
-          ${t.range.alt_size ? s`<span class="alc-badge">${t.range.alt_size}</span>` : c}
-          ${t.range.range_label ? s`<span class="alc-badge">${t.range.range_label}</span>` : c}
+          ${result.range.alt_size ? html`<span class="alc-badge">${result.range.alt_size}</span>` : nothing}
+          ${result.range.range_label ? html`<span class="alc-badge">${result.range.range_label}</span>` : nothing}
         </div>
 
         <p class="alc-result__length">
-          ${t.suggestedLength}
-          <span class="alc-result__unit">${o("سم", "cm")}</span>
+          ${result.suggestedLength}
+          <span class="alc-result__unit">${t("سم", "cm")}</span>
         </p>
 
         <div class="alc-confidence">
           <div class="alc-confidence__label">
-            <span>${r}</span>
-            <strong>${t.confidence}%</strong>
+            <span>${confidenceLabel}</span>
+            <strong>${result.confidence}%</strong>
           </div>
           <div
             class="alc-confidence__bar"
             role="meter"
             aria-valuemin="0"
             aria-valuemax="100"
-            aria-valuenow=${t.confidence}
-            aria-label=${r}
+            aria-valuenow=${result.confidence}
+            aria-label=${confidenceLabel}
           >
-            <span style=${z({ width: `${t.confidence}%` })}></span>
+            <span style=${styleMap({ width: `${result.confidence}%` })}></span>
           </div>
         </div>
 
-        ${t.reason ? s`<p class="alc-result__reason">${t.reason}</p>` : c}
+        ${result.reason ? html`<p class="alc-result__reason">${result.reason}</p>` : nothing}
 
-        <div class="alc-breakdown" aria-label=${o("تفاصيل الحساب", "Calculation details")}>
+        <div class="alc-breakdown" aria-label=${t("تفاصيل الحساب", "Calculation details")}>
           <div class="alc-breakdown__row">
             <span>${this._label("alc_base_label", "الطول الأساسي", "Base length")}</span>
-            <strong>${t.baseLength} ${o("سم", "cm")}</strong>
+            <strong>${result.baseLength} ${t("سم", "cm")}</strong>
           </div>
           <div class="alc-breakdown__row">
             <span>${this._label("alc_pref_label", "التفضيل", "Preference")}</span>
-            <strong>${this._formatDelta(t.preferenceDelta)} ${o("سم", "cm")}</strong>
+            <strong>${this._formatDelta(result.preferenceDelta)} ${t("سم", "cm")}</strong>
           </div>
-          ${this.showCut ? s`<div class="alc-breakdown__row">
+          ${this.showCut ? html`<div class="alc-breakdown__row">
                 <span>${this._label("alc_cut_label", "القصة", "Silhouette")}</span>
-                <strong>${this._formatDelta(t.cutDelta)} ${o("سم", "cm")}</strong>
-              </div>` : c}
-          ${this.showScarf ? s`<div class="alc-breakdown__row">
+                <strong>${this._formatDelta(result.cutDelta)} ${t("سم", "cm")}</strong>
+              </div>` : nothing}
+          ${this.showScarf ? html`<div class="alc-breakdown__row">
                 <span>${this._label("alc_scarf_label", "الطرحة", "Scarf")}</span>
-                <strong>${this._formatDelta(t.scarfDelta)} ${o("سم", "cm")}</strong>
-              </div>` : c}
+                <strong>${this._formatDelta(result.scarfDelta)} ${t("سم", "cm")}</strong>
+              </div>` : nothing}
         </div>
 
-        ${t.range.note ? s`<p class="alc-result__note">${t.range.note}</p>` : c}
+        ${result.range.note ? html`<p class="alc-result__note">${result.range.note}</p>` : nothing}
 
-        ${P(t.range.products_url) ? s`<div class="alc-actions">
+        ${isValidHref(result.range.products_url) ? html`<div class="alc-actions">
               <a
                 class="fs-btn"
-                href=${t.range.products_url}
+                href=${result.range.products_url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                ${e}
+                ${shopBtn}
               </a>
-            </div>` : c}
+            </div>` : nothing}
 
-        ${t.nearby.length ? s`<div class="alc-nearby">
+        ${result.nearby.length ? html`<div class="alc-nearby">
               <p class="alc-nearby__title">
                 ${this._label(
       "alc_nearby_title",
@@ -1060,81 +1072,81 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
     )}
               </p>
               <div class="alc-nearby__list">
-                ${t.nearby.map((n) => {
-      const g = s`
+                ${result.nearby.map((item) => {
+      const content = html`
                     <span>
-                      ${n.relation === "lower" ? this._label("alc_nearby_lower", "أقصر قليلًا", "Slightly smaller") : this._label("alc_nearby_higher", "أطول قليلًا", "Slightly larger")}
+                      ${item.relation === "lower" ? this._label("alc_nearby_lower", "أقصر قليلًا", "Slightly smaller") : this._label("alc_nearby_higher", "أطول قليلًا", "Slightly larger")}
                     </span>
                     <strong>
-                      ${n.alt_size || `${n.suggestedLength} ${o("سم", "cm")}`}
+                      ${item.alt_size || `${item.suggestedLength} ${t("سم", "cm")}`}
                     </strong>
-                    <span>${n.suggestedLength} ${o("سم", "cm")}</span>
+                    <span>${item.suggestedLength} ${t("سم", "cm")}</span>
                   `;
-      return P(n.products_url) ? s`<a
+      return isValidHref(item.products_url) ? html`<a
                         class="alc-nearby__card"
-                        href=${n.products_url}
+                        href=${item.products_url}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        ${g}
-                      </a>` : s`<div class="alc-nearby__card">${g}</div>`;
+                        ${content}
+                      </a>` : html`<div class="alc-nearby__card">${content}</div>`;
     })}
               </div>
-            </div>` : c}
+            </div>` : nothing}
       </div>
     `;
   }
-  _renderOption(e, a, t, r) {
-    return s`
+  _renderOption(value, label, current, onSelect) {
+    return html`
       <button
         type="button"
         class="alc-option"
-        aria-pressed=${t === e ? "true" : "false"}
-        @click=${r}
+        aria-pressed=${current === value ? "true" : "false"}
+        @click=${onSelect}
       >
-        ${a}
+        ${label}
       </button>
     `;
   }
 };
-L.styles = [
-  Y,
-  U,
-  R`
+__name(_AbayaLengthCalculator, "AbayaLengthCalculator"), _AbayaLengthCalculator.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let u = L;
-v([
-  E({ type: Object })
-], u.prototype, "config");
-v([
-  $()
-], u.prototype, "heightInput");
-v([
-  $()
-], u.prototype, "shoeType");
-v([
-  $()
-], u.prototype, "preference");
-v([
-  $()
-], u.prototype, "cutId");
-v([
-  $()
-], u.prototype, "withScarf");
-v([
-  $()
-], u.prototype, "result");
-v([
-  $()
-], u.prototype, "error");
-v([
-  $()
-], u.prototype, "initialized");
-typeof u < "u" && u.registerSallaComponent("salla-abaya-length-calculator");
+let AbayaLengthCalculator = _AbayaLengthCalculator;
+__decorateClass([
+  property({ type: Object })
+], AbayaLengthCalculator.prototype, "config");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "heightInput");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "shoeType");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "preference");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "cutId");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "withScarf");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "result");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "error");
+__decorateClass([
+  state()
+], AbayaLengthCalculator.prototype, "initialized");
+typeof AbayaLengthCalculator < "u" && AbayaLengthCalculator.registerSallaComponent("salla-abaya-length-calculator");
 export {
-  u as default
+  AbayaLengthCalculator as default
 };

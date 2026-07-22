@@ -1,9 +1,11 @@
-import { css as x, LitElement as w, html as t, nothing as s } from "lit";
-import { property as $, state as h } from "lit/decorators.js";
-import { classMap as y } from "lit/directives/class-map.js";
-import { styleMap as q } from "lit/directives/style-map.js";
-import { n as _, l, s as k, r as C, p as z, i as L, t as n, a as S, b as I } from "./sharedStyles-Cd7RKVf-.js";
-const E = x`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, s as sharedSectionCss, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .ip-shell {
     display: grid;
     gap: 1.25rem;
@@ -246,30 +248,33 @@ const E = x`
     }
   }
 `;
-function M(o) {
-  return _(o).map((r, i) => ({
-    id: l(r.id) || `ask-${i + 1}`,
-    question: l(r.question),
-    answer: l(r.answer),
-    category: l(r.category) || ""
-  })).filter((r) => r.question && r.answer);
+function parseInquiries(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: localizedString(item.id) || `ask-${index + 1}`,
+    question: localizedString(item.question),
+    answer: localizedString(item.answer),
+    category: localizedString(item.category) || ""
+  })).filter((i) => i.question && i.answer);
 }
-function A(o) {
-  const r = /* @__PURE__ */ new Set();
-  return o.forEach((i) => {
-    i.category.trim() && r.add(i.category.trim());
-  }), [...r];
+__name(parseInquiries, "parseInquiries");
+function uniqueCategories(items) {
+  const set = /* @__PURE__ */ new Set();
+  return items.forEach((i) => {
+    i.category.trim() && set.add(i.category.trim());
+  }), [...set];
 }
-function O(o, r, i) {
-  const d = r.trim().toLowerCase();
-  return o.filter((e) => i && e.category !== i ? !1 : d ? e.question.toLowerCase().includes(d) || e.answer.toLowerCase().includes(d) || e.category.toLowerCase().includes(d) : !0);
+__name(uniqueCategories, "uniqueCategories");
+function filterInquiries(items, query, category) {
+  const q = query.trim().toLowerCase();
+  return items.filter((item) => category && item.category !== category ? !1 : q ? item.question.toLowerCase().includes(q) || item.answer.toLowerCase().includes(q) || item.category.toLowerCase().includes(q) : !0);
 }
-var Y = Object.defineProperty, f = (o, r, i, d) => {
-  for (var e = void 0, p = o.length - 1, m; p >= 0; p--)
-    (m = o[p]) && (e = m(r, i, e) || e);
-  return e && Y(r, i, e), e;
-};
-const u = class u extends w {
+__name(filterInquiries, "filterInquiries");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _InquiryParlour = class _InquiryParlour extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.openId = "", this.query = "", this.category = "", this.boundLang = () => this.requestUpdate();
   }
@@ -280,47 +285,47 @@ const u = class u extends w {
     window.removeEventListener("language-changed", this.boundLang), super.disconnectedCallback();
   }
   get items() {
-    var r;
-    return M((r = this.config) == null ? void 0 : r.ip_items);
+    var _a;
+    return parseInquiries((_a = this.config) == null ? void 0 : _a.ip_items);
   }
   get filtered() {
-    return O(this.items, this.query, this.category);
+    return filterInquiries(this.items, this.query, this.category);
   }
-  toggle(r) {
-    this.openId = this.openId === r ? "" : r;
+  toggle(id) {
+    this.openId = this.openId === id ? "" : id;
   }
   render() {
-    const r = this.config || {}, i = C(r, "ip_"), d = i.animate && !z(), e = l(r.ip_title), p = l(r.ip_desc), m = L(r.ip_show_search, !0), b = this.items, v = this.filtered, g = A(b);
-    return b.length ? t`
+    const c = this.config || {}, theme = readSectionTheme(c, "ip_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.ip_title), desc = localizedString(c.ip_desc), showSearch = isTruthy(c.ip_show_search, !0), items = this.items, filtered = this.filtered, cats = uniqueCategories(items);
+    return items.length ? html`
       <section
-        class=${y({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": d
+      "fs-animate": animate
     })}
-        style=${q(S(i))}
-        aria-label=${e || n("ديوان الأسئلة", "Questions Diwan")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("ديوان الأسئلة", "Questions Diwan")}
       >
         <div class="fs-container">
-          ${e || p ? t`<header class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${n("أسئلة شائعة", "FAQ")}</p>
-                ${e ? t`<h2 class="fs-title">${e}</h2>` : s}
+          ${title || desc ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("أسئلة شائعة", "FAQ")}</p>
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${p ? t`<p class="fs-desc">${p}</p>` : s}
-              </header>` : s}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="ip-shell">
-            ${m || g.length ? t`<div class="ip-toolbar">
-                  ${m ? t`<input
+            ${showSearch || cats.length ? html`<div class="ip-toolbar">
+                  ${showSearch ? html`<input
                         class="ip-search"
                         type="search"
                         .value=${this.query}
-                        placeholder=${n("ابحث في الأسئلة…", "Search questions…")}
-                        aria-label=${n("بحث", "Search")}
-                        @input=${(a) => {
-      this.query = a.target.value;
+                        placeholder=${t("ابحث في الأسئلة…", "Search questions…")}
+                        aria-label=${t("بحث", "Search")}
+                        @input=${(e) => {
+      this.query = e.target.value;
     }}
-                      />` : s}
-                  ${g.length ? t`<div class="ip-cats" role="group" aria-label=${n("التصنيفات", "Categories")}>
+                      />` : nothing}
+                  ${cats.length ? html`<div class="ip-cats" role="group" aria-label=${t("التصنيفات", "Categories")}>
                         <button
                           type="button"
                           class="ip-cat"
@@ -329,87 +334,87 @@ const u = class u extends w {
       this.category = "";
     }}
                         >
-                          ${n("الكل", "All")}
+                          ${t("الكل", "All")}
                         </button>
-                        ${g.map(
-      (a) => t`
+                        ${cats.map(
+      (cat) => html`
                             <button
                               type="button"
                               class="ip-cat"
-                              aria-pressed=${this.category === a ? "true" : "false"}
+                              aria-pressed=${this.category === cat ? "true" : "false"}
                               @click=${() => {
-        this.category = a;
+        this.category = cat;
       }}
                             >
-                              ${a}
+                              ${cat}
                             </button>
                           `
     )}
-                      </div>` : s}
-                </div>` : s}
+                      </div>` : nothing}
+                </div>` : nothing}
 
-            ${v.length ? t`<div class="ip-list">
-                  ${v.map(
-      (a) => t`
+            ${filtered.length ? html`<div class="ip-list">
+                  ${filtered.map(
+      (item) => html`
                       <article
-                        class=${y({
+                        class=${classMap({
         "ip-item": !0,
-        "ip-item--open": this.openId === a.id
+        "ip-item--open": this.openId === item.id
       })}
                       >
                         <button
                           type="button"
                           class="ip-q"
-                          aria-expanded=${this.openId === a.id ? "true" : "false"}
-                          @click=${() => this.toggle(a.id)}
+                          aria-expanded=${this.openId === item.id ? "true" : "false"}
+                          @click=${() => this.toggle(item.id)}
                         >
                           <span>
-                            <span class="ip-q__text">${a.question}</span>
-                            ${a.category ? t`<span class="ip-q__meta">${a.category}</span>` : s}
+                            <span class="ip-q__text">${item.question}</span>
+                            ${item.category ? html`<span class="ip-q__meta">${item.category}</span>` : nothing}
                           </span>
                           <span class="ip-q__icon" aria-hidden="true">+</span>
                         </button>
-                        ${this.openId === a.id ? t`<div class="ip-a">
-                              <p>${a.answer}</p>
-                            </div>` : s}
+                        ${this.openId === item.id ? html`<div class="ip-a">
+                              <p>${item.answer}</p>
+                            </div>` : nothing}
                       </article>
                     `
     )}
-                </div>` : t`<div class="fs-empty" role="status">
-                  ${n("لا توجد نتائج مطابقة", "No matching results")}
+                </div>` : html`<div class="fs-empty" role="status">
+                  ${t("لا توجد نتائج مطابقة", "No matching results")}
                 </div>`}
           </div>
         </div>
-        ${I(this.config || {}, "ip_")}
+        ${renderCommerceOutcome(this.config || {}, "ip_")}
       </section>
-    ` : t`<div class="fs-empty" role="status">
-        ${n("أضف أسئلة وأجوبة في الإعدادات", "Add questions and answers in settings")}
+    ` : html`<div class="fs-empty" role="status">
+        ${t("أضف أسئلة وأجوبة في الإعدادات", "Add questions and answers in settings")}
       </div>`;
   }
 };
-u.styles = [
-  k,
-  E,
-  x`
+__name(_InquiryParlour, "InquiryParlour"), _InquiryParlour.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let c = u;
-f([
-  $({ type: Object })
-], c.prototype, "config");
-f([
-  h()
-], c.prototype, "openId");
-f([
-  h()
-], c.prototype, "query");
-f([
-  h()
-], c.prototype, "category");
-typeof c < "u" && c.registerSallaComponent("salla-inquiry-parlour");
+let InquiryParlour = _InquiryParlour;
+__decorateClass([
+  property({ type: Object })
+], InquiryParlour.prototype, "config");
+__decorateClass([
+  state()
+], InquiryParlour.prototype, "openId");
+__decorateClass([
+  state()
+], InquiryParlour.prototype, "query");
+__decorateClass([
+  state()
+], InquiryParlour.prototype, "category");
+typeof InquiryParlour < "u" && InquiryParlour.registerSallaComponent("salla-inquiry-parlour");
 export {
-  c as default
+  InquiryParlour as default
 };

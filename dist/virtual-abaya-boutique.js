@@ -1,9 +1,11 @@
-import { css as k, LitElement as S, html as t, nothing as c } from "lit";
-import { property as C, state as I } from "lit/decorators.js";
-import { classMap as f } from "lit/directives/class-map.js";
-import { styleMap as _ } from "lit/directives/style-map.js";
-import { n as L, l as p, d as j, u as y, q as w, o as H, s as E, p as $, v as u, r as A, i as q, t as o, a as R, b as Z } from "./sharedStyles-Cd7RKVf-.js";
-const Y = k`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, u as clamp, q as getUnitValue, o as getRadioValue, s as sharedSectionCss, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, i as isTruthy, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .vab-shell {
     display: grid;
     gap: 1.25rem;
@@ -622,39 +624,42 @@ const Y = k`
     }
   }
 `;
-function D(s) {
-  const r = H(s, "").toLowerCase() || p(s).toLowerCase();
-  return ["left", "right", "top", "bottom"].includes(r) ? r : "";
+function normalizeCardDir(raw) {
+  const val = getRadioValue(raw, "").toLowerCase() || localizedString(raw).toLowerCase();
+  return ["left", "right", "top", "bottom"].includes(val) ? val : "";
 }
-function M(s) {
-  return L(s).map((a, r) => {
-    const i = p(a.spot_name);
+__name(normalizeCardDir, "normalizeCardDir");
+function parseHotspots(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const spotName = localizedString(item.spot_name);
     return {
-      spot_id: p(a.spot_id) || i || `zone-${r + 1}`,
-      spot_name: i,
-      spot_desc: p(a.spot_desc),
-      pos_x: y(w(a.pos_x, 50), 0, 100),
-      pos_y: y(w(a.pos_y, 50), 0, 100),
-      spot_image: String(a.spot_image || "").trim(),
-      spot_url: j(a.spot_url),
-      spot_btn: p(a.spot_btn),
-      spot_color: String(a.spot_color || "").trim() || "#8b5e4b",
-      card_dir: D(a.card_dir)
+      spot_id: localizedString(item.spot_id) || spotName || `zone-${index + 1}`,
+      spot_name: spotName,
+      spot_desc: localizedString(item.spot_desc),
+      pos_x: clamp(getUnitValue(item.pos_x, 50), 0, 100),
+      pos_y: clamp(getUnitValue(item.pos_y, 50), 0, 100),
+      spot_image: String(item.spot_image || "").trim(),
+      spot_url: extractLink(item.spot_url),
+      spot_btn: localizedString(item.spot_btn),
+      spot_color: String(item.spot_color || "").trim() || "#8b5e4b",
+      card_dir: normalizeCardDir(item.card_dir)
     };
-  }).filter((a) => a.spot_name.trim() !== "" || a.spot_image !== "");
+  }).filter((h) => h.spot_name.trim() !== "" || h.spot_image !== "");
 }
-function P(s) {
-  return s && typeof s == "object" ? s : {};
+__name(parseHotspots, "parseHotspots");
+function ensureConfig(config) {
+  return config && typeof config == "object" ? config : {};
 }
-var T = Object.defineProperty, z = (s, a, r, i) => {
-  for (var e = void 0, l = s.length - 1, n; l >= 0; l--)
-    (n = s[l]) && (e = n(a, r, e) || e);
-  return e && T(a, r, e), e;
-};
-const x = class x extends S {
+__name(ensureConfig, "ensureConfig");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _VirtualAbayaBoutique = class _VirtualAbayaBoutique extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.activeId = null, this.boundLangHandler = () => this.requestUpdate(), this.boundKeyHandler = (a) => {
-      a.key !== "Escape" || !this.activeId || (this.activeId = null);
+    super(...arguments), this.config = {}, this.activeId = null, this.boundLangHandler = () => this.requestUpdate(), this.boundKeyHandler = (e) => {
+      e.key !== "Escape" || !this.activeId || (this.activeId = null);
     };
   }
   connectedCallback() {
@@ -663,237 +668,237 @@ const x = class x extends S {
   disconnectedCallback() {
     window.removeEventListener("language-changed", this.boundLangHandler), window.removeEventListener("keydown", this.boundKeyHandler), super.disconnectedCallback();
   }
-  updated(a) {
-    a.has("config") && this.ensureActiveSpot();
+  updated(changed) {
+    changed.has("config") && this.ensureActiveSpot();
   }
   ensureActiveSpot() {
-    const a = this.hotspots;
-    if (!a.length) {
+    const hotspots = this.hotspots;
+    if (!hotspots.length) {
       this.activeId = null;
       return;
     }
-    (!this.activeId || !a.some((r) => r.spot_id === this.activeId)) && (this.activeId = a[0].spot_id);
+    (!this.activeId || !hotspots.some((h) => h.spot_id === this.activeId)) && (this.activeId = hotspots[0].spot_id);
   }
   get cfg() {
-    return P(this.config);
+    return ensureConfig(this.config);
   }
   get hotspots() {
-    return M(this.cfg.vab_hotspots);
+    return parseHotspots(this.cfg.vab_hotspots);
   }
-  selectSpot(a) {
-    this.activeId = a;
-    const r = this.renderRoot.querySelectorAll("[data-spot-id]"), i = Array.from(r).find((e) => e.dataset.spotId === a);
-    i == null || i.scrollIntoView({
-      behavior: $() ? "auto" : "smooth",
+  selectSpot(id) {
+    this.activeId = id;
+    const cards = this.renderRoot.querySelectorAll("[data-spot-id]"), card = Array.from(cards).find((el) => el.dataset.spotId === id);
+    card == null || card.scrollIntoView({
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
       block: "nearest"
     });
   }
-  stopLinkClick(a) {
-    a.stopPropagation();
+  stopLinkClick(e) {
+    e.stopPropagation();
   }
-  zoneHref(a) {
-    return u(a.spot_url) ? a.spot_url : "";
+  zoneHref(spot) {
+    return isValidHref(spot.spot_url) ? spot.spot_url : "";
   }
   render() {
-    const a = this.cfg, r = A(a, "vab_"), i = r.animate && !$(), e = this.hotspots, l = q(a.vab_enable_pulse, !0), n = String(a.vab_map_image || "").trim(), v = p(a.vab_title), g = p(a.vab_desc), b = e.find((d) => d.spot_id === this.activeId) || e[0] || null;
-    return !e.length && !n ? t`<div class="fs-empty" role="status">
-        ${o("أضيفي صورة البوتيك ومناطق التفاعل", "Add boutique image and interactive zones")}
-      </div>` : t`
+    const c = this.cfg, theme = readSectionTheme(c, "vab_"), animate = theme.animate && !prefersReducedMotion(), hotspots = this.hotspots, enablePulse = isTruthy(c.vab_enable_pulse, !0), mapImage = String(c.vab_map_image || "").trim(), title = localizedString(c.vab_title), desc = localizedString(c.vab_desc), active = hotspots.find((h) => h.spot_id === this.activeId) || hotspots[0] || null;
+    return !hotspots.length && !mapImage ? html`<div class="fs-empty" role="status">
+        ${t("أضيفي صورة البوتيك ومناطق التفاعل", "Add boutique image and interactive zones")}
+      </div>` : html`
       <section
-        class=${f({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": i
+      "fs-animate": animate
     })}
-        style=${_(R(r))}
-        aria-label=${v || o("بوتيك العبايات التفاعلي", "Virtual abaya boutique")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("بوتيك العبايات التفاعلي", "Virtual abaya boutique")}
       >
         <div class="fs-container">
-          ${v || g ? t`<header class="fs-header">
-                ${v ? t`<h2 class="fs-title">${v}</h2>` : c}
-                ${g ? t`<p class="fs-desc">${g}</p>` : c}
-              </header>` : c}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="vab-shell">
             <div class="vab-map-panel">
-              ${n ? t`<img
+              ${mapImage ? html`<img
                     class="vab-map"
-                    src=${n}
-                    alt=${v || o("خريطة البوتيك", "Boutique map")}
+                    src=${mapImage}
+                    alt=${title || t("خريطة البوتيك", "Boutique map")}
                     loading="eager"
                     decoding="async"
-                  />` : t`<div class="fs-empty" style="min-height:280px;place-content:center;">
-                    ${o("أضيفي صورة الخريطة", "Add a map image")}
+                  />` : html`<div class="fs-empty" style="min-height:280px;place-content:center;">
+                    ${t("أضيفي صورة الخريطة", "Add a map image")}
                   </div>`}
               <div class="vab-map-veil" aria-hidden="true"></div>
 
-              ${b ? t`<div class="vab-map-caption">
-                    <strong>${b.spot_name}</strong>
+              ${active ? html`<div class="vab-map-caption">
+                    <strong>${active.spot_name}</strong>
                     <span>
-                      ${o(
+                      ${t(
       "اضغطي على النقاط أو البطاقات للاستكشاف",
       "Tap pins or cards to explore"
     )}
                     </span>
-                  </div>` : c}
+                  </div>` : nothing}
 
-              ${e.map(
-      (d, h) => t`
+              ${hotspots.map(
+      (spot, index) => html`
                   <button
                     type="button"
-                    class=${f({
+                    class=${classMap({
         "vab-hotspot": !0,
-        "vab-hotspot--pulse": l && i,
-        "fs-animate": i
+        "vab-hotspot--pulse": enablePulse && animate,
+        "fs-animate": animate
       })}
-                    style=${_({
-        left: `${d.pos_x}%`,
-        top: `${d.pos_y}%`,
-        "--spot-color": d.spot_color
+                    style=${styleMap({
+        left: `${spot.pos_x}%`,
+        top: `${spot.pos_y}%`,
+        "--spot-color": spot.spot_color
       })}
-                    aria-label=${d.spot_name}
-                    aria-pressed=${this.activeId === d.spot_id ? "true" : "false"}
-                    @click=${() => this.selectSpot(d.spot_id)}
+                    aria-label=${spot.spot_name}
+                    aria-pressed=${this.activeId === spot.spot_id ? "true" : "false"}
+                    @click=${() => this.selectSpot(spot.spot_id)}
                   >
-                    <span class="vab-hotspot__index">${h + 1}</span>
+                    <span class="vab-hotspot__index">${index + 1}</span>
                   </button>
                 `
     )}
             </div>
 
-            <aside class="vab-gallery" aria-label=${o("بطاقات المناطق", "Zone cards")}>
+            <aside class="vab-gallery" aria-label=${t("بطاقات المناطق", "Zone cards")}>
               <div class="vab-gallery__head">
-                <h3>${o("مناطق البوتيك", "Boutique zones")}</h3>
+                <h3>${t("مناطق البوتيك", "Boutique zones")}</h3>
                 <span class="vab-gallery__count">
-                  ${e.length}
-                  ${o("منطقة", "zones")}
+                  ${hotspots.length}
+                  ${t("منطقة", "zones")}
                 </span>
               </div>
 
-              ${e.length ? t`
+              ${hotspots.length ? html`
                     <div class="vab-cards" role="list">
-                      ${e.map(
-      (d, h) => this.renderZoneCard(d, h, i)
+                      ${hotspots.map(
+      (spot, index) => this.renderZoneCard(spot, index, animate)
     )}
                     </div>
 
-                    ${b ? this.renderActiveDetail(b) : c}
-                  ` : t`<div class="fs-empty">
-                    ${o("لا توجد مناطق مضافة بعد", "No zones added yet")}
+                    ${active ? this.renderActiveDetail(active) : nothing}
+                  ` : html`<div class="fs-empty">
+                    ${t("لا توجد مناطق مضافة بعد", "No zones added yet")}
                   </div>`}
             </aside>
           </div>
         </div>
-        ${Z(this.config || {}, "vab_")}
+        ${renderCommerceOutcome(this.config || {}, "vab_")}
       </section>
     `;
   }
-  renderZoneCard(a, r, i) {
-    const e = this.activeId === a.spot_id, l = this.zoneHref(a);
-    return t`
+  renderZoneCard(spot, index, animate) {
+    const active = this.activeId === spot.spot_id, href = this.zoneHref(spot);
+    return html`
       <div
-        class=${f({
+        class=${classMap({
       "vab-card": !0,
-      "vab-card--active": e,
-      "fs-animate": i
+      "vab-card--active": active,
+      "fs-animate": animate
     })}
-        data-spot-id=${a.spot_id}
+        data-spot-id=${spot.spot_id}
         role="listitem"
         tabindex="0"
-        aria-pressed=${e ? "true" : "false"}
-        @click=${() => this.selectSpot(a.spot_id)}
-        @keydown=${(n) => {
-      (n.key === "Enter" || n.key === " ") && (n.preventDefault(), this.selectSpot(a.spot_id));
+        aria-pressed=${active ? "true" : "false"}
+        @click=${() => this.selectSpot(spot.spot_id)}
+        @keydown=${(e) => {
+      (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.selectSpot(spot.spot_id));
     }}
       >
         <div class="vab-card__media">
-          ${a.spot_image ? t`<img
-                src=${a.spot_image}
-                alt=${a.spot_name}
-                loading=${r === 0 ? "eager" : "lazy"}
+          ${spot.spot_image ? html`<img
+                src=${spot.spot_image}
+                alt=${spot.spot_name}
+                loading=${index === 0 ? "eager" : "lazy"}
                 decoding="async"
-              />` : c}
+              />` : nothing}
           <span
             class="vab-card__dot"
-            style=${_({ "--spot-color": a.spot_color })}
+            style=${styleMap({ "--spot-color": spot.spot_color })}
             aria-hidden="true"
           ></span>
         </div>
         <div class="vab-card__body">
           <div class="vab-card__text">
             <h4 class="vab-card__title">
-              ${a.spot_name || `${o("منطقة", "Zone")} ${r + 1}`}
+              ${spot.spot_name || `${t("منطقة", "Zone")} ${index + 1}`}
             </h4>
-            ${a.spot_desc ? t`<p class="vab-card__desc">${a.spot_desc}</p>` : c}
+            ${spot.spot_desc ? html`<p class="vab-card__desc">${spot.spot_desc}</p>` : nothing}
           </div>
           <div class="vab-card__actions">
-            <span class="vab-card__status ${e ? "vab-card__status--on" : ""}">
-              ${e ? o("مختارة الآن", "Selected") : o("عرض التفاصيل", "View details")}
+            <span class="vab-card__status ${active ? "vab-card__status--on" : ""}">
+              ${active ? t("مختارة الآن", "Selected") : t("عرض التفاصيل", "View details")}
             </span>
-            ${u(l) ? t`<a
+            ${isValidHref(href) ? html`<a
                   class="vab-card__cta"
-                  href=${l}
+                  href=${href}
                   @click=${this.stopLinkClick}
                 >
-                  ${a.spot_btn || o("استكشفي", "Explore")}
-                </a>` : c}
+                  ${spot.spot_btn || t("استكشفي", "Explore")}
+                </a>` : nothing}
           </div>
         </div>
       </div>
     `;
   }
-  renderActiveDetail(a) {
-    const r = this.zoneHref(a);
-    return t`
+  renderActiveDetail(spot) {
+    const href = this.zoneHref(spot);
+    return html`
       <div
         class="vab-detail"
         aria-live="polite"
-        aria-label=${a.spot_name || o("تفاصيل المنطقة", "Zone details")}
+        aria-label=${spot.spot_name || t("تفاصيل المنطقة", "Zone details")}
       >
         <div class="vab-detail__head">
           <span class="vab-detail__title">
-            ${a.spot_name || o("تفاصيل المنطقة", "Zone details")}
+            ${spot.spot_name || t("تفاصيل المنطقة", "Zone details")}
           </span>
         </div>
-        ${a.spot_image ? t`<img
+        ${spot.spot_image ? html`<img
               class="vab-detail__hero"
-              src=${a.spot_image}
-              alt=${a.spot_name || ""}
+              src=${spot.spot_image}
+              alt=${spot.spot_name || ""}
               loading="lazy"
               decoding="async"
-            />` : c}
-        ${a.spot_desc ? t`<p class="vab-products__status">${a.spot_desc}</p>` : t`<p class="vab-products__status">
-              ${o(
+            />` : nothing}
+        ${spot.spot_desc ? html`<p class="vab-products__status">${spot.spot_desc}</p>` : html`<p class="vab-products__status">
+              ${t(
       "أضيفي وصفاً أو رابطاً لهذه المنطقة لإكمال التجربة.",
       "Add a description or link for this zone to complete the experience."
     )}
             </p>`}
 
-        ${u(r) ? t`<div class="vab-detail__actions">
-              <a class="fs-btn vab-detail__cta" href=${r}>
-                ${a.spot_btn || o("استكشفي المنطقة", "Explore zone")}
+        ${isValidHref(href) ? html`<div class="vab-detail__actions">
+              <a class="fs-btn vab-detail__cta" href=${href}>
+                ${spot.spot_btn || t("استكشفي المنطقة", "Explore zone")}
               </a>
-            </div>` : c}
+            </div>` : nothing}
       </div>
     `;
   }
 };
-x.styles = [
-  E,
-  Y,
-  k`
+__name(_VirtualAbayaBoutique, "VirtualAbayaBoutique"), _VirtualAbayaBoutique.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let m = x;
-z([
-  C({ type: Object })
-], m.prototype, "config");
-z([
-  I()
-], m.prototype, "activeId");
-typeof m < "u" && m.registerSallaComponent("salla-virtual-abaya-boutique");
+let VirtualAbayaBoutique = _VirtualAbayaBoutique;
+__decorateClass([
+  property({ type: Object })
+], VirtualAbayaBoutique.prototype, "config");
+__decorateClass([
+  state()
+], VirtualAbayaBoutique.prototype, "activeId");
+typeof VirtualAbayaBoutique < "u" && VirtualAbayaBoutique.registerSallaComponent("salla-virtual-abaya-boutique");
 export {
-  m as default
+  VirtualAbayaBoutique as default
 };

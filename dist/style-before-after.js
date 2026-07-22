@@ -1,9 +1,11 @@
-import { css as _, LitElement as x, nothing as m, html as d } from "lit";
-import { property as y, state as $ } from "lit/decorators.js";
-import { classMap as L } from "lit/directives/class-map.js";
-import { styleMap as h } from "lit/directives/style-map.js";
-import { t as s, n as I, l as f, s as k, r as C, p as z, i as S, a as D, b as E } from "./sharedStyles-Cd7RKVf-.js";
-const M = _`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { t, n as normalizeCollection, l as localizedString, s as sharedSectionCss, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .stba-shell {
     position: relative;
   }
@@ -173,54 +175,55 @@ const M = _`
       animation: none !important;
     }
   }
-`, g = [
+`, DEFAULTS = [
   {
     id: "drape",
     beforeImage: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1000&q=80",
     afterImage: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80",
-    beforeLabel: s("قبل", "Before"),
-    afterLabel: s("بعد", "After"),
-    caption: s("فرق القصة والوقع", "Cut & drape difference")
+    beforeLabel: t("قبل", "Before"),
+    afterLabel: t("بعد", "After"),
+    caption: t("فرق القصة والوقع", "Cut & drape difference")
   },
   {
     id: "fabric",
     beforeImage: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1000&q=80",
     afterImage: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1000&q=80",
-    beforeLabel: s("خامة خفيفة", "Light fabric"),
-    afterLabel: s("خامة فاخرة", "Luxe fabric"),
-    caption: s("مقارنة القماش", "Fabric comparison")
+    beforeLabel: t("خامة خفيفة", "Light fabric"),
+    afterLabel: t("خامة فاخرة", "Luxe fabric"),
+    caption: t("مقارنة القماش", "Fabric comparison")
   }
 ];
-function q(p) {
-  const t = I(p).map((e, i) => {
-    const a = String(e.before_image || e.image_before || "").trim(), o = String(e.after_image || e.image_after || "").trim();
+function parseBeforeAfterPairs(raw) {
+  const parsed = normalizeCollection(raw).map((item, index) => {
+    const beforeImage = String(item.before_image || item.image_before || "").trim(), afterImage = String(item.after_image || item.image_after || "").trim();
     return {
-      id: String(e.id || `stba-${i}`),
-      beforeImage: a,
-      afterImage: o,
-      beforeLabel: f(e.before_label) || "",
-      afterLabel: f(e.after_label) || "",
-      caption: f(e.caption) || ""
+      id: String(item.id || `stba-${index}`),
+      beforeImage,
+      afterImage,
+      beforeLabel: localizedString(item.before_label) || "",
+      afterLabel: localizedString(item.after_label) || "",
+      caption: localizedString(item.caption) || ""
     };
-  }).filter((e) => e.beforeImage || e.afterImage || e.caption);
-  return t.length ? t.map((e, i) => {
-    const a = g[i % g.length];
+  }).filter((v) => v.beforeImage || v.afterImage || v.caption);
+  return parsed.length ? parsed.map((item, i) => {
+    const d = DEFAULTS[i % DEFAULTS.length];
     return {
-      ...e,
-      beforeImage: e.beforeImage || a.beforeImage,
-      afterImage: e.afterImage || a.afterImage,
-      beforeLabel: e.beforeLabel || a.beforeLabel,
-      afterLabel: e.afterLabel || a.afterLabel,
-      caption: e.caption || a.caption
+      ...item,
+      beforeImage: item.beforeImage || d.beforeImage,
+      afterImage: item.afterImage || d.afterImage,
+      beforeLabel: item.beforeLabel || d.beforeLabel,
+      afterLabel: item.afterLabel || d.afterLabel,
+      caption: item.caption || d.caption
     };
-  }) : g.map((e) => ({ ...e }));
+  }) : DEFAULTS.map((d) => ({ ...d }));
 }
-var P = Object.defineProperty, w = (p, t, e, i) => {
-  for (var a = void 0, o = p.length - 1, l; o >= 0; o--)
-    (l = p[o]) && (a = l(t, e, a) || a);
-  return a && P(t, e, a), a;
-};
-const u = class u extends x {
+__name(parseBeforeAfterPairs, "parseBeforeAfterPairs");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _StyleBeforeAfter = class _StyleBeforeAfter extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.reveals = {}, this.boundLang = () => this.requestUpdate(), this.dragId = "", this.endDrag = () => {
       this.dragId = "";
@@ -233,96 +236,96 @@ const u = class u extends x {
     window.removeEventListener("language-changed", this.boundLang), window.removeEventListener("pointerup", this.endDrag), window.removeEventListener("pointercancel", this.endDrag), super.disconnectedCallback();
   }
   get pairs() {
-    var t;
-    return q((t = this.config) == null ? void 0 : t.stba_items);
+    var _a;
+    return parseBeforeAfterPairs((_a = this.config) == null ? void 0 : _a.stba_items);
   }
-  revealFor(t) {
-    const e = this.reveals[t];
-    return typeof e == "number" ? e : 50;
+  revealFor(id) {
+    const v = this.reveals[id];
+    return typeof v == "number" ? v : 50;
   }
-  setReveal(t, e) {
-    const i = Math.min(95, Math.max(5, e));
-    this.reveals = { ...this.reveals, [t]: i };
+  setReveal(id, value) {
+    const next = Math.min(95, Math.max(5, value));
+    this.reveals = { ...this.reveals, [id]: next };
   }
-  onPointerDown(t, e) {
-    var i, a;
-    this.dragId = t, (a = (i = e.currentTarget).setPointerCapture) == null || a.call(i, e.pointerId), this.updateFromEvent(t, e);
+  onPointerDown(id, e) {
+    var _a, _b;
+    this.dragId = id, (_b = (_a = e.currentTarget).setPointerCapture) == null || _b.call(_a, e.pointerId), this.updateFromEvent(id, e);
   }
-  onPointerMove(t, e) {
-    this.dragId === t && this.updateFromEvent(t, e);
+  onPointerMove(id, e) {
+    this.dragId === id && this.updateFromEvent(id, e);
   }
-  updateFromEvent(t, e) {
-    const i = this.renderRoot.querySelector(`[data-compare="${t}"]`);
-    if (!i) return;
-    const a = i.getBoundingClientRect();
-    if (!a.width) return;
-    const o = getComputedStyle(this).direction === "rtl", l = (e.clientX - a.left) / a.width * 100;
-    this.setReveal(t, o ? 100 - l : l);
+  updateFromEvent(id, e) {
+    const el = this.renderRoot.querySelector(`[data-compare="${id}"]`);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (!rect.width) return;
+    const rtl = getComputedStyle(this).direction === "rtl", raw = (e.clientX - rect.left) / rect.width * 100;
+    this.setReveal(id, rtl ? 100 - raw : raw);
   }
   render() {
-    const t = this.config || {}, e = C(t, "stba_"), i = e.animate && !z(), a = f(t.stba_title) || s("قبل وبعد", "Before & After"), o = f(t.stba_desc), l = S(t.stba_show_title, !0), v = this.pairs;
-    return d`
+    const c = this.config || {}, theme = readSectionTheme(c, "stba_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.stba_title) || t("قبل وبعد", "Before & After"), desc = localizedString(c.stba_desc), showTitle = isTruthy(c.stba_show_title, !0), pairs = this.pairs;
+    return html`
       <section
-        class=${L({ "fs-section": !0, "fs-animate": i, "stba-shell": !0 })}
-        style=${h(D(e))}
-        aria-label=${a}
+        class=${classMap({ "fs-section": !0, "fs-animate": animate, "stba-shell": !0 })}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title}
       >
         <div class="fs-container">
-          ${l ? d`<header class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${s("تحوّل الإطلالة", "Style transformation")}</p>
-                <h2 class="fs-title">${a}</h2>
+          ${showTitle ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("تحوّل الإطلالة", "Style transformation")}</p>
+                <h2 class="fs-title">${title}</h2>
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${o ? d`<p class="fs-desc">${o}</p>` : m}
-              </header>` : m}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          ${v.length ? d`
+          ${pairs.length ? html`
                 <div class="stba-pairs">
-                  ${v.map((r) => {
-      const b = this.revealFor(r.id);
-      return d`
-                      <article class="stba-compare" aria-label=${r.caption || s("مقارنة", "Comparison")}>
+                  ${pairs.map((pair) => {
+      const pos = this.revealFor(pair.id);
+      return html`
+                      <article class="stba-compare" aria-label=${pair.caption || t("مقارنة", "Comparison")}>
                         <div
                           class="stba-slider"
-                          data-compare=${r.id}
-                          @pointerdown=${(n) => this.onPointerDown(r.id, n)}
-                          @pointermove=${(n) => this.onPointerMove(r.id, n)}
+                          data-compare=${pair.id}
+                          @pointerdown=${(e) => this.onPointerDown(pair.id, e)}
+                          @pointermove=${(e) => this.onPointerMove(pair.id, e)}
                         >
                           <img
                             class="stba-slider__img stba-slider__img--after"
-                            src=${r.afterImage}
-                            alt=${r.afterLabel || s("بعد", "After")}
+                            src=${pair.afterImage}
+                            alt=${pair.afterLabel || t("بعد", "After")}
                             loading="lazy"
                             draggable="false"
                           />
                           <div
                             class="stba-slider__before"
-                            style=${h({ width: `${b}%` })}
+                            style=${styleMap({ width: `${pos}%` })}
                           >
                             <img
                               class="stba-slider__img"
-                              src=${r.beforeImage}
-                              alt=${r.beforeLabel || s("قبل", "Before")}
+                              src=${pair.beforeImage}
+                              alt=${pair.beforeLabel || t("قبل", "Before")}
                               loading="lazy"
                               draggable="false"
                             />
                           </div>
                           <span class="stba-slider__label stba-slider__label--before">
-                            ${r.beforeLabel || s("قبل", "Before")}
+                            ${pair.beforeLabel || t("قبل", "Before")}
                           </span>
                           <span class="stba-slider__label stba-slider__label--after">
-                            ${r.afterLabel || s("بعد", "After")}
+                            ${pair.afterLabel || t("بعد", "After")}
                           </span>
                           <div
                             class="stba-handle"
-                            style=${h({ insetInlineStart: `${b}%` })}
+                            style=${styleMap({ insetInlineStart: `${pos}%` })}
                             role="slider"
                             tabindex="0"
                             aria-valuemin="5"
                             aria-valuemax="95"
-                            aria-valuenow=${Math.round(b)}
-                            aria-label=${s("اسحب للمقارنة", "Drag to compare")}
-                            @keydown=${(n) => {
-        n.key === "ArrowLeft" ? (n.preventDefault(), this.setReveal(r.id, b + (getComputedStyle(this).direction === "rtl" ? 4 : -4))) : n.key === "ArrowRight" && (n.preventDefault(), this.setReveal(r.id, b + (getComputedStyle(this).direction === "rtl" ? -4 : 4)));
+                            aria-valuenow=${Math.round(pos)}
+                            aria-label=${t("اسحب للمقارنة", "Drag to compare")}
+                            @keydown=${(e) => {
+        e.key === "ArrowLeft" ? (e.preventDefault(), this.setReveal(pair.id, pos + (getComputedStyle(this).direction === "rtl" ? 4 : -4))) : e.key === "ArrowRight" && (e.preventDefault(), this.setReveal(pair.id, pos + (getComputedStyle(this).direction === "rtl" ? -4 : 4)));
       }}
                           >
                             <span class="stba-handle__line" aria-hidden="true"></span>
@@ -331,35 +334,35 @@ const u = class u extends x {
                             </span>
                           </div>
                         </div>
-                        ${r.caption ? d`<p class="stba-caption">${r.caption}</p>` : m}
+                        ${pair.caption ? html`<p class="stba-caption">${pair.caption}</p>` : nothing}
                       </article>
                     `;
     })}
                 </div>
-              ` : d`<div class="fs-empty">${s("أضف مقارنات قبل وبعد من إعدادات العنصر", "Add before & after pairs from element settings")}</div>`}
-          ${E(this.config || {}, "stba_")}
+              ` : html`<div class="fs-empty">${t("أضف مقارنات قبل وبعد من إعدادات العنصر", "Add before & after pairs from element settings")}</div>`}
+          ${renderCommerceOutcome(this.config || {}, "stba_")}
         </div>
       </section>
     `;
   }
 };
-u.styles = [
-  k,
-  M,
-  _`
+__name(_StyleBeforeAfter, "StyleBeforeAfter"), _StyleBeforeAfter.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let c = u;
-w([
-  y({ type: Object })
-], c.prototype, "config");
-w([
-  $()
-], c.prototype, "reveals");
-typeof c < "u" && c.registerSallaComponent("salla-style-before-after");
+let StyleBeforeAfter = _StyleBeforeAfter;
+__decorateClass([
+  property({ type: Object })
+], StyleBeforeAfter.prototype, "config");
+__decorateClass([
+  state()
+], StyleBeforeAfter.prototype, "reveals");
+typeof StyleBeforeAfter < "u" && StyleBeforeAfter.registerSallaComponent("salla-style-before-after");
 export {
-  c as default
+  StyleBeforeAfter as default
 };

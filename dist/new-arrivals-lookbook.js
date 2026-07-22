@@ -1,9 +1,11 @@
-import { css as z, LitElement as S, nothing as h, html as o } from "lit";
-import { property as L, state as M, query as C } from "lit/decorators.js";
-import { classMap as v } from "lit/directives/class-map.js";
-import { styleMap as y } from "lit/directives/style-map.js";
-import { n as E, l as u, d as k, u as _, q as $, s as Y, p as I, v as g, r as A, t as i, i as O, a as j, b as q } from "./sharedStyles-Cd7RKVf-.js";
-const D = z`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state, query } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, u as clamp, q as getUnitValue, s as sharedSectionCss, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, t, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .nal-shell {
     position: relative;
   }
@@ -479,25 +481,26 @@ const D = z`
     }
   }
 `;
-function R(b) {
-  return E(b).map((e, a) => {
-    const n = String(e.image || e.poster || "").trim(), r = u(e.label) || u(e.title), s = k(e.link) || k(e.url) || String(e.link || "").trim();
-    return n ? {
-      id: String(e.id || `nal-${a}`),
-      image: n,
-      label: r,
-      url: s,
-      spotX: _($(e.spot_x, 50), 5, 95),
-      spotY: _($(e.spot_y, 50), 5, 95)
+function parseLookbookItems(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const image = String(item.image || item.poster || "").trim(), label = localizedString(item.label) || localizedString(item.title), url = extractLink(item.link) || extractLink(item.url) || String(item.link || "").trim();
+    return image ? {
+      id: String(item.id || `nal-${index}`),
+      image,
+      label,
+      url,
+      spotX: clamp(getUnitValue(item.spot_x, 50), 5, 95),
+      spotY: clamp(getUnitValue(item.spot_y, 50), 5, 95)
     } : null;
-  }).filter((e) => !!e);
+  }).filter((v) => !!v);
 }
-var V = Object.defineProperty, x = (b, e, a, n) => {
-  for (var r = void 0, s = b.length - 1, c; s >= 0; s--)
-    (c = b[s]) && (r = c(e, a, r) || r);
-  return r && V(e, a, r), r;
-};
-const w = class w extends S {
+__name(parseLookbookItems, "parseLookbookItems");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _NewArrivalsLookbook = class _NewArrivalsLookbook extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeId = "", this.boundLang = () => this.requestUpdate();
   }
@@ -505,192 +508,192 @@ const w = class w extends S {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.ensureActive();
   }
   disconnectedCallback() {
-    var e;
-    window.removeEventListener("language-changed", this.boundLang), (e = this.observer) == null || e.disconnect(), super.disconnectedCallback();
+    var _a;
+    window.removeEventListener("language-changed", this.boundLang), (_a = this.observer) == null || _a.disconnect(), super.disconnectedCallback();
   }
   firstUpdated() {
     this.setupMobileObserver();
   }
-  updated(e) {
-    e.has("config") && (this.ensureActive(), this.setupMobileObserver());
+  updated(changed) {
+    changed.has("config") && (this.ensureActive(), this.setupMobileObserver());
   }
   get items() {
-    var e;
-    return R((e = this.config) == null ? void 0 : e.nal_items);
+    var _a;
+    return parseLookbookItems((_a = this.config) == null ? void 0 : _a.nal_items);
   }
   get activeItem() {
-    return this.items.find((e) => e.id === this.activeId) || this.items[0] || null;
+    return this.items.find((i) => i.id === this.activeId) || this.items[0] || null;
   }
   ensureActive() {
-    const e = this.items;
-    if (!e.length) {
+    const list = this.items;
+    if (!list.length) {
       this.activeId = "";
       return;
     }
-    e.some((a) => a.id === this.activeId) || (this.activeId = e[0].id);
+    list.some((i) => i.id === this.activeId) || (this.activeId = list[0].id);
   }
   setupMobileObserver() {
-    var a;
-    (a = this.observer) == null || a.disconnect();
-    const e = this.galleryEl;
-    !e || window.matchMedia("(min-width: 768px)").matches || (this.observer = new IntersectionObserver(
-      (n) => {
-        var c, m;
-        const r = n.filter((l) => l.isIntersecting).sort((l, t) => t.intersectionRatio - l.intersectionRatio)[0], s = (m = (c = r == null ? void 0 : r.target) == null ? void 0 : c.dataset) == null ? void 0 : m.id;
-        s && (this.activeId = s);
+    var _a;
+    (_a = this.observer) == null || _a.disconnect();
+    const gallery = this.galleryEl;
+    !gallery || window.matchMedia("(min-width: 768px)").matches || (this.observer = new IntersectionObserver(
+      (entries) => {
+        var _a2, _b;
+        const best = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0], id = (_b = (_a2 = best == null ? void 0 : best.target) == null ? void 0 : _a2.dataset) == null ? void 0 : _b.id;
+        id && (this.activeId = id);
       },
-      { root: e, threshold: [0.55, 0.75] }
-    ), e.querySelectorAll(".nal-item").forEach((n) => {
-      var r;
-      return (r = this.observer) == null ? void 0 : r.observe(n);
+      { root: gallery, threshold: [0.55, 0.75] }
+    ), gallery.querySelectorAll(".nal-item").forEach((el) => {
+      var _a2;
+      return (_a2 = this.observer) == null ? void 0 : _a2.observe(el);
     }));
   }
-  selectItem(e, a = !1) {
-    if (this.activeId = e.id, !a || !this.galleryEl) return;
-    const n = this.galleryEl.querySelector(`[data-id="${e.id}"]`);
-    n == null || n.scrollIntoView({
-      behavior: I() ? "auto" : "smooth",
+  selectItem(item, scroll = !1) {
+    if (this.activeId = item.id, !scroll || !this.galleryEl) return;
+    const el = this.galleryEl.querySelector(`[data-id="${item.id}"]`);
+    el == null || el.scrollIntoView({
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
       inline: "center",
       block: "nearest"
     });
   }
-  shift(e) {
-    const a = this.items;
-    if (!a.length) return;
-    const n = Math.max(0, a.findIndex((s) => s.id === this.activeId)), r = Math.min(a.length - 1, Math.max(0, n + e));
-    this.selectItem(a[r], !0);
+  shift(delta) {
+    const list = this.items;
+    if (!list.length) return;
+    const idx = Math.max(0, list.findIndex((i) => i.id === this.activeId)), next = Math.min(list.length - 1, Math.max(0, idx + delta));
+    this.selectItem(list[next], !0);
   }
-  openLink(e, a) {
-    a == null || a.stopPropagation(), g(e.url) && window.open(e.url, "_blank", "noopener,noreferrer");
+  openLink(item, e) {
+    e == null || e.stopPropagation(), isValidHref(item.url) && window.open(item.url, "_blank", "noopener,noreferrer");
   }
   onGalleryKey(e) {
     e.key === "ArrowRight" ? (e.preventDefault(), this.shift(-1)) : e.key === "ArrowLeft" && (e.preventDefault(), this.shift(1));
   }
   render() {
-    const e = this.config || {}, a = A(e, "nal_"), n = a.animate && !I(), r = u(e.nal_title) || i("وصل حديثا", "New Arrivals"), s = u(e.nal_desc), c = O(e.nal_show_title, !0), m = this.items, l = this.activeItem;
-    return o`
+    const c = this.config || {}, theme = readSectionTheme(c, "nal_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.nal_title) || t("وصل حديثا", "New Arrivals"), desc = localizedString(c.nal_desc), showTitle = isTruthy(c.nal_show_title, !0), items = this.items, active = this.activeItem;
+    return html`
       <section
-        class=${v({ "fs-section": !0, "fs-animate": n, "nal-shell": !0 })}
-        style=${y(j(a))}
-        aria-label=${r}
+        class=${classMap({ "fs-section": !0, "fs-animate": animate, "nal-shell": !0 })}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title}
       >
         <div class="fs-container">
-          ${c ? o`<header class="nal-header">
-                <p class="nal-eyebrow">${i("تشكيلة الموسم", "Season edit")}</p>
-                <h2 class="nal-title">${r}</h2>
+          ${showTitle ? html`<header class="nal-header">
+                <p class="nal-eyebrow">${t("تشكيلة الموسم", "Season edit")}</p>
+                <h2 class="nal-title">${title}</h2>
                 <span class="nal-title-line" aria-hidden="true"></span>
-                ${s ? o`<p class="nal-desc">${s}</p>` : h}
-              </header>` : h}
+                ${desc ? html`<p class="nal-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          ${m.length ? o`
+          ${items.length ? html`
                 <div
                   class="nal-gallery"
                   role="list"
                   tabindex="0"
-                  aria-label=${i("معرض الوصل حديثاً — استخدم الأسهم للتنقل", "New arrivals gallery — use arrow keys")}
-                  @keydown=${(t) => this.onGalleryKey(t)}
+                  aria-label=${t("معرض الوصل حديثاً — استخدم الأسهم للتنقل", "New arrivals gallery — use arrow keys")}
+                  @keydown=${(e) => this.onGalleryKey(e)}
                 >
-                  ${m.map((t) => {
-      const p = t.id === this.activeId;
-      return o`
+                  ${items.map((item) => {
+      const isActive = item.id === this.activeId;
+      return html`
                       <article
-                        class=${v({ "nal-item": !0, "is-active": p })}
+                        class=${classMap({ "nal-item": !0, "is-active": isActive })}
                         role="listitem"
                         tabindex="0"
-                        data-id=${t.id}
-                        aria-current=${p ? "true" : "false"}
-                        aria-label=${t.label || i("قطعة جديدة", "New piece")}
-                        @click=${() => this.selectItem(t)}
-                        @mouseenter=${() => this.selectItem(t)}
-                        @focus=${() => this.selectItem(t)}
-                        @keydown=${(f) => {
-        (f.key === "Enter" || f.key === " ") && (f.preventDefault(), this.selectItem(t), g(t.url) && this.openLink(t));
+                        data-id=${item.id}
+                        aria-current=${isActive ? "true" : "false"}
+                        aria-label=${item.label || t("قطعة جديدة", "New piece")}
+                        @click=${() => this.selectItem(item)}
+                        @mouseenter=${() => this.selectItem(item)}
+                        @focus=${() => this.selectItem(item)}
+                        @keydown=${(e) => {
+        (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.selectItem(item), isValidHref(item.url) && this.openLink(item));
       }}
                       >
-                        <img class="nal-item__img" src=${t.image} alt=${t.label || ""} loading="lazy" />
+                        <img class="nal-item__img" src=${item.image} alt=${item.label || ""} loading="lazy" />
                         <div class="nal-item__shade" aria-hidden="true"></div>
-                        <span class="nal-badge">${i("جديد", "New")}</span>
-                        ${t.label ? o`<h3 class="nal-item__label">${t.label}</h3>` : h}
-                        ${g(t.url) ? o`
+                        <span class="nal-badge">${t("جديد", "New")}</span>
+                        ${item.label ? html`<h3 class="nal-item__label">${item.label}</h3>` : nothing}
+                        ${isValidHref(item.url) ? html`
                               <span
                                 class="nal-tip"
-                                style=${y({ left: `${t.spotX}%`, top: `${t.spotY}%` })}
+                                style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
                               >
-                                ${i("اكتشف التفاصيل", "Discover details")}
+                                ${t("اكتشف التفاصيل", "Discover details")}
                               </span>
                               <button
                                 type="button"
                                 class="nal-spot"
-                                style=${y({ left: `${t.spotX}%`, top: `${t.spotY}%` })}
-                                aria-label=${i("عرض المنتج", "View product")}
-                                @click=${(f) => this.openLink(t, f)}
+                                style=${styleMap({ left: `${item.spotX}%`, top: `${item.spotY}%` })}
+                                aria-label=${t("عرض المنتج", "View product")}
+                                @click=${(e) => this.openLink(item, e)}
                               >
                                 <i class="sicon-add" aria-hidden="true"></i>
                               </button>
-                            ` : h}
+                            ` : nothing}
                       </article>
                     `;
     })}
                 </div>
 
-                ${l ? o`<div class="nal-dock">
+                ${active ? html`<div class="nal-dock">
                       <div class="nal-dock__meta">
-                        <p class="nal-dock__kicker">${i("القطعة المختارة", "Selected look")}</p>
-                        <h3 class="nal-dock__title">${l.label || i("قطعة جديدة", "New piece")}</h3>
+                        <p class="nal-dock__kicker">${t("القطعة المختارة", "Selected look")}</p>
+                        <h3 class="nal-dock__title">${active.label || t("قطعة جديدة", "New piece")}</h3>
                         <p class="nal-dock__hint">
-                          ${i("مرّر على اللوحات أو استخدم الأسهم لاستكشاف التشكيلة", "Hover panels or use arrows to explore the edit")}
+                          ${t("مرّر على اللوحات أو استخدم الأسهم لاستكشاف التشكيلة", "Hover panels or use arrows to explore the edit")}
                         </p>
                       </div>
                       <button
                         type="button"
                         class="nal-dock__cta"
-                        ?disabled=${!g(l.url)}
-                        @click=${() => this.openLink(l)}
+                        ?disabled=${!isValidHref(active.url)}
+                        @click=${() => this.openLink(active)}
                       >
-                        ${i("تسوق الآن", "Shop now")}
+                        ${t("تسوق الآن", "Shop now")}
                         <span aria-hidden="true">→</span>
                       </button>
-                    </div>` : h}
+                    </div>` : nothing}
 
-                <div class="nal-steps" role="tablist" aria-label=${i("قطع التشكيلة", "Looks")}>
-                  ${m.map(
-      (t, p) => o`
+                <div class="nal-steps" role="tablist" aria-label=${t("قطع التشكيلة", "Looks")}>
+                  ${items.map(
+      (item, i) => html`
                       <button
                         type="button"
-                        class=${v({ "nal-step": !0, "is-active": t.id === this.activeId })}
-                        aria-label=${t.label || i(`قطعة ${p + 1}`, `Look ${p + 1}`)}
-                        @click=${() => this.selectItem(t, !0)}
+                        class=${classMap({ "nal-step": !0, "is-active": item.id === this.activeId })}
+                        aria-label=${item.label || t(`قطعة ${i + 1}`, `Look ${i + 1}`)}
+                        @click=${() => this.selectItem(item, !0)}
                       ></button>
                     `
     )}
                 </div>
-              ` : o`<div class="nal-empty">${i("أضف قطع «وصل حديثا» من إعدادات العنصر", "Add new-arrival looks from the element settings")}</div>`}
-          ${q(this.config || {}, "nal_")}
+              ` : html`<div class="nal-empty">${t("أضف قطع «وصل حديثا» من إعدادات العنصر", "Add new-arrival looks from the element settings")}</div>`}
+          ${renderCommerceOutcome(this.config || {}, "nal_")}
         </div>
       </section>
     `;
   }
 };
-w.styles = [
-  Y,
-  D,
-  z`
+__name(_NewArrivalsLookbook, "NewArrivalsLookbook"), _NewArrivalsLookbook.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let d = w;
-x([
-  L({ type: Object })
-], d.prototype, "config");
-x([
-  M()
-], d.prototype, "activeId");
-x([
-  C(".nal-gallery")
-], d.prototype, "galleryEl");
-typeof d < "u" && d.registerSallaComponent("salla-new-arrivals-lookbook");
+let NewArrivalsLookbook = _NewArrivalsLookbook;
+__decorateClass([
+  property({ type: Object })
+], NewArrivalsLookbook.prototype, "config");
+__decorateClass([
+  state()
+], NewArrivalsLookbook.prototype, "activeId");
+__decorateClass([
+  query(".nal-gallery")
+], NewArrivalsLookbook.prototype, "galleryEl");
+typeof NewArrivalsLookbook < "u" && NewArrivalsLookbook.registerSallaComponent("salla-new-arrivals-lookbook");
 export {
-  d as default
+  NewArrivalsLookbook as default
 };

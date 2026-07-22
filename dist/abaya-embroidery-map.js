@@ -1,10 +1,12 @@
-import { css as C, LitElement as R, html as i, nothing as s } from "lit";
-import { property as N, state as b, query as O } from "lit/decorators.js";
-import { classMap as x } from "lit/directives/class-map.js";
-import { ifDefined as _ } from "lit/directives/if-defined.js";
-import { styleMap as k } from "lit/directives/style-map.js";
-import { n as H, l as u, q as S, i as f, d as E, e as T, o as y, u as q, f as P, s as Z, p as $, r as z, a as j, t as l, v as I, b as V } from "./sharedStyles-Cd7RKVf-.js";
-const B = C`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state, query } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, q as getUnitValue, i as isTruthy, d as extractLink, e as extractImageUrl, o as getRadioValue, u as clamp, f as toNumber, s as sharedSectionCss, p as prefersReducedMotion, r as readSectionTheme, a as themeStyleMap, t, v as isValidHref, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .aem-shell {
     display: grid;
     gap: 1.25rem;
@@ -860,190 +862,201 @@ const B = C`
     }
   }
 `;
-function L(o, e = 50) {
-  const t = P(o, Number.NaN);
-  return Number.isFinite(t) ? q(t, 0, 100) : e;
+function clampPct(value, fallback = 50) {
+  const n = toNumber(value, Number.NaN);
+  return Number.isFinite(n) ? clamp(n, 0, 100) : fallback;
 }
-function K(o) {
-  const e = y(o, "auto").toLowerCase();
-  return e === "right" || e === "left" || e === "auto" ? e : "auto";
+__name(clampPct, "clampPct");
+function parseCardSide(raw) {
+  const val = getRadioValue(raw, "auto").toLowerCase();
+  return val === "right" || val === "left" || val === "auto" ? val : "auto";
 }
-function Y(o) {
-  const e = y(o, "3/4").replace(/\s/g, "").replace(":", "/");
-  return e === "2/3" || e === "4/5" || e === "1/1" || e === "3/4" ? e : "3/4";
+__name(parseCardSide, "parseCardSide");
+function parseAspectRatio(raw) {
+  const val = getRadioValue(raw, "3/4").replace(/\s/g, "").replace(":", "/");
+  return val === "2/3" || val === "4/5" || val === "1/1" || val === "3/4" ? val : "3/4";
 }
-function U(o) {
-  const e = y(o, "").toLowerCase();
-  return e === "hand" || e === "machine" || e === "both" ? e : "";
+__name(parseAspectRatio, "parseAspectRatio");
+function parseCraftMethod(raw) {
+  const val = getRadioValue(raw, "").toLowerCase();
+  return val === "hand" || val === "machine" || val === "both" ? val : "";
 }
-function M(o) {
-  return o === "hand" ? { ar: "يدوي", en: "Hand" } : o === "machine" ? { ar: "آلي", en: "Machine" } : o === "both" ? { ar: "يدوي وآلي", en: "Hand & machine" } : { ar: "", en: "" };
+__name(parseCraftMethod, "parseCraftMethod");
+function resolveMethodText(method) {
+  return method === "hand" ? { ar: "يدوي", en: "Hand" } : method === "machine" ? { ar: "آلي", en: "Machine" } : method === "both" ? { ar: "يدوي وآلي", en: "Hand & machine" } : { ar: "", en: "" };
 }
-function X(o) {
-  return H(o).map((e, t) => {
-    const r = u(e.name).trim(), a = S(e.sort_order, t + 1);
+__name(resolveMethodText, "resolveMethodText");
+function parseDetails(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const name = localizedString(item.name).trim(), order = getUnitValue(item.sort_order, index + 1);
     return {
-      index: t,
-      sort: a,
-      name: r || `Detail ${t + 1}`,
-      desc: u(e.desc).trim(),
-      image: T(e.image) || String(e.image || "").trim(),
-      alt: u(e.alt).trim() || r || `Embroidery detail ${t + 1}`,
-      pos_x: L(e.pos_x ?? e.x, 50),
-      pos_y: L(e.pos_y ?? e.y, 50),
-      card_side: K(e.card_side),
-      stitch_type: u(e.stitch_type).trim(),
-      thread: u(e.thread).trim(),
-      method: U(e.method),
-      duration: u(e.duration).trim(),
-      extra: u(e.extra).trim(),
-      product_url: E(e.product_url),
-      btn_text: u(e.btn_text).trim(),
-      show_number: f(e.show_number, !0),
-      spot_color: String(e.spot_color || "").trim(),
-      is_featured: f(e.is_featured, !1),
-      badge: u(e.badge).trim()
+      index,
+      sort: order,
+      name: name || `Detail ${index + 1}`,
+      desc: localizedString(item.desc).trim(),
+      image: extractImageUrl(item.image) || String(item.image || "").trim(),
+      alt: localizedString(item.alt).trim() || name || `Embroidery detail ${index + 1}`,
+      pos_x: clampPct(item.pos_x ?? item.x, 50),
+      pos_y: clampPct(item.pos_y ?? item.y, 50),
+      card_side: parseCardSide(item.card_side),
+      stitch_type: localizedString(item.stitch_type).trim(),
+      thread: localizedString(item.thread).trim(),
+      method: parseCraftMethod(item.method),
+      duration: localizedString(item.duration).trim(),
+      extra: localizedString(item.extra).trim(),
+      product_url: extractLink(item.product_url),
+      btn_text: localizedString(item.btn_text).trim(),
+      show_number: isTruthy(item.show_number, !0),
+      spot_color: String(item.spot_color || "").trim(),
+      is_featured: isTruthy(item.is_featured, !1),
+      badge: localizedString(item.badge).trim()
     };
-  }).sort((e, t) => e.sort - t.sort || e.index - t.index).map((e, t) => ({
-    index: t,
-    name: e.name,
-    desc: e.desc,
-    image: e.image,
-    alt: e.alt,
-    pos_x: e.pos_x,
-    pos_y: e.pos_y,
-    card_side: e.card_side,
-    stitch_type: e.stitch_type,
-    thread: e.thread,
-    method: e.method,
-    duration: e.duration,
-    extra: e.extra,
-    product_url: e.product_url,
-    btn_text: e.btn_text,
-    show_number: e.show_number,
-    spot_color: e.spot_color,
-    is_featured: e.is_featured,
-    badge: e.badge
+  }).sort((a, b) => a.sort - b.sort || a.index - b.index).map((item, index) => ({
+    index,
+    name: item.name,
+    desc: item.desc,
+    image: item.image,
+    alt: item.alt,
+    pos_x: item.pos_x,
+    pos_y: item.pos_y,
+    card_side: item.card_side,
+    stitch_type: item.stitch_type,
+    thread: item.thread,
+    method: item.method,
+    duration: item.duration,
+    extra: item.extra,
+    product_url: item.product_url,
+    btn_text: item.btn_text,
+    show_number: item.show_number,
+    spot_color: item.spot_color,
+    is_featured: item.is_featured,
+    badge: item.badge
   }));
 }
-function F(o) {
-  return o.card_side === "left" || o.card_side === "right" ? o.card_side : o.pos_x >= 50 ? "right" : "left";
+__name(parseDetails, "parseDetails");
+function resolveSide(detail) {
+  return detail.card_side === "left" || detail.card_side === "right" ? detail.card_side : detail.pos_x >= 50 ? "right" : "left";
 }
-function G(o) {
-  const e = /* @__PURE__ */ new Set();
-  for (const t of o)
-    if (t.is_featured && (e.add(t.index), e.size >= 2))
+__name(resolveSide, "resolveSide");
+function featuredVisualSet(details) {
+  const set = /* @__PURE__ */ new Set();
+  for (const d of details)
+    if (d.is_featured && (set.add(d.index), set.size >= 2))
       break;
-  return e;
+  return set;
 }
-function J(o, e, t, r) {
-  const a = o.left + o.width / 2 - t.left, d = o.top + o.height / 2 - t.top, c = e.top + e.height / 2 - t.top, m = 14;
-  let n, p;
-  r === "right" ? (n = e.left - t.left, p = n - m) : (n = e.right - t.left, p = n + m);
-  const v = (a + p) / 2;
-  return `M ${a.toFixed(1)} ${d.toFixed(1)} L ${v.toFixed(1)} ${d.toFixed(1)} L ${p.toFixed(1)} ${d.toFixed(1)} L ${p.toFixed(1)} ${c.toFixed(1)} L ${n.toFixed(1)} ${c.toFixed(1)}`;
+__name(featuredVisualSet, "featuredVisualSet");
+function buildLinePath(spot, card, root, side) {
+  const sx = spot.left + spot.width / 2 - root.left, sy = spot.top + spot.height / 2 - root.top, cardMidY = card.top + card.height / 2 - root.top, stub = 14;
+  let edgeX, elbowX;
+  side === "right" ? (edgeX = card.left - root.left, elbowX = edgeX - stub) : (edgeX = card.right - root.left, elbowX = edgeX + stub);
+  const midX = (sx + elbowX) / 2;
+  return `M ${sx.toFixed(1)} ${sy.toFixed(1)} L ${midX.toFixed(1)} ${sy.toFixed(1)} L ${elbowX.toFixed(1)} ${sy.toFixed(1)} L ${elbowX.toFixed(1)} ${cardMidY.toFixed(1)} L ${edgeX.toFixed(1)} ${cardMidY.toFixed(1)}`;
 }
-function Q(o, e, t, r) {
-  const a = e.getBoundingClientRect();
-  if (!a.width || !a.height) return [];
-  const d = [];
-  for (const c of o)
+__name(buildLinePath, "buildLinePath");
+function computeLines(details, rootEl, getSpot, getCard) {
+  const root = rootEl.getBoundingClientRect();
+  if (!root.width || !root.height) return [];
+  const lines = [];
+  for (const d of details)
     try {
-      const m = t(c.index), n = r(c.index);
-      if (!m || !n) continue;
-      const p = m.getBoundingClientRect(), v = n.getBoundingClientRect();
-      if (!p.width || !v.width) continue;
-      const w = F(c);
-      d.push({
-        index: c.index,
-        d: J(p, v, a, w)
+      const spotEl = getSpot(d.index), cardEl = getCard(d.index);
+      if (!spotEl || !cardEl) continue;
+      const spot = spotEl.getBoundingClientRect(), card = cardEl.getBoundingClientRect();
+      if (!spot.width || !card.width) continue;
+      const side = resolveSide(d);
+      lines.push({
+        index: d.index,
+        d: buildLinePath(spot, card, root, side)
       });
     } catch {
     }
-  return d;
+  return lines;
 }
-function W(o) {
-  const e = [
+__name(computeLines, "computeLines");
+function shadowForLevel(level) {
+  const shadows = [
     "none",
     "0 10px 28px rgba(43, 33, 28, 0.08)",
     "0 16px 40px rgba(43, 33, 28, 0.12)",
     "0 22px 56px rgba(43, 33, 28, 0.18)"
   ];
-  return e[q(o, 0, 3)] || e[1];
+  return shadows[clamp(level, 0, 3)] || shadows[1];
 }
-var ee = Object.defineProperty, g = (o, e, t, r) => {
-  for (var a = void 0, d = o.length - 1, c; d >= 0; d--)
-    (c = o[d]) && (a = c(e, t, a) || a);
-  return a && ee(e, t, a), a;
-};
-const D = class D extends R {
+__name(shadowForLevel, "shadowForLevel");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _AbayaEmbroideryMap = class _AbayaEmbroideryMap extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeIndex = null, this.hoverIndex = null, this.lines = [], this.entered = !1, this.zoomOpen = !1, this.zoomIndex = null, this.useFallbackDialog = !1, this.brokenMain = !1, this.brokenDetail = /* @__PURE__ */ new Set(), this.isDesktop = !0, this.boundLang = () => this.requestUpdate(), this.resizeObs = null, this.io = null, this.mq = null, this.lineRaf = 0, this.enterOnce = !1, this.zoomTrigger = null, this.boundMq = () => this.onMqChange(), this.boundKeydown = (e) => this.onGlobalKey(e);
   }
   connectedCallback() {
-    var e, t, r, a;
-    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.mq = window.matchMedia("(min-width: 960px)"), this.isDesktop = this.mq.matches, (t = (e = this.mq).addEventListener) == null || t.call(e, "change", this.boundMq), (a = (r = this.mq).addListener) == null || a.call(r, this.boundMq);
+    var _a, _b, _c, _d;
+    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.mq = window.matchMedia("(min-width: 960px)"), this.isDesktop = this.mq.matches, (_b = (_a = this.mq).addEventListener) == null || _b.call(_a, "change", this.boundMq), (_d = (_c = this.mq).addListener) == null || _d.call(_c, this.boundMq);
   }
   disconnectedCallback() {
-    var e, t, r, a;
-    window.removeEventListener("language-changed", this.boundLang), (t = (e = this.mq) == null ? void 0 : e.removeEventListener) == null || t.call(e, "change", this.boundMq), (a = (r = this.mq) == null ? void 0 : r.removeListener) == null || a.call(r, this.boundMq), this.teardownObservers(), this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), this.lineRaf && cancelAnimationFrame(this.lineRaf), super.disconnectedCallback();
+    var _a, _b, _c, _d;
+    window.removeEventListener("language-changed", this.boundLang), (_b = (_a = this.mq) == null ? void 0 : _a.removeEventListener) == null || _b.call(_a, "change", this.boundMq), (_d = (_c = this.mq) == null ? void 0 : _c.removeListener) == null || _d.call(_c, this.boundMq), this.teardownObservers(), this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), this.lineRaf && cancelAnimationFrame(this.lineRaf), super.disconnectedCallback();
   }
   firstUpdated() {
     this.setupObservers(), this.scheduleLines();
   }
-  updated(e) {
-    e.has("config") && (this.brokenMain = !1, this.brokenDetail = /* @__PURE__ */ new Set(), this.activeIndex != null && this.activeIndex >= this.details.length && (this.activeIndex = null)), this.style.display = this.mainImage ? "" : "none", this.scheduleLines();
+  updated(changed) {
+    changed.has("config") && (this.brokenMain = !1, this.brokenDetail = /* @__PURE__ */ new Set(), this.activeIndex != null && this.activeIndex >= this.details.length && (this.activeIndex = null)), this.style.display = this.mainImage ? "" : "none", this.scheduleLines();
   }
   get details() {
-    var e;
-    return X((e = this.config) == null ? void 0 : e.aem_details);
+    var _a;
+    return parseDetails((_a = this.config) == null ? void 0 : _a.aem_details);
   }
   get mainImage() {
-    const e = this.config || {};
-    return T(e.aem_image) || String(e.aem_image || "").trim();
+    const c = this.config || {};
+    return extractImageUrl(c.aem_image) || String(c.aem_image || "").trim();
   }
   get featuredSet() {
-    return G(this.details);
+    return featuredVisualSet(this.details);
   }
   get enableLines() {
-    var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_lines, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.aem_enable_lines, !0);
   }
   get enablePulse() {
-    var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_pulse, !0) && !$();
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.aem_enable_pulse, !0) && !prefersReducedMotion();
   }
   get showNumbers() {
-    var e;
-    return f((e = this.config) == null ? void 0 : e.aem_show_numbers, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.aem_show_numbers, !0);
   }
   get enableDetailImages() {
-    var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_detail_images, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.aem_enable_detail_images, !0);
   }
   get enableZoom() {
-    var e;
-    return f((e = this.config) == null ? void 0 : e.aem_enable_zoom, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.aem_enable_zoom, !0);
   }
   get openNewTab() {
-    var e;
-    return f((e = this.config) == null ? void 0 : e.aem_open_new_tab, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.aem_open_new_tab, !0);
   }
   teardownObservers() {
-    var e, t;
-    (e = this.resizeObs) == null || e.disconnect(), this.resizeObs = null, (t = this.io) == null || t.disconnect(), this.io = null;
+    var _a, _b;
+    (_a = this.resizeObs) == null || _a.disconnect(), this.resizeObs = null, (_b = this.io) == null || _b.disconnect(), this.io = null;
   }
   setupObservers() {
     this.teardownObservers(), typeof ResizeObserver < "u" && (this.resizeObs = new ResizeObserver(() => this.scheduleLines()), this.deskEl && this.resizeObs.observe(this.deskEl), this.resizeObs.observe(this)), typeof IntersectionObserver < "u" ? (this.io = new IntersectionObserver(
-      (e) => {
-        e.some((t) => t.isIntersecting) && this.triggerEnter();
+      (entries) => {
+        entries.some((e) => e.isIntersecting) && this.triggerEnter();
       },
       { threshold: 0.2 }
     ), this.io.observe(this)) : this.triggerEnter();
   }
   onMqChange() {
-    var e;
-    this.isDesktop = !!((e = this.mq) != null && e.matches), requestAnimationFrame(() => {
+    var _a;
+    this.isDesktop = !!((_a = this.mq) != null && _a.matches), requestAnimationFrame(() => {
       this.setupObservers(), this.scheduleLines();
     });
   }
@@ -1053,7 +1066,7 @@ const D = class D extends R {
   }
   triggerEnter() {
     if (this.enterOnce) return;
-    if (this.enterOnce = !0, !z(this.config, "aem_").animate || $()) {
+    if (this.enterOnce = !0, !readSectionTheme(this.config, "aem_").animate || prefersReducedMotion()) {
       this.entered = !1;
       return;
     }
@@ -1071,66 +1084,66 @@ const D = class D extends R {
       this.lines.length && (this.lines = []);
       return;
     }
-    const e = this.focusIndex(), t = e == null ? [] : this.details.filter((a) => a.index === e), r = Q(
-      t,
+    const focus = this.focusIndex(), forLines = focus == null ? [] : this.details.filter((d) => d.index === focus), next = computeLines(
+      forLines,
       this.deskEl,
-      (a) => this.renderRoot.querySelector(
-        `.aem-spot[data-index="${a}"]`
+      (i) => this.renderRoot.querySelector(
+        `.aem-spot[data-index="${i}"]`
       ),
-      (a) => this.renderRoot.querySelector(
-        `.aem-desk .aem-card[data-index="${a}"]`
+      (i) => this.renderRoot.querySelector(
+        `.aem-desk .aem-card[data-index="${i}"]`
       )
     );
-    this.lines = r;
+    this.lines = next;
   }
-  setHover(e) {
-    this.hoverIndex !== e && (this.hoverIndex = e);
+  setHover(index) {
+    this.hoverIndex !== index && (this.hoverIndex = index);
   }
-  setActive(e) {
-    if (this.activeIndex === e) {
+  setActive(index) {
+    if (this.activeIndex === index) {
       this.scheduleLines();
       return;
     }
-    this.activeIndex = e, this.scheduleLines();
+    this.activeIndex = index, this.scheduleLines();
   }
-  toggleActive(e) {
-    this.setActive(this.activeIndex === e ? null : e);
+  toggleActive(index) {
+    this.setActive(this.activeIndex === index ? null : index);
   }
   clearActive() {
     this.setActive(null), this.hoverIndex = null;
   }
-  onSpotKeydown(e, t) {
-    const r = this.details.length;
-    if (!r) return;
-    let a = t;
+  onSpotKeydown(e, index) {
+    const len = this.details.length;
+    if (!len) return;
+    let next = index;
     if (e.key === "ArrowRight" || e.key === "ArrowDown")
-      e.preventDefault(), a = (t + 1) % r;
+      e.preventDefault(), next = (index + 1) % len;
     else if (e.key === "ArrowLeft" || e.key === "ArrowUp")
-      e.preventDefault(), a = (t - 1 + r) % r;
+      e.preventDefault(), next = (index - 1 + len) % len;
     else if (e.key === "Home")
-      e.preventDefault(), a = 0;
+      e.preventDefault(), next = 0;
     else if (e.key === "End")
-      e.preventDefault(), a = r - 1;
+      e.preventDefault(), next = len - 1;
     else
       return;
-    this.setActive(a);
-    const d = this.renderRoot.querySelector(
-      `.aem-spot[data-index="${a}"]`
+    this.setActive(next);
+    const btn = this.renderRoot.querySelector(
+      `.aem-spot[data-index="${next}"]`
     );
-    d == null || d.focus();
+    btn == null || btn.focus();
   }
-  openZoom(e, t) {
+  openZoom(index, trigger) {
     if (!this.enableZoom) return;
-    const r = this.details[e];
-    !(r != null && r.image) || this.brokenDetail.has(e) || (this.zoomTrigger = t instanceof HTMLElement ? t : null, this.zoomIndex = e, this.zoomOpen = !0, this.lockPageScroll(), document.addEventListener("keydown", this.boundKeydown), requestAnimationFrame(() => {
-      const a = this.dialogEl;
-      a && typeof a.showModal == "function" ? (this.useFallbackDialog = !1, a.open || a.showModal()) : this.useFallbackDialog = !0;
+    const d = this.details[index];
+    !(d != null && d.image) || this.brokenDetail.has(index) || (this.zoomTrigger = trigger instanceof HTMLElement ? trigger : null, this.zoomIndex = index, this.zoomOpen = !0, this.lockPageScroll(), document.addEventListener("keydown", this.boundKeydown), requestAnimationFrame(() => {
+      const dialog = this.dialogEl;
+      dialog && typeof dialog.showModal == "function" ? (this.useFallbackDialog = !1, dialog.open || dialog.showModal()) : this.useFallbackDialog = !0;
     }));
   }
   closeZoom() {
-    var t, r;
-    const e = this.dialogEl;
-    e != null && e.open && e.close(), this.zoomOpen = !1, this.useFallbackDialog = !1, this.zoomIndex = null, this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), (r = (t = this.zoomTrigger) == null ? void 0 : t.focus) == null || r.call(t), this.zoomTrigger = null;
+    var _a, _b;
+    const dialog = this.dialogEl;
+    dialog != null && dialog.open && dialog.close(), this.zoomOpen = !1, this.useFallbackDialog = !1, this.zoomIndex = null, this.unlockPageScroll(), document.removeEventListener("keydown", this.boundKeydown), (_b = (_a = this.zoomTrigger) == null ? void 0 : _a.focus) == null || _b.call(_a), this.zoomTrigger = null;
   }
   onGlobalKey(e) {
     e.key === "Escape" && this.zoomOpen && (e.preventDefault(), this.closeZoom());
@@ -1141,176 +1154,176 @@ const D = class D extends R {
   unlockPageScroll() {
     document.documentElement.style.overflow = "";
   }
-  markBrokenDetail(e) {
-    const t = new Set(this.brokenDetail);
-    t.add(e), this.brokenDetail = t;
+  markBrokenDetail(index) {
+    const next = new Set(this.brokenDetail);
+    next.add(index), this.brokenDetail = next;
   }
   designVars() {
-    const e = this.config || {}, t = z(e, "aem_"), r = Math.max(0, Math.min(3, S(e.aem_shadow, 1)));
+    const c = this.config || {}, theme = readSectionTheme(c, "aem_"), shadowLevel = Math.max(0, Math.min(3, getUnitValue(c.aem_shadow, 1)));
     return {
-      ...j(t),
-      "--aem-stage-bg": String(e.aem_stage_bg || "#f3ece7"),
-      "--aem-spot-color": String(e.aem_spot_color || t.accent),
-      "--aem-line-color": String(e.aem_line_color || "#c4a99a"),
-      "--aem-active": String(e.aem_active_color || t.accent),
-      "--aem-card-border": String(e.aem_card_border || t.border),
-      "--aem-shadow": W(r),
-      "--aem-aspect": Y(e.aem_aspect).replace("/", " / "),
-      "--aem-max-width": `${S(e.aem_max_width, 420)}px`
+      ...themeStyleMap(theme),
+      "--aem-stage-bg": String(c.aem_stage_bg || "#f3ece7"),
+      "--aem-spot-color": String(c.aem_spot_color || theme.accent),
+      "--aem-line-color": String(c.aem_line_color || "#c4a99a"),
+      "--aem-active": String(c.aem_active_color || theme.accent),
+      "--aem-card-border": String(c.aem_card_border || theme.border),
+      "--aem-shadow": shadowForLevel(shadowLevel),
+      "--aem-aspect": parseAspectRatio(c.aem_aspect).replace("/", " / "),
+      "--aem-max-width": `${getUnitValue(c.aem_max_width, 420)}px`
     };
   }
   highlightIndex() {
     return this.hoverIndex ?? this.activeIndex;
   }
-  renderSpot(e) {
-    const t = this.highlightIndex(), r = this.featuredSet.has(e.index), a = this.showNumbers && e.show_number, d = e.spot_color || void 0;
-    return i`
+  renderSpot(d) {
+    const hi = this.highlightIndex(), featured = this.featuredSet.has(d.index), showNum = this.showNumbers && d.show_number, color = d.spot_color || void 0;
+    return html`
       <button
         type="button"
-        class=${x({
+        class=${classMap({
       "aem-spot": !0,
       "aem-spot--pulse": this.enablePulse,
-      "aem-spot--active": this.activeIndex === e.index,
-      "aem-spot--hover": this.hoverIndex === e.index,
-      "aem-spot--featured": r
+      "aem-spot--active": this.activeIndex === d.index,
+      "aem-spot--hover": this.hoverIndex === d.index,
+      "aem-spot--featured": featured
     })}
-        style=${k({
-      left: `${e.pos_x}%`,
-      top: `${e.pos_y}%`,
-      ...d ? { color: d } : {},
-      ...this.entered ? { animationDelay: `${80 + e.index * 55}ms` } : {}
+        style=${styleMap({
+      left: `${d.pos_x}%`,
+      top: `${d.pos_y}%`,
+      ...color ? { color } : {},
+      ...this.entered ? { animationDelay: `${80 + d.index * 55}ms` } : {}
     })}
-        data-index=${e.index}
-        aria-label=${e.name}
-        aria-pressed=${this.activeIndex === e.index ? "true" : "false"}
-        @pointerenter=${() => this.setHover(e.index)}
+        data-index=${d.index}
+        aria-label=${d.name}
+        aria-pressed=${this.activeIndex === d.index ? "true" : "false"}
+        @pointerenter=${() => this.setHover(d.index)}
         @pointerleave=${() => this.setHover(null)}
-        @focus=${() => this.setHover(e.index)}
-        @blur=${(c) => {
-      const m = c.relatedTarget;
-      m && this.renderRoot.contains(m) || this.setHover(null);
+        @focus=${() => this.setHover(d.index)}
+        @blur=${(e) => {
+      const next = e.relatedTarget;
+      next && this.renderRoot.contains(next) || this.setHover(null);
     }}
-        @click=${() => this.toggleActive(e.index)}
-        @keydown=${(c) => this.onSpotKeydown(c, e.index)}
+        @click=${() => this.toggleActive(d.index)}
+        @keydown=${(e) => this.onSpotKeydown(e, d.index)}
       >
         <span class="aem-spot__ring">
-          ${a ? i`<span class="aem-spot__num">${e.index + 1}</span>` : i`<span class="aem-spot__core" aria-hidden="true"></span>`}
+          ${showNum ? html`<span class="aem-spot__num">${d.index + 1}</span>` : html`<span class="aem-spot__core" aria-hidden="true"></span>`}
         </span>
         <span
-          class=${x({
+          class=${classMap({
       "aem-spot__tip": !0,
-      "aem-spot__tip--show": t === e.index
+      "aem-spot__tip--show": hi === d.index
     })}
-          >${e.name}</span
+          >${d.name}</span
         >
       </button>
     `;
   }
-  renderCard(e) {
-    const t = this.featuredSet.has(e.index), r = this.enableDetailImages && e.image && !this.brokenDetail.has(e.index), a = M(e.method), d = a.ar ? l(a.ar, a.en) : "", c = e.btn_text || l("عرض المنتج", "View product"), m = I(e.product_url) ? e.product_url : "";
-    return i`
+  renderCard(d) {
+    const featured = this.featuredSet.has(d.index), showImg = this.enableDetailImages && d.image && !this.brokenDetail.has(d.index), method = resolveMethodText(d.method), methodText = method.ar ? t(method.ar, method.en) : "", btnText = d.btn_text || t("عرض المنتج", "View product"), link = isValidHref(d.product_url) ? d.product_url : "";
+    return html`
       <article
-        class=${x({
+        class=${classMap({
       "aem-card": !0,
-      "aem-card--active": this.activeIndex === e.index,
-      "aem-card--hover": this.hoverIndex === e.index,
-      "aem-card--featured": t
+      "aem-card--active": this.activeIndex === d.index,
+      "aem-card--hover": this.hoverIndex === d.index,
+      "aem-card--featured": featured
     })}
-        data-index=${e.index}
+        data-index=${d.index}
         tabindex="0"
         role="button"
-        aria-pressed=${this.activeIndex === e.index ? "true" : "false"}
-        @pointerenter=${() => this.setHover(e.index)}
+        aria-pressed=${this.activeIndex === d.index ? "true" : "false"}
+        @pointerenter=${() => this.setHover(d.index)}
         @pointerleave=${() => this.setHover(null)}
-        @focus=${() => this.setHover(e.index)}
-        @blur=${(n) => {
-      const p = n.relatedTarget;
-      p && this.renderRoot.contains(p) || this.setHover(null);
+        @focus=${() => this.setHover(d.index)}
+        @blur=${(e) => {
+      const next = e.relatedTarget;
+      next && this.renderRoot.contains(next) || this.setHover(null);
     }}
-        @click=${(n) => {
-      n.target.closest("a, .aem-card__zoom") || this.toggleActive(e.index);
+        @click=${(e) => {
+      e.target.closest("a, .aem-card__zoom") || this.toggleActive(d.index);
     }}
-        @keydown=${(n) => {
-      (n.key === "Enter" || n.key === " ") && (n.preventDefault(), this.toggleActive(e.index));
+        @keydown=${(e) => {
+      (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.toggleActive(d.index));
     }}
       >
-        ${t && e.badge ? i`<span class="aem-badge">${e.badge}</span>` : s}
-        ${r ? i`<div class="aem-card__media">
+        ${featured && d.badge ? html`<span class="aem-badge">${d.badge}</span>` : nothing}
+        ${showImg ? html`<div class="aem-card__media">
               <img
-                src=${e.image}
-                alt=${e.alt || e.name}
+                src=${d.image}
+                alt=${d.alt || d.name}
                 loading="lazy"
                 decoding="async"
-                @error=${() => this.markBrokenDetail(e.index)}
+                @error=${() => this.markBrokenDetail(d.index)}
               />
-              ${this.enableZoom ? i`<button
+              ${this.enableZoom ? html`<button
                     type="button"
                     class="aem-card__zoom"
-                    aria-label=${l("تكبير التفصيلة", "Zoom detail")}
-                    @click=${(n) => {
-      n.stopPropagation(), this.openZoom(e.index, n.currentTarget);
+                    aria-label=${t("تكبير التفصيلة", "Zoom detail")}
+                    @click=${(e) => {
+      e.stopPropagation(), this.openZoom(d.index, e.currentTarget);
     }}
-                  ></button>` : s}
-            </div>` : s}
-        <h3 class="aem-card__title">${e.name}</h3>
-        ${e.desc ? i`<p class="aem-card__desc">${e.desc}</p>` : s}
-        ${e.stitch_type || e.thread || d || e.duration || e.extra ? i`<div class="aem-meta">
-              ${e.stitch_type ? i`<div>
-                    <strong>${l("التطريز", "Stitch")}:</strong> ${e.stitch_type}
-                  </div>` : s}
-              ${e.thread ? i`<div>
-                    <strong>${l("الخيط / الخامة", "Thread / material")}:</strong>
-                    ${e.thread}
-                  </div>` : s}
-              ${d ? i`<div>
-                    <strong>${l("التنفيذ", "Method")}:</strong> ${d}
-                  </div>` : s}
-              ${e.duration ? i`<div>
-                    <strong>${l("المدة", "Duration")}:</strong> ${e.duration}
-                  </div>` : s}
-              ${e.extra ? i`<div>${e.extra}</div>` : s}
-            </div>` : s}
-        ${m ? i`<a
+                  ></button>` : nothing}
+            </div>` : nothing}
+        <h3 class="aem-card__title">${d.name}</h3>
+        ${d.desc ? html`<p class="aem-card__desc">${d.desc}</p>` : nothing}
+        ${d.stitch_type || d.thread || methodText || d.duration || d.extra ? html`<div class="aem-meta">
+              ${d.stitch_type ? html`<div>
+                    <strong>${t("التطريز", "Stitch")}:</strong> ${d.stitch_type}
+                  </div>` : nothing}
+              ${d.thread ? html`<div>
+                    <strong>${t("الخيط / الخامة", "Thread / material")}:</strong>
+                    ${d.thread}
+                  </div>` : nothing}
+              ${methodText ? html`<div>
+                    <strong>${t("التنفيذ", "Method")}:</strong> ${methodText}
+                  </div>` : nothing}
+              ${d.duration ? html`<div>
+                    <strong>${t("المدة", "Duration")}:</strong> ${d.duration}
+                  </div>` : nothing}
+              ${d.extra ? html`<div>${d.extra}</div>` : nothing}
+            </div>` : nothing}
+        ${link ? html`<a
               class="fs-btn aem-card__link"
-              href=${m}
-              target=${_(this.openNewTab ? "_blank" : void 0)}
-              rel=${_(this.openNewTab ? "noopener noreferrer" : void 0)}
-              @click=${(n) => n.stopPropagation()}
-              >${c}</a
-            >` : s}
+              href=${link}
+              target=${ifDefined(this.openNewTab ? "_blank" : void 0)}
+              rel=${ifDefined(this.openNewTab ? "noopener noreferrer" : void 0)}
+              @click=${(e) => e.stopPropagation()}
+              >${btnText}</a
+            >` : nothing}
       </article>
     `;
   }
   renderLines() {
-    return !this.isDesktop || !this.enableLines || !this.lines.length ? s : (this.highlightIndex(), i`
+    return !this.isDesktop || !this.enableLines || !this.lines.length ? nothing : (this.highlightIndex(), html`
       <svg class="aem-lines" aria-hidden="true" focusable="false">
         ${this.lines.map(
-      (e) => i`<path
-            class=${x({
+      (line) => html`<path
+            class=${classMap({
         "aem-line": !0,
-        "aem-line--active": this.activeIndex === e.index,
-        "aem-line--hover": this.hoverIndex === e.index
+        "aem-line--active": this.activeIndex === line.index,
+        "aem-line--hover": this.hoverIndex === line.index
       })}
-            d=${e.d}
-            style=${this.entered ? k({
-        animationDelay: `${350 + e.index * 40}ms`
-      }) : s}
+            d=${line.d}
+            style=${this.entered ? styleMap({
+        animationDelay: `${350 + line.index * 40}ms`
+      }) : nothing}
           />`
     )}
       </svg>
     `);
   }
   renderStage() {
-    const e = this.config || {}, t = u(e.aem_image_alt).trim() || l("عباية", "Abaya");
-    return i`
+    const c = this.config || {}, alt = localizedString(c.aem_image_alt).trim() || t("عباية", "Abaya");
+    return html`
       <div class="aem-stage-wrap">
         <div class="aem-stage">
           <div class="aem-stage__ornament" aria-hidden="true"></div>
           <div class="aem-stage__img-wrap">
-            ${this.brokenMain ? s : i`<img
+            ${this.brokenMain ? nothing : html`<img
                   class="aem-stage__img"
                   src=${this.mainImage}
-                  alt=${t}
+                  alt=${alt}
                   decoding="async"
                   @error=${() => {
       this.brokenMain = !0;
@@ -1318,251 +1331,251 @@ const D = class D extends R {
                 />`}
           </div>
           <div class="aem-spots">
-            ${this.details.map((r) => this.renderSpot(r))}
+            ${this.details.map((d) => this.renderSpot(d))}
           </div>
         </div>
       </div>
     `;
   }
-  renderColSlot(e, t) {
-    const r = t && F(t) === e;
-    return i`
-      <div class="aem-col aem-col--${e}">
-        ${r && t ? i`<div class="aem-card-slot aem-card-slot--in">
-              ${this.renderCard(t)}
-            </div>` : i`<div class="aem-col__placeholder" aria-hidden="true"></div>`}
+  renderColSlot(side, detail) {
+    const show = detail && resolveSide(detail) === side;
+    return html`
+      <div class="aem-col aem-col--${side}">
+        ${show && detail ? html`<div class="aem-card-slot aem-card-slot--in">
+              ${this.renderCard(detail)}
+            </div>` : html`<div class="aem-col__placeholder" aria-hidden="true"></div>`}
       </div>
     `;
   }
   renderDesktop() {
-    var a;
-    const e = this.focusIndex(), t = e != null && this.details[e] || null, r = this.highlightIndex();
-    return i`
+    var _a;
+    const focus = this.focusIndex(), detail = focus != null && this.details[focus] || null, hi = this.highlightIndex();
+    return html`
       <div
-        class=${x({
+        class=${classMap({
       "aem-desk": !0,
-      "aem-desk--dim": r != null,
-      "aem-desk--compact": y((a = this.config) == null ? void 0 : a.aem_layout, "map") === "compact",
-      "aem-desk--focus": t != null
+      "aem-desk--dim": hi != null,
+      "aem-desk--compact": getRadioValue((_a = this.config) == null ? void 0 : _a.aem_layout, "map") === "compact",
+      "aem-desk--focus": detail != null
     })}
       >
-        ${this.renderColSlot("left", t)}
+        ${this.renderColSlot("left", detail)}
         <div class="aem-stage-stack">
           ${this.renderStage()}
           <p
-            class=${x({
+            class=${classMap({
       "aem-pick-hint": !0,
-      "aem-pick-hint--hidden": t != null
+      "aem-pick-hint--hidden": detail != null
     })}
             aria-live="polite"
-            aria-hidden=${t != null ? "true" : "false"}
+            aria-hidden=${detail != null ? "true" : "false"}
           >
-            ${l(
+            ${t(
       "اضغطي على رقم التفصيلة لعرض تفاصيلها",
       "Tap a detail number to view it"
     )}
           </p>
         </div>
-        ${this.renderColSlot("right", t)}
-        ${t ? this.renderLines() : s}
+        ${this.renderColSlot("right", detail)}
+        ${detail ? this.renderLines() : nothing}
       </div>
     `;
   }
   renderMobile() {
-    const e = this.activeIndex != null ? this.details[this.activeIndex] : null, t = this.details.length > 1;
-    return i`
+    const active = this.activeIndex != null ? this.details[this.activeIndex] : null, showNav = this.details.length > 1;
+    return html`
       <div class="aem-mobile">
         ${this.renderStage()}
         <div class="aem-mobile__live" aria-live="polite">
-          ${e ? e.name : l(
+          ${active ? active.name : t(
       "اضغطي على رقم التفصيلة",
       "Tap a detail number"
     )}
         </div>
-        ${e ? i`<div class="aem-mobile__card aem-card-slot aem-card-slot--in">
-              ${this.renderCard(e)}
-            </div>` : i`<p class="aem-pick-hint">
-              ${l(
+        ${active ? html`<div class="aem-mobile__card aem-card-slot aem-card-slot--in">
+              ${this.renderCard(active)}
+            </div>` : html`<p class="aem-pick-hint">
+              ${t(
       "اختاري تفصيلة من الأرقام على الصورة",
       "Choose a detail from the numbers on the image"
     )}
             </p>`}
-        ${t && e ? i`<div class="aem-nav">
+        ${showNav && active ? html`<div class="aem-nav">
               <button
                 type="button"
-                aria-label=${l("السابق", "Previous")}
-                ?disabled=${e.index <= 0}
-                @click=${() => this.setActive(Math.max(0, e.index - 1))}
+                aria-label=${t("السابق", "Previous")}
+                ?disabled=${active.index <= 0}
+                @click=${() => this.setActive(Math.max(0, active.index - 1))}
               >
                 ‹
               </button>
               <button
                 type="button"
-                aria-label=${l("التالي", "Next")}
-                ?disabled=${e.index >= this.details.length - 1}
+                aria-label=${t("التالي", "Next")}
+                ?disabled=${active.index >= this.details.length - 1}
                 @click=${() => this.setActive(
-      Math.min(this.details.length - 1, e.index + 1)
+      Math.min(this.details.length - 1, active.index + 1)
     )}
               >
                 ›
               </button>
-            </div>` : s}
+            </div>` : nothing}
       </div>
     `;
   }
   renderZoom() {
-    if (!this.zoomOpen || this.zoomIndex == null) return s;
-    const e = this.details[this.zoomIndex];
-    if (!e) return s;
-    const t = M(e.method), r = t.ar ? l(t.ar, t.en) : "", a = I(e.product_url) ? e.product_url : "", d = e.btn_text || l("عرض المنتج", "View product"), c = i`
+    if (!this.zoomOpen || this.zoomIndex == null) return nothing;
+    const d = this.details[this.zoomIndex];
+    if (!d) return nothing;
+    const method = resolveMethodText(d.method), methodText = method.ar ? t(method.ar, method.en) : "", link = isValidHref(d.product_url) ? d.product_url : "", btnText = d.btn_text || t("عرض المنتج", "View product"), inner = html`
       <div class="aem-dialog__inner">
         <button
           type="button"
           class="aem-dialog__close"
-          aria-label=${l("إغلاق", "Close")}
+          aria-label=${t("إغلاق", "Close")}
           @click=${() => this.closeZoom()}
         >
           ✕
         </button>
-        <img class="aem-dialog__img" src=${e.image} alt=${e.alt || e.name} />
-        <h3 class="aem-dialog__title">${e.name}</h3>
-        ${e.desc ? i`<p class="aem-dialog__desc">${e.desc}</p>` : s}
-        ${e.stitch_type || r ? i`<div class="aem-meta">
-              ${e.stitch_type ? i`<div>
-                    <strong>${l("التطريز", "Stitch")}:</strong> ${e.stitch_type}
-                  </div>` : s}
-              ${r ? i`<div>
-                    <strong>${l("التنفيذ", "Method")}:</strong> ${r}
-                  </div>` : s}
-            </div>` : s}
-        ${a ? i`<a
+        <img class="aem-dialog__img" src=${d.image} alt=${d.alt || d.name} />
+        <h3 class="aem-dialog__title">${d.name}</h3>
+        ${d.desc ? html`<p class="aem-dialog__desc">${d.desc}</p>` : nothing}
+        ${d.stitch_type || methodText ? html`<div class="aem-meta">
+              ${d.stitch_type ? html`<div>
+                    <strong>${t("التطريز", "Stitch")}:</strong> ${d.stitch_type}
+                  </div>` : nothing}
+              ${methodText ? html`<div>
+                    <strong>${t("التنفيذ", "Method")}:</strong> ${methodText}
+                  </div>` : nothing}
+            </div>` : nothing}
+        ${link ? html`<a
               class="fs-btn"
-              href=${a}
-              target=${_(this.openNewTab ? "_blank" : void 0)}
-              rel=${_(this.openNewTab ? "noopener noreferrer" : void 0)}
-              >${d}</a
-            >` : s}
+              href=${link}
+              target=${ifDefined(this.openNewTab ? "_blank" : void 0)}
+              rel=${ifDefined(this.openNewTab ? "noopener noreferrer" : void 0)}
+              >${btnText}</a
+            >` : nothing}
       </div>
     `;
-    return this.useFallbackDialog ? i`<div
+    return this.useFallbackDialog ? html`<div
         class="aem-fs-fallback"
-        @click=${(m) => {
-      m.target === m.currentTarget && this.closeZoom();
+        @click=${(e) => {
+      e.target === e.currentTarget && this.closeZoom();
     }}
       >
-        ${c}
-      </div>` : i`<dialog
+        ${inner}
+      </div>` : html`<dialog
       class="aem-dialog"
-      @click=${(m) => {
-      m.target === this.dialogEl && this.closeZoom();
+      @click=${(e) => {
+      e.target === this.dialogEl && this.closeZoom();
     }}
       @close=${() => {
       this.zoomOpen && this.closeZoom();
     }}
     >
-      ${c}
+      ${inner}
     </dialog>`;
   }
   render() {
-    if (!this.mainImage) return s;
-    const e = this.config || {}, r = z(e, "aem_").animate && !$(), a = f(e.aem_full_width, !1), d = f(e.aem_show_title, !0), c = f(e.aem_show_desc, !0), m = f(e.aem_show_btn, !0), n = d ? u(e.aem_title).trim() : "", p = c ? u(e.aem_desc).trim() : "", v = E(e.aem_product_url), w = u(e.aem_btn_text).trim() || l("عرض العباية", "View abaya"), A = m && I(v);
-    return i`
+    if (!this.mainImage) return nothing;
+    const c = this.config || {}, animate = readSectionTheme(c, "aem_").animate && !prefersReducedMotion(), full = isTruthy(c.aem_full_width, !1), showTitle = isTruthy(c.aem_show_title, !0), showDesc = isTruthy(c.aem_show_desc, !0), showBtn = isTruthy(c.aem_show_btn, !0), title = showTitle ? localizedString(c.aem_title).trim() : "", desc = showDesc ? localizedString(c.aem_desc).trim() : "", mainUrl = extractLink(c.aem_product_url), mainBtn = localizedString(c.aem_btn_text).trim() || t("عرض العباية", "View abaya"), showMainBtn = showBtn && isValidHref(mainUrl);
+    return html`
       <section
-        class=${x({
+        class=${classMap({
       "fs-section": !0,
-      "fs-section--full": a,
-      "fs-animate": r,
+      "fs-section--full": full,
+      "fs-animate": animate,
       "aem--enter": this.entered
     })}
-        style=${k(this.designVars())}
-        aria-label=${n || l("خريطة تطريز العباية", "Abaya embroidery map")}
+        style=${styleMap(this.designVars())}
+        aria-label=${title || t("خريطة تطريز العباية", "Abaya embroidery map")}
       >
         <div class="fs-container">
-          ${n || p ? i`<header class="fs-header">
-                ${n ? i`<h2 class="fs-title">${n}</h2>` : s}
-                ${p ? i`<p class="fs-desc">${p}</p>` : s}
-              </header>` : s}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="aem-shell">
             ${this.isDesktop ? this.renderDesktop() : this.renderMobile()}
-            ${this.activeIndex != null ? i`<div class="aem-clear-wrap">
+            ${this.activeIndex != null ? html`<div class="aem-clear-wrap">
                   <button
                     type="button"
                     class="aem-clear"
                     @click=${() => this.clearActive()}
                   >
-                    ${l("مسح التحديد", "Clear selection")}
+                    ${t("مسح التحديد", "Clear selection")}
                   </button>
-                </div>` : s}
-            ${A ? i`<div class="aem-cta">
+                </div>` : nothing}
+            ${showMainBtn ? html`<div class="aem-cta">
                   <a
                     class="fs-btn"
-                    href=${v}
-                    target=${_(this.openNewTab ? "_blank" : void 0)}
-                    rel=${_(
+                    href=${mainUrl}
+                    target=${ifDefined(this.openNewTab ? "_blank" : void 0)}
+                    rel=${ifDefined(
       this.openNewTab ? "noopener noreferrer" : void 0
     )}
-                    >${w}</a
+                    >${mainBtn}</a
                   >
-                </div>` : s}
+                </div>` : nothing}
           </div>
         </div>
         ${this.renderZoom()}
-        ${V(this.config || {}, "aem_")}
+        ${renderCommerceOutcome(this.config || {}, "aem_")}
       </section>
     `;
   }
 };
-D.styles = [
-  Z,
-  B,
-  C`
+__name(_AbayaEmbroideryMap, "AbayaEmbroideryMap"), _AbayaEmbroideryMap.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let h = D;
-g([
-  N({ type: Object })
-], h.prototype, "config");
-g([
-  b()
-], h.prototype, "activeIndex");
-g([
-  b()
-], h.prototype, "hoverIndex");
-g([
-  b()
-], h.prototype, "lines");
-g([
-  b()
-], h.prototype, "entered");
-g([
-  b()
-], h.prototype, "zoomOpen");
-g([
-  b()
-], h.prototype, "zoomIndex");
-g([
-  b()
-], h.prototype, "useFallbackDialog");
-g([
-  b()
-], h.prototype, "brokenMain");
-g([
-  b()
-], h.prototype, "brokenDetail");
-g([
-  b()
-], h.prototype, "isDesktop");
-g([
-  O(".aem-desk")
-], h.prototype, "deskEl");
-g([
-  O("dialog.aem-dialog")
-], h.prototype, "dialogEl");
-typeof h < "u" && h.registerSallaComponent("salla-abaya-embroidery-map");
+let AbayaEmbroideryMap = _AbayaEmbroideryMap;
+__decorateClass([
+  property({ type: Object })
+], AbayaEmbroideryMap.prototype, "config");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "activeIndex");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "hoverIndex");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "lines");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "entered");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "zoomOpen");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "zoomIndex");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "useFallbackDialog");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "brokenMain");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "brokenDetail");
+__decorateClass([
+  state()
+], AbayaEmbroideryMap.prototype, "isDesktop");
+__decorateClass([
+  query(".aem-desk")
+], AbayaEmbroideryMap.prototype, "deskEl");
+__decorateClass([
+  query("dialog.aem-dialog")
+], AbayaEmbroideryMap.prototype, "dialogEl");
+typeof AbayaEmbroideryMap < "u" && AbayaEmbroideryMap.registerSallaComponent("salla-abaya-embroidery-map");
 export {
-  h as default
+  AbayaEmbroideryMap as default
 };

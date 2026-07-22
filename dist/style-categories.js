@@ -1,54 +1,57 @@
-import { css as $, LitElement as E, nothing as b, html as p } from "lit";
-import { property as S } from "lit/decorators.js";
-import { classMap as _ } from "lit/directives/class-map.js";
-import { ref as C } from "lit/directives/ref.js";
-import { styleMap as D } from "lit/directives/style-map.js";
-import { t as l, n as T, l as h, d as L, s as z, v, r as P, p as M, i as O, a as q, b as A } from "./sharedStyles-Cd7RKVf-.js";
-const k = "__fsDragScrollCleanup", H = 6;
-function I(c) {
-  var f;
-  if (!c) return;
-  const e = c;
-  (f = e[k]) == null || f.call(e);
-  let t = null, n = 0, r = 0, i = !1;
-  const o = (s) => {
-    s.pointerType !== "mouse" || s.button !== 0 || e.scrollWidth <= e.clientWidth || (t = s.pointerId, n = s.clientX, r = e.scrollLeft, i = !1, e.style.scrollSnapType = "none", e.style.cursor = "grabbing");
-  }, m = (s) => {
-    if (t === null || s.pointerId !== t) return;
-    const u = s.clientX - n;
-    if (!i && Math.abs(u) > H) {
-      i = !0;
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { ref } from "lit/directives/ref.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { t, n as normalizeCollection, l as localizedString, d as extractLink, s as sharedSectionCss, v as isValidHref, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const CLEANUP_KEY = "__fsDragScrollCleanup", DRAG_THRESHOLD_PX = 6;
+function enableDragScroll(el) {
+  var _a;
+  if (!el) return;
+  const host = el;
+  (_a = host[CLEANUP_KEY]) == null || _a.call(host);
+  let pointerId = null, startX = 0, startScrollLeft = 0, dragged = !1;
+  const onPointerDown = /* @__PURE__ */ __name((event) => {
+    event.pointerType !== "mouse" || event.button !== 0 || host.scrollWidth <= host.clientWidth || (pointerId = event.pointerId, startX = event.clientX, startScrollLeft = host.scrollLeft, dragged = !1, host.style.scrollSnapType = "none", host.style.cursor = "grabbing");
+  }, "onPointerDown"), onPointerMove = /* @__PURE__ */ __name((event) => {
+    if (pointerId === null || event.pointerId !== pointerId) return;
+    const dx = event.clientX - startX;
+    if (!dragged && Math.abs(dx) > DRAG_THRESHOLD_PX) {
+      dragged = !0;
       try {
-        e.setPointerCapture(t);
+        host.setPointerCapture(pointerId);
       } catch {
       }
     }
-    i && (s.preventDefault(), e.scrollLeft = r - u);
-  }, d = (s) => {
-    if (!(t === null || s.pointerId !== t)) {
-      if (i)
+    dragged && (event.preventDefault(), host.scrollLeft = startScrollLeft - dx);
+  }, "onPointerMove"), endDrag = /* @__PURE__ */ __name((event) => {
+    if (!(pointerId === null || event.pointerId !== pointerId)) {
+      if (dragged)
         try {
-          e.releasePointerCapture(t);
+          host.releasePointerCapture(pointerId);
         } catch {
         }
-      if (t = null, e.style.scrollSnapType = "", e.style.cursor = "", i) {
-        const u = (w) => {
-          w.preventDefault(), w.stopPropagation();
-        };
-        e.addEventListener("click", u, { capture: !0, once: !0 }), window.setTimeout(() => {
-          e.removeEventListener("click", u, { capture: !0 });
+      if (pointerId = null, host.style.scrollSnapType = "", host.style.cursor = "", dragged) {
+        const suppressClick = /* @__PURE__ */ __name((clickEvent) => {
+          clickEvent.preventDefault(), clickEvent.stopPropagation();
+        }, "suppressClick");
+        host.addEventListener("click", suppressClick, { capture: !0, once: !0 }), window.setTimeout(() => {
+          host.removeEventListener("click", suppressClick, { capture: !0 });
         }, 0);
       }
-      i = !1;
+      dragged = !1;
     }
-  }, a = (s) => {
-    s.preventDefault();
-  };
-  e.addEventListener("pointerdown", o), e.addEventListener("pointermove", m), e.addEventListener("pointerup", d), e.addEventListener("pointercancel", d), e.addEventListener("dragstart", a, { capture: !0 }), e.style.touchAction = "pan-x pan-y", e.scrollWidth > e.clientWidth && (e.style.cursor = "grab"), e[k] = () => {
-    e.removeEventListener("pointerdown", o), e.removeEventListener("pointermove", m), e.removeEventListener("pointerup", d), e.removeEventListener("pointercancel", d), e.removeEventListener("dragstart", a, { capture: !0 });
+  }, "endDrag"), onDragStart = /* @__PURE__ */ __name((event) => {
+    event.preventDefault();
+  }, "onDragStart");
+  host.addEventListener("pointerdown", onPointerDown), host.addEventListener("pointermove", onPointerMove), host.addEventListener("pointerup", endDrag), host.addEventListener("pointercancel", endDrag), host.addEventListener("dragstart", onDragStart, { capture: !0 }), host.style.touchAction = "pan-x pan-y", host.scrollWidth > host.clientWidth && (host.style.cursor = "grab"), host[CLEANUP_KEY] = () => {
+    host.removeEventListener("pointerdown", onPointerDown), host.removeEventListener("pointermove", onPointerMove), host.removeEventListener("pointerup", endDrag), host.removeEventListener("pointercancel", endDrag), host.removeEventListener("dragstart", onDragStart, { capture: !0 });
   };
 }
-const W = $`
+__name(enableDragScroll, "enableDragScroll");
+const componentStyles = css`
   .stc-shell {
     position: relative;
   }
@@ -247,57 +250,58 @@ const W = $`
       transition: none !important;
     }
   }
-`, y = [
+`, DEFAULTS = [
   {
     id: "evening",
     image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
-    title: l("سهرة", "Evening"),
+    title: t("سهرة", "Evening"),
     url: ""
   },
   {
     id: "daily",
     image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80",
-    title: l("يومي", "Daily"),
+    title: t("يومي", "Daily"),
     url: ""
   },
   {
     id: "occasion",
     image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80",
-    title: l("مناسبات", "Occasions"),
+    title: t("مناسبات", "Occasions"),
     url: ""
   },
   {
     id: "new",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
-    title: l("وصل حديثاً", "New in"),
+    title: t("وصل حديثاً", "New in"),
     url: ""
   }
 ];
-function X(c) {
-  const e = T(c).map((t, n) => {
-    const r = String(t.image || t.poster || "").trim(), i = h(t.title) || h(t.label), o = L(t.link) || L(t.url) || String(t.link || "").trim();
+function parseCategoryTiles(raw) {
+  const parsed = normalizeCollection(raw).map((item, index) => {
+    const image = String(item.image || item.poster || "").trim(), title = localizedString(item.title) || localizedString(item.label), url = extractLink(item.link) || extractLink(item.url) || String(item.link || "").trim();
     return {
-      id: String(t.id || `stc-${n}`),
-      image: r,
-      title: i,
-      url: o
+      id: String(item.id || `stc-${index}`),
+      image,
+      title,
+      url
     };
-  }).filter((t) => t.image || t.title);
-  return e.length ? e.map((t, n) => {
-    const r = y[n % y.length];
+  }).filter((v) => v.image || v.title);
+  return parsed.length ? parsed.map((item, i) => {
+    const d = DEFAULTS[i % DEFAULTS.length];
     return {
-      ...t,
-      image: t.image || r.image,
-      title: t.title || r.title
+      ...item,
+      image: item.image || d.image,
+      title: item.title || d.title
     };
-  }) : y.map((t) => ({ ...t }));
+  }) : DEFAULTS.map((d) => ({ ...d }));
 }
-var j = Object.defineProperty, R = (c, e, t, n) => {
-  for (var r = void 0, i = c.length - 1, o; i >= 0; i--)
-    (o = c[i]) && (r = o(e, t, r) || r);
-  return r && j(e, t, r), r;
-};
-const x = class x extends E {
+__name(parseCategoryTiles, "parseCategoryTiles");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _StyleCategories = class _StyleCategories extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.boundLang = () => this.requestUpdate();
   }
@@ -308,81 +312,81 @@ const x = class x extends E {
     window.removeEventListener("language-changed", this.boundLang), super.disconnectedCallback();
   }
   get tiles() {
-    var e;
-    return X((e = this.config) == null ? void 0 : e.stc_items);
+    var _a;
+    return parseCategoryTiles((_a = this.config) == null ? void 0 : _a.stc_items);
   }
-  openTile(e) {
-    v(e) && window.open(e, "_blank", "noopener,noreferrer");
+  openTile(url) {
+    isValidHref(url) && window.open(url, "_blank", "noopener,noreferrer");
   }
   render() {
-    const e = this.config || {}, t = P(e, "stc_"), n = t.animate && !M(), r = h(e.stc_title) || l("تصنيفات الأزياء", "Style Categories"), i = h(e.stc_desc), o = O(e.stc_show_title, !0), m = String(e.stc_layout || "grid"), d = this.tiles;
-    return p`
+    const c = this.config || {}, theme = readSectionTheme(c, "stc_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.stc_title) || t("تصنيفات الأزياء", "Style Categories"), desc = localizedString(c.stc_desc), showTitle = isTruthy(c.stc_show_title, !0), layout = String(c.stc_layout || "grid"), tiles = this.tiles;
+    return html`
       <section
-        class=${_({ "fs-section": !0, "fs-animate": n, "stc-shell": !0 })}
-        style=${D(q(t))}
-        aria-label=${r}
+        class=${classMap({ "fs-section": !0, "fs-animate": animate, "stc-shell": !0 })}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title}
       >
         <div class="fs-container">
-          ${o ? p`<header class="stc-header">
-                <p class="stc-eyebrow">${l("تشكيلتنا", "Our collection")}</p>
-                <h2 class="stc-title">${r}</h2>
+          ${showTitle ? html`<header class="stc-header">
+                <p class="stc-eyebrow">${t("تشكيلتنا", "Our collection")}</p>
+                <h2 class="stc-title">${title}</h2>
                 <span class="stc-title-line" aria-hidden="true"></span>
-                ${i ? p`<p class="stc-desc">${i}</p>` : b}
-              </header>` : b}
+                ${desc ? html`<p class="stc-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          ${d.length ? p`
+          ${tiles.length ? html`
                 <div
-                  class=${_({ "stc-grid": m === "grid", "stc-slider": m === "slider" })}
+                  class=${classMap({ "stc-grid": layout === "grid", "stc-slider": layout === "slider" })}
                   role="list"
-                  ${C((a) => {
-      a instanceof HTMLElement && a.classList.contains("stc-slider") && I(a);
+                  ${ref((el) => {
+      el instanceof HTMLElement && el.classList.contains("stc-slider") && enableDragScroll(el);
     })}
                 >
-                  ${d.map(
-      (a) => p`
+                  ${tiles.map(
+      (tile) => html`
                       <a
                         class="stc-tile"
                         role="listitem"
-                        href=${v(a.url) ? a.url : b}
+                        href=${isValidHref(tile.url) ? tile.url : nothing}
                         target="_blank"
                         rel="noopener noreferrer"
                         tabindex="0"
-                        aria-label=${a.title || l("تصنيف", "Category")}
-                        @click=${(f) => {
-        v(a.url) || f.preventDefault();
+                        aria-label=${tile.title || t("تصنيف", "Category")}
+                        @click=${(e) => {
+        isValidHref(tile.url) || e.preventDefault();
       }}
                       >
-                        <img class="stc-tile__img" src=${a.image} alt=${a.title || ""} loading="lazy" />
+                        <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ""} loading="lazy" />
                         <div class="stc-tile__shade" aria-hidden="true"></div>
                         <div class="stc-tile__label">
-                          ${a.title}
+                          ${tile.title}
                           <span class="stc-tile__rule" aria-hidden="true"></span>
                         </div>
                       </a>
                     `
     )}
                 </div>
-              ` : p`<div class="stc-empty">${l("أضف تصنيفات من إعدادات العنصر", "Add categories from element settings")}</div>`}
-          ${A(this.config || {}, "stc_")}
+              ` : html`<div class="stc-empty">${t("أضف تصنيفات من إعدادات العنصر", "Add categories from element settings")}</div>`}
+          ${renderCommerceOutcome(this.config || {}, "stc_")}
         </div>
       </section>
     `;
   }
 };
-x.styles = [
-  z,
-  W,
-  $`
+__name(_StyleCategories, "StyleCategories"), _StyleCategories.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let g = x;
-R([
-  S({ type: Object })
-], g.prototype, "config");
-typeof g < "u" && g.registerSallaComponent("salla-style-categories");
+let StyleCategories = _StyleCategories;
+__decorateClass([
+  property({ type: Object })
+], StyleCategories.prototype, "config");
+typeof StyleCategories < "u" && StyleCategories.registerSallaComponent("salla-style-categories");
 export {
-  g as default
+  StyleCategories as default
 };

@@ -1,9 +1,11 @@
-import { css as w, LitElement as k, nothing as c, html as i } from "lit";
-import { property as C, state as _ } from "lit/decorators.js";
-import { classMap as f } from "lit/directives/class-map.js";
-import { styleMap as y } from "lit/directives/style-map.js";
-import { l as t, n as O, d as x, u as U, q as j, s as H, p as b, i as p, t as m, r as I, a as E, b as D } from "./sharedStyles-Cd7RKVf-.js";
-const q = w`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { l as localizedString, n as normalizeCollection, d as extractLink, u as clamp, q as getUnitValue, s as sharedSectionCss, p as prefersReducedMotion, i as isTruthy, t, r as readSectionTheme, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .cr-stage {
     position: relative;
     overflow: hidden;
@@ -242,37 +244,42 @@ const q = w`
     }
   }
 `;
-function P(a) {
-  const e = t(a, "").trim();
-  if (!e) return null;
-  const r = new Date(e);
-  return Number.isFinite(r.getTime()) ? r : null;
+function parseLaunchDate(raw) {
+  const str = localizedString(raw, "").trim();
+  if (!str) return null;
+  const parsed = new Date(str);
+  return Number.isFinite(parsed.getTime()) ? parsed : null;
 }
-function Q(a, e = /* @__PURE__ */ new Date()) {
-  const r = Math.max(0, a.getTime() - e.getTime()), s = Math.floor(r / 1e3), n = Math.floor(s / 86400), l = Math.floor(s % 86400 / 3600), o = Math.floor(s % 3600 / 60), g = s % 60;
-  return { days: n, hours: l, minutes: o, seconds: g, totalMs: r };
+__name(parseLaunchDate, "parseLaunchDate");
+function getCountdown(target, now = /* @__PURE__ */ new Date()) {
+  const totalMs = Math.max(0, target.getTime() - now.getTime()), totalSec = Math.floor(totalMs / 1e3), days = Math.floor(totalSec / 86400), hours = Math.floor(totalSec % 86400 / 3600), minutes = Math.floor(totalSec % 3600 / 60), seconds = totalSec % 60;
+  return { days, hours, minutes, seconds, totalMs };
 }
-function Y(a) {
-  return O(a).map((e) => ({
-    image: t(e.image),
-    name: t(e.name),
-    desc: t(e.desc),
-    url: x(e.url),
-    btn_text: t(e.btn_text)
-  })).filter((e) => e.name || e.image);
+__name(getCountdown, "getCountdown");
+function parseRevealProducts(raw) {
+  return normalizeCollection(raw).map((item) => ({
+    image: localizedString(item.image),
+    name: localizedString(item.name),
+    desc: localizedString(item.desc),
+    url: extractLink(item.url),
+    btn_text: localizedString(item.btn_text)
+  })).filter((p) => p.name || p.image);
 }
-function A(a) {
-  return a ? /\.(mp4|webm|ogg)(\?|$)/i.test(a) || a.includes("video") : !1;
+__name(parseRevealProducts, "parseRevealProducts");
+function isVideoUrl(url) {
+  return url ? /\.(mp4|webm|ogg)(\?|$)/i.test(url) || url.includes("video") : !1;
 }
-function F(a) {
-  return U(j(a, 0), 0, 100) / 100;
+__name(isVideoUrl, "isVideoUrl");
+function overlayOpacity(raw) {
+  return clamp(getUnitValue(raw, 0), 0, 100) / 100;
 }
-var R = Object.defineProperty, h = (a, e, r, s) => {
-  for (var n = void 0, l = a.length - 1, o; l >= 0; l--)
-    (o = a[l]) && (n = o(e, r, n) || n);
-  return n && R(e, r, n), n;
-};
-const v = class v extends k {
+__name(overlayOpacity, "overlayOpacity");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _CollectionReveal = class _CollectionReveal extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.phase = "pre", this.curtainOpen = !1, this.countdown = {
       days: 0,
@@ -286,31 +293,31 @@ const v = class v extends k {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLangHandler), this.motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)"), this.motionQuery.addEventListener("change", this.boundMotionHandler), this.syncTimer();
   }
   disconnectedCallback() {
-    var e;
-    window.removeEventListener("language-changed", this.boundLangHandler), (e = this.motionQuery) == null || e.removeEventListener("change", this.boundMotionHandler), this.clearTimer(), this.curtainTimer && clearTimeout(this.curtainTimer), super.disconnectedCallback();
+    var _a;
+    window.removeEventListener("language-changed", this.boundLangHandler), (_a = this.motionQuery) == null || _a.removeEventListener("change", this.boundMotionHandler), this.clearTimer(), this.curtainTimer && clearTimeout(this.curtainTimer), super.disconnectedCallback();
   }
   clearTimer() {
     this.timerId != null && (clearInterval(this.timerId), this.timerId = null);
   }
   get cfg() {
-    const e = this.config;
-    return e && typeof e == "object" ? e : {};
+    const value = this.config;
+    return value && typeof value == "object" ? value : {};
   }
   syncTimer() {
     this.clearTimer();
-    const e = P(this.cfg.cr_launch_at);
-    if (!e) {
+    const launchAt = parseLaunchDate(this.cfg.cr_launch_at);
+    if (!launchAt) {
       this.phase = "post";
       return;
     }
-    const r = () => {
-      const s = Q(e);
-      this.countdown = s, s.totalMs <= 0 && (this.clearTimer(), this.phase === "pre" && this.beginLaunchReveal());
-    };
-    r(), this.phase === "pre" && (this.timerId = setInterval(r, 1e3));
+    const tick = /* @__PURE__ */ __name(() => {
+      const parts = getCountdown(launchAt);
+      this.countdown = parts, parts.totalMs <= 0 && (this.clearTimer(), this.phase === "pre" && this.beginLaunchReveal());
+    }, "tick");
+    tick(), this.phase === "pre" && (this.timerId = setInterval(tick, 1e3));
   }
   beginLaunchReveal() {
-    if (!b() && p(this.cfg.cr_animate, !0)) {
+    if (!prefersReducedMotion() && isTruthy(this.cfg.cr_animate, !0)) {
       this.phase = "curtain", this.curtainOpen = !1, this.curtainTimer && clearTimeout(this.curtainTimer), this.updateComplete.then(() => {
         requestAnimationFrame(() => {
           this.curtainOpen = !0;
@@ -322,152 +329,152 @@ const v = class v extends k {
     }
     this.phase = "post";
   }
-  updated(e) {
-    e.has("config") && (this.phase = "pre", this.curtainOpen = !1, this.curtainTimer && clearTimeout(this.curtainTimer), this.syncTimer());
+  updated(changed) {
+    changed.has("config") && (this.phase = "pre", this.curtainOpen = !1, this.curtainTimer && clearTimeout(this.curtainTimer), this.syncTimer());
   }
-  renderTimerUnit(e, r, s, n) {
-    return n ? i`
+  renderTimerUnit(value, labelAr, labelEn, show) {
+    return show ? html`
       <div class="cr-timer__unit" role="listitem">
-        <span class="cr-timer__value" aria-hidden="true">${String(e).padStart(2, "0")}</span>
-        <span class="cr-timer__label">${m(r, s)}</span>
+        <span class="cr-timer__value" aria-hidden="true">${String(value).padStart(2, "0")}</span>
+        <span class="cr-timer__label">${t(labelAr, labelEn)}</span>
       </div>
-    ` : c;
+    ` : nothing;
   }
   render() {
-    const e = this.cfg, r = I(e, "cr_"), s = r.animate && !b(), n = Y(e.cr_products), l = x(e.cr_cta_url), o = t(e.cr_launch_media), g = F(e.cr_overlay_opacity), $ = String(e.cr_timer_color || r.accent), T = String(e.cr_overlay_color || "#2b211c"), M = p(e.cr_show_days, !0), S = p(e.cr_show_hours, !0), z = p(e.cr_show_minutes, !0), L = p(e.cr_show_seconds, !0);
-    return i`
+    const c = this.cfg, theme = readSectionTheme(c, "cr_"), animate = theme.animate && !prefersReducedMotion(), products = parseRevealProducts(c.cr_products), ctaUrl = extractLink(c.cr_cta_url), launchMedia = localizedString(c.cr_launch_media), overlayAlpha = overlayOpacity(c.cr_overlay_opacity), timerColor = String(c.cr_timer_color || theme.accent), overlayColor = String(c.cr_overlay_color || "#2b211c"), showDays = isTruthy(c.cr_show_days, !0), showHours = isTruthy(c.cr_show_hours, !0), showMinutes = isTruthy(c.cr_show_minutes, !0), showSeconds = isTruthy(c.cr_show_seconds, !0);
+    return html`
       <section
-        class=${f({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": s
+      "fs-animate": animate
     })}
-        style=${y({
-      ...E(r),
-      "--timer-color": $
+        style=${styleMap({
+      ...themeStyleMap(theme),
+      "--timer-color": timerColor
     })}
         aria-live=${this.phase === "post" ? "polite" : "off"}
       >
         <div class="fs-container">
-          ${this.phase !== "post" ? i`
+          ${this.phase !== "post" ? html`
                 <div class="fs-header">
-                  <h2 class="fs-title">${t(e.cr_tease_title)}</h2>
-                  <p class="fs-desc">${t(e.cr_tease_desc)}</p>
+                  <h2 class="fs-title">${localizedString(c.cr_tease_title)}</h2>
+                  <p class="fs-desc">${localizedString(c.cr_tease_desc)}</p>
                 </div>
                 <div class="cr-stage fs-card">
-                  ${t(e.cr_bg_image) ? i`<img
+                  ${localizedString(c.cr_bg_image) ? html`<img
                         class="cr-bg"
-                        src=${t(e.cr_bg_image)}
+                        src=${localizedString(c.cr_bg_image)}
                         alt=""
                         loading="lazy"
                         decoding="async"
-                      />` : c}
+                      />` : nothing}
                   <div
                     class="cr-overlay"
-                    style=${y({
-      background: T,
-      opacity: String(g)
+                    style=${styleMap({
+      background: overlayColor,
+      opacity: String(overlayAlpha)
     })}
                   ></div>
                   <div class="cr-pre">
-                    ${t(e.cr_pre_text) ? i`<p class="cr-pre-text">${t(e.cr_pre_text)}</p>` : c}
-                    ${t(e.cr_mystery_image) ? i`<img
-                          class=${f({
+                    ${localizedString(c.cr_pre_text) ? html`<p class="cr-pre-text">${localizedString(c.cr_pre_text)}</p>` : nothing}
+                    ${localizedString(c.cr_mystery_image) ? html`<img
+                          class=${classMap({
       "cr-mystery": !0,
-      "cr-mystery--breath": p(e.cr_breath_effect) && s
+      "cr-mystery--breath": isTruthy(c.cr_breath_effect) && animate
     })}
-                          src=${t(e.cr_mystery_image)}
-                          alt=${t(e.cr_tease_title) || m("صورة المجموعة", "Collection preview")}
+                          src=${localizedString(c.cr_mystery_image)}
+                          alt=${localizedString(c.cr_tease_title) || t("صورة المجموعة", "Collection preview")}
                           loading="eager"
                           decoding="async"
-                        />` : c}
-                    <div class="cr-timer" role="timer" aria-label=${m("العد التنازلي", "Countdown")}>
-                      ${this.renderTimerUnit(this.countdown.days, "يوم", "Days", M)}
-                      ${this.renderTimerUnit(this.countdown.hours, "ساعة", "Hours", S)}
-                      ${this.renderTimerUnit(this.countdown.minutes, "دقيقة", "Minutes", z)}
-                      ${this.renderTimerUnit(this.countdown.seconds, "ثانية", "Seconds", L)}
+                        />` : nothing}
+                    <div class="cr-timer" role="timer" aria-label=${t("العد التنازلي", "Countdown")}>
+                      ${this.renderTimerUnit(this.countdown.days, "يوم", "Days", showDays)}
+                      ${this.renderTimerUnit(this.countdown.hours, "ساعة", "Hours", showHours)}
+                      ${this.renderTimerUnit(this.countdown.minutes, "دقيقة", "Minutes", showMinutes)}
+                      ${this.renderTimerUnit(this.countdown.seconds, "ثانية", "Seconds", showSeconds)}
                     </div>
                   </div>
-                  ${this.phase === "curtain" ? i`<div
-                        class=${f({
+                  ${this.phase === "curtain" ? html`<div
+                        class=${classMap({
       "cr-curtain": !0,
       "cr-curtain--open": this.curtainOpen
     })}
                         aria-hidden="true"
-                      ></div>` : c}
+                      ></div>` : nothing}
                 </div>
-              ` : i`
-                <div class="cr-post ${s ? "fs-animate" : ""}">
+              ` : html`
+                <div class="cr-post ${animate ? "fs-animate" : ""}">
                   <div class="fs-header">
-                    <h2 class="fs-title">${t(e.cr_launch_title)}</h2>
-                    <p class="fs-desc">${t(e.cr_launch_desc)}</p>
+                    <h2 class="fs-title">${localizedString(c.cr_launch_title)}</h2>
+                    <p class="fs-desc">${localizedString(c.cr_launch_desc)}</p>
                   </div>
-                  ${o ? A(o) ? i`<video
+                  ${launchMedia ? isVideoUrl(launchMedia) ? html`<video
                           class="cr-media"
-                          src=${o}
+                          src=${launchMedia}
                           controls
                           muted
                           playsinline
                           preload="metadata"
-                          aria-label=${t(e.cr_launch_title) || m("فيديو الإطلاق", "Launch video")}
-                        ></video>` : i`<img
+                          aria-label=${localizedString(c.cr_launch_title) || t("فيديو الإطلاق", "Launch video")}
+                        ></video>` : html`<img
                           class="cr-media"
-                          src=${o}
-                          alt=${t(e.cr_launch_title) || m("وسائط الإطلاق", "Launch media")}
+                          src=${launchMedia}
+                          alt=${localizedString(c.cr_launch_title) || t("وسائط الإطلاق", "Launch media")}
                           loading="eager"
                           decoding="async"
-                        />` : c}
-                  ${l ? i`<div class="cr-cta-wrap">
-                        <a class="fs-btn" href=${l}>
-                          ${t(e.cr_cta_text) || m("اكتشفي المجموعة", "Explore collection")}
+                        />` : nothing}
+                  ${ctaUrl ? html`<div class="cr-cta-wrap">
+                        <a class="fs-btn" href=${ctaUrl}>
+                          ${localizedString(c.cr_cta_text) || t("اكتشفي المجموعة", "Explore collection")}
                         </a>
-                      </div>` : c}
-                  ${n.length ? i`<div class="cr-products">
-                        ${n.map(
-      (d) => i`
+                      </div>` : nothing}
+                  ${products.length ? html`<div class="cr-products">
+                        ${products.map(
+      (p) => html`
                             <article class="cr-product fs-card">
-                              ${d.image ? i`<img
+                              ${p.image ? html`<img
                                     class="cr-product__img"
-                                    src=${d.image}
-                                    alt=${d.name || m("منتج", "Product")}
+                                    src=${p.image}
+                                    alt=${p.name || t("منتج", "Product")}
                                     loading="lazy"
                                     decoding="async"
-                                  />` : c}
-                              <h3 class="cr-product__name">${d.name}</h3>
-                              ${d.desc ? i`<p class="cr-product__desc">${d.desc}</p>` : c}
-                              ${d.url ? i`<a class="fs-btn" href=${d.url}>
-                                    ${d.btn_text || m("تسوقي الآن", "Shop now")}
-                                  </a>` : c}
+                                  />` : nothing}
+                              <h3 class="cr-product__name">${p.name}</h3>
+                              ${p.desc ? html`<p class="cr-product__desc">${p.desc}</p>` : nothing}
+                              ${p.url ? html`<a class="fs-btn" href=${p.url}>
+                                    ${p.btn_text || t("تسوقي الآن", "Shop now")}
+                                  </a>` : nothing}
                             </article>
                           `
     )}
-                      </div>` : c}
+                      </div>` : nothing}
                 </div>
               `}
         </div>
-        ${D(this.config || {}, "cr_")}
+        ${renderCommerceOutcome(this.config || {}, "cr_")}
       </section>
     `;
   }
 };
-v.styles = [H, q, w`
+__name(_CollectionReveal, "CollectionReveal"), _CollectionReveal.styles = [sharedSectionCss, componentStyles, css`
     :host {
       direction: inherit;
     }
   `];
-let u = v;
-h([
-  C({ type: Object })
-], u.prototype, "config");
-h([
-  _()
-], u.prototype, "phase");
-h([
-  _()
-], u.prototype, "curtainOpen");
-h([
-  _()
-], u.prototype, "countdown");
-typeof u < "u" && u.registerSallaComponent("salla-collection-reveal");
+let CollectionReveal = _CollectionReveal;
+__decorateClass([
+  property({ type: Object })
+], CollectionReveal.prototype, "config");
+__decorateClass([
+  state()
+], CollectionReveal.prototype, "phase");
+__decorateClass([
+  state()
+], CollectionReveal.prototype, "curtainOpen");
+__decorateClass([
+  state()
+], CollectionReveal.prototype, "countdown");
+typeof CollectionReveal < "u" && CollectionReveal.registerSallaComponent("salla-collection-reveal");
 export {
-  u as default
+  CollectionReveal as default
 };

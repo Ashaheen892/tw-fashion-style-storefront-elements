@@ -1,8 +1,10 @@
-import { css as S, LitElement as C, html as a, nothing as d } from "lit";
-import { property as L, state as u } from "lit/decorators.js";
-import { styleMap as f } from "lit/directives/style-map.js";
-import { n as $, l as n, d as I, z as P, s as z, r as X, i as M, x as E, y as j, t as i, a as U, b as D, v as Y } from "./sharedStyles-Cd7RKVf-.js";
-const O = S`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, z as parseTags, s as sharedSectionCss, r as readSectionTheme, i as isTruthy, x as safeStorageGet, y as safeStorageSet, t, a as themeStyleMap, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .ass-studio {
     position: relative;
     overflow: hidden;
@@ -424,57 +426,62 @@ const O = S`
     }
   }
 `;
-function R(l) {
-  return $(l).map((s, r) => ({
-    id: `card-${r}`,
-    image: n(s.image),
-    look_name: n(s.look_name),
-    look_desc: n(s.look_desc),
-    tags: P(s.tags),
-    url: I(s.url),
-    btn_text: n(s.btn_text)
-  })).filter((s) => s.look_name.trim() !== "" || s.image.trim() !== "");
+function parseCards(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: `card-${index}`,
+    image: localizedString(item.image),
+    look_name: localizedString(item.look_name),
+    look_desc: localizedString(item.look_desc),
+    tags: parseTags(item.tags),
+    url: extractLink(item.url),
+    btn_text: localizedString(item.btn_text)
+  })).filter((c) => c.look_name.trim() !== "" || c.image.trim() !== "");
 }
-function T(l) {
-  return $(l).map((s) => ({
-    tag_name: n(s.tag_name).toLowerCase(),
-    result_title: n(s.result_title),
-    result_desc: n(s.result_desc),
-    result_image: n(s.result_image),
-    result_url: I(s.result_url),
-    result_btn: n(s.result_btn)
-  })).filter((s) => s.tag_name.trim() !== "");
+__name(parseCards, "parseCards");
+function parseResults(raw) {
+  return normalizeCollection(raw).map((item) => ({
+    tag_name: localizedString(item.tag_name).toLowerCase(),
+    result_title: localizedString(item.result_title),
+    result_desc: localizedString(item.result_desc),
+    result_image: localizedString(item.result_image),
+    result_url: extractLink(item.result_url),
+    result_btn: localizedString(item.result_btn)
+  })).filter((r) => r.tag_name.trim() !== "");
 }
-function K(l) {
-  const s = /* @__PURE__ */ new Map(), r = /* @__PURE__ */ new Map();
-  l.forEach((t, o) => {
-    t.tags.forEach((c) => {
-      const h = c.toLowerCase();
-      s.set(h, (s.get(h) ?? 0) + 1), r.has(h) || r.set(h, o);
+__name(parseResults, "parseResults");
+function computeWinningTag(likedCards) {
+  const counts = /* @__PURE__ */ new Map(), firstSeen = /* @__PURE__ */ new Map();
+  likedCards.forEach((card, cardIndex) => {
+    card.tags.forEach((tag) => {
+      const key = tag.toLowerCase();
+      counts.set(key, (counts.get(key) ?? 0) + 1), firstSeen.has(key) || firstSeen.set(key, cardIndex);
     });
   });
-  let e = null;
-  for (const [t, o] of s) {
-    const c = r.get(t) ?? 0;
-    (!e || o > e.count || o === e.count && c < e.order) && (e = { tag: t, count: o, order: c });
+  let best = null;
+  for (const [tag, count] of counts) {
+    const order = firstSeen.get(tag) ?? 0;
+    (!best || count > best.count || count === best.count && order < best.order) && (best = { tag, count, order });
   }
-  return e ? { tag: e.tag, count: e.count } : null;
+  return best ? { tag: best.tag, count: best.count } : null;
 }
-function V(l, s) {
-  const r = s.toLowerCase();
-  return l.find((e) => e.tag_name === r) ?? null;
+__name(computeWinningTag, "computeWinningTag");
+function findMatchingResult(results, tag) {
+  const key = tag.toLowerCase();
+  return results.find((r) => r.tag_name === key) ?? null;
 }
-function H(l, s) {
-  return n(l, s).trim() || s;
+__name(findMatchingResult, "findMatchingResult");
+function getStorageKey(configKey, fallback) {
+  return localizedString(configKey, fallback).trim() || fallback;
 }
-var N = Object.defineProperty, p = (l, s, r, e) => {
-  for (var t = void 0, o = l.length - 1, c; o >= 0; o--)
-    (c = l[o]) && (t = c(s, r, t) || t);
-  return t && N(s, r, t), t;
-};
-const v = 80, x = class x extends C {
+__name(getStorageKey, "getStorageKey");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const SWIPE_THRESHOLD = 80, _AbayaStyleSwipe = class _AbayaStyleSwipe extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.cardIndex = 0, this.likedIds = [], this.history = [], this.finished = !1, this.dragX = 0, this.dragging = !1, this._onLangChange = () => this.requestUpdate(), this._storageKey = "", this._pointerId = null, this._startX = 0, this._boundPointerMove = (s) => this._onPointerMove(s), this._boundPointerUp = (s) => this._onPointerUp(s);
+    super(...arguments), this.config = {}, this.cardIndex = 0, this.likedIds = [], this.history = [], this.finished = !1, this.dragX = 0, this.dragging = !1, this._onLangChange = () => this.requestUpdate(), this._storageKey = "", this._pointerId = null, this._startX = 0, this._boundPointerMove = (e) => this._onPointerMove(e), this._boundPointerUp = (e) => this._onPointerUp(e);
   }
   connectedCallback() {
     super.connectedCallback(), document.addEventListener("language-changed", this._onLangChange), this._loadState(), this._syncVisibility();
@@ -482,49 +489,49 @@ const v = 80, x = class x extends C {
   disconnectedCallback() {
     super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange), this._cleanupPointerListeners();
   }
-  updated(s) {
-    this._syncVisibility(), s.has("config") && this._loadState();
+  updated(changed) {
+    this._syncVisibility(), changed.has("config") && this._loadState();
   }
   get cards() {
-    var s;
-    return R((s = this.config) == null ? void 0 : s.ass_cards);
+    var _a;
+    return parseCards((_a = this.config) == null ? void 0 : _a.ass_cards);
   }
   get results() {
-    var s;
-    return T((s = this.config) == null ? void 0 : s.ass_results);
+    var _a;
+    return parseResults((_a = this.config) == null ? void 0 : _a.ass_results);
   }
   get theme() {
-    return X(this.config, "ass_");
+    return readSectionTheme(this.config, "ass_");
   }
   get enableStorage() {
-    var s;
-    return M((s = this.config) == null ? void 0 : s.ass_enable_storage, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.ass_enable_storage, !0);
   }
   get currentCard() {
     return this.cards[this.cardIndex] ?? null;
   }
   get likedCards() {
-    return this.cards.filter((s) => this.likedIds.includes(s.id));
+    return this.cards.filter((c) => this.likedIds.includes(c.id));
   }
   _syncVisibility() {
     this.style.display = this.cards.length ? "" : "none";
   }
   _loadState() {
-    var r;
+    var _a;
     if (!this.enableStorage) return;
-    this._storageKey = H(
-      (r = this.config) == null ? void 0 : r.ass_storage_key,
+    this._storageKey = getStorageKey(
+      (_a = this.config) == null ? void 0 : _a.ass_storage_key,
       "ass-style-swipe-state"
     );
-    const s = E(this._storageKey, {
+    const stored = safeStorageGet(this._storageKey, {
       index: 0,
       likedIds: [],
       history: []
     });
-    this.cardIndex = Math.min(s.index, Math.max(0, this.cards.length - 1)), this.likedIds = s.likedIds || [], this.history = s.history || [], this.finished = this.cardIndex >= this.cards.length;
+    this.cardIndex = Math.min(stored.index, Math.max(0, this.cards.length - 1)), this.likedIds = stored.likedIds || [], this.history = stored.history || [], this.finished = this.cardIndex >= this.cards.length;
   }
   _saveState() {
-    this.enableStorage && j(this._storageKey, {
+    this.enableStorage && safeStorageSet(this._storageKey, {
       index: this.cardIndex,
       likedIds: this.likedIds,
       history: this.history
@@ -533,60 +540,60 @@ const v = 80, x = class x extends C {
   _cleanupPointerListeners() {
     window.removeEventListener("pointermove", this._boundPointerMove), window.removeEventListener("pointerup", this._boundPointerUp), window.removeEventListener("pointercancel", this._boundPointerUp), this._pointerId = null;
   }
-  _onPointerDown(s) {
-    this.finished || !this.currentCard || (this.dragging = !0, this._pointerId = s.pointerId, this._startX = s.clientX, this.dragX = 0, s.currentTarget.setPointerCapture(s.pointerId), window.addEventListener("pointermove", this._boundPointerMove), window.addEventListener("pointerup", this._boundPointerUp), window.addEventListener("pointercancel", this._boundPointerUp));
+  _onPointerDown(e) {
+    this.finished || !this.currentCard || (this.dragging = !0, this._pointerId = e.pointerId, this._startX = e.clientX, this.dragX = 0, e.currentTarget.setPointerCapture(e.pointerId), window.addEventListener("pointermove", this._boundPointerMove), window.addEventListener("pointerup", this._boundPointerUp), window.addEventListener("pointercancel", this._boundPointerUp));
   }
-  _onPointerMove(s) {
-    !this.dragging || s.pointerId !== this._pointerId || (this.dragX = s.clientX - this._startX);
+  _onPointerMove(e) {
+    !this.dragging || e.pointerId !== this._pointerId || (this.dragX = e.clientX - this._startX);
   }
-  _onPointerUp(s) {
-    !this.dragging || s.pointerId !== this._pointerId || (this._cleanupPointerListeners(), this.dragging = !1, this.dragX > v ? this._swipe("like") : this.dragX < -v ? this._swipe("skip") : this.dragX = 0);
+  _onPointerUp(e) {
+    !this.dragging || e.pointerId !== this._pointerId || (this._cleanupPointerListeners(), this.dragging = !1, this.dragX > SWIPE_THRESHOLD ? this._swipe("like") : this.dragX < -SWIPE_THRESHOLD ? this._swipe("skip") : this.dragX = 0);
   }
-  _swipe(s) {
-    const r = this.currentCard;
-    r && (this.history = [...this.history, { cardId: r.id, action: s }], s === "like" && (this.likedIds = [...this.likedIds, r.id]), this.dragX = 0, this.cardIndex += 1, this.cardIndex >= this.cards.length && (this.finished = !0), this._saveState());
+  _swipe(action) {
+    const card = this.currentCard;
+    card && (this.history = [...this.history, { cardId: card.id, action }], action === "like" && (this.likedIds = [...this.likedIds, card.id]), this.dragX = 0, this.cardIndex += 1, this.cardIndex >= this.cards.length && (this.finished = !0), this._saveState());
   }
   _undo() {
-    const s = this.history[this.history.length - 1];
-    s && (this.history = this.history.slice(0, -1), s.action === "like" && (this.likedIds = this.likedIds.filter((r) => r !== s.cardId)), this.cardIndex = Math.max(0, this.cardIndex - 1), this.finished = !1, this._saveState());
+    const last = this.history[this.history.length - 1];
+    last && (this.history = this.history.slice(0, -1), last.action === "like" && (this.likedIds = this.likedIds.filter((id) => id !== last.cardId)), this.cardIndex = Math.max(0, this.cardIndex - 1), this.finished = !1, this._saveState());
   }
   _restart() {
     this.cardIndex = 0, this.likedIds = [], this.history = [], this.finished = !1, this.dragX = 0, this._saveState();
   }
   render() {
-    var m, b, _, y, k, w;
+    var _a, _b, _c, _d, _e, _f;
     if (!this.cards.length)
-      return a`<div class="fs-empty" role="status">
-        ${i("لا توجد بطاقات للعرض", "No cards to display")}
+      return html`<div class="fs-empty" role="status">
+        ${t("لا توجد بطاقات للعرض", "No cards to display")}
       </div>`;
-    const s = this.theme, r = n((m = this.config) == null ? void 0 : m.ass_title), e = n((b = this.config) == null ? void 0 : b.ass_desc), t = n((_ = this.config) == null ? void 0 : _.ass_like_label) || i("أعجبني", "Like"), o = n((y = this.config) == null ? void 0 : y.ass_skip_label) || i("تخطي", "Skip"), c = n((k = this.config) == null ? void 0 : k.ass_undo_label) || i("تراجع", "Undo"), h = n((w = this.config) == null ? void 0 : w.ass_restart_label) || i("ابدئي من جديد", "Restart");
-    return a`
+    const theme = this.theme, title = localizedString((_a = this.config) == null ? void 0 : _a.ass_title), desc = localizedString((_b = this.config) == null ? void 0 : _b.ass_desc), likeLabel = localizedString((_c = this.config) == null ? void 0 : _c.ass_like_label) || t("أعجبني", "Like"), skipLabel = localizedString((_d = this.config) == null ? void 0 : _d.ass_skip_label) || t("تخطي", "Skip"), undoLabel = localizedString((_e = this.config) == null ? void 0 : _e.ass_undo_label) || t("تراجع", "Undo"), restartLabel = localizedString((_f = this.config) == null ? void 0 : _f.ass_restart_label) || t("ابدئي من جديد", "Restart");
+    return html`
       <section
         class="fs-section"
-        style=${f(U(s))}
-        aria-label=${r || i("اكتشفي أسلوبك", "Discover your style")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("اكتشفي أسلوبك", "Discover your style")}
       >
         <div class="fs-container">
-          ${r || e ? a`<header class="fs-header">
-                ${r ? a`<h2 class="fs-title">${r}</h2>` : d}
-                ${e ? a`<p class="fs-desc">${e}</p>` : d}
-              </header>` : d}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          ${this.finished ? this._renderResult(h) : this._renderDeck(t, o, c)}
+          ${this.finished ? this._renderResult(restartLabel) : this._renderDeck(likeLabel, skipLabel, undoLabel)}
         </div>
-        ${D(this.config || {}, "ass_")}
+        ${renderCommerceOutcome(this.config || {}, "ass_")}
       </section>
     `;
   }
-  _renderDeck(s, r, e) {
-    const t = this.currentCard;
-    if (!t) return d;
-    const o = Math.min(1, Math.max(0, this.dragX / v)), c = Math.min(1, Math.max(0, -this.dragX / v)), h = this.dragX * 0.06, m = this.cards.length - this.cardIndex, b = Math.round(this.cardIndex / this.cards.length * 100);
-    return a`
+  _renderDeck(likeLabel, skipLabel, undoLabel) {
+    const card = this.currentCard;
+    if (!card) return nothing;
+    const likeOpacity = Math.min(1, Math.max(0, this.dragX / SWIPE_THRESHOLD)), skipOpacity = Math.min(1, Math.max(0, -this.dragX / SWIPE_THRESHOLD)), rotate = this.dragX * 0.06, remaining = this.cards.length - this.cardIndex, progress = Math.round(this.cardIndex / this.cards.length * 100);
+    return html`
       <div class="ass-studio">
         <div class="ass-progress" aria-live="polite">
           <span class="ass-progress__meta">
-            ${i("إطلالة", "Look")} ${this.cardIndex + 1}
+            ${t("إطلالة", "Look")} ${this.cardIndex + 1}
             <span aria-hidden="true">·</span>
             ${this.cards.length}
           </span>
@@ -596,64 +603,64 @@ const v = 80, x = class x extends C {
             aria-valuemin="0"
             aria-valuemax=${this.cards.length}
             aria-valuenow=${this.cardIndex}
-            aria-label=${i("تقدم الاكتشاف", "Discovery progress")}
+            aria-label=${t("تقدم الاكتشاف", "Discovery progress")}
           >
             <div
               class="ass-progress__fill"
-              style=${f({ width: `${b}%` })}
+              style=${styleMap({ width: `${progress}%` })}
             ></div>
           </div>
         </div>
 
         <p class="ass-hint">
-          ${i("اسحبي يميناً للإعجاب أو يساراً للتخطي", "Swipe right to like, left to skip")}
+          ${t("اسحبي يميناً للإعجاب أو يساراً للتخطي", "Swipe right to like, left to skip")}
         </p>
 
-        <div class="ass-deck" aria-label=${i("بطاقات الأسلوب", "Style cards")}>
-          ${m > 2 ? a`<div class="ass-stack ass-stack--2" aria-hidden="true"></div>` : d}
-          ${m > 1 ? a`<div class="ass-stack ass-stack--1" aria-hidden="true"></div>` : d}
+        <div class="ass-deck" aria-label=${t("بطاقات الأسلوب", "Style cards")}>
+          ${remaining > 2 ? html`<div class="ass-stack ass-stack--2" aria-hidden="true"></div>` : nothing}
+          ${remaining > 1 ? html`<div class="ass-stack ass-stack--1" aria-hidden="true"></div>` : nothing}
 
           <div
             class="ass-card ${this.dragging ? "ass-card--dragging" : ""}"
-            style=${f({
-      transform: `translateX(${this.dragX}px) rotate(${h}deg)`
+            style=${styleMap({
+      transform: `translateX(${this.dragX}px) rotate(${rotate}deg)`
     })}
             @pointerdown=${this._onPointerDown}
             role="article"
-            aria-label=${t.look_name}
+            aria-label=${card.look_name}
           >
             <span
-              class="ass-indicator ass-indicator--like ${o > 0.2 ? "ass-indicator--visible" : ""}"
-              style=${f({ opacity: String(o) })}
+              class="ass-indicator ass-indicator--like ${likeOpacity > 0.2 ? "ass-indicator--visible" : ""}"
+              style=${styleMap({ opacity: String(likeOpacity) })}
               aria-hidden="true"
             >
-              ${s}
+              ${likeLabel}
             </span>
             <span
-              class="ass-indicator ass-indicator--skip ${c > 0.2 ? "ass-indicator--visible" : ""}"
-              style=${f({ opacity: String(c) })}
+              class="ass-indicator ass-indicator--skip ${skipOpacity > 0.2 ? "ass-indicator--visible" : ""}"
+              style=${styleMap({ opacity: String(skipOpacity) })}
               aria-hidden="true"
             >
-              ${r}
+              ${skipLabel}
             </span>
 
             <div class="ass-card__media">
-              ${t.image ? a`<img
+              ${card.image ? html`<img
                     class="ass-card__img"
-                    src=${t.image}
-                    alt=${t.look_name}
+                    src=${card.image}
+                    alt=${card.look_name}
                     loading="lazy"
                     draggable="false"
-                  />` : d}
+                  />` : nothing}
               <div class="ass-card__shade" aria-hidden="true"></div>
             </div>
 
             <div class="ass-card__body">
-              <h3 class="ass-card__name">${t.look_name}</h3>
-              ${t.look_desc ? a`<p class="ass-card__desc">${t.look_desc}</p>` : d}
-              ${t.tags.length ? a`<div class="ass-card__tags">
-                    ${t.tags.map((_) => a`<span class="ass-tag">${_}</span>`)}
-                  </div>` : d}
+              <h3 class="ass-card__name">${card.look_name}</h3>
+              ${card.look_desc ? html`<p class="ass-card__desc">${card.look_desc}</p>` : nothing}
+              ${card.tags.length ? html`<div class="ass-card__tags">
+                    ${card.tags.map((tag) => html`<span class="ass-tag">${tag}</span>`)}
+                  </div>` : nothing}
             </div>
           </div>
         </div>
@@ -662,7 +669,7 @@ const v = 80, x = class x extends C {
           <button
             type="button"
             class="ass-btn-round ass-btn-round--skip"
-            aria-label=${r}
+            aria-label=${skipLabel}
             @click=${() => this._swipe("skip")}
           >
             ✕
@@ -670,91 +677,91 @@ const v = 80, x = class x extends C {
           <button
             type="button"
             class="ass-btn-round ass-btn-round--like"
-            aria-label=${s}
+            aria-label=${likeLabel}
             @click=${() => this._swipe("like")}
           >
             ♥
           </button>
         </div>
         <div class="ass-btn-labels" aria-hidden="true">
-          <span>${r}</span>
-          <span>${s}</span>
+          <span>${skipLabel}</span>
+          <span>${likeLabel}</span>
         </div>
-        ${this.history.length ? a`<div class="ass-controls ass-undo">
+        ${this.history.length ? html`<div class="ass-controls ass-undo">
               <button type="button" class="fs-btn fs-btn--ghost" @click=${this._undo}>
-                ${e}
+                ${undoLabel}
               </button>
-            </div>` : d}
+            </div>` : nothing}
       </div>
     `;
   }
-  _renderResult(s) {
-    const r = K(this.likedCards), e = r ? V(this.results, r.tag) : null, t = this.likedIds.length;
-    return a`
+  _renderResult(restartLabel) {
+    const winning = computeWinningTag(this.likedCards), match = winning ? findMatchingResult(this.results, winning.tag) : null, likesCount = this.likedIds.length;
+    return html`
       <div class="ass-result">
         <span class="ass-result__badge">
-          ${i("نتيجة ذوقك", "Your taste result")}
-          ${t ? a`<span aria-hidden="true">·</span>
-                ${t}
-                ${i("إعجاب", "likes")}` : d}
+          ${t("نتيجة ذوقك", "Your taste result")}
+          ${likesCount ? html`<span aria-hidden="true">·</span>
+                ${likesCount}
+                ${t("إعجاب", "likes")}` : nothing}
         </span>
 
-        ${e != null && e.result_image ? a`<div class="ass-result__frame">
+        ${match != null && match.result_image ? html`<div class="ass-result__frame">
               <img
                 class="ass-result__img"
-                src=${e.result_image}
-                alt=${e.result_title}
+                src=${match.result_image}
+                alt=${match.result_title}
                 loading="lazy"
               />
-            </div>` : d}
+            </div>` : nothing}
 
         <h3 class="ass-result__title">
-          ${(e == null ? void 0 : e.result_title) || i("أسلوبك المميز", "Your signature style")}
+          ${(match == null ? void 0 : match.result_title) || t("أسلوبك المميز", "Your signature style")}
         </h3>
 
-        ${e != null && e.result_desc ? a`<p class="ass-result__desc">${e.result_desc}</p>` : r ? a`<p class="ass-result__desc">
-                ${i("الوسم الأبرز في اختياراتك", "Your top style tag")}
+        ${match != null && match.result_desc ? html`<p class="ass-result__desc">${match.result_desc}</p>` : winning ? html`<p class="ass-result__desc">
+                ${t("الوسم الأبرز في اختياراتك", "Your top style tag")}
               </p>
-              <span class="ass-result__tag">${r.tag}</span>` : a`<p class="ass-result__desc">
-                ${i("لم تعجبك أي بطاقة — جرّبي مرة أخرى", "No likes yet — try again")}
+              <span class="ass-result__tag">${winning.tag}</span>` : html`<p class="ass-result__desc">
+                ${t("لم تعجبك أي بطاقة — جرّبي مرة أخرى", "No likes yet — try again")}
               </p>`}
 
         <div class="ass-result__actions">
-          ${e && Y(e.result_url) ? a`<a class="fs-btn" href=${e.result_url}>
-                ${e.result_btn || i("تسوقي الإطلالة", "Shop the look")}
-              </a>` : d}
+          ${match && isValidHref(match.result_url) ? html`<a class="fs-btn" href=${match.result_url}>
+                ${match.result_btn || t("تسوقي الإطلالة", "Shop the look")}
+              </a>` : nothing}
           <button type="button" class="fs-btn fs-btn--ghost" @click=${this._restart}>
-            ${s}
+            ${restartLabel}
           </button>
         </div>
       </div>
     `;
   }
 };
-x.styles = [z, O];
-let g = x;
-p([
-  L({ type: Object })
-], g.prototype, "config");
-p([
-  u()
-], g.prototype, "cardIndex");
-p([
-  u()
-], g.prototype, "likedIds");
-p([
-  u()
-], g.prototype, "history");
-p([
-  u()
-], g.prototype, "finished");
-p([
-  u()
-], g.prototype, "dragX");
-p([
-  u()
-], g.prototype, "dragging");
-typeof g < "u" && g.registerSallaComponent("salla-abaya-style-swipe");
+__name(_AbayaStyleSwipe, "AbayaStyleSwipe"), _AbayaStyleSwipe.styles = [sharedSectionCss, componentStyles];
+let AbayaStyleSwipe = _AbayaStyleSwipe;
+__decorateClass([
+  property({ type: Object })
+], AbayaStyleSwipe.prototype, "config");
+__decorateClass([
+  state()
+], AbayaStyleSwipe.prototype, "cardIndex");
+__decorateClass([
+  state()
+], AbayaStyleSwipe.prototype, "likedIds");
+__decorateClass([
+  state()
+], AbayaStyleSwipe.prototype, "history");
+__decorateClass([
+  state()
+], AbayaStyleSwipe.prototype, "finished");
+__decorateClass([
+  state()
+], AbayaStyleSwipe.prototype, "dragX");
+__decorateClass([
+  state()
+], AbayaStyleSwipe.prototype, "dragging");
+typeof AbayaStyleSwipe < "u" && AbayaStyleSwipe.registerSallaComponent("salla-abaya-style-swipe");
 export {
-  g as default
+  AbayaStyleSwipe as default
 };

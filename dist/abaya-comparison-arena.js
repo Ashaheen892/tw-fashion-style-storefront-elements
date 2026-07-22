@@ -1,9 +1,11 @@
-import { css as L, LitElement as R, nothing as f, html as c } from "lit";
-import { property as O, state as w } from "lit/decorators.js";
-import { classMap as _ } from "lit/directives/class-map.js";
-import { styleMap as V } from "lit/directives/style-map.js";
-import { n as k, l as p, d as H, f as P, e as B, s as N, t as l, h as $, r as K, p as U, a as q, b as F } from "./sharedStyles-Cd7RKVf-.js";
-const X = L`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, f as toNumber, e as extractImageUrl, s as sharedSectionCss, t, h as formatPrice, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .acm-studio {
     position: relative;
     overflow: hidden;
@@ -408,56 +410,63 @@ const X = L`
     }
   }
 `;
-function T(i, e) {
-  return i.trim().toLowerCase().replace(/\s+/g, "-") || `criterion-${e + 1}`;
+function criterionKeyFromLabel(label, index) {
+  return label.trim().toLowerCase().replace(/\s+/g, "-") || `criterion-${index + 1}`;
 }
-function Y(i) {
-  return k(i).map((e, t) => {
-    const o = p(e.label).trim(), r = p(e.value).trim(), a = p(e.key).trim() || T(o, t);
-    return { key: a, label: o || a, value: r };
-  }).filter((e) => e.label && e.value);
+__name(criterionKeyFromLabel, "criterionKeyFromLabel");
+function parseAttributes(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const label = localizedString(item.label).trim(), value = localizedString(item.value).trim(), key = localizedString(item.key).trim() || criterionKeyFromLabel(label, index);
+    return { key, label: label || key, value };
+  }).filter((a) => a.label && a.value);
 }
-function M(i) {
-  return k(i).map((e, t) => ({
-    id: p(e.id).trim() || p(e.name).trim() || `item-${t}`,
-    name: p(e.name).trim(),
-    image: B(e.image),
-    price: P(e.price, 0),
-    old_price: P(e.old_price, 0),
-    url: H(e.url),
-    btn_text: p(e.btn_text).trim(),
-    attributes: Y(e.attributes)
-  })).filter((e) => e.name || e.image || e.url || e.attributes.length);
+__name(parseAttributes, "parseAttributes");
+function peekCompareProducts(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: localizedString(item.id).trim() || localizedString(item.name).trim() || `item-${index}`,
+    name: localizedString(item.name).trim(),
+    image: extractImageUrl(item.image),
+    price: toNumber(item.price, 0),
+    old_price: toNumber(item.old_price, 0),
+    url: extractLink(item.url),
+    btn_text: localizedString(item.btn_text).trim(),
+    attributes: parseAttributes(item.attributes)
+  })).filter((item) => item.name || item.image || item.url || item.attributes.length);
 }
-async function G(i) {
-  return M(i);
+__name(peekCompareProducts, "peekCompareProducts");
+async function resolveCompareProducts(raw) {
+  return peekCompareProducts(raw);
 }
-function J(i, e = []) {
-  const t = k(i).map((a, n) => {
-    const s = p(a.label).trim(), d = p(a.key).trim() || T(s, n);
-    return { key: d, label: s || d };
-  }).filter((a) => a.label);
-  if (t.length) return t;
-  const o = /* @__PURE__ */ new Set(), r = [];
-  for (const a of e)
-    for (const n of a.attributes) {
-      const s = n.key || n.label;
-      !s || o.has(s) || (o.add(s), r.push({ key: n.key, label: n.label }));
+__name(resolveCompareProducts, "resolveCompareProducts");
+function parseCriteria(raw, products = []) {
+  const fromConfig = normalizeCollection(raw).map((item, index) => {
+    const label = localizedString(item.label).trim(), key = localizedString(item.key).trim() || criterionKeyFromLabel(label, index);
+    return { key, label: label || key };
+  }).filter((c) => c.label);
+  if (fromConfig.length) return fromConfig;
+  const seen = /* @__PURE__ */ new Set(), fromProducts = [];
+  for (const product of products)
+    for (const attr of product.attributes) {
+      const mark = attr.key || attr.label;
+      !mark || seen.has(mark) || (seen.add(mark), fromProducts.push({ key: attr.key, label: attr.label }));
     }
-  return r;
+  return fromProducts;
 }
-function E(i, e) {
-  const t = i.attributes.find((a) => a.key === e.key);
-  if (t != null && t.value) return t.value;
-  const o = e.label.trim().toLowerCase(), r = i.attributes.find(
-    (a) => a.label.trim().toLowerCase() === o
+__name(parseCriteria, "parseCriteria");
+function getAttributeValue(product, criterion) {
+  const byKey = product.attributes.find((a) => a.key === criterion.key);
+  if (byKey != null && byKey.value) return byKey.value;
+  const labelNorm = criterion.label.trim().toLowerCase(), byLabel = product.attributes.find(
+    (a) => a.label.trim().toLowerCase() === labelNorm
   );
-  return (r == null ? void 0 : r.value) || "";
+  return (byLabel == null ? void 0 : byLabel.value) || "";
 }
-function S(i, e) {
-  return !e || e <= i ? 0 : Math.round((e - i) / e * 100);
+__name(getAttributeValue, "getAttributeValue");
+function getDiscountPercent(price, oldPrice) {
+  return !oldPrice || oldPrice <= price ? 0 : Math.round((oldPrice - price) / oldPrice * 100);
 }
-function Q(i) {
+__name(getDiscountPercent, "getDiscountPercent");
+function buildCompareRows(criteria) {
   return [
     {
       key: "price",
@@ -473,51 +482,53 @@ function Q(i) {
       kind: "discount",
       isDiscount: !0
     },
-    ...i.map((e) => ({
-      key: `attr:${e.key}`,
-      labelAr: e.label,
-      labelEn: e.label,
+    ...criteria.map((c) => ({
+      key: `attr:${c.key}`,
+      labelAr: c.label,
+      labelEn: c.label,
       kind: "attr",
-      criterionKey: e.key,
+      criterionKey: c.key,
       highlightIdentical: !0
     }))
   ];
 }
-function W(i, e, t) {
-  const o = /* @__PURE__ */ new Set();
-  let r = null, a = null;
-  if (i.highlightIdentical && i.criterionKey && e.length > 1) {
-    const n = t.find((s) => s.key === i.criterionKey);
-    if (n) {
-      const s = e.map((d) => E(d, n).trim().toLowerCase()).filter(Boolean);
-      s.length === e.length && s.every((d) => d === s[0]) && e.forEach((d) => o.add(d.id));
+__name(buildCompareRows, "buildCompareRows");
+function rowHighlights(row, selected, criteria) {
+  const identical = /* @__PURE__ */ new Set();
+  let bestPriceId = null, bestDiscountId = null;
+  if (row.highlightIdentical && row.criterionKey && selected.length > 1) {
+    const criterion = criteria.find((c) => c.key === row.criterionKey);
+    if (criterion) {
+      const values = selected.map((p) => getAttributeValue(p, criterion).trim().toLowerCase()).filter(Boolean);
+      values.length === selected.length && values.every((v) => v === values[0]) && selected.forEach((p) => identical.add(p.id));
     }
   }
-  if (i.isPrice) {
-    const n = e.filter((s) => s.price > 0);
-    if (n.length) {
-      const s = Math.min(...n.map((h) => h.price)), d = n.filter((h) => h.price === s);
-      d.length === 1 && (r = d[0].id);
+  if (row.isPrice) {
+    const priced = selected.filter((p) => p.price > 0);
+    if (priced.length) {
+      const min = Math.min(...priced.map((p) => p.price)), winners = priced.filter((p) => p.price === min);
+      winners.length === 1 && (bestPriceId = winners[0].id);
     }
   }
-  if (i.isDiscount) {
-    const n = e.map((s) => ({
-      id: s.id,
-      pct: S(s.price, s.old_price)
-    })).filter((s) => s.pct > 0);
-    if (n.length) {
-      const s = Math.max(...n.map((h) => h.pct)), d = n.filter((h) => h.pct === s);
-      d.length === 1 && (a = d[0].id);
+  if (row.isDiscount) {
+    const discounted = selected.map((p) => ({
+      id: p.id,
+      pct: getDiscountPercent(p.price, p.old_price)
+    })).filter((d) => d.pct > 0);
+    if (discounted.length) {
+      const max = Math.max(...discounted.map((d) => d.pct)), winners = discounted.filter((d) => d.pct === max);
+      winners.length === 1 && (bestDiscountId = winners[0].id);
     }
   }
-  return { identical: o, bestPriceId: r, bestDiscountId: a };
+  return { identical, bestPriceId, bestDiscountId };
 }
-var Z = Object.defineProperty, v = (i, e, t, o) => {
-  for (var r = void 0, a = i.length - 1, n; a >= 0; a--)
-    (n = i[a]) && (r = n(e, t, r) || r);
-  return r && Z(e, t, r), r;
-};
-const y = 3, x = 2, C = class C extends R {
+__name(rowHighlights, "rowHighlights");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const MAX_COMPARE = 3, MIN_COMPARE = 2, _AbayaComparisonArena = class _AbayaComparisonArena extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.products = [], this.productsLoading = !1, this.selectedIds = [], this.showTable = !1, this.loadToken = 0, this.boundLangHandler = () => this.requestUpdate();
   }
@@ -527,131 +538,131 @@ const y = 3, x = 2, C = class C extends R {
   disconnectedCallback() {
     window.removeEventListener("language-changed", this.boundLangHandler), super.disconnectedCallback();
   }
-  updated(e) {
-    e.has("config") && (this.selectedIds = [], this.showTable = !1, this.loadProducts());
+  updated(changed) {
+    changed.has("config") && (this.selectedIds = [], this.showTable = !1, this.loadProducts());
   }
   get criteria() {
-    var e;
-    return J((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
+    var _a;
+    return parseCriteria((_a = this.config) == null ? void 0 : _a.acm_criteria, this.products);
   }
   get selected() {
-    return this.selectedIds.map((e) => this.products.find((t) => t.id === e)).filter((e) => !!e);
+    return this.selectedIds.map((id) => this.products.find((p) => p.id === id)).filter((p) => !!p);
   }
   get currency() {
-    var e;
-    return String(((e = this.config) == null ? void 0 : e.acm_currency) || "ر.س").trim() || "ر.س";
+    var _a;
+    return String(((_a = this.config) == null ? void 0 : _a.acm_currency) || "ر.س").trim() || "ر.س";
   }
   async loadProducts() {
-    var r, a;
-    const e = ++this.loadToken, t = M((r = this.config) == null ? void 0 : r.acm_products);
-    t.length ? (this.products = t, this.productsLoading = !1) : this.productsLoading = !0;
-    const o = await G((a = this.config) == null ? void 0 : a.acm_products);
-    e === this.loadToken && (this.products = o, this.productsLoading = !1, this.selectedIds = this.selectedIds.filter(
-      (n) => o.some((s) => s.id === n)
-    ), this.selectedIds.length < x && (this.showTable = !1));
+    var _a, _b;
+    const token = ++this.loadToken, instant = peekCompareProducts((_a = this.config) == null ? void 0 : _a.acm_products);
+    instant.length ? (this.products = instant, this.productsLoading = !1) : this.productsLoading = !0;
+    const list = await resolveCompareProducts((_b = this.config) == null ? void 0 : _b.acm_products);
+    token === this.loadToken && (this.products = list, this.productsLoading = !1, this.selectedIds = this.selectedIds.filter(
+      (id) => list.some((p) => p.id === id)
+    ), this.selectedIds.length < MIN_COMPARE && (this.showTable = !1));
   }
-  toggleProduct(e) {
-    if (this.selectedIds.includes(e)) {
-      this.selectedIds = this.selectedIds.filter((t) => t !== e), this.selectedIds.length < x && (this.showTable = !1);
+  toggleProduct(id) {
+    if (this.selectedIds.includes(id)) {
+      this.selectedIds = this.selectedIds.filter((x) => x !== id), this.selectedIds.length < MIN_COMPARE && (this.showTable = !1);
       return;
     }
-    this.selectedIds.length >= y || (this.selectedIds = [...this.selectedIds, e]);
+    this.selectedIds.length >= MAX_COMPARE || (this.selectedIds = [...this.selectedIds, id]);
   }
-  removeProduct(e) {
-    this.selectedIds = this.selectedIds.filter((t) => t !== e), this.selectedIds.length < x && (this.showTable = !1);
+  removeProduct(id) {
+    this.selectedIds = this.selectedIds.filter((x) => x !== id), this.selectedIds.length < MIN_COMPARE && (this.showTable = !1);
   }
   clearAll() {
     this.selectedIds = [], this.showTable = !1;
   }
-  renderChoiceCard(e, t, o) {
-    return c`
+  renderChoiceCard(product, isSelected, disabled) {
+    return html`
       <article
-        class=${_({
+        class=${classMap({
       "acm-pick-slot": !0,
-      "is-disabled": o,
-      "acm-pick-slot--selected": t
+      "is-disabled": disabled,
+      "acm-pick-slot--selected": isSelected
     })}
       >
-        ${e.image ? c`<img
+        ${product.image ? html`<img
               class="acm-product-head__img"
-              src=${e.image}
-              alt=${e.name}
+              src=${product.image}
+              alt=${product.name}
               loading="lazy"
               decoding="async"
-            />` : f}
+            />` : nothing}
         <div class="acm-product-head">
-          <span class="acm-product-head__name">${e.name || l("عنصر", "Item")}</span>
-          ${e.price > 0 ? c`<strong>${$(e.price, this.currency)}</strong>` : f}
-          ${e.old_price > e.price && e.price > 0 ? c`<span class="acm-slot__empty">
-                ${$(e.old_price, this.currency)}
-              </span>` : f}
+          <span class="acm-product-head__name">${product.name || t("عنصر", "Item")}</span>
+          ${product.price > 0 ? html`<strong>${formatPrice(product.price, this.currency)}</strong>` : nothing}
+          ${product.old_price > product.price && product.price > 0 ? html`<span class="acm-slot__empty">
+                ${formatPrice(product.old_price, this.currency)}
+              </span>` : nothing}
         </div>
         <div class="acm-actions">
           <button
             type="button"
-            class="fs-btn ${t ? "fs-btn--ghost" : ""}"
-            ?disabled=${o}
+            class="fs-btn ${isSelected ? "fs-btn--ghost" : ""}"
+            ?disabled=${disabled}
             @click=${() => {
-      o || this.toggleProduct(e.id);
+      disabled || this.toggleProduct(product.id);
     }}
           >
-            ${t ? l("إزالة من المقارنة", "Remove") : l("اختيار للمقارنة", "Compare")}
+            ${isSelected ? t("إزالة من المقارنة", "Remove") : t("اختيار للمقارنة", "Compare")}
           </button>
-          ${e.url ? c`<a class="fs-btn fs-btn--ghost" href=${e.url}>
-                ${e.btn_text || l("عرض", "View")}
-              </a>` : f}
+          ${product.url ? html`<a class="fs-btn fs-btn--ghost" href=${product.url}>
+                ${product.btn_text || t("عرض", "View")}
+              </a>` : nothing}
         </div>
       </article>
     `;
   }
-  formatCellValue(e, t, o) {
-    if (e === "price")
-      return t.price > 0 ? $(t.price, this.currency) : "—";
-    if (e === "discount") {
-      const r = S(t.price, t.old_price);
-      return r > 0 ? `${r}%` : "—";
+  formatCellValue(rowKey, product, criterionKey) {
+    if (rowKey === "price")
+      return product.price > 0 ? formatPrice(product.price, this.currency) : "—";
+    if (rowKey === "discount") {
+      const pct = getDiscountPercent(product.price, product.old_price);
+      return pct > 0 ? `${pct}%` : "—";
     }
-    if (o) {
-      const r = this.criteria.find((a) => a.key === o);
-      if (r)
-        return E(t, r) || "—";
+    if (criterionKey) {
+      const criterion = this.criteria.find((c) => c.key === criterionKey);
+      if (criterion)
+        return getAttributeValue(product, criterion) || "—";
     }
     return "—";
   }
-  _renderSlots(e) {
-    return c`
-      <div class="acm-slots" aria-label=${l("خانات المقارنة", "Comparison slots")}>
-        ${Array.from({ length: y }, (t, o) => {
-      const r = e[o];
-      return c`
+  _renderSlots(selected) {
+    return html`
+      <div class="acm-slots" aria-label=${t("خانات المقارنة", "Comparison slots")}>
+        ${Array.from({ length: MAX_COMPARE }, (_, i) => {
+      const product = selected[i];
+      return html`
             <div
-              class=${_({
+              class=${classMap({
         "acm-slot": !0,
-        "acm-slot--filled": !!r
+        "acm-slot--filled": !!product
       })}
             >
-              <span class="acm-slot__num" aria-hidden="true">${o + 1}</span>
-              ${r ? c`
-                    ${r.image ? c`<img
+              <span class="acm-slot__num" aria-hidden="true">${i + 1}</span>
+              ${product ? html`
+                    ${product.image ? html`<img
                           class="acm-slot__thumb"
-                          src=${r.image}
+                          src=${product.image}
                           alt=""
                           loading="lazy"
                           decoding="async"
-                        />` : f}
+                        />` : nothing}
                     <span class="acm-slot__meta">
-                      <span class="acm-slot__name">${r.name}</span>
+                      <span class="acm-slot__name">${product.name}</span>
                     </span>
                     <button
                       type="button"
                       class="acm-slot__remove"
-                      aria-label=${l("إزالة", "Remove") + " " + r.name}
-                      @click=${() => this.removeProduct(r.id)}
+                      aria-label=${t("إزالة", "Remove") + " " + product.name}
+                      @click=${() => this.removeProduct(product.id)}
                     >
                       ×
                     </button>
-                  ` : c`<span class="acm-slot__empty">
-                    ${l("فارغة", "Empty")}
+                  ` : html`<span class="acm-slot__empty">
+                    ${t("فارغة", "Empty")}
                   </span>`}
             </div>
           `;
@@ -660,50 +671,50 @@ const y = 3, x = 2, C = class C extends R {
     `;
   }
   render() {
-    const e = this.config || {}, t = K(e, "acm_"), o = t.animate && !U(), r = this.products, a = this.selected;
+    const c = this.config || {}, theme = readSectionTheme(c, "acm_"), animate = theme.animate && !prefersReducedMotion(), products = this.products, selected = this.selected;
     this.currency;
-    const n = this.selectedIds.length >= y, s = a.length >= x, d = p(e.acm_title), h = p(e.acm_desc), I = this.criteria, A = Q(I);
-    return c`
+    const atMax = this.selectedIds.length >= MAX_COMPARE, canCompare = selected.length >= MIN_COMPARE, title = localizedString(c.acm_title), desc = localizedString(c.acm_desc), criteria = this.criteria, rows = buildCompareRows(criteria);
+    return html`
       <section
-        class=${_({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": o
+      "fs-animate": animate
     })}
-        style=${V(q(t))}
-        aria-label=${d || l("مقارنة العبايات", "Compare abayas")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("مقارنة العبايات", "Compare abayas")}
       >
         <div class="fs-container">
-          ${d || h ? c`<div class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${l("مقارنة ذكية", "Smart compare")}</p>
-                ${d ? c`<h2 class="fs-title">${d}</h2>` : f}
+          ${title || desc ? html`<div class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("مقارنة ذكية", "Smart compare")}</p>
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${h ? c`<p class="fs-desc">${h}</p>` : f}
-              </div>` : f}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </div>` : nothing}
 
-          ${this.productsLoading ? c`<div class="fs-empty" role="status">
-                ${l("جاري تحميل المنتجات...", "Loading products...")}
-              </div>` : r.length ? c`<div class="acm-studio">
+          ${this.productsLoading ? html`<div class="fs-empty" role="status">
+                ${t("جاري تحميل المنتجات...", "Loading products...")}
+              </div>` : products.length ? html`<div class="acm-studio">
                   <div class="acm-toolbar">
                     <p class="acm-hint">
-                      ${p(e.acm_select_hint) || l(
+                      ${localizedString(c.acm_select_hint) || t(
       "اختر من 2 إلى 3 عبايات ثم اضغط قارن",
       "Pick 2 to 3 abayas, then tap Compare"
     )}
                     </p>
                     <span class="acm-count" aria-live="polite">
-                      ${a.length} / ${y}
-                      ${l("مختارة", "selected")}
+                      ${selected.length} / ${MAX_COMPARE}
+                      ${t("مختارة", "selected")}
                     </span>
                   </div>
 
-                  ${this._renderSlots(a)}
+                  ${this._renderSlots(selected)}
 
                   <div class="acm-picker" role="list">
-                    ${r.map((m) => {
-      const b = this.selectedIds.includes(m.id), u = !b && n;
-      return c`
+                    ${products.map((p) => {
+      const isSelected = this.selectedIds.includes(p.id), disabled = !isSelected && atMax;
+      return html`
                         <div role="listitem">
-                          ${this.renderChoiceCard(m, b, u)}
+                          ${this.renderChoiceCard(p, isSelected, disabled)}
                         </div>
                       `;
     })}
@@ -713,27 +724,27 @@ const y = 3, x = 2, C = class C extends R {
                     <button
                       type="button"
                       class="fs-btn"
-                      ?disabled=${!s}
+                      ?disabled=${!canCompare}
                       @click=${() => {
       this.showTable = !0;
     }}
                     >
-                      ${p(e.acm_compare_btn) || l("قارني", "Compare")}
+                      ${localizedString(c.acm_compare_btn) || t("قارني", "Compare")}
                     </button>
                     <button
                       type="button"
                       class="fs-btn fs-btn--ghost"
-                      ?disabled=${!a.length}
+                      ?disabled=${!selected.length}
                       @click=${this.clearAll}
                     >
-                      ${p(e.acm_clear_btn) || l("مسح الكل", "Clear all")}
+                      ${localizedString(c.acm_clear_btn) || t("مسح الكل", "Clear all")}
                     </button>
                   </div>
 
-                  ${this.showTable && s ? c`
+                  ${this.showTable && canCompare ? html`
                         <div class="acm-table-wrap">
                           <p class="acm-user-hint">
-                            ${p(e.acm_user_hint) || l(
+                            ${localizedString(c.acm_user_hint) || t(
       "السعر من المتجر تلقائيًا — وبقية المقارنة من إعدادات كل منتج",
       "Price comes from the store — other rows come from each product’s settings"
     )}
@@ -741,32 +752,32 @@ const y = 3, x = 2, C = class C extends R {
                           <div class="acm-legend" aria-hidden="true">
                             <span class="acm-legend__item">
                               <span class="acm-legend__swatch acm-legend__swatch--best"></span>
-                              ${l("أفضل قيمة", "Best value")}
+                              ${t("أفضل قيمة", "Best value")}
                             </span>
                             <span class="acm-legend__item">
                               <span class="acm-legend__swatch acm-legend__swatch--same"></span>
-                              ${l("متطابق", "Identical")}
+                              ${t("متطابق", "Identical")}
                             </span>
                           </div>
                           <table class="acm-table">
                             <thead>
                               <tr>
-                                <th class="acm-table__label">${l("الخاصية", "Attribute")}</th>
-                                ${a.map(
-      (m) => c`
+                                <th class="acm-table__label">${t("الخاصية", "Attribute")}</th>
+                                ${selected.map(
+      (p) => html`
                                     <th>
                                       <div class="acm-product-head">
-                                        ${m.image ? c`<img
+                                        ${p.image ? html`<img
                                               class="acm-product-head__img"
-                                              src=${m.image}
-                                              alt=${m.name}
+                                              src=${p.image}
+                                              alt=${p.name}
                                               loading="lazy"
                                               decoding="async"
-                                            />` : f}
-                                        <span class="acm-product-head__name">${m.name}</span>
-                                        ${m.url ? c`<a class="fs-btn fs-btn--ghost" href=${m.url}>
-                                              ${m.btn_text || l("عرض", "View")}
-                                            </a>` : f}
+                                            />` : nothing}
+                                        <span class="acm-product-head__name">${p.name}</span>
+                                        ${p.url ? html`<a class="fs-btn fs-btn--ghost" href=${p.url}>
+                                              ${p.btn_text || t("عرض", "View")}
+                                            </a>` : nothing}
                                       </div>
                                     </th>
                                   `
@@ -774,30 +785,30 @@ const y = 3, x = 2, C = class C extends R {
                               </tr>
                             </thead>
                             <tbody>
-                              ${A.map((m) => {
-      const b = W(m, a, I);
-      return c`
+                              ${rows.map((row) => {
+      const hl = rowHighlights(row, selected, criteria);
+      return html`
                                   <tr>
                                     <th class="acm-table__label" scope="row">
-                                      ${l(m.labelAr, m.labelEn)}
+                                      ${t(row.labelAr, row.labelEn)}
                                     </th>
-                                    ${a.map((u) => {
-        const j = b.identical.has(u.id), z = b.bestPriceId === u.id || b.bestDiscountId === u.id, D = this.formatCellValue(
-          m.key,
-          u,
-          m.criterionKey
+                                    ${selected.map((p) => {
+        const same = hl.identical.has(p.id), best = hl.bestPriceId === p.id || hl.bestDiscountId === p.id, value = this.formatCellValue(
+          row.key,
+          p,
+          row.criterionKey
         );
-        return c`
+        return html`
                                         <td
-                                          class=${_({
-          "acm-cell--same": j,
-          "acm-cell--best": z
+                                          class=${classMap({
+          "acm-cell--same": same,
+          "acm-cell--best": best
         })}
                                         >
-                                          ${D}
-                                          ${z ? c`<span class="acm-cell__badge">
-                                                ${l("الأفضل", "Best")}
-                                              </span>` : f}
+                                          ${value}
+                                          ${best ? html`<span class="acm-cell__badge">
+                                                ${t("الأفضل", "Best")}
+                                              </span>` : nothing}
                                         </td>
                                       `;
       })}
@@ -807,45 +818,45 @@ const y = 3, x = 2, C = class C extends R {
                             </tbody>
                           </table>
                         </div>
-                      ` : f}
-                </div>` : c`<div class="fs-empty" role="status">
-                  ${l(
+                      ` : nothing}
+                </div>` : html`<div class="fs-empty" role="status">
+                  ${t(
       "أضف منتجات المقارنة من إعدادات العنصر لعرضها هنا.",
       "Add comparison products from the element settings to show them here."
     )}
                 </div>`}
         </div>
-        ${F(this.config || {}, "acm_")}
+        ${renderCommerceOutcome(this.config || {}, "acm_")}
       </section>
     `;
   }
 };
-C.styles = [
-  N,
-  X,
-  L`
+__name(_AbayaComparisonArena, "AbayaComparisonArena"), _AbayaComparisonArena.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let g = C;
-v([
-  O({ type: Object })
-], g.prototype, "config");
-v([
-  w()
-], g.prototype, "products");
-v([
-  w()
-], g.prototype, "productsLoading");
-v([
-  w()
-], g.prototype, "selectedIds");
-v([
-  w()
-], g.prototype, "showTable");
-typeof g < "u" && g.registerSallaComponent("salla-abaya-comparison-arena");
+let AbayaComparisonArena = _AbayaComparisonArena;
+__decorateClass([
+  property({ type: Object })
+], AbayaComparisonArena.prototype, "config");
+__decorateClass([
+  state()
+], AbayaComparisonArena.prototype, "products");
+__decorateClass([
+  state()
+], AbayaComparisonArena.prototype, "productsLoading");
+__decorateClass([
+  state()
+], AbayaComparisonArena.prototype, "selectedIds");
+__decorateClass([
+  state()
+], AbayaComparisonArena.prototype, "showTable");
+typeof AbayaComparisonArena < "u" && AbayaComparisonArena.registerSallaComponent("salla-abaya-comparison-arena");
 export {
-  g as default
+  AbayaComparisonArena as default
 };

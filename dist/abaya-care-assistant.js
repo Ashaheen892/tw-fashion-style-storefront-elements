@@ -1,9 +1,11 @@
-import { css as A, LitElement as E, html as i, nothing as n } from "lit";
-import { property as G, state as _ } from "lit/decorators.js";
-import { classMap as L } from "lit/directives/class-map.js";
-import { styleMap as F } from "lit/directives/style-map.js";
-import { n as j, i as b, l as p, e as P, s as K, r as M, g as N, c as R, t as o, p as W, a as Q, b as U } from "./sharedStyles-Cd7RKVf-.js";
-const I = A`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, i as isTruthy, l as localizedString, e as extractImageUrl, s as sharedSectionCss, r as readSectionTheme, g as getPageLocale, c as copyText, t, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .aca-layout {
     display: grid;
     gap: 1.75rem;
@@ -645,7 +647,7 @@ const I = A`
       line-height: 1.65;
     }
   }
-`, k = [
+`, JUNK_STEP_VALUES = [
   "رابط المنتجات",
   "نص الزر",
   "product link",
@@ -654,73 +656,79 @@ const I = A`
   "products url",
   "btn text"
 ];
-function v(t) {
-  const a = t.replace(/[:：]\s*$/, "").trim().toLowerCase();
-  return a ? k.some((r) => a === r.toLowerCase()) : !0;
+function isJunkLine(line) {
+  const normalized = line.replace(/[:：]\s*$/, "").trim().toLowerCase();
+  return normalized ? JUNK_STEP_VALUES.some((junk) => normalized === junk.toLowerCase()) : !0;
 }
-function m(t) {
-  const a = p(t).trim();
-  if (!a) return "";
-  let e = a.split(/\r?\n/).map((s) => s.trim()).filter((s) => s && !v(s)).join(`
+__name(isJunkLine, "isJunkLine");
+function cleanCareText(raw) {
+  const text = localizedString(raw).trim();
+  if (!text) return "";
+  let cleaned = text.split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !isJunkLine(line)).join(`
 `).trim();
-  if (!e) return "";
-  for (const s of k) {
-    const d = new RegExp(`(?:^|[\\s،,])${s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[:：]?`, "gi");
-    e = e.replace(d, " ").replace(/\s{2,}/g, " ").trim();
+  if (!cleaned) return "";
+  for (const junk of JUNK_STEP_VALUES) {
+    const pattern = new RegExp(`(?:^|[\\s،,])${junk.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[:：]?`, "gi");
+    cleaned = cleaned.replace(pattern, " ").replace(/\s{2,}/g, " ").trim();
   }
-  return v(e) ? "" : e;
+  return isJunkLine(cleaned) ? "" : cleaned;
 }
-function V(t) {
-  return j(t).map((a) => ({
-    fabric_name: p(a.fabric_name),
-    fabric_image: P(a.fabric_image),
-    fabric_summary: p(a.fabric_summary),
-    pre_wash: m(a.pre_wash),
-    wash: m(a.wash),
-    dry: m(a.dry),
-    iron: m(a.iron),
-    store: m(a.store),
-    stain: m(a.stain),
-    embroidery_warn: m(a.embroidery_warn),
-    wash_temp: m(a.wash_temp),
-    allow_washer: b(a.allow_washer),
-    allow_dryer: b(a.allow_dryer),
-    allow_steam: b(a.allow_steam)
-  })).filter((a) => a.fabric_name.trim() !== "");
+__name(cleanCareText, "cleanCareText");
+function parseFabrics(raw) {
+  return normalizeCollection(raw).map((item) => ({
+    fabric_name: localizedString(item.fabric_name),
+    fabric_image: extractImageUrl(item.fabric_image),
+    fabric_summary: localizedString(item.fabric_summary),
+    pre_wash: cleanCareText(item.pre_wash),
+    wash: cleanCareText(item.wash),
+    dry: cleanCareText(item.dry),
+    iron: cleanCareText(item.iron),
+    store: cleanCareText(item.store),
+    stain: cleanCareText(item.stain),
+    embroidery_warn: cleanCareText(item.embroidery_warn),
+    wash_temp: cleanCareText(item.wash_temp),
+    allow_washer: isTruthy(item.allow_washer),
+    allow_dryer: isTruthy(item.allow_dryer),
+    allow_steam: isTruthy(item.allow_steam)
+  })).filter((f) => f.fabric_name.trim() !== "");
 }
-function u(t) {
+__name(parseFabrics, "parseFabrics");
+function buildCareSteps(fabric) {
   return [
-    { key: "pre_wash", labelAr: "قبل الغسيل", labelEn: "Pre-wash", value: t.pre_wash },
-    { key: "wash", labelAr: "الغسيل", labelEn: "Wash", value: t.wash },
-    { key: "dry", labelAr: "التجفيف", labelEn: "Dry", value: t.dry },
-    { key: "iron", labelAr: "الكي", labelEn: "Iron", value: t.iron },
-    { key: "store", labelAr: "التخزين", labelEn: "Storage", value: t.store }
-  ].filter((r) => r.value.trim() !== "");
+    { key: "pre_wash", labelAr: "قبل الغسيل", labelEn: "Pre-wash", value: fabric.pre_wash },
+    { key: "wash", labelAr: "الغسيل", labelEn: "Wash", value: fabric.wash },
+    { key: "dry", labelAr: "التجفيف", labelEn: "Dry", value: fabric.dry },
+    { key: "iron", labelAr: "الكي", labelEn: "Iron", value: fabric.iron },
+    { key: "store", labelAr: "التخزين", labelEn: "Storage", value: fabric.store }
+  ].filter((s) => s.value.trim() !== "");
 }
-function Y(t, a) {
-  const r = [t.fabric_name];
-  t.fabric_summary && r.push(t.fabric_summary);
-  for (const e of u(t))
-    r.push(`${a ? e.labelEn : e.labelAr}: ${e.value}`);
-  return t.stain && r.push(`${a ? "Stain removal" : "إزالة البقع"}: ${t.stain}`), t.embroidery_warn && r.push(
-    `${a ? "Embroidery note" : "تنبيه التطريز"}: ${t.embroidery_warn}`
-  ), t.wash_temp && r.push(
-    `${a ? "Wash temperature" : "حرارة الغسيل"}: ${t.wash_temp}`
-  ), r.join(`
+__name(buildCareSteps, "buildCareSteps");
+function buildCareText(fabric, localeEn) {
+  const lines = [fabric.fabric_name];
+  fabric.fabric_summary && lines.push(fabric.fabric_summary);
+  for (const step of buildCareSteps(fabric))
+    lines.push(`${localeEn ? step.labelEn : step.labelAr}: ${step.value}`);
+  return fabric.stain && lines.push(`${localeEn ? "Stain removal" : "إزالة البقع"}: ${fabric.stain}`), fabric.embroidery_warn && lines.push(
+    `${localeEn ? "Embroidery note" : "تنبيه التطريز"}: ${fabric.embroidery_warn}`
+  ), fabric.wash_temp && lines.push(
+    `${localeEn ? "Wash temperature" : "حرارة الغسيل"}: ${fabric.wash_temp}`
+  ), lines.join(`
 `);
 }
-function B(t, a) {
-  const r = a.trim().toLowerCase();
-  return r ? t.filter(
-    (e) => e.fabric_name.toLowerCase().includes(r) || e.fabric_summary.toLowerCase().includes(r)
-  ) : t;
+__name(buildCareText, "buildCareText");
+function filterFabrics(fabrics, query) {
+  const q = query.trim().toLowerCase();
+  return q ? fabrics.filter(
+    (f) => f.fabric_name.toLowerCase().includes(q) || f.fabric_summary.toLowerCase().includes(q)
+  ) : fabrics;
 }
-var O = Object.defineProperty, h = (t, a, r, e) => {
-  for (var s = void 0, d = t.length - 1, f; d >= 0; d--)
-    (f = t[d]) && (s = f(a, r, s) || s);
-  return s && O(a, r, s), s;
-}, l;
-const g = (l = class extends E {
+__name(filterFabrics, "filterFabrics");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass"), _a;
+const _AbayaCareAssistant = (_a = class extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.searchQuery = "", this.selectedKey = "", this.showToast = !1, this._onLangChange = () => this.requestUpdate(), this._toastTimer = null;
   }
@@ -728,56 +736,56 @@ const g = (l = class extends E {
     super.connectedCallback(), this._ensureFonts(), document.addEventListener("language-changed", this._onLangChange), this._ensureSelection(), this._syncVisibility();
   }
   _ensureFonts() {
-    if (l.fontsReady || typeof document > "u") return;
-    const a = "aca-luxury-fonts";
-    if (document.getElementById(a)) {
-      l.fontsReady = !0;
+    if (_a.fontsReady || typeof document > "u") return;
+    const id = "aca-luxury-fonts";
+    if (document.getElementById(id)) {
+      _a.fontsReady = !0;
       return;
     }
-    const r = document.createElement("link");
-    r.id = a, r.rel = "stylesheet", r.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(r), l.fontsReady = !0;
+    const link = document.createElement("link");
+    link.id = id, link.rel = "stylesheet", link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(link), _a.fontsReady = !0;
   }
   disconnectedCallback() {
     super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange), this._toastTimer && (clearTimeout(this._toastTimer), this._toastTimer = null);
   }
-  updated(a) {
-    a.has("config") && this._ensureSelection(), this._syncVisibility();
+  updated(changed) {
+    changed.has("config") && this._ensureSelection(), this._syncVisibility();
   }
   get fabrics() {
-    var a;
-    return V((a = this.config) == null ? void 0 : a.aca_fabrics);
+    var _a2;
+    return parseFabrics((_a2 = this.config) == null ? void 0 : _a2.aca_fabrics);
   }
   get filteredFabrics() {
-    return B(this.fabrics, this.searchQuery);
+    return filterFabrics(this.fabrics, this.searchQuery);
   }
   get theme() {
-    return M(this.config, "aca_");
+    return readSectionTheme(this.config, "aca_");
   }
   get selected() {
-    return this.filteredFabrics.find((a) => a.fabric_name === this.selectedKey) || this.filteredFabrics[0] || null;
+    return this.filteredFabrics.find((f) => f.fabric_name === this.selectedKey) || this.filteredFabrics[0] || null;
   }
   _syncVisibility() {
     this.style.display = this.fabrics.length ? "" : "none";
   }
   _ensureSelection() {
-    const a = this.filteredFabrics;
-    if (!a.length) {
+    const list = this.filteredFabrics;
+    if (!list.length) {
       this.selectedKey = "";
       return;
     }
-    a.some((r) => r.fabric_name === this.selectedKey) || (this.selectedKey = a[0].fabric_name);
+    list.some((f) => f.fabric_name === this.selectedKey) || (this.selectedKey = list[0].fabric_name);
   }
-  _onSearch(a) {
-    this.searchQuery = a.target.value, this._ensureSelection();
+  _onSearch(e) {
+    this.searchQuery = e.target.value, this._ensureSelection();
   }
-  _selectFabric(a) {
-    this.selectedKey = a;
+  _selectFabric(name) {
+    this.selectedKey = name;
   }
   async _copyCare() {
-    const a = this.selected;
-    if (!a) return;
-    const r = N() === "en";
-    await R(Y(a, r)) && this._showCopiedToast();
+    const fabric = this.selected;
+    if (!fabric) return;
+    const localeEn = getPageLocale() === "en";
+    await copyText(buildCareText(fabric, localeEn)) && this._showCopiedToast();
   }
   _printCare() {
     window.print();
@@ -787,68 +795,68 @@ const g = (l = class extends E {
       this.showToast = !1, this._toastTimer = null;
     }, 2400);
   }
-  _label(a, r, e) {
-    var s;
-    return p((s = this.config) == null ? void 0 : s[a], "") || o(r, e);
+  _label(key, ar, en) {
+    var _a2;
+    return localizedString((_a2 = this.config) == null ? void 0 : _a2[key], "") || t(ar, en);
   }
   render() {
-    var x, w;
+    var _a2, _b;
     if (!this.fabrics.length)
-      return i`<div class="fs-empty" role="status">
-        ${o("لا توجد أقمشة متاحة", "No fabrics available")}
+      return html`<div class="fs-empty" role="status">
+        ${t("لا توجد أقمشة متاحة", "No fabrics available")}
       </div>`;
-    const a = this.theme, r = a.animate && !W(), e = this.selected, s = p((x = this.config) == null ? void 0 : x.aca_title), d = p((w = this.config) == null ? void 0 : w.aca_desc), f = this._label("aca_search_placeholder", "ابحثي عن الخامة...", "Search fabrics..."), C = this._label("aca_copy_btn", "نسخ التعليمات", "Copy instructions"), z = this._label("aca_print_btn", "طباعة البطاقة", "Print card"), T = this._label("aca_copied_msg", "تم النسخ بنجاح", "Copied successfully"), y = e ? u(e) : [];
-    return i`
+    const theme = this.theme, animate = theme.animate && !prefersReducedMotion(), fabric = this.selected, title = localizedString((_a2 = this.config) == null ? void 0 : _a2.aca_title), desc = localizedString((_b = this.config) == null ? void 0 : _b.aca_desc), searchPh = this._label("aca_search_placeholder", "ابحثي عن الخامة...", "Search fabrics..."), copyBtn = this._label("aca_copy_btn", "نسخ التعليمات", "Copy instructions"), printBtn = this._label("aca_print_btn", "طباعة البطاقة", "Print card"), copiedMsg = this._label("aca_copied_msg", "تم النسخ بنجاح", "Copied successfully"), steps = fabric ? buildCareSteps(fabric) : [];
+    return html`
       <section
-        class=${L({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": r
+      "fs-animate": animate
     })}
-        style=${F(Q(a))}
-        aria-label=${s || o("مساعد العناية بالعباية", "Abaya care assistant")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("مساعد العناية بالعباية", "Abaya care assistant")}
       >
         <div class="fs-container">
-          ${s || d ? i`<header class="fs-header">
-                ${s ? i`<h2 class="fs-title">${s}</h2>` : n}
-                ${d ? i`<p class="fs-desc">${d}</p>` : n}
-              </header>` : n}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="aca-layout">
             <aside class="aca-sidebar">
               <label class="aca-sidebar__label" for="aca-search">
-                ${o("اختاري الخامة", "Choose a fabric")}
+                ${t("اختاري الخامة", "Choose a fabric")}
               </label>
               <input
                 id="aca-search"
                 class="aca-search"
                 type="search"
                 .value=${this.searchQuery}
-                placeholder=${f}
+                placeholder=${searchPh}
                 @input=${this._onSearch}
-                aria-label=${f}
+                aria-label=${searchPh}
               />
-              <ul class="aca-list" role="listbox" aria-label=${o("قائمة الأقمشة", "Fabric list")}>
+              <ul class="aca-list" role="listbox" aria-label=${t("قائمة الأقمشة", "Fabric list")}>
                 ${this.filteredFabrics.map(
-      (c) => i`
+      (f) => html`
                     <li>
                       <button
                         type="button"
                         class="aca-list__item"
                         role="option"
-                        aria-current=${c.fabric_name === (e == null ? void 0 : e.fabric_name) ? "true" : "false"}
-                        @click=${() => this._selectFabric(c.fabric_name)}
+                        aria-current=${f.fabric_name === (fabric == null ? void 0 : fabric.fabric_name) ? "true" : "false"}
+                        @click=${() => this._selectFabric(f.fabric_name)}
                       >
-                        ${c.fabric_image ? i`<img
+                        ${f.fabric_image ? html`<img
                               class="aca-list__thumb"
-                              src=${c.fabric_image}
+                              src=${f.fabric_image}
                               alt=""
                               loading="lazy"
                               width="48"
                               height="48"
-                            />` : i`<span class="aca-list__thumb" aria-hidden="true"></span>`}
+                            />` : html`<span class="aca-list__thumb" aria-hidden="true"></span>`}
                         <span class="aca-list__meta">
-                          <span class="aca-list__name">${c.fabric_name}</span>
-                          ${c.fabric_summary ? i`<span class="aca-list__hint">${c.fabric_summary}</span>` : n}
+                          <span class="aca-list__name">${f.fabric_name}</span>
+                          ${f.fabric_summary ? html`<span class="aca-list__hint">${f.fabric_summary}</span>` : nothing}
                         </span>
                         <span class="aca-list__check" aria-hidden="true">✓</span>
                       </button>
@@ -856,42 +864,42 @@ const g = (l = class extends E {
                   `
     )}
               </ul>
-              ${this.filteredFabrics.length ? n : i`<p class="aca-empty-inline">${o("لا توجد نتائج", "No results")}</p>`}
+              ${this.filteredFabrics.length ? nothing : html`<p class="aca-empty-inline">${t("لا توجد نتائج", "No results")}</p>`}
             </aside>
 
-            ${e ? i`<article class="aca-panel" aria-live="polite">
+            ${fabric ? html`<article class="aca-panel" aria-live="polite">
                   <div class="aca-panel__hero">
-                    ${e.fabric_image ? i`<img
+                    ${fabric.fabric_image ? html`<img
                           class="aca-panel__hero-bg"
-                          src=${e.fabric_image}
+                          src=${fabric.fabric_image}
                           alt=""
                           loading="eager"
                           decoding="async"
-                        />` : n}
+                        />` : nothing}
                     <div class="aca-panel__hero-content">
-                      <span class="aca-kicker">${o("أتيليه العناية", "Care atelier")}</span>
-                      <h3 class="aca-panel__title">${e.fabric_name}</h3>
-                      ${e.fabric_summary ? i`<p class="aca-panel__summary">${e.fabric_summary}</p>` : n}
+                      <span class="aca-kicker">${t("أتيليه العناية", "Care atelier")}</span>
+                      <h3 class="aca-panel__title">${fabric.fabric_name}</h3>
+                      ${fabric.fabric_summary ? html`<p class="aca-panel__summary">${fabric.fabric_summary}</p>` : nothing}
                     </div>
                   </div>
 
                   <div class="aca-panel__body">
                     <section class="aca-block aca-block--ritual">
                       <h4 class="aca-section-title">
-                        ${o("طقوس العناية بأناقة", "An elegant care ritual")}
+                        ${t("طقوس العناية بأناقة", "An elegant care ritual")}
                       </h4>
-                      ${y.length ? i`<div class="aca-journey" aria-label=${o("خطوات العناية", "Care steps")}>
-                            ${y.map(
-      (c, S) => i`
+                      ${steps.length ? html`<div class="aca-journey" aria-label=${t("خطوات العناية", "Care steps")}>
+                            ${steps.map(
+      (step, i) => html`
                                 <div class="aca-step">
-                                  <span class="aca-step__num" aria-hidden="true">${S + 1}</span>
-                                  <p class="aca-step__title">${o(c.labelAr, c.labelEn)}</p>
-                                  <p class="aca-step__text">${c.value}</p>
+                                  <span class="aca-step__num" aria-hidden="true">${i + 1}</span>
+                                  <p class="aca-step__title">${t(step.labelAr, step.labelEn)}</p>
+                                  <p class="aca-step__text">${step.value}</p>
                                 </div>
                               `
     )}
-                          </div>` : i`<p class="aca-empty-inline">
-                            ${o("لا توجد خطوات عناية لهذه الخامة", "No care steps for this fabric")}
+                          </div>` : html`<p class="aca-empty-inline">
+                            ${t("لا توجد خطوات عناية لهذه الخامة", "No care steps for this fabric")}
                           </p>`}
                     </section>
 
@@ -900,98 +908,98 @@ const g = (l = class extends E {
                       aria-labelledby="aca-allows-title"
                     >
                       <h4 class="aca-section-title" id="aca-allows-title">
-                        ${o("ما المسموح؟", "What is allowed?")}
+                        ${t("ما المسموح؟", "What is allowed?")}
                       </h4>
-                      <div class="aca-allows" aria-label=${o("الأجهزة المسموحة", "Allowed appliances")}>
-                        ${this._renderAllow(o("غسالة", "Washer"), e.allow_washer)}
-                        ${this._renderAllow(o("مجفف", "Dryer"), e.allow_dryer)}
-                        ${this._renderAllow(o("بخار", "Steam"), e.allow_steam)}
+                      <div class="aca-allows" aria-label=${t("الأجهزة المسموحة", "Allowed appliances")}>
+                        ${this._renderAllow(t("غسالة", "Washer"), fabric.allow_washer)}
+                        ${this._renderAllow(t("مجفف", "Dryer"), fabric.allow_dryer)}
+                        ${this._renderAllow(t("بخار", "Steam"), fabric.allow_steam)}
                       </div>
                     </section>
 
-                    ${e.wash_temp || e.stain || e.embroidery_warn ? i`<section class="aca-block aca-block--notes">
+                    ${fabric.wash_temp || fabric.stain || fabric.embroidery_warn ? html`<section class="aca-block aca-block--notes">
                           <h4 class="aca-section-title">
-                            ${o("ملاحظات إضافية", "Extra notes")}
+                            ${t("ملاحظات إضافية", "Extra notes")}
                           </h4>
                           <div class="aca-notes">
-                            ${e.wash_temp ? i`<p class="aca-extra">
-                                  <strong>${o("حرارة الغسيل:", "Wash temp:")}</strong>
-                                  ${e.wash_temp}
-                                </p>` : n}
-                            ${e.stain ? i`<p class="aca-extra">
-                                  <strong>${o("إزالة البقع:", "Stain removal:")}</strong>
-                                  ${e.stain}
-                                </p>` : n}
-                            ${e.embroidery_warn ? i`<p class="aca-extra">
-                                  <strong>${o("تنبيه التطريز:", "Embroidery note:")}</strong>
-                                  ${e.embroidery_warn}
-                                </p>` : n}
+                            ${fabric.wash_temp ? html`<p class="aca-extra">
+                                  <strong>${t("حرارة الغسيل:", "Wash temp:")}</strong>
+                                  ${fabric.wash_temp}
+                                </p>` : nothing}
+                            ${fabric.stain ? html`<p class="aca-extra">
+                                  <strong>${t("إزالة البقع:", "Stain removal:")}</strong>
+                                  ${fabric.stain}
+                                </p>` : nothing}
+                            ${fabric.embroidery_warn ? html`<p class="aca-extra">
+                                  <strong>${t("تنبيه التطريز:", "Embroidery note:")}</strong>
+                                  ${fabric.embroidery_warn}
+                                </p>` : nothing}
                           </div>
-                        </section>` : n}
+                        </section>` : nothing}
 
                     <div class="aca-actions">
                       <button type="button" class="fs-btn" @click=${this._copyCare}>
-                        ${C}
+                        ${copyBtn}
                       </button>
                       <button type="button" class="fs-btn fs-btn--ghost" @click=${this._printCare}>
-                        ${z}
+                        ${printBtn}
                       </button>
                     </div>
                   </div>
-                </article>` : n}
+                </article>` : nothing}
           </div>
         </div>
 
-        ${this.showToast ? i`<div class="aca-toast" role="status" aria-live="polite">${T}</div>` : n}
+        ${this.showToast ? html`<div class="aca-toast" role="status" aria-live="polite">${copiedMsg}</div>` : nothing}
 
-        ${e ? this._renderPrintCard(e) : n}
-        ${U(this.config || {}, "aca_")}
+        ${fabric ? this._renderPrintCard(fabric) : nothing}
+        ${renderCommerceOutcome(this.config || {}, "aca_")}
       </section>
     `;
   }
-  _renderAllow(a, r) {
-    return i`
-      <div class="aca-allow ${r ? "aca-allow--yes" : "aca-allow--no"}">
-        <span class="aca-allow__icon" aria-hidden="true">${r ? "✓" : "✕"}</span>
+  _renderAllow(label, allowed) {
+    return html`
+      <div class="aca-allow ${allowed ? "aca-allow--yes" : "aca-allow--no"}">
+        <span class="aca-allow__icon" aria-hidden="true">${allowed ? "✓" : "✕"}</span>
         <span class="aca-allow__label">
-          <strong>${a}</strong>
-          <span>${r ? o("مسموح", "Allowed") : o("غير مسموح", "Not allowed")}</span>
+          <strong>${label}</strong>
+          <span>${allowed ? t("مسموح", "Allowed") : t("غير مسموح", "Not allowed")}</span>
         </span>
       </div>
     `;
   }
-  _renderPrintCard(a) {
-    const r = u(a);
-    return i`
+  _renderPrintCard(fabric) {
+    const steps = buildCareSteps(fabric);
+    return html`
       <div class="aca-print-card" aria-hidden="true">
-        <h1>${a.fabric_name}</h1>
-        ${a.fabric_summary ? i`<p>${a.fabric_summary}</p>` : n}
+        <h1>${fabric.fabric_name}</h1>
+        ${fabric.fabric_summary ? html`<p>${fabric.fabric_summary}</p>` : nothing}
         <ol>
-          ${r.map(
-      (e) => i`<li><strong>${o(e.labelAr, e.labelEn)}:</strong> ${e.value}</li>`
+          ${steps.map(
+      (s) => html`<li><strong>${t(s.labelAr, s.labelEn)}:</strong> ${s.value}</li>`
     )}
         </ol>
-        ${a.wash_temp ? i`<p>${o("حرارة الغسيل", "Wash temp")}: ${a.wash_temp}</p>` : n}
-        ${a.stain ? i`<p>${o("إزالة البقع", "Stain")}: ${a.stain}</p>` : n}
-        ${a.embroidery_warn ? i`<p>${o("تنبيه التطريز", "Embroidery")}: ${a.embroidery_warn}</p>` : n}
+        ${fabric.wash_temp ? html`<p>${t("حرارة الغسيل", "Wash temp")}: ${fabric.wash_temp}</p>` : nothing}
+        ${fabric.stain ? html`<p>${t("إزالة البقع", "Stain")}: ${fabric.stain}</p>` : nothing}
+        ${fabric.embroidery_warn ? html`<p>${t("تنبيه التطريز", "Embroidery")}: ${fabric.embroidery_warn}</p>` : nothing}
       </div>
     `;
   }
-}, l.fontsReady = !1, l.styles = [K, I], l);
-h([
-  G({ type: Object })
-], g.prototype, "config");
-h([
-  _()
-], g.prototype, "searchQuery");
-h([
-  _()
-], g.prototype, "selectedKey");
-h([
-  _()
-], g.prototype, "showToast");
-let $ = g;
-typeof $ < "u" && $.registerSallaComponent("salla-abaya-care-assistant");
+}, __name(_a, "_AbayaCareAssistant"), _a.fontsReady = !1, _a.styles = [sharedSectionCss, componentStyles], _a);
+__decorateClass([
+  property({ type: Object })
+], _AbayaCareAssistant.prototype, "config");
+__decorateClass([
+  state()
+], _AbayaCareAssistant.prototype, "searchQuery");
+__decorateClass([
+  state()
+], _AbayaCareAssistant.prototype, "selectedKey");
+__decorateClass([
+  state()
+], _AbayaCareAssistant.prototype, "showToast");
+let AbayaCareAssistant = _AbayaCareAssistant;
+typeof AbayaCareAssistant < "u" && AbayaCareAssistant.registerSallaComponent("salla-abaya-care-assistant");
 export {
-  $ as default
+  AbayaCareAssistant as default
 };

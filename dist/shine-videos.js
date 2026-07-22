@@ -1,9 +1,11 @@
-import { css as x, LitElement as w, nothing as l, html as o } from "lit";
-import { property as k, state as _, query as $ } from "lit/decorators.js";
-import { classMap as b } from "lit/directives/class-map.js";
-import { styleMap as I } from "lit/directives/style-map.js";
-import { n as z, d as M, l as u, s as S, p as y, t as n, r as C, i as E, a as L, b as Y } from "./sharedStyles-Cd7RKVf-.js";
-const O = x`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state, query } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, p as prefersReducedMotion, t, r as readSectionTheme, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .sv-shell {
     position: relative;
     isolation: isolate;
@@ -500,127 +502,130 @@ const O = x`
     }
   }
 `;
-function P(c) {
-  var t, e;
-  if (!c) return "";
+function youtubeId(url) {
+  var _a, _b;
+  if (!url) return "";
   try {
-    const s = new URL(c);
-    return s.hostname.includes("youtu.be") ? s.pathname.replace("/", "").split("/")[0] || "" : s.pathname.includes("/shorts/") ? ((t = s.pathname.split("/shorts/")[1]) == null ? void 0 : t.split(/[/?#]/)[0]) || "" : s.pathname.includes("/embed/") ? ((e = s.pathname.split("/embed/")[1]) == null ? void 0 : e.split(/[/?#]/)[0]) || "" : s.searchParams.get("v") || "";
+    const u = new URL(url);
+    return u.hostname.includes("youtu.be") ? u.pathname.replace("/", "").split("/")[0] || "" : u.pathname.includes("/shorts/") ? ((_a = u.pathname.split("/shorts/")[1]) == null ? void 0 : _a.split(/[/?#]/)[0]) || "" : u.pathname.includes("/embed/") ? ((_b = u.pathname.split("/embed/")[1]) == null ? void 0 : _b.split(/[/?#]/)[0]) || "" : u.searchParams.get("v") || "";
   } catch {
     return "";
   }
 }
-function T(c) {
-  const t = P(c);
-  return t ? `https://www.youtube.com/embed/${t}?autoplay=1&rel=0` : "";
+__name(youtubeId, "youtubeId");
+function youtubeEmbedUrl(url) {
+  const id = youtubeId(url);
+  return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : "";
 }
-function U(c) {
-  return z(c).map((t, e) => {
-    const s = String(t.poster || t.image || "").trim(), a = M(t.video_url) || String(t.video_url || t.youtube || "").trim(), r = u(t.caption) || u(t.title);
-    return !s && !a ? null : {
-      id: String(t.id || `sv-${e}`),
-      poster: s,
-      videoUrl: a,
-      caption: r
+__name(youtubeEmbedUrl, "youtubeEmbedUrl");
+function parseVideos(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const poster = String(item.poster || item.image || "").trim(), videoUrl = extractLink(item.video_url) || String(item.video_url || item.youtube || "").trim(), caption = localizedString(item.caption) || localizedString(item.title);
+    return !poster && !videoUrl ? null : {
+      id: String(item.id || `sv-${index}`),
+      poster,
+      videoUrl,
+      caption
     };
-  }).filter((t) => !!t);
+  }).filter((v) => !!v);
 }
-var F = Object.defineProperty, h = (c, t, e, s) => {
-  for (var a = void 0, r = c.length - 1, p; r >= 0; r--)
-    (p = c[r]) && (a = p(t, e, a) || a);
-  return a && F(t, e, a), a;
-};
-const g = class g extends w {
+__name(parseVideos, "parseVideos");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _ShineVideos = class _ShineVideos extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.active = null, this.focusId = "", this.boundLang = () => this.requestUpdate(), this.boundKey = (t) => {
-      this.active && (t.key === "Escape" && this.closeModal(), t.key === "ArrowRight" && this.shiftModal(-1), t.key === "ArrowLeft" && this.shiftModal(1));
+    super(...arguments), this.config = {}, this.active = null, this.focusId = "", this.boundLang = () => this.requestUpdate(), this.boundKey = (e) => {
+      this.active && (e.key === "Escape" && this.closeModal(), e.key === "ArrowRight" && this.shiftModal(-1), e.key === "ArrowLeft" && this.shiftModal(1));
     };
   }
   connectedCallback() {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), window.addEventListener("keydown", this.boundKey);
   }
   disconnectedCallback() {
-    var t;
-    window.removeEventListener("language-changed", this.boundLang), window.removeEventListener("keydown", this.boundKey), (t = this.observer) == null || t.disconnect(), super.disconnectedCallback();
+    var _a;
+    window.removeEventListener("language-changed", this.boundLang), window.removeEventListener("keydown", this.boundKey), (_a = this.observer) == null || _a.disconnect(), super.disconnectedCallback();
   }
   firstUpdated() {
     this.setupObserver(), this.ensureFocus();
   }
-  updated(t) {
-    t.has("config") && (this.ensureFocus(), this.setupObserver());
+  updated(changed) {
+    changed.has("config") && (this.ensureFocus(), this.setupObserver());
   }
   get videos() {
-    var t;
-    return U((t = this.config) == null ? void 0 : t.sv_videos);
+    var _a;
+    return parseVideos((_a = this.config) == null ? void 0 : _a.sv_videos);
   }
   ensureFocus() {
-    const t = this.videos;
-    if (!t.length) {
+    const list = this.videos;
+    if (!list.length) {
       this.focusId = "";
       return;
     }
-    t.some((e) => e.id === this.focusId) || (this.focusId = t[0].id);
+    list.some((v) => v.id === this.focusId) || (this.focusId = list[0].id);
   }
   setupObserver() {
-    var e;
-    (e = this.observer) == null || e.disconnect();
-    const t = this.trackEl;
-    t && (this.observer = new IntersectionObserver(
-      (s) => {
-        var p, v;
-        const a = s.filter((m) => m.isIntersecting).sort((m, i) => i.intersectionRatio - m.intersectionRatio)[0], r = (v = (p = a == null ? void 0 : a.target) == null ? void 0 : p.dataset) == null ? void 0 : v.id;
-        r && (this.focusId = r);
+    var _a;
+    (_a = this.observer) == null || _a.disconnect();
+    const track = this.trackEl;
+    track && (this.observer = new IntersectionObserver(
+      (entries) => {
+        var _a2, _b;
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0], id = (_b = (_a2 = visible == null ? void 0 : visible.target) == null ? void 0 : _a2.dataset) == null ? void 0 : _b.id;
+        id && (this.focusId = id);
       },
-      { root: t, threshold: [0.45, 0.7, 0.9] }
-    ), t.querySelectorAll(".sv-card").forEach((s) => {
-      var a;
-      return (a = this.observer) == null ? void 0 : a.observe(s);
+      { root: track, threshold: [0.45, 0.7, 0.9] }
+    ), track.querySelectorAll(".sv-card").forEach((card) => {
+      var _a2;
+      return (_a2 = this.observer) == null ? void 0 : _a2.observe(card);
     }));
   }
-  scrollToIndex(t) {
-    const e = this.trackEl, s = e == null ? void 0 : e.querySelectorAll(".sv-card")[t];
-    s == null || s.scrollIntoView({ behavior: y() ? "auto" : "smooth", inline: "center", block: "nearest" });
+  scrollToIndex(index) {
+    const track = this.trackEl, card = track == null ? void 0 : track.querySelectorAll(".sv-card")[index];
+    card == null || card.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", inline: "center", block: "nearest" });
   }
   focusIndex() {
-    return Math.max(0, this.videos.findIndex((t) => t.id === this.focusId));
+    return Math.max(0, this.videos.findIndex((v) => v.id === this.focusId));
   }
-  shiftFocus(t) {
-    const e = this.videos;
-    if (!e.length) return;
-    const s = Math.min(e.length - 1, Math.max(0, this.focusIndex() + t));
-    this.focusId = e[s].id, this.scrollToIndex(s);
+  shiftFocus(delta) {
+    const list = this.videos;
+    if (!list.length) return;
+    const next = Math.min(list.length - 1, Math.max(0, this.focusIndex() + delta));
+    this.focusId = list[next].id, this.scrollToIndex(next);
   }
-  openModal(t) {
-    !t.videoUrl && !t.poster || (this.active = t, this.focusId = t.id);
+  openModal(item) {
+    !item.videoUrl && !item.poster || (this.active = item, this.focusId = item.id);
   }
   closeModal() {
     this.active = null;
   }
-  shiftModal(t) {
-    const e = this.videos;
-    if (!this.active || e.length < 2) return;
-    const a = (e.findIndex((r) => r.id === this.active.id) + t + e.length) % e.length;
-    this.active = e[a], this.focusId = e[a].id, this.scrollToIndex(a);
+  shiftModal(dir) {
+    const list = this.videos;
+    if (!this.active || list.length < 2) return;
+    const next = (list.findIndex((v) => v.id === this.active.id) + dir + list.length) % list.length;
+    this.active = list[next], this.focusId = list[next].id, this.scrollToIndex(next);
   }
   renderModal() {
-    if (!this.active) return l;
-    const t = this.active.videoUrl, e = T(t), a = this.videos.length > 1;
-    return o`
+    if (!this.active) return nothing;
+    const url = this.active.videoUrl, yt = youtubeEmbedUrl(url), multi = this.videos.length > 1;
+    return html`
       <div class="sv-modal" role="dialog" aria-modal="true" @click=${() => this.closeModal()}>
-        <div class="sv-modal__panel" @click=${(r) => r.stopPropagation()}>
+        <div class="sv-modal__panel" @click=${(e) => e.stopPropagation()}>
           <button
             type="button"
             class="sv-modal__close"
-            aria-label=${n("إغلاق", "Close")}
+            aria-label=${t("إغلاق", "Close")}
             @click=${() => this.closeModal()}
           >
             ×
           </button>
-          ${a ? o`
+          ${multi ? html`
                 <button
                   type="button"
                   class="sv-modal__nav sv-modal__nav--prev"
-                  aria-label=${n("السابق", "Previous")}
+                  aria-label=${t("السابق", "Previous")}
                   @click=${() => this.shiftModal(1)}
                 >
                   ‹
@@ -628,45 +633,45 @@ const g = class g extends w {
                 <button
                   type="button"
                   class="sv-modal__nav sv-modal__nav--next"
-                  aria-label=${n("التالي", "Next")}
+                  aria-label=${t("التالي", "Next")}
                   @click=${() => this.shiftModal(-1)}
                 >
                   ›
                 </button>
-              ` : l}
-          ${e ? o`<iframe
-                src=${e}
-                title=${this.active.caption || n("فيديو", "Video")}
+              ` : nothing}
+          ${yt ? html`<iframe
+                src=${yt}
+                title=${this.active.caption || t("فيديو", "Video")}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
-              ></iframe>` : t ? o`<video src=${t} controls autoplay playsinline></video>` : this.active.poster ? o`<img src=${this.active.poster} alt=${this.active.caption || ""} />` : l}
-          ${this.active.caption ? o`<p class="sv-modal__cap">${this.active.caption}</p>` : l}
+              ></iframe>` : url ? html`<video src=${url} controls autoplay playsinline></video>` : this.active.poster ? html`<img src=${this.active.poster} alt=${this.active.caption || ""} />` : nothing}
+          ${this.active.caption ? html`<p class="sv-modal__cap">${this.active.caption}</p>` : nothing}
         </div>
       </div>
     `;
   }
   render() {
-    const t = this.config || {}, e = C(t, "sv_"), s = e.animate && !y(), a = u(t.sv_title) || n("تألقي", "Shine"), r = u(t.sv_desc), p = E(t.sv_show_title, !0), v = this.videos, m = this.focusIndex();
-    return o`
+    const c = this.config || {}, theme = readSectionTheme(c, "sv_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.sv_title) || t("تألقي", "Shine"), desc = localizedString(c.sv_desc), showTitle = isTruthy(c.sv_show_title, !0), videos = this.videos, focusIdx = this.focusIndex();
+    return html`
       <section
-        class=${b({ "fs-section": !0, "fs-animate": s, "sv-shell": !0 })}
-        style=${I(L(e))}
-        aria-label=${a}
+        class=${classMap({ "fs-section": !0, "fs-animate": animate, "sv-shell": !0 })}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title}
       >
         <div class="fs-container">
-          ${p ? o`<header class="sv-header">
-                <p class="sv-eyebrow">${n("لحظات الأناقة", "Style moments")}</p>
-                <h2 class="sv-title">${a}</h2>
+          ${showTitle ? html`<header class="sv-header">
+                <p class="sv-eyebrow">${t("لحظات الأناقة", "Style moments")}</p>
+                <h2 class="sv-title">${title}</h2>
                 <span class="sv-title-line" aria-hidden="true"></span>
-                ${r ? o`<p class="sv-desc">${r}</p>` : l}
-              </header>` : l}
+                ${desc ? html`<p class="sv-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          ${v.length ? o`<div class="sv-stage">
+          ${videos.length ? html`<div class="sv-stage">
                 <button
                   type="button"
                   class="sv-nav sv-nav--prev"
-                  aria-label=${n("السابق", "Previous")}
-                  ?disabled=${m <= 0}
+                  aria-label=${t("السابق", "Previous")}
+                  ?disabled=${focusIdx <= 0}
                   @click=${() => this.shiftFocus(-1)}
                 >
                   ‹
@@ -674,88 +679,88 @@ const g = class g extends w {
                 <button
                   type="button"
                   class="sv-nav sv-nav--next"
-                  aria-label=${n("التالي", "Next")}
-                  ?disabled=${m >= v.length - 1}
+                  aria-label=${t("التالي", "Next")}
+                  ?disabled=${focusIdx >= videos.length - 1}
                   @click=${() => this.shiftFocus(1)}
                 >
                   ›
                 </button>
 
                 <div class="sv-track" role="list">
-                  ${v.map(
-      (i, f) => o`
+                  ${videos.map(
+      (item, i) => html`
                       <article
-                        class=${b({ "sv-card": !0, "is-focus": i.id === this.focusId })}
+                        class=${classMap({ "sv-card": !0, "is-focus": item.id === this.focusId })}
                         role="listitem"
-                        data-id=${i.id}
+                        data-id=${item.id}
                       >
                         <button
                           type="button"
                           class="sv-thumb"
-                          aria-label=${i.caption || n("تشغيل الفيديو", "Play video")}
-                          @click=${() => this.openModal(i)}
+                          aria-label=${item.caption || t("تشغيل الفيديو", "Play video")}
+                          @click=${() => this.openModal(item)}
                           @focus=${() => {
-        this.focusId = i.id;
+        this.focusId = item.id;
       }}
                         >
-                          ${i.poster ? o`<img src=${i.poster} alt=${i.caption || ""} loading="lazy" />` : l}
+                          ${item.poster ? html`<img src=${item.poster} alt=${item.caption || ""} loading="lazy" />` : nothing}
                           <span class="sv-film" aria-hidden="true"></span>
-                          <span class="sv-index">${String(f + 1).padStart(2, "0")}</span>
+                          <span class="sv-index">${String(i + 1).padStart(2, "0")}</span>
                           <span class="sv-play" aria-hidden="true">
                             <span class="sv-play__btn"><i class="sicon-play"></i></span>
                           </span>
                         </button>
-                        ${i.caption ? o`<p class="sv-caption">${i.caption}</p>` : l}
+                        ${item.caption ? html`<p class="sv-caption">${item.caption}</p>` : nothing}
                       </article>
                     `
     )}
                 </div>
 
-                <div class="sv-dots" role="tablist" aria-label=${n("التنقل بين المقاطع", "Browse clips")}>
-                  ${v.map(
-      (i, f) => o`
+                <div class="sv-dots" role="tablist" aria-label=${t("التنقل بين المقاطع", "Browse clips")}>
+                  ${videos.map(
+      (item, i) => html`
                       <button
                         type="button"
-                        class=${b({ "sv-dot": !0, "is-active": i.id === this.focusId })}
-                        aria-label=${n(`مقطع ${f + 1}`, `Clip ${f + 1}`)}
+                        class=${classMap({ "sv-dot": !0, "is-active": item.id === this.focusId })}
+                        aria-label=${t(`مقطع ${i + 1}`, `Clip ${i + 1}`)}
                         @click=${() => {
-        this.focusId = i.id, this.scrollToIndex(f);
+        this.focusId = item.id, this.scrollToIndex(i);
       }}
                       ></button>
                     `
     )}
                 </div>
-              </div>` : o`<div class="sv-empty">${n("أضف مقاطع فيديو من إعدادات العنصر", "Add videos from the element settings")}</div>`}
+              </div>` : html`<div class="sv-empty">${t("أضف مقاطع فيديو من إعدادات العنصر", "Add videos from the element settings")}</div>`}
         </div>
-        ${Y(this.config || {}, "sv_")}
+        ${renderCommerceOutcome(this.config || {}, "sv_")}
         ${this.renderModal()}
       </section>
     `;
   }
 };
-g.styles = [
-  S,
-  O,
-  x`
+__name(_ShineVideos, "ShineVideos"), _ShineVideos.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let d = g;
-h([
-  k({ type: Object })
-], d.prototype, "config");
-h([
-  _()
-], d.prototype, "active");
-h([
-  _()
-], d.prototype, "focusId");
-h([
-  $(".sv-track")
-], d.prototype, "trackEl");
-typeof d < "u" && d.registerSallaComponent("salla-shine-videos");
+let ShineVideos = _ShineVideos;
+__decorateClass([
+  property({ type: Object })
+], ShineVideos.prototype, "config");
+__decorateClass([
+  state()
+], ShineVideos.prototype, "active");
+__decorateClass([
+  state()
+], ShineVideos.prototype, "focusId");
+__decorateClass([
+  query(".sv-track")
+], ShineVideos.prototype, "trackEl");
+typeof ShineVideos < "u" && ShineVideos.registerSallaComponent("salla-shine-videos");
 export {
-  d as default
+  ShineVideos as default
 };

@@ -1,9 +1,11 @@
-import { css as b, LitElement as x, nothing as i, html as r } from "lit";
-import { property as w, state as z } from "lit/decorators.js";
-import { classMap as f } from "lit/directives/class-map.js";
-import { styleMap as g } from "lit/directives/style-map.js";
-import { n as v, l as a, s as S, t as n, r as k, p as I, a as C, b as L } from "./sharedStyles-Cd7RKVf-.js";
-const M = b`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, s as sharedSectionCss, t, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .sfr-layout {
     display: grid;
     gap: 1.35rem;
@@ -279,32 +281,34 @@ const M = b`
     }
   }
 `;
-function P(l) {
-  return v(l).map((e, s) => ({
-    id: a(e.id) || `step-${s + 1}`,
-    title: a(e.title),
-    desc: a(e.desc),
-    image: String(e.image || "").trim(),
-    tip: a(e.tip)
-  })).filter((e) => e.title || e.desc || e.image);
+function parseSteps(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: localizedString(item.id) || `step-${index + 1}`,
+    title: localizedString(item.title),
+    desc: localizedString(item.desc),
+    image: String(item.image || "").trim(),
+    tip: localizedString(item.tip)
+  })).filter((s) => s.title || s.desc || s.image);
 }
-function j(l) {
-  return v(l).map((e, s) => ({
-    id: a(e.id) || `size-${s + 1}`,
-    size_label: a(e.size_label),
-    bust: a(e.bust),
-    waist: a(e.waist),
-    hips: a(e.hips),
-    length: a(e.length),
-    note: a(e.note)
-  })).filter((e) => e.size_label);
+__name(parseSteps, "parseSteps");
+function parseSizeRows(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: localizedString(item.id) || `size-${index + 1}`,
+    size_label: localizedString(item.size_label),
+    bust: localizedString(item.bust),
+    waist: localizedString(item.waist),
+    hips: localizedString(item.hips),
+    length: localizedString(item.length),
+    note: localizedString(item.note)
+  })).filter((r) => r.size_label);
 }
-var E = Object.defineProperty, u = (l, e, s, o) => {
-  for (var t = void 0, c = l.length - 1, d; c >= 0; c--)
-    (d = l[c]) && (t = d(e, s, t) || t);
-  return t && E(e, s, t), t;
-};
-const m = class m extends x {
+__name(parseSizeRows, "parseSizeRows");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _SilhouetteFitRitual = class _SilhouetteFitRitual extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeStepId = "", this.boundLang = () => this.requestUpdate();
   }
@@ -314,192 +318,192 @@ const m = class m extends x {
   disconnectedCallback() {
     window.removeEventListener("language-changed", this.boundLang), super.disconnectedCallback();
   }
-  updated(e) {
-    e.has("config") && this.ensureStep();
+  updated(changed) {
+    changed.has("config") && this.ensureStep();
   }
   get steps() {
-    var e;
-    return P((e = this.config) == null ? void 0 : e.sfr_steps);
+    var _a;
+    return parseSteps((_a = this.config) == null ? void 0 : _a.sfr_steps);
   }
   get sizes() {
-    var e;
-    return j((e = this.config) == null ? void 0 : e.sfr_sizes);
+    var _a;
+    return parseSizeRows((_a = this.config) == null ? void 0 : _a.sfr_sizes);
   }
   get activeStep() {
-    return this.steps.find((e) => e.id === this.activeStepId) || this.steps[0] || null;
+    return this.steps.find((s) => s.id === this.activeStepId) || this.steps[0] || null;
   }
   ensureStep() {
-    const e = this.steps;
-    if (!e.length) {
+    const list = this.steps;
+    if (!list.length) {
       this.activeStepId = "";
       return;
     }
-    e.some((s) => s.id === this.activeStepId) || (this.activeStepId = e[0].id);
+    list.some((s) => s.id === this.activeStepId) || (this.activeStepId = list[0].id);
   }
   renderPreview() {
-    const e = this.activeStep;
-    return e ? r`
+    const active = this.activeStep;
+    return active ? html`
       <div class="sfr-panel sfr-panel--preview" aria-live="polite">
-        ${e.image ? r`<div class="sfr-detail__media">
+        ${active.image ? html`<div class="sfr-detail__media">
               <img
-                src=${e.image}
-                alt=${e.title}
+                src=${active.image}
+                alt=${active.title}
                 loading="lazy"
                 decoding="async"
               />
-            </div>` : r`<div
+            </div>` : html`<div
               class="sfr-detail__media sfr-detail__media--empty"
-              data-label=${n("معاينة الخطوة", "Step preview")}
+              data-label=${t("معاينة الخطوة", "Step preview")}
               aria-hidden="true"
             ></div>`}
-        <h4 class="sfr-detail__title">${e.title}</h4>
-        ${e.desc ? r`<p class="sfr-detail__desc">${e.desc}</p>` : i}
-        ${e.tip ? r`<p class="sfr-tip">
-              <strong>${n("نصيحة", "Tip")}:</strong> ${e.tip}
-            </p>` : i}
+        <h4 class="sfr-detail__title">${active.title}</h4>
+        ${active.desc ? html`<p class="sfr-detail__desc">${active.desc}</p>` : nothing}
+        ${active.tip ? html`<p class="sfr-tip">
+              <strong>${t("نصيحة", "Tip")}:</strong> ${active.tip}
+            </p>` : nothing}
       </div>
-    ` : i;
+    ` : nothing;
   }
   renderChart() {
-    const e = this.config || {}, s = this.sizes, o = a(e.sfr_chart_note);
-    return s.length ? r`
+    const c = this.config || {}, sizes = this.sizes, chartNote = localizedString(c.sfr_chart_note);
+    return sizes.length ? html`
       <div class="sfr-panel">
         <h3 class="sfr-panel__title">
-          ${a(e.sfr_chart_title) || n("دليل المقاسات", "Size chart")}
+          ${localizedString(c.sfr_chart_title) || t("دليل المقاسات", "Size chart")}
         </h3>
         <div class="sfr-table-wrap">
           <table class="sfr-table">
             <thead>
               <tr>
-                <th>${n("المقاس", "Size")}</th>
-                <th>${n("الصدر", "Bust")}</th>
-                <th>${n("الخصر", "Waist")}</th>
-                <th>${n("الورك", "Hips")}</th>
-                <th>${n("الطول", "Length")}</th>
+                <th>${t("المقاس", "Size")}</th>
+                <th>${t("الصدر", "Bust")}</th>
+                <th>${t("الخصر", "Waist")}</th>
+                <th>${t("الورك", "Hips")}</th>
+                <th>${t("الطول", "Length")}</th>
               </tr>
             </thead>
             <tbody>
-              ${s.map(
-      (t) => r`
+              ${sizes.map(
+      (row) => html`
                   <tr>
                     <td class="sfr-table__size">
-                      ${t.size_label}
-                      ${t.note ? r`<div class="sfr-table__note">${t.note}</div>` : i}
+                      ${row.size_label}
+                      ${row.note ? html`<div class="sfr-table__note">${row.note}</div>` : nothing}
                     </td>
-                    <td>${t.bust || "—"}</td>
-                    <td>${t.waist || "—"}</td>
-                    <td>${t.hips || "—"}</td>
-                    <td>${t.length || "—"}</td>
+                    <td>${row.bust || "—"}</td>
+                    <td>${row.waist || "—"}</td>
+                    <td>${row.hips || "—"}</td>
+                    <td>${row.length || "—"}</td>
                   </tr>
                 `
     )}
             </tbody>
           </table>
         </div>
-        ${o ? r`<p class="sfr-note">${o}</p>` : i}
+        ${chartNote ? html`<p class="sfr-note">${chartNote}</p>` : nothing}
       </div>
-    ` : i;
+    ` : nothing;
   }
   renderSteps() {
-    const e = this.config || {}, s = this.steps;
-    return s.length ? r`
+    const c = this.config || {}, steps = this.steps;
+    return steps.length ? html`
       <div class="sfr-panel">
         <h3 class="sfr-panel__title">
-          ${a(e.sfr_steps_title) || n("كيف تأخذ مقاساتك", "How to take your measurements")}
+          ${localizedString(c.sfr_steps_title) || t("كيف تأخذ مقاساتك", "How to take your measurements")}
         </h3>
         <div class="sfr-steps" role="tablist">
-          ${s.map(
-      (o, t) => r`
+          ${steps.map(
+      (step, index) => html`
               <button
                 type="button"
-                class=${f({
+                class=${classMap({
         "sfr-step-btn": !0,
-        "sfr-step-btn--active": o.id === this.activeStepId
+        "sfr-step-btn--active": step.id === this.activeStepId
       })}
                 role="tab"
-                aria-selected=${o.id === this.activeStepId ? "true" : "false"}
+                aria-selected=${step.id === this.activeStepId ? "true" : "false"}
                 @click=${() => {
-        this.activeStepId = o.id;
+        this.activeStepId = step.id;
       }}
               >
-                <span class="sfr-step-btn__num">${t + 1}</span>
+                <span class="sfr-step-btn__num">${index + 1}</span>
                 <span class="sfr-step-btn__copy">
-                  <strong>${o.title}</strong>
-                  ${o.desc ? r`<span>${o.desc}</span>` : i}
+                  <strong>${step.title}</strong>
+                  ${step.desc ? html`<span>${step.desc}</span>` : nothing}
                 </span>
               </button>
             `
     )}
         </div>
       </div>
-    ` : i;
+    ` : nothing;
   }
   render() {
-    const e = this.config || {}, s = k(e, "sfr_"), o = s.animate && !I(), t = a(e.sfr_title), c = a(e.sfr_desc), d = this.steps, _ = this.sizes;
-    if (!d.length && !_.length)
-      return r`<div class="fs-empty" role="status">
-        ${n("أضف خطوات القياس أو جدول المقاسات", "Add measure steps or a size chart")}
+    const c = this.config || {}, theme = readSectionTheme(c, "sfr_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.sfr_title), desc = localizedString(c.sfr_desc), steps = this.steps, sizes = this.sizes;
+    if (!steps.length && !sizes.length)
+      return html`<div class="fs-empty" role="status">
+        ${t("أضف خطوات القياس أو جدول المقاسات", "Add measure steps or a size chart")}
       </div>`;
-    const h = Math.max(0, d.findIndex(($) => $.id === this.activeStepId)), y = d.length ? Math.round((h + 1) / d.length * 100) : 0;
-    return r`
+    const stepIndex = Math.max(0, steps.findIndex((s) => s.id === this.activeStepId)), stepPct = steps.length ? Math.round((stepIndex + 1) / steps.length * 100) : 0;
+    return html`
       <section
-        class=${f({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": o
+      "fs-animate": animate
     })}
-        style=${g(C(s))}
-        aria-label=${t || n("طقوس القياس", "Silhouette Fit Ritual")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("طقوس القياس", "Silhouette Fit Ritual")}
       >
         <div class="fs-container">
-          ${t || c ? r`<header class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${n("دليل المقاس", "Fit guide")}</p>
-                ${t ? r`<h2 class="fs-title">${t}</h2>` : i}
+          ${title || desc ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("دليل المقاس", "Fit guide")}</p>
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${c ? r`<p class="fs-desc">${c}</p>` : i}
-              </header>` : i}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          ${d.length ? r`<div class="fs-progress" aria-hidden="true">
-                <span class="fs-progress__label">${n("الخطوة", "Step")} ${h + 1} / ${d.length}</span>
+          ${steps.length ? html`<div class="fs-progress" aria-hidden="true">
+                <span class="fs-progress__label">${t("الخطوة", "Step")} ${stepIndex + 1} / ${steps.length}</span>
                 <div class="fs-progress__track">
-                  <div class="fs-progress__bar" style=${g({ width: `${y}%` })}></div>
+                  <div class="fs-progress__bar" style=${styleMap({ width: `${stepPct}%` })}></div>
                 </div>
-              </div>` : i}
+              </div>` : nothing}
 
           <div
-            class=${f({
+            class=${classMap({
       "sfr-layout": !0,
-      "sfr-layout--with-preview": d.length > 0
+      "sfr-layout--with-preview": steps.length > 0
     })}
           >
             <div class="sfr-main">
               ${this.renderChart()}
               ${this.renderSteps()}
             </div>
-            ${d.length ? this.renderPreview() : i}
+            ${steps.length ? this.renderPreview() : nothing}
           </div>
         </div>
-        ${L(this.config || {}, "sfr_")}
+        ${renderCommerceOutcome(this.config || {}, "sfr_")}
       </section>
     `;
   }
 };
-m.styles = [
-  S,
-  M,
-  b`
+__name(_SilhouetteFitRitual, "SilhouetteFitRitual"), _SilhouetteFitRitual.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let p = m;
-u([
-  w({ type: Object })
-], p.prototype, "config");
-u([
-  z()
-], p.prototype, "activeStepId");
-typeof p < "u" && p.registerSallaComponent("salla-silhouette-fit-ritual");
+let SilhouetteFitRitual = _SilhouetteFitRitual;
+__decorateClass([
+  property({ type: Object })
+], SilhouetteFitRitual.prototype, "config");
+__decorateClass([
+  state()
+], SilhouetteFitRitual.prototype, "activeStepId");
+typeof SilhouetteFitRitual < "u" && SilhouetteFitRitual.registerSallaComponent("salla-silhouette-fit-ritual");
 export {
-  p as default
+  SilhouetteFitRitual as default
 };

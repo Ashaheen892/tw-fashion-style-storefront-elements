@@ -1,9 +1,11 @@
-import { css as L, LitElement as M, html as o, nothing as i } from "lit";
-import { property as B, state as I } from "lit/decorators.js";
-import { classMap as b } from "lit/directives/class-map.js";
-import { styleMap as R } from "lit/directives/style-map.js";
-import { n as K, l, d as C, q as S, s as O, r as j, i as x, t as d, x as T, y as A, p as E, a as N, b as P, v as V } from "./sharedStyles-Cd7RKVf-.js";
-const U = L`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, d as extractLink, q as getUnitValue, s as sharedSectionCss, r as readSectionTheme, i as isTruthy, t, x as safeStorageGet, y as safeStorageSet, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome, v as isValidHref } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .asd-arena {
     position: relative;
     overflow: hidden;
@@ -384,43 +386,46 @@ const U = L`
     }
   }
 `;
-function X(c) {
-  return K(c).map((e, r) => ({
-    id: `round-${r}`,
-    question: l(e.question),
-    img_a: l(e.img_a),
-    name_a: l(e.name_a),
-    url_a: C(e.url_a),
-    votes_a: S(e.votes_a),
-    votes_b: S(e.votes_b),
-    img_b: l(e.img_b),
-    name_b: l(e.name_b),
-    url_b: C(e.url_b),
-    result_desc: l(e.result_desc),
-    enable_next: e.enable_next !== !1 && e.enable_next !== "false"
+function parseRounds(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: `round-${index}`,
+    question: localizedString(item.question),
+    img_a: localizedString(item.img_a),
+    name_a: localizedString(item.name_a),
+    url_a: extractLink(item.url_a),
+    votes_a: getUnitValue(item.votes_a),
+    votes_b: getUnitValue(item.votes_b),
+    img_b: localizedString(item.img_b),
+    name_b: localizedString(item.name_b),
+    url_b: extractLink(item.url_b),
+    result_desc: localizedString(item.result_desc),
+    enable_next: item.enable_next !== !1 && item.enable_next !== "false"
   })).filter(
-    (e) => e.question.trim() !== "" && (e.name_a.trim() !== "" || e.img_a.trim() !== "") && (e.name_b.trim() !== "" || e.img_b.trim() !== "")
+    (r) => r.question.trim() !== "" && (r.name_a.trim() !== "" || r.img_a.trim() !== "") && (r.name_b.trim() !== "" || r.img_b.trim() !== "")
   );
 }
-function Y(c, e, r) {
-  let t = r ? c.votes_a : 0, a = r ? c.votes_b : 0;
-  e === "a" && (t += 1), e === "b" && (a += 1);
-  const s = t + a;
-  return s === 0 ? { pctA: 50, pctB: 50, total: 0 } : {
-    pctA: Math.round(t / s * 100),
-    pctB: Math.round(a / s * 100),
-    total: s
+__name(parseRounds, "parseRounds");
+function computePercentages(round, choice, useSeed) {
+  let votesA = useSeed ? round.votes_a : 0, votesB = useSeed ? round.votes_b : 0;
+  choice === "a" && (votesA += 1), choice === "b" && (votesB += 1);
+  const total = votesA + votesB;
+  return total === 0 ? { pctA: 50, pctB: 50, total: 0 } : {
+    pctA: Math.round(votesA / total * 100),
+    pctB: Math.round(votesB / total * 100),
+    total
   };
 }
-function G(c, e) {
-  return l(c, e).trim() || e;
+__name(computePercentages, "computePercentages");
+function getStorageKey(configKey, fallback) {
+  return localizedString(configKey, fallback).trim() || fallback;
 }
-var H = Object.defineProperty, y = (c, e, r, t) => {
-  for (var a = void 0, s = c.length - 1, p; s >= 0; s--)
-    (p = c[s]) && (a = p(e, r, a) || a);
-  return a && H(e, r, a), a;
-};
-const $ = class $ extends M {
+__name(getStorageKey, "getStorageKey");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _AbayaStyleDuel = class _AbayaStyleDuel extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.roundIndex = 0, this.votes = {}, this._onLangChange = () => this.requestUpdate(), this._storageKey = "";
   }
@@ -430,206 +435,206 @@ const $ = class $ extends M {
   disconnectedCallback() {
     super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange);
   }
-  updated(e) {
-    this._syncVisibility(), e.has("config") && (this._loadVotes(), this.roundIndex >= this.rounds.length && (this.roundIndex = Math.max(0, this.rounds.length - 1)));
+  updated(changed) {
+    this._syncVisibility(), changed.has("config") && (this._loadVotes(), this.roundIndex >= this.rounds.length && (this.roundIndex = Math.max(0, this.rounds.length - 1)));
   }
   get rounds() {
-    var e;
-    return X((e = this.config) == null ? void 0 : e.asd_rounds);
+    var _a;
+    return parseRounds((_a = this.config) == null ? void 0 : _a.asd_rounds);
   }
   get theme() {
-    return j(this.config, "asd_");
+    return readSectionTheme(this.config, "asd_");
   }
   get useSeedVotes() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.asd_use_seed_votes, !0);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.asd_use_seed_votes, !0);
   }
   get allowRevote() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.asd_allow_revote);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.asd_allow_revote);
   }
   get hideResultSource() {
-    var e;
-    return x((e = this.config) == null ? void 0 : e.asd_hide_result_source);
+    var _a;
+    return isTruthy((_a = this.config) == null ? void 0 : _a.asd_hide_result_source);
   }
   get currentRound() {
     return this.rounds[this.roundIndex] ?? null;
   }
-  _label(e, r, t) {
-    var a;
-    return l((a = this.config) == null ? void 0 : a[e], "") || d(r, t);
+  _label(key, ar, en) {
+    var _a;
+    return localizedString((_a = this.config) == null ? void 0 : _a[key], "") || t(ar, en);
   }
   _syncVisibility() {
     this.style.display = this.rounds.length ? "" : "none";
   }
   _loadVotes() {
-    var r;
-    this._storageKey = G(
-      (r = this.config) == null ? void 0 : r.asd_storage_key,
+    var _a;
+    this._storageKey = getStorageKey(
+      (_a = this.config) == null ? void 0 : _a.asd_storage_key,
       "asd-style-duel-votes"
     );
-    const e = T(this._storageKey, { votes: {} });
-    this.votes = e.votes || {};
+    const stored = safeStorageGet(this._storageKey, { votes: {} });
+    this.votes = stored.votes || {};
   }
   _saveVotes() {
-    A(this._storageKey, { votes: this.votes });
+    safeStorageSet(this._storageKey, { votes: this.votes });
   }
-  _vote(e) {
-    const r = this.currentRound;
-    !r || this.votes[r.id] && !this.allowRevote || (this.votes = { ...this.votes, [r.id]: e }, this._saveVotes());
+  _vote(choice) {
+    const round = this.currentRound;
+    !round || this.votes[round.id] && !this.allowRevote || (this.votes = { ...this.votes, [round.id]: choice }, this._saveVotes());
   }
   _nextRound() {
     this.roundIndex < this.rounds.length - 1 && (this.roundIndex += 1);
   }
   render() {
-    var w, k, z;
+    var _a, _b, _c;
     if (!this.rounds.length)
-      return o`<div class="fs-empty" role="status">
-        ${d("لا توجد جولات متاحة", "No rounds available")}
+      return html`<div class="fs-empty" role="status">
+        ${t("لا توجد جولات متاحة", "No rounds available")}
       </div>`;
-    const e = this.theme, r = e.animate && !E(), t = this.currentRound;
-    if (!t) return i;
-    const a = l((w = this.config) == null ? void 0 : w.asd_title), s = l((k = this.config) == null ? void 0 : k.asd_desc), p = l((z = this.config) == null ? void 0 : z.asd_result_note), _ = this._label("asd_next_btn", "المواجهة التالية", "Next duel"), m = this.votes[t.id] ?? null, n = m !== null, { pctA: g, pctB: f } = Y(t, m, this.useSeedVotes), h = n && g >= f, v = n && f > g;
-    return o`
+    const theme = this.theme, animate = theme.animate && !prefersReducedMotion(), round = this.currentRound;
+    if (!round) return nothing;
+    const title = localizedString((_a = this.config) == null ? void 0 : _a.asd_title), desc = localizedString((_b = this.config) == null ? void 0 : _b.asd_desc), resultNote = localizedString((_c = this.config) == null ? void 0 : _c.asd_result_note), nextBtn = this._label("asd_next_btn", "المواجهة التالية", "Next duel"), choice = this.votes[round.id] ?? null, hasVoted = choice !== null, { pctA, pctB } = computePercentages(round, choice, this.useSeedVotes), winnerA = hasVoted && pctA >= pctB, winnerB = hasVoted && pctB > pctA;
+    return html`
       <section
-        class=${b({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": r
+      "fs-animate": animate
     })}
-        style=${R(N(e))}
-        aria-label=${a || d("تحدي العبايات", "Abaya style duel")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("تحدي العبايات", "Abaya style duel")}
       >
         <div class="fs-container">
-          ${a || s ? o`<header class="fs-header">
-                ${a ? o`<h2 class="fs-title">${a}</h2>` : i}
-                ${s ? o`<p class="fs-desc">${s}</p>` : i}
-              </header>` : i}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
-          <div class="asd-arena" role="group" aria-label=${t.question}>
+          <div class="asd-arena" role="group" aria-label=${round.question}>
             <div class="asd-progress">
               <span class="asd-progress__meta">
-                ${d("جولة", "Round")} ${this.roundIndex + 1}
+                ${t("جولة", "Round")} ${this.roundIndex + 1}
                 /
                 ${this.rounds.length}
               </span>
               <div class="asd-dots" aria-hidden="true">
                 ${this.rounds.map(
-      (F, q) => o`<span
-                    class=${b({
+      (_, i) => html`<span
+                    class=${classMap({
         "asd-dot": !0,
-        "asd-dot--active": q === this.roundIndex
+        "asd-dot--active": i === this.roundIndex
       })}
                   ></span>`
     )}
               </div>
             </div>
 
-            <p class="asd-question">${t.question}</p>
+            <p class="asd-question">${round.question}</p>
 
             <div class="asd-options">
-              ${this._renderOption("a", t, g, h, n, m === "a", r)}
+              ${this._renderOption("a", round, pctA, winnerA, hasVoted, choice === "a", animate)}
               <span class="asd-vs" aria-hidden="true">VS</span>
-              ${this._renderOption("b", t, f, v, n, m === "b", r)}
+              ${this._renderOption("b", round, pctB, winnerB, hasVoted, choice === "b", animate)}
             </div>
 
-            ${n && t.result_desc ? o`<div class="asd-result" aria-live="polite">${t.result_desc}</div>` : i}
+            ${hasVoted && round.result_desc ? html`<div class="asd-result" aria-live="polite">${round.result_desc}</div>` : nothing}
 
-            ${n && t.enable_next && this.roundIndex < this.rounds.length - 1 ? o`<div class="asd-nav">
+            ${hasVoted && round.enable_next && this.roundIndex < this.rounds.length - 1 ? html`<div class="asd-nav">
                   <button type="button" class="fs-btn" @click=${this._nextRound}>
-                    ${_}
+                    ${nextBtn}
                   </button>
-                </div>` : i}
+                </div>` : nothing}
 
-            ${p && !this.hideResultSource ? o`<p class="asd-note">${p}</p>` : i}
+            ${resultNote && !this.hideResultSource ? html`<p class="asd-note">${resultNote}</p>` : nothing}
 
             <p class="asd-note">
-              ${d(
+              ${t(
       "النتائج محفوظة على جهازك فقط ولا تمثل تصويتًا لجميع الزوّار.",
       "Results are saved on your device only and do not represent all visitors."
     )}
             </p>
           </div>
         </div>
-        ${P(this.config || {}, "asd_")}
+        ${renderCommerceOutcome(this.config || {}, "asd_")}
       </section>
     `;
   }
-  _renderOption(e, r, t, a, s, p, _) {
-    const m = e === "a" ? r.img_a : r.img_b, n = e === "a" ? r.name_a : r.name_b, g = e === "a" ? r.url_a : r.url_b, f = !s || this.allowRevote, h = {
+  _renderOption(side, round, pct, isWinner, hasVoted, isPicked, animate) {
+    const img = side === "a" ? round.img_a : round.img_b, name = side === "a" ? round.name_a : round.name_b, url = side === "a" ? round.url_a : round.url_b, canVote = !hasVoted || this.allowRevote, classes = {
       "asd-option": !0,
-      "asd-option--winner": a,
-      "asd-option--picked": p,
-      "fs-celebrate": _ && a
-    }, v = o`
+      "asd-option--winner": isWinner,
+      "asd-option--picked": isPicked,
+      "fs-celebrate": animate && isWinner
+    }, content = html`
       <div class="asd-option__media">
-        ${m ? o`<img
+        ${img ? html`<img
               class="asd-option__img"
-              src=${m}
-              alt=${n}
-              loading=${e === "a" ? "eager" : "lazy"}
+              src=${img}
+              alt=${name}
+              loading=${side === "a" ? "eager" : "lazy"}
               decoding="async"
-            />` : i}
+            />` : nothing}
         <div class="asd-option__veil" aria-hidden="true"></div>
-        ${s ? i : o`<span class="asd-option__vote-label">${d("صوّتي لها", "Vote for this")}</span>`}
-        ${a ? o`<span class="asd-option__crown">${d("الأقرب لذوقك", "Your pick lead")}</span>` : i}
+        ${hasVoted ? nothing : html`<span class="asd-option__vote-label">${t("صوّتي لها", "Vote for this")}</span>`}
+        ${isWinner ? html`<span class="asd-option__crown">${t("الأقرب لذوقك", "Your pick lead")}</span>` : nothing}
       </div>
       <div class="asd-option__body">
-        <p class="asd-option__name">${n}</p>
-        ${s ? o`
+        <p class="asd-option__name">${name}</p>
+        ${hasVoted ? html`
               <div class="asd-pct-row">
-                <p class="asd-pct">${t}%</p>
-                <span class="asd-pct-label">${d("من ذوقك", "of your taste")}</span>
+                <p class="asd-pct">${pct}%</p>
+                <span class="asd-pct-label">${t("من ذوقك", "of your taste")}</span>
               </div>
               <div
                 class="asd-bar"
                 role="progressbar"
                 aria-valuemin="0"
                 aria-valuemax="100"
-                aria-valuenow=${t}
-                aria-label=${`${n}: ${t}%`}
+                aria-valuenow=${pct}
+                aria-label=${`${name}: ${pct}%`}
               >
-                <span style=${R({ width: `${t}%` })}></span>
+                <span style=${styleMap({ width: `${pct}%` })}></span>
               </div>
-              ${V(g) ? o`<p class="asd-option__cta">${d("اضغطي لعرض المنتج", "Tap to view product")}</p>` : i}
-            ` : o`<p class="asd-option__cta">${d("اختاري ما يقرّب من ذوقك", "Choose what matches your taste")}</p>`}
+              ${isValidHref(url) ? html`<p class="asd-option__cta">${t("اضغطي لعرض المنتج", "Tap to view product")}</p>` : nothing}
+            ` : html`<p class="asd-option__cta">${t("اختاري ما يقرّب من ذوقك", "Choose what matches your taste")}</p>`}
       </div>
     `;
-    return V(g) && s ? o`
+    return isValidHref(url) && hasVoted ? html`
         <a
-          class=${b(h)}
-          href=${g}
+          class=${classMap(classes)}
+          href=${url}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label=${n}
+          aria-label=${name}
         >
-          ${v}
+          ${content}
         </a>
-      ` : o`
+      ` : html`
       <button
         type="button"
-        class=${b(h)}
-        ?disabled=${!f && s}
-        aria-label=${d(`اختيار ${n}`, `Choose ${n}`)}
-        aria-pressed=${p ? "true" : "false"}
-        @click=${() => this._vote(e)}
+        class=${classMap(classes)}
+        ?disabled=${!canVote && hasVoted}
+        aria-label=${t(`اختيار ${name}`, `Choose ${name}`)}
+        aria-pressed=${isPicked ? "true" : "false"}
+        @click=${() => this._vote(side)}
       >
-        ${v}
+        ${content}
       </button>
     `;
   }
 };
-$.styles = [O, U];
-let u = $;
-y([
-  B({ type: Object })
-], u.prototype, "config");
-y([
-  I()
-], u.prototype, "roundIndex");
-y([
-  I()
-], u.prototype, "votes");
-typeof u < "u" && u.registerSallaComponent("salla-abaya-style-duel");
+__name(_AbayaStyleDuel, "AbayaStyleDuel"), _AbayaStyleDuel.styles = [sharedSectionCss, componentStyles];
+let AbayaStyleDuel = _AbayaStyleDuel;
+__decorateClass([
+  property({ type: Object })
+], AbayaStyleDuel.prototype, "config");
+__decorateClass([
+  state()
+], AbayaStyleDuel.prototype, "roundIndex");
+__decorateClass([
+  state()
+], AbayaStyleDuel.prototype, "votes");
+typeof AbayaStyleDuel < "u" && AbayaStyleDuel.registerSallaComponent("salla-abaya-style-duel");
 export {
-  u as default
+  AbayaStyleDuel as default
 };

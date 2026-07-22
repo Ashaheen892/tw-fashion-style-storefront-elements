@@ -1,9 +1,11 @@
-import { css as b, LitElement as x, html as a, nothing as o } from "lit";
-import { property as $, state as _ } from "lit/decorators.js";
-import { classMap as u } from "lit/directives/class-map.js";
-import { styleMap as w } from "lit/directives/style-map.js";
-import { n as k, l as d, u as A, f as I, s as z, i as q, p as v, r as C, t as p, a as T, b as S } from "./sharedStyles-Cd7RKVf-.js";
-const L = b`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, l as localizedString, u as clamp, f as toNumber, s as sharedSectionCss, i as isTruthy, p as prefersReducedMotion, r as readSectionTheme, t, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .es-shell {
     display: grid;
     gap: 1.35rem;
@@ -235,28 +237,30 @@ const L = b`
     }
   }
 `;
-function M(n) {
-  return k(n).map((e, r) => ({
-    id: d(e.id) || `echo-${r + 1}`,
-    name: d(e.name),
-    role: d(e.role),
-    avatar: String(e.avatar || "").trim(),
-    rating: A(I(e.rating, 5), 1, 5),
-    quote: d(e.quote),
-    product_note: d(e.product_note)
-  })).filter((e) => e.name || e.quote);
+function parseReviews(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: localizedString(item.id) || `echo-${index + 1}`,
+    name: localizedString(item.name),
+    role: localizedString(item.role),
+    avatar: String(item.avatar || "").trim(),
+    rating: clamp(toNumber(item.rating, 5), 1, 5),
+    quote: localizedString(item.quote),
+    product_note: localizedString(item.product_note)
+  })).filter((r) => r.name || r.quote);
 }
-function R(n) {
-  if (!n.length) return 0;
-  const e = n.reduce((r, c) => r + c.rating, 0);
-  return Math.round(e / n.length * 10) / 10;
+__name(parseReviews, "parseReviews");
+function averageRating(reviews) {
+  if (!reviews.length) return 0;
+  const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+  return Math.round(sum / reviews.length * 10) / 10;
 }
-var j = Object.defineProperty, y = (n, e, r, c) => {
-  for (var t = void 0, i = n.length - 1, l; i >= 0; i--)
-    (l = n[i]) && (t = l(e, r, t) || t);
-  return t && j(e, r, t), t;
-};
-const h = class h extends x {
+__name(averageRating, "averageRating");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _EchoSalon = class _EchoSalon extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeId = "", this.boundLang = () => this.requestUpdate(), this.autoTimer = null;
   }
@@ -266,115 +270,115 @@ const h = class h extends x {
   disconnectedCallback() {
     window.removeEventListener("language-changed", this.boundLang), this.clearAutoplay(), super.disconnectedCallback();
   }
-  updated(e) {
-    e.has("config") && (this.ensureActive(), this.syncAutoplay());
+  updated(changed) {
+    changed.has("config") && (this.ensureActive(), this.syncAutoplay());
   }
   get reviews() {
-    var e;
-    return M((e = this.config) == null ? void 0 : e.es_reviews);
+    var _a;
+    return parseReviews((_a = this.config) == null ? void 0 : _a.es_reviews);
   }
   get active() {
-    return this.reviews.find((e) => e.id === this.activeId) || this.reviews[0] || null;
+    return this.reviews.find((r) => r.id === this.activeId) || this.reviews[0] || null;
   }
   ensureActive() {
-    const e = this.reviews;
-    if (!e.length) {
+    const list = this.reviews;
+    if (!list.length) {
       this.activeId = "";
       return;
     }
-    e.some((r) => r.id === this.activeId) || (this.activeId = e[0].id);
+    list.some((r) => r.id === this.activeId) || (this.activeId = list[0].id);
   }
   clearAutoplay() {
     this.autoTimer && (clearInterval(this.autoTimer), this.autoTimer = null);
   }
   syncAutoplay() {
-    var r;
-    this.clearAutoplay(), !(!(q((r = this.config) == null ? void 0 : r.es_autoplay, !0) && !v()) || this.reviews.length < 2) && (this.autoTimer = setInterval(() => this.next(), 5500));
+    var _a;
+    this.clearAutoplay(), !(!(isTruthy((_a = this.config) == null ? void 0 : _a.es_autoplay, !0) && !prefersReducedMotion()) || this.reviews.length < 2) && (this.autoTimer = setInterval(() => this.next(), 5500));
   }
   next() {
-    const e = this.reviews;
-    if (e.length < 2) return;
-    const r = e.findIndex((t) => t.id === this.activeId), c = e[(r + 1) % e.length];
-    this.activeId = c.id;
+    const list = this.reviews;
+    if (list.length < 2) return;
+    const idx = list.findIndex((r) => r.id === this.activeId), next = list[(idx + 1) % list.length];
+    this.activeId = next.id;
   }
-  select(e) {
-    this.activeId = e, this.syncAutoplay();
+  select(id) {
+    this.activeId = id, this.syncAutoplay();
   }
-  renderStars(e) {
-    return a`
-      <span class="es-stars" aria-label=${`${e} / 5`}>
+  renderStars(rating) {
+    return html`
+      <span class="es-stars" aria-label=${`${rating} / 5`}>
         ${[1, 2, 3, 4, 5].map(
-      (r) => a`<span class=${r <= e ? "" : "es-stars--muted"}>★</span>`
+      (n) => html`<span class=${n <= rating ? "" : "es-stars--muted"}>★</span>`
     )}
       </span>
     `;
   }
-  renderAvatar(e, r = !1) {
-    const c = "es-avatar";
-    if (e.avatar)
-      return a`<img class=${c} src=${e.avatar} alt="" loading="lazy" decoding="async" />`;
-    const t = (e.name || "?").trim().charAt(0);
-    return a`<span class="es-avatar es-avatar--placeholder" aria-hidden="true">${t}</span>`;
+  renderAvatar(review, large = !1) {
+    const cls = "es-avatar";
+    if (review.avatar)
+      return html`<img class=${cls} src=${review.avatar} alt="" loading="lazy" decoding="async" />`;
+    const initial = (review.name || "?").trim().charAt(0);
+    return html`<span class="es-avatar es-avatar--placeholder" aria-hidden="true">${initial}</span>`;
   }
   render() {
-    const e = this.config || {}, r = C(e, "es_"), c = r.animate && !v(), t = this.reviews, i = this.active, l = d(e.es_title), f = d(e.es_desc), g = R(t);
-    return t.length ? a`
+    const c = this.config || {}, theme = readSectionTheme(c, "es_"), animate = theme.animate && !prefersReducedMotion(), reviews = this.reviews, active = this.active, title = localizedString(c.es_title), desc = localizedString(c.es_desc), avg = averageRating(reviews);
+    return reviews.length ? html`
       <section
-        class=${u({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": c
+      "fs-animate": animate
     })}
-        style=${w(T(r))}
-        aria-label=${l || p("رواق الشهادات", "Testimony Arcade")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("رواق الشهادات", "Testimony Arcade")}
       >
         <div class="fs-container">
-          ${l || f ? a`<header class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${p("آراء العملاء", "Customer voices")}</p>
-                ${l ? a`<h2 class="fs-title">${l}</h2>` : o}
+          ${title || desc ? html`<header class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("آراء العملاء", "Customer voices")}</p>
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${f ? a`<p class="fs-desc">${f}</p>` : o}
-              </header>` : o}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="es-shell">
-            ${i ? a`<article class="es-featured" aria-live="polite">
+            ${active ? html`<article class="es-featured" aria-live="polite">
                   <span class="es-featured__mark" aria-hidden="true">”</span>
-                  <p class="es-featured__quote">${i.quote}</p>
+                  <p class="es-featured__quote">${active.quote}</p>
                   <div class="es-featured__meta">
-                    ${this.renderAvatar(i, !0)}
+                    ${this.renderAvatar(active, !0)}
                     <div class="es-person">
-                      <strong>${i.name}</strong>
-                      ${i.role ? a`<span>${i.role}</span>` : o}
-                      ${i.product_note ? a`<span>${i.product_note}</span>` : o}
+                      <strong>${active.name}</strong>
+                      ${active.role ? html`<span>${active.role}</span>` : nothing}
+                      ${active.product_note ? html`<span>${active.product_note}</span>` : nothing}
                     </div>
-                    ${this.renderStars(i.rating)}
-                    ${g > 0 ? a`<div class="es-score">
-                          <strong>${g}</strong>
-                          <span>/ 5 · ${t.length} ${p("صدى", "echoes")}</span>
-                        </div>` : o}
+                    ${this.renderStars(active.rating)}
+                    ${avg > 0 ? html`<div class="es-score">
+                          <strong>${avg}</strong>
+                          <span>/ 5 · ${reviews.length} ${t("صدى", "echoes")}</span>
+                        </div>` : nothing}
                   </div>
-                </article>` : o}
+                </article>` : nothing}
 
             <div class="es-rail" role="list">
-              ${t.map(
-      (s) => a`
+              ${reviews.map(
+      (review) => html`
                   <button
                     type="button"
-                    class=${u({
+                    class=${classMap({
         "es-card": !0,
-        "es-card--active": s.id === this.activeId
+        "es-card--active": review.id === this.activeId
       })}
                     role="listitem"
-                    aria-pressed=${s.id === this.activeId ? "true" : "false"}
-                    @click=${() => this.select(s.id)}
+                    aria-pressed=${review.id === this.activeId ? "true" : "false"}
+                    @click=${() => this.select(review.id)}
                   >
-                    ${this.renderStars(s.rating)}
-                    <p class="es-card__quote">${s.quote}</p>
-                    ${s.product_note ? a`<p class="es-card__note">${s.product_note}</p>` : o}
+                    ${this.renderStars(review.rating)}
+                    <p class="es-card__quote">${review.quote}</p>
+                    ${review.product_note ? html`<p class="es-card__note">${review.product_note}</p>` : nothing}
                     <div class="es-card__foot">
-                      ${this.renderAvatar(s)}
+                      ${this.renderAvatar(review)}
                       <div class="es-person">
-                        <strong>${s.name}</strong>
-                        ${s.role ? a`<span>${s.role}</span>` : o}
+                        <strong>${review.name}</strong>
+                        ${review.role ? html`<span>${review.role}</span>` : nothing}
                       </div>
                     </div>
                   </button>
@@ -382,44 +386,44 @@ const h = class h extends x {
     )}
             </div>
 
-            ${t.length > 1 ? a`<div class="fs-dots" role="tablist" aria-label=${p("التنقل بين الشهادات", "Browse reviews")}>
-                  ${t.map(
-      (s) => a`
+            ${reviews.length > 1 ? html`<div class="fs-dots" role="tablist" aria-label=${t("التنقل بين الشهادات", "Browse reviews")}>
+                  ${reviews.map(
+      (review) => html`
                       <button
                         type="button"
-                        class=${u({ "fs-dot": !0, "is-active": s.id === this.activeId })}
-                        aria-label=${s.name || p("شهادة", "Review")}
-                        @click=${() => this.select(s.id)}
+                        class=${classMap({ "fs-dot": !0, "is-active": review.id === this.activeId })}
+                        aria-label=${review.name || t("شهادة", "Review")}
+                        @click=${() => this.select(review.id)}
                       ></button>
                     `
     )}
-                </div>` : o}
+                </div>` : nothing}
           </div>
         </div>
-        ${S(this.config || {}, "es_")}
+        ${renderCommerceOutcome(this.config || {}, "es_")}
       </section>
-    ` : a`<div class="fs-empty" role="status">
-        ${p("أضف شهادات العملاء في الإعدادات", "Add customer echoes in settings")}
+    ` : html`<div class="fs-empty" role="status">
+        ${t("أضف شهادات العملاء في الإعدادات", "Add customer echoes in settings")}
       </div>`;
   }
 };
-h.styles = [
-  z,
-  L,
-  b`
+__name(_EchoSalon, "EchoSalon"), _EchoSalon.styles = [
+  sharedSectionCss,
+  componentStyles,
+  css`
       :host {
         direction: inherit;
       }
     `
 ];
-let m = h;
-y([
-  $({ type: Object })
-], m.prototype, "config");
-y([
-  _()
-], m.prototype, "activeId");
-typeof m < "u" && m.registerSallaComponent("salla-echo-salon");
+let EchoSalon = _EchoSalon;
+__decorateClass([
+  property({ type: Object })
+], EchoSalon.prototype, "config");
+__decorateClass([
+  state()
+], EchoSalon.prototype, "activeId");
+typeof EchoSalon < "u" && EchoSalon.registerSallaComponent("salla-echo-salon");
 export {
-  m as default
+  EchoSalon as default
 };

@@ -1,9 +1,11 @@
-import { css as M, LitElement as E, html as i, nothing as n } from "lit";
-import { property as F, state as u } from "lit/decorators.js";
-import { classMap as x } from "lit/directives/class-map.js";
-import { styleMap as w } from "lit/directives/style-map.js";
-import { n as S, u as d, q as m, l as p, e as O, w as V, s as G, r as A, i as j, t as s, p as L, a as R, b as T } from "./sharedStyles-Cd7RKVf-.js";
-const U = M`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, html, nothing } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { n as normalizeCollection, u as clamp, q as getUnitValue, l as localizedString, e as extractImageUrl, w as isDirectMediaUrl, s as sharedSectionCss, r as readSectionTheme, i as isTruthy, t, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .fs-header {
     margin-bottom: 2rem;
   }
@@ -533,7 +535,7 @@ const U = M`
       transform: none;
     }
   }
-`, C = [
+`, JUNK_VALUES = [
   "رابط المنتجات",
   "نص الزر",
   "product link",
@@ -542,47 +544,51 @@ const U = M`
   "products url",
   "btn text"
 ];
-function y(o) {
-  const e = o.replace(/[:：]\s*$/, "").trim().toLowerCase();
-  return e ? C.some((a) => e === a.toLowerCase()) : !0;
+function isJunkLine(line) {
+  const normalized = line.replace(/[:：]\s*$/, "").trim().toLowerCase();
+  return normalized ? JUNK_VALUES.some((junk) => normalized === junk.toLowerCase()) : !0;
 }
-function f(o) {
-  const e = p(o).trim();
-  if (!e) return "";
-  let r = e.split(/\r?\n/).map((t) => t.trim()).filter((t) => t && !y(t)).join(`
+__name(isJunkLine, "isJunkLine");
+function cleanText(raw) {
+  const text = localizedString(raw).trim();
+  if (!text) return "";
+  let cleaned = text.split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !isJunkLine(line)).join(`
 `).trim();
-  if (!r) return "";
-  for (const t of C) {
-    const l = new RegExp(
-      `(?:^|[\\s،,])${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[:：]?`,
+  if (!cleaned) return "";
+  for (const junk of JUNK_VALUES) {
+    const pattern = new RegExp(
+      `(?:^|[\\s،,])${junk.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[:：]?`,
       "gi"
     );
-    r = r.replace(l, " ").replace(/\s{2,}/g, " ").trim();
+    cleaned = cleaned.replace(pattern, " ").replace(/\s{2,}/g, " ").trim();
   }
-  return y(r) ? "" : r;
+  return isJunkLine(cleaned) ? "" : cleaned;
 }
-function B(o) {
-  return S(o).map((e, a) => ({
-    id: `fabric-${a}`,
-    fabric_name: f(e.fabric_name),
-    fabric_desc: f(e.fabric_desc),
-    macro_image: O(e.macro_image),
-    video_url: p(e.video_url).trim(),
-    flow: d(m(e.flow), 0, 100),
-    thickness: d(m(e.thickness), 0, 100),
-    shine: d(m(e.shine), 0, 100),
-    summer: d(m(e.summer), 0, 100),
-    wrinkle: d(m(e.wrinkle), 0, 100),
-    transparency: d(m(e.transparency), 0, 100),
-    wash_care: f(e.wash_care),
-    iron_care: f(e.iron_care),
-    best_use: f(e.best_use)
-  })).filter((e) => e.fabric_name.trim() !== "");
+__name(cleanText, "cleanText");
+function parseFabrics(raw) {
+  return normalizeCollection(raw).map((item, index) => ({
+    id: `fabric-${index}`,
+    fabric_name: cleanText(item.fabric_name),
+    fabric_desc: cleanText(item.fabric_desc),
+    macro_image: extractImageUrl(item.macro_image),
+    video_url: localizedString(item.video_url).trim(),
+    flow: clamp(getUnitValue(item.flow), 0, 100),
+    thickness: clamp(getUnitValue(item.thickness), 0, 100),
+    shine: clamp(getUnitValue(item.shine), 0, 100),
+    summer: clamp(getUnitValue(item.summer), 0, 100),
+    wrinkle: clamp(getUnitValue(item.wrinkle), 0, 100),
+    transparency: clamp(getUnitValue(item.transparency), 0, 100),
+    wash_care: cleanText(item.wash_care),
+    iron_care: cleanText(item.iron_care),
+    best_use: cleanText(item.best_use)
+  })).filter((f) => f.fabric_name.trim() !== "");
 }
-function N(o) {
-  return V(o) && /\.(mp4|webm|ogg)(\?|$)/i.test(o);
+__name(parseFabrics, "parseFabrics");
+function isPlayableVideo(url) {
+  return isDirectMediaUrl(url) && /\.(mp4|webm|ogg)(\?|$)/i.test(url);
 }
-const $ = [
+__name(isPlayableVideo, "isPlayableVideo");
+const METER_SPECS = [
   { key: "flow", labelAr: "انسيابية", labelEn: "Flow" },
   { key: "thickness", labelAr: "سُمك", labelEn: "Thickness" },
   { key: "shine", labelAr: "لمعان", labelEn: "Shine" },
@@ -590,12 +596,12 @@ const $ = [
   { key: "wrinkle", labelAr: "مقاومة التجاعيد", labelEn: "Wrinkle resist" },
   { key: "transparency", labelAr: "شفافية", labelEn: "Transparency" }
 ];
-var P = Object.defineProperty, b = (o, e, a, r) => {
-  for (var t = void 0, l = o.length - 1, h; l >= 0; l--)
-    (h = o[l]) && (t = h(e, a, t) || t);
-  return t && P(e, a, t), t;
-}, c;
-const g = (c = class extends E {
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass"), _a;
+const _AbayaFabricLab = (_a = class extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeIndex = 0, this.compareMode = !1, this.compareIds = [], this._onLangChange = () => this.requestUpdate(), this._videoObserver = null;
   }
@@ -603,81 +609,81 @@ const g = (c = class extends E {
     super.connectedCallback(), this._ensureFonts(), document.addEventListener("language-changed", this._onLangChange), this._syncVisibility(), this._setupVideoObserver();
   }
   _ensureFonts() {
-    if (c.fontsReady || typeof document > "u") return;
-    const e = "afl-luxury-fonts";
-    if (document.getElementById(e)) {
-      c.fontsReady = !0;
+    if (_a.fontsReady || typeof document > "u") return;
+    const id = "afl-luxury-fonts";
+    if (document.getElementById(id)) {
+      _a.fontsReady = !0;
       return;
     }
-    const a = document.createElement("link");
-    a.id = e, a.rel = "stylesheet", a.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(a), c.fontsReady = !0;
+    const link = document.createElement("link");
+    link.id = id, link.rel = "stylesheet", link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(link), _a.fontsReady = !0;
   }
   disconnectedCallback() {
-    var e;
-    super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange), (e = this._videoObserver) == null || e.disconnect(), this._videoObserver = null;
+    var _a2;
+    super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange), (_a2 = this._videoObserver) == null || _a2.disconnect(), this._videoObserver = null;
   }
   firstUpdated() {
     this._setupVideoObserver();
   }
-  updated(e) {
-    if (e.has("config")) {
-      const a = this.fabrics;
-      this.activeIndex >= a.length && (this.activeIndex = Math.max(0, a.length - 1));
+  updated(changed) {
+    if (changed.has("config")) {
+      const fabrics = this.fabrics;
+      this.activeIndex >= fabrics.length && (this.activeIndex = Math.max(0, fabrics.length - 1));
     }
     this._syncVisibility(), this._observeVideos();
   }
   get fabrics() {
-    var e;
-    return B((e = this.config) == null ? void 0 : e.afl_fabrics);
+    var _a2;
+    return parseFabrics((_a2 = this.config) == null ? void 0 : _a2.afl_fabrics);
   }
   get theme() {
-    return A(this.config, "afl_");
+    return readSectionTheme(this.config, "afl_");
   }
   get autoplayVideo() {
-    var e;
-    return j((e = this.config) == null ? void 0 : e.afl_autoplay_video);
+    var _a2;
+    return isTruthy((_a2 = this.config) == null ? void 0 : _a2.afl_autoplay_video);
   }
   get activeFabric() {
     return this.fabrics[this.activeIndex] ?? null;
   }
   get compareFabrics() {
-    return this.compareIds.map((e) => this.fabrics.find((a) => a.id === e)).filter((e) => !!e).slice(0, 2);
+    return this.compareIds.map((id) => this.fabrics.find((f) => f.id === id)).filter((f) => !!f).slice(0, 2);
   }
-  _label(e, a, r) {
-    var t;
-    return p((t = this.config) == null ? void 0 : t[e], "") || s(a, r);
+  _label(key, ar, en) {
+    var _a2;
+    return localizedString((_a2 = this.config) == null ? void 0 : _a2[key], "") || t(ar, en);
   }
   _syncVisibility() {
     this.style.display = this.fabrics.length ? "" : "none";
   }
   _setupVideoObserver() {
     this._videoObserver || (this._videoObserver = new IntersectionObserver(
-      (e) => {
-        for (const a of e) {
-          const r = a.target;
-          a.isIntersecting && this.autoplayVideo ? r.play().catch(() => {
-          }) : r.pause();
+      (entries) => {
+        for (const entry of entries) {
+          const video = entry.target;
+          entry.isIntersecting && this.autoplayVideo ? video.play().catch(() => {
+          }) : video.pause();
         }
       },
       { threshold: 0.35 }
     ), this._observeVideos());
   }
   _observeVideos() {
-    this._videoObserver && (this._videoObserver.disconnect(), this.renderRoot.querySelectorAll("video").forEach((e) => this._videoObserver.observe(e)));
+    this._videoObserver && (this._videoObserver.disconnect(), this.renderRoot.querySelectorAll("video").forEach((v) => this._videoObserver.observe(v)));
   }
-  _selectFabric(e) {
-    this.activeIndex = e;
+  _selectFabric(index) {
+    this.activeIndex = index;
   }
-  _toggleCompare(e) {
-    if (this.compareIds.includes(e)) {
-      this.compareIds = this.compareIds.filter((a) => a !== e);
+  _toggleCompare(id) {
+    if (this.compareIds.includes(id)) {
+      this.compareIds = this.compareIds.filter((x) => x !== id);
       return;
     }
     if (this.compareIds.length >= 2) {
-      this.compareIds = [this.compareIds[1], e];
+      this.compareIds = [this.compareIds[1], id];
       return;
     }
-    this.compareIds = [...this.compareIds, e];
+    this.compareIds = [...this.compareIds, id];
   }
   _enterCompare() {
     this.compareIds.length < 2 && this.activeFabric && (this.compareIds = [this.activeFabric.id]), this.compareMode = !0;
@@ -685,163 +691,163 @@ const g = (c = class extends E {
   _exitCompare() {
     this.compareMode = !1, this.compareIds = [];
   }
-  _initial(e) {
-    const a = e.trim();
-    return a ? a.slice(0, 1) : "أ";
+  _initial(name) {
+    const trimmed = name.trim();
+    return trimmed ? trimmed.slice(0, 1) : "أ";
   }
   render() {
-    var _, v;
+    var _a2, _b;
     if (!this.fabrics.length)
-      return i`<div class="fs-empty" role="status">
-        ${s("لا توجد أقمشة للعرض", "No fabrics to display")}
+      return html`<div class="fs-empty" role="status">
+        ${t("لا توجد أقمشة للعرض", "No fabrics to display")}
       </div>`;
-    const e = this.theme, a = e.animate && !L(), r = p((_ = this.config) == null ? void 0 : _.afl_title), t = p((v = this.config) == null ? void 0 : v.afl_desc), l = this._label("afl_compare_btn", "قارني خامتين", "Compare two fabrics"), h = this._label("afl_exit_compare", "إنهاء المقارنة", "Exit compare");
-    return i`
+    const theme = this.theme, animate = theme.animate && !prefersReducedMotion(), title = localizedString((_a2 = this.config) == null ? void 0 : _a2.afl_title), desc = localizedString((_b = this.config) == null ? void 0 : _b.afl_desc), compareBtn = this._label("afl_compare_btn", "قارني خامتين", "Compare two fabrics"), exitCompareBtn = this._label("afl_exit_compare", "إنهاء المقارنة", "Exit compare");
+    return html`
       <section
-        class=${x({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": a
+      "fs-animate": animate
     })}
-        style=${w(R(e))}
-        aria-label=${r || s("مختبر أقمشة العبايات", "Abaya fabric lab")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("مختبر أقمشة العبايات", "Abaya fabric lab")}
       >
         <div class="fs-container">
-          ${r || t ? i`<header class="fs-header">
-                ${r ? i`<h2 class="fs-title">${r}</h2>` : n}
-                ${t ? i`<p class="fs-desc">${t}</p>` : n}
-              </header>` : n}
+          ${title || desc ? html`<header class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </header>` : nothing}
 
           <div class="afl-studio">
             <div class="afl-toolbar">
               <div>
                 <span class="afl-toolbar__kicker"
-                  >${s("أتيليه العينات", "Swatch atelier")}</span
+                  >${t("أتيليه العينات", "Swatch atelier")}</span
                 >
                 <p class="afl-toolbar__hint">
-                  ${this.compareMode ? s("اختاري خامتين للمقارنة", "Select two fabrics to compare") : s("لمسي عينة لاستكشاف الخامة", "Tap a swatch to explore the fabric")}
+                  ${this.compareMode ? t("اختاري خامتين للمقارنة", "Select two fabrics to compare") : t("لمسي عينة لاستكشاف الخامة", "Tap a swatch to explore the fabric")}
                 </p>
               </div>
-              ${this.compareMode ? i`<button type="button" class="fs-btn fs-btn--ghost" @click=${this._exitCompare}>
-                    ${h}
-                  </button>` : i`<button type="button" class="fs-btn fs-btn--ghost" @click=${this._enterCompare}>
-                    ${l}
+              ${this.compareMode ? html`<button type="button" class="fs-btn fs-btn--ghost" @click=${this._exitCompare}>
+                    ${exitCompareBtn}
+                  </button>` : html`<button type="button" class="fs-btn fs-btn--ghost" @click=${this._enterCompare}>
+                    ${compareBtn}
                   </button>`}
             </div>
 
             <div
               class="afl-swatches"
               role="tablist"
-              aria-label=${s("عينات الأقمشة", "Fabric swatches")}
+              aria-label=${t("عينات الأقمشة", "Fabric swatches")}
             >
-              ${this.fabrics.map((I, z) => this._renderSwatch(I, z))}
+              ${this.fabrics.map((f, i) => this._renderSwatch(f, i))}
             </div>
 
-            ${this.compareMode ? this._renderCompare(a) : this._renderDetail(this.activeFabric, a)}
+            ${this.compareMode ? this._renderCompare(animate) : this._renderDetail(this.activeFabric, animate)}
           </div>
         </div>
-        ${T(this.config || {}, "afl_")}
+        ${renderCommerceOutcome(this.config || {}, "afl_")}
       </section>
     `;
   }
-  _renderSwatch(e, a) {
-    const r = !this.compareMode && a === this.activeIndex, t = this.compareMode && this.compareIds.includes(e.id), l = this.compareIds.indexOf(e.id) + 1;
-    return i`
+  _renderSwatch(fabric, index) {
+    const selected = !this.compareMode && index === this.activeIndex, pressed = this.compareMode && this.compareIds.includes(fabric.id), mark = this.compareIds.indexOf(fabric.id) + 1;
+    return html`
       <button
         type="button"
         class="afl-swatch"
         role="tab"
-        aria-selected=${r ? "true" : "false"}
-        aria-pressed=${t ? "true" : "false"}
-        aria-label=${e.fabric_name}
-        @click=${() => this.compareMode ? this._toggleCompare(e.id) : this._selectFabric(a)}
+        aria-selected=${selected ? "true" : "false"}
+        aria-pressed=${pressed ? "true" : "false"}
+        aria-label=${fabric.fabric_name}
+        @click=${() => this.compareMode ? this._toggleCompare(fabric.id) : this._selectFabric(index)}
       >
         <span class="afl-swatch__ring">
           <span class="afl-swatch__media">
-            ${e.macro_image ? i`<img
-                  src=${e.macro_image}
+            ${fabric.macro_image ? html`<img
+                  src=${fabric.macro_image}
                   alt=""
-                  loading=${a === 0 ? "eager" : "lazy"}
+                  loading=${index === 0 ? "eager" : "lazy"}
                   decoding="async"
-                />` : i`<span class="afl-swatch__fallback" aria-hidden="true">
-                  ${this._initial(e.fabric_name)}
+                />` : html`<span class="afl-swatch__fallback" aria-hidden="true">
+                  ${this._initial(fabric.fabric_name)}
                 </span>`}
           </span>
-          <span class="afl-swatch__badge" aria-hidden="true">${l > 0 ? l : ""}</span>
+          <span class="afl-swatch__badge" aria-hidden="true">${mark > 0 ? mark : ""}</span>
         </span>
-        <span class="afl-swatch__name">${e.fabric_name}</span>
+        <span class="afl-swatch__name">${fabric.fabric_name}</span>
       </button>
     `;
   }
-  _renderDetail(e, a) {
-    return e ? i`
+  _renderDetail(fabric, animate) {
+    return fabric ? html`
       <div class="afl-stage" aria-live="polite">
         <div class="afl-media">
-          ${N(e.video_url) ? i`<video
-                src=${e.video_url}
+          ${isPlayableVideo(fabric.video_url) ? html`<video
+                src=${fabric.video_url}
                 muted
                 playsinline
                 loop
                 ?autoplay=${this.autoplayVideo}
-                aria-label=${e.fabric_name}
-              ></video>` : e.macro_image ? i`<img
-                  src=${e.macro_image}
-                  alt=${e.fabric_name}
+                aria-label=${fabric.fabric_name}
+              ></video>` : fabric.macro_image ? html`<img
+                  src=${fabric.macro_image}
+                  alt=${fabric.fabric_name}
                   loading="eager"
                   decoding="async"
-                />` : n}
-          <span class="afl-media__tag">${s("عينة مقربة", "Macro sample")}</span>
+                />` : nothing}
+          <span class="afl-media__tag">${t("عينة مقربة", "Macro sample")}</span>
         </div>
 
         <div class="afl-info">
-          <span class="afl-info__kicker">${s("ملف الخامة", "Fabric profile")}</span>
-          <h3 class="afl-info__title">${e.fabric_name}</h3>
-          ${e.fabric_desc ? i`<p class="afl-info__desc">${e.fabric_desc}</p>` : n}
+          <span class="afl-info__kicker">${t("ملف الخامة", "Fabric profile")}</span>
+          <h3 class="afl-info__title">${fabric.fabric_name}</h3>
+          ${fabric.fabric_desc ? html`<p class="afl-info__desc">${fabric.fabric_desc}</p>` : nothing}
 
           <div>
-            <h4 class="afl-section-title">${s("خصائص القماش", "Fabric properties")}</h4>
-            <div class="afl-meters" aria-label=${s("خصائص القماش", "Fabric properties")}>
-              ${$.map((r) => this._renderMeter(e, r, a))}
+            <h4 class="afl-section-title">${t("خصائص القماش", "Fabric properties")}</h4>
+            <div class="afl-meters" aria-label=${t("خصائص القماش", "Fabric properties")}>
+              ${METER_SPECS.map((spec) => this._renderMeter(fabric, spec, animate))}
             </div>
           </div>
 
-          ${e.wash_care || e.iron_care || e.best_use ? i`<div>
-                <h4 class="afl-section-title">${s("ملاحظات العناية", "Care notes")}</h4>
+          ${fabric.wash_care || fabric.iron_care || fabric.best_use ? html`<div>
+                <h4 class="afl-section-title">${t("ملاحظات العناية", "Care notes")}</h4>
                 <div class="afl-care">
-                  ${e.wash_care ? i`<p class="afl-care__item">
-                        <strong>${s("الغسيل:", "Wash:")}</strong> ${e.wash_care}
-                      </p>` : n}
-                  ${e.iron_care ? i`<p class="afl-care__item">
-                        <strong>${s("الكي:", "Iron:")}</strong> ${e.iron_care}
-                      </p>` : n}
-                  ${e.best_use ? i`<p class="afl-care__item">
-                        <strong>${s("الأنسب لـ:", "Best for:")}</strong> ${e.best_use}
-                      </p>` : n}
+                  ${fabric.wash_care ? html`<p class="afl-care__item">
+                        <strong>${t("الغسيل:", "Wash:")}</strong> ${fabric.wash_care}
+                      </p>` : nothing}
+                  ${fabric.iron_care ? html`<p class="afl-care__item">
+                        <strong>${t("الكي:", "Iron:")}</strong> ${fabric.iron_care}
+                      </p>` : nothing}
+                  ${fabric.best_use ? html`<p class="afl-care__item">
+                        <strong>${t("الأنسب لـ:", "Best for:")}</strong> ${fabric.best_use}
+                      </p>` : nothing}
                 </div>
-              </div>` : n}
+              </div>` : nothing}
         </div>
       </div>
-    ` : n;
+    ` : nothing;
   }
-  _renderCompare(e) {
-    const a = this.compareFabrics;
-    return a.length < 2 ? i`<p class="afl-empty" role="status">
-        ${s("اختاري قماشين للمقارنة (حد أقصى ٢)", "Select 2 fabrics to compare (max 2)")}
-      </p>` : i`
-      <div class="afl-compare" role="region" aria-label=${s("مقارنة الأقمشة", "Fabric comparison")}>
-        ${a.map(
-      (r) => i`
+  _renderCompare(animate) {
+    const fabrics = this.compareFabrics;
+    return fabrics.length < 2 ? html`<p class="afl-empty" role="status">
+        ${t("اختاري قماشين للمقارنة (حد أقصى ٢)", "Select 2 fabrics to compare (max 2)")}
+      </p>` : html`
+      <div class="afl-compare" role="region" aria-label=${t("مقارنة الأقمشة", "Fabric comparison")}>
+        ${fabrics.map(
+      (f) => html`
             <article class="afl-compare__card">
               <div class="afl-compare__media">
-                ${r.macro_image ? i`<img
-                      src=${r.macro_image}
-                      alt=${r.fabric_name}
+                ${f.macro_image ? html`<img
+                      src=${f.macro_image}
+                      alt=${f.fabric_name}
                       loading="lazy"
                       decoding="async"
-                    />` : n}
+                    />` : nothing}
               </div>
-              <h3>${r.fabric_name}</h3>
+              <h3>${f.fabric_name}</h3>
               <div class="afl-meters">
-                ${$.map((t) => this._renderMeter(r, t, e))}
+                ${METER_SPECS.map((spec) => this._renderMeter(f, spec, animate))}
               </div>
             </article>
           `
@@ -849,35 +855,35 @@ const g = (c = class extends E {
       </div>
     `;
   }
-  _renderMeter(e, a, r) {
-    const t = e[a.key];
-    return i`
+  _renderMeter(fabric, spec, animate) {
+    const value = fabric[spec.key];
+    return html`
       <div class="afl-meter">
         <div class="afl-meter__label">
-          <span>${s(a.labelAr, a.labelEn)}</span>
-          <span class="afl-meter__value">${t}%</span>
+          <span>${t(spec.labelAr, spec.labelEn)}</span>
+          <span class="afl-meter__value">${value}%</span>
         </div>
-        <div class=${x({ "fs-meter": !0, "fs-animate": r })}>
-          <span style=${w({ width: `${t}%` })}></span>
+        <div class=${classMap({ "fs-meter": !0, "fs-animate": animate })}>
+          <span style=${styleMap({ width: `${value}%` })}></span>
         </div>
       </div>
     `;
   }
-}, c.fontsReady = !1, c.styles = [G, U], c);
-b([
-  F({ type: Object })
-], g.prototype, "config");
-b([
-  u()
-], g.prototype, "activeIndex");
-b([
-  u()
-], g.prototype, "compareMode");
-b([
-  u()
-], g.prototype, "compareIds");
-let k = g;
-typeof k < "u" && k.registerSallaComponent("salla-abaya-fabric-lab");
+}, __name(_a, "_AbayaFabricLab"), _a.fontsReady = !1, _a.styles = [sharedSectionCss, componentStyles], _a);
+__decorateClass([
+  property({ type: Object })
+], _AbayaFabricLab.prototype, "config");
+__decorateClass([
+  state()
+], _AbayaFabricLab.prototype, "activeIndex");
+__decorateClass([
+  state()
+], _AbayaFabricLab.prototype, "compareMode");
+__decorateClass([
+  state()
+], _AbayaFabricLab.prototype, "compareIds");
+let AbayaFabricLab = _AbayaFabricLab;
+typeof AbayaFabricLab < "u" && AbayaFabricLab.registerSallaComponent("salla-abaya-fabric-lab");
 export {
-  k as default
+  AbayaFabricLab as default
 };

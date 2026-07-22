@@ -1,9 +1,11 @@
-import { css as G, LitElement as E, nothing as f, html as r } from "lit";
-import { property as D, state as b } from "lit/decorators.js";
-import { classMap as k } from "lit/directives/class-map.js";
-import { styleMap as T } from "lit/directives/style-map.js";
-import { j as H, k as K, n as W, l as p, e as z, i as A, f as v, m as q, s as V, p as M, c as Y, t as l, r as J, d as Q, o as X, a as Z, h as O, b as ee } from "./sharedStyles-Cd7RKVf-.js";
-const te = G`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { j as groupByKey, k as sortByOrder, n as normalizeCollection, l as localizedString, e as extractImageUrl, i as isTruthy, f as toNumber, m as buildWhatsAppUrl, s as sharedSectionCss, p as prefersReducedMotion, c as copyText, t, r as readSectionTheme, d as extractLink, o as getRadioValue, a as themeStyleMap, h as formatPrice, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .fs-header {
     margin-bottom: 1.5rem;
   }
@@ -397,72 +399,78 @@ const te = G`
     }
   }
 `;
-function oe(n) {
-  return W(n).map((e, o) => {
-    const a = p(e.group_name), t = p(e.option_name), i = p(e.group_key) || a || "default";
+function parseConfigOptions(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const groupName = localizedString(item.group_name), optionName = localizedString(item.option_name), groupKey = localizedString(item.group_key) || groupName || "default";
     return {
-      group_key: i,
-      group_name: a || i,
-      group_order: v(e.group_order, 0),
-      option_id: p(e.option_id) || t || `opt-${o + 1}`,
-      option_name: t,
-      overlay_image: z(e.overlay_image),
-      price_delta: v(e.price_delta, 0),
-      is_default: A(e.is_default),
-      option_desc: p(e.option_desc),
-      thumb_image: z(e.thumb_image),
-      swatch_color: p(e.swatch_color)
+      group_key: groupKey,
+      group_name: groupName || groupKey,
+      group_order: toNumber(item.group_order, 0),
+      option_id: localizedString(item.option_id) || optionName || `opt-${index + 1}`,
+      option_name: optionName,
+      overlay_image: extractImageUrl(item.overlay_image),
+      price_delta: toNumber(item.price_delta, 0),
+      is_default: isTruthy(item.is_default),
+      option_desc: localizedString(item.option_desc),
+      thumb_image: extractImageUrl(item.thumb_image),
+      swatch_color: localizedString(item.swatch_color)
     };
-  }).filter((e) => e.option_name);
+  }).filter((o) => o.option_name);
 }
-function ae(n) {
-  const e = H(n, "group_key"), o = [];
-  for (const [a, t] of e) {
-    const i = K(t, "group_order"), c = i[0];
-    o.push({
-      key: a,
-      name: c.group_name || a,
-      order: c.group_order,
-      options: i
+__name(parseConfigOptions, "parseConfigOptions");
+function buildOptionGroups(options) {
+  const map = groupByKey(options, "group_key"), groups = [];
+  for (const [key, list] of map) {
+    const sorted = sortByOrder(list, "group_order"), first = sorted[0];
+    groups.push({
+      key,
+      name: first.group_name || key,
+      order: first.group_order,
+      options: sorted
     });
   }
-  return o.sort((a, t) => a.order - t.order);
+  return groups.sort((a, b) => a.order - b.order);
 }
-function R(n) {
-  const e = {};
-  for (const o of n) {
-    const a = o.options.find((t) => t.is_default) || o.options[0];
-    a && (e[o.key] = a.option_id);
+__name(buildOptionGroups, "buildOptionGroups");
+function defaultOptionSelections(groups) {
+  const selections = {};
+  for (const group of groups) {
+    const def = group.options.find((o) => o.is_default) || group.options[0];
+    def && (selections[group.key] = def.option_id);
   }
-  return e;
+  return selections;
 }
-function L(n, e, o) {
-  let a = n;
-  for (const t of e) {
-    const i = o[t.key], c = t.options.find((d) => d.option_id === i);
-    c && (a += c.price_delta);
+__name(defaultOptionSelections, "defaultOptionSelections");
+function calcFinalPrice(basePrice, groups, selections) {
+  let total = basePrice;
+  for (const group of groups) {
+    const id = selections[group.key], opt = group.options.find((o) => o.option_id === id);
+    opt && (total += opt.price_delta);
   }
-  return a;
+  return total;
 }
-function ie(n, e, o, a) {
-  const t = [];
-  t.push(`${a}`), t.push(`Base: ${o}`);
-  for (const i of n) {
-    const c = e[i.key], d = i.options.find((w) => w.option_id === c);
-    d && (t.push(`${i.name}: ${d.option_name}`), d.price_delta && t.push(`  +${d.price_delta}`), d.option_desc && t.push(`  ${d.option_desc}`));
+__name(calcFinalPrice, "calcFinalPrice");
+function buildDesignSummary(groups, selections, basePrice, currency) {
+  const lines = [];
+  lines.push(`${currency}`), lines.push(`Base: ${basePrice}`);
+  for (const group of groups) {
+    const id = selections[group.key], opt = group.options.find((o) => o.option_id === id);
+    opt && (lines.push(`${group.name}: ${opt.option_name}`), opt.price_delta && lines.push(`  +${opt.price_delta}`), opt.option_desc && lines.push(`  ${opt.option_desc}`));
   }
-  return t.push(`Total: ${L(o, n, e)} ${a}`), t.join(`
+  return lines.push(`Total: ${calcFinalPrice(basePrice, groups, selections)} ${currency}`), lines.join(`
 `);
 }
-function re(n, e) {
-  return q(n, e);
+__name(buildDesignSummary, "buildDesignSummary");
+function whatsAppLink(phone, message) {
+  return buildWhatsAppUrl(phone, message);
 }
-var se = Object.defineProperty, _ = (n, e, o, a) => {
-  for (var t = void 0, i = n.length - 1, c; i >= 0; i--)
-    (c = n[i]) && (t = c(e, o, t) || t);
-  return t && se(e, o, t), t;
-}, g;
-const u = (g = class extends E {
+__name(whatsAppLink, "whatsAppLink");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass"), _a;
+const _AbayaConfigurator = (_a = class extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.selections = {}, this.copyMsg = "", this.recommendFlash = !1, this.previewPulse = !1, this.boundLangHandler = () => this.requestUpdate(), this.copyTimer = null, this.recommendTimer = null, this.pulseTimer = null;
   }
@@ -470,135 +478,135 @@ const u = (g = class extends E {
     super.connectedCallback(), this._ensureFonts(), window.addEventListener("language-changed", this.boundLangHandler), this.initSelections();
   }
   _ensureFonts() {
-    if (g.fontsReady || typeof document > "u") return;
-    const e = "acfg-luxury-fonts";
-    if (document.getElementById(e)) {
-      g.fontsReady = !0;
+    if (_a.fontsReady || typeof document > "u") return;
+    const id = "acfg-luxury-fonts";
+    if (document.getElementById(id)) {
+      _a.fontsReady = !0;
       return;
     }
-    const o = document.createElement("link");
-    o.id = e, o.rel = "stylesheet", o.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(o), g.fontsReady = !0;
+    const link = document.createElement("link");
+    link.id = id, link.rel = "stylesheet", link.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(link), _a.fontsReady = !0;
   }
   disconnectedCallback() {
     window.removeEventListener("language-changed", this.boundLangHandler), this.copyTimer && clearTimeout(this.copyTimer), this.recommendTimer && clearTimeout(this.recommendTimer), this.pulseTimer && clearTimeout(this.pulseTimer), super.disconnectedCallback();
   }
   get groups() {
-    return ae(oe(this.config.acfg_options));
+    return buildOptionGroups(parseConfigOptions(this.config.acfg_options));
   }
   initSelections() {
-    const e = this.groups;
-    e.length && (this.selections = R(e));
+    const groups = this.groups;
+    groups.length && (this.selections = defaultOptionSelections(groups));
   }
-  updated(e) {
-    e.has("config") && this.initSelections();
+  updated(changed) {
+    changed.has("config") && this.initSelections();
   }
-  selectOption(e, o) {
-    this.selections[e] !== o && (this.selections = { ...this.selections, [e]: o }, this.pulsePreview());
+  selectOption(groupKey, optionId) {
+    this.selections[groupKey] !== optionId && (this.selections = { ...this.selections, [groupKey]: optionId }, this.pulsePreview());
   }
   pulsePreview() {
-    M() || (this.previewPulse = !0, this.pulseTimer && clearTimeout(this.pulseTimer), this.pulseTimer = setTimeout(() => {
+    prefersReducedMotion() || (this.previewPulse = !0, this.pulseTimer && clearTimeout(this.pulseTimer), this.pulseTimer = setTimeout(() => {
       this.previewPulse = !1;
     }, 420));
   }
   applyRecommended() {
-    const e = R(this.groups);
-    this.selections = e, this.recommendFlash = !0, this.pulsePreview(), this.recommendTimer && clearTimeout(this.recommendTimer), this.recommendTimer = setTimeout(() => {
+    const next = defaultOptionSelections(this.groups);
+    this.selections = next, this.recommendFlash = !0, this.pulsePreview(), this.recommendTimer && clearTimeout(this.recommendTimer), this.recommendTimer = setTimeout(() => {
       this.recommendFlash = !1;
     }, 1600);
   }
   hasRecommended() {
-    return this.groups.some((e) => e.options.some((o) => o.is_default));
+    return this.groups.some((g) => g.options.some((o) => o.is_default));
   }
   async handleCopy() {
-    const e = p(this.config.acfg_currency) || "ر.س", o = v(this.config.acfg_base_price, 0), a = ie(this.groups, this.selections, o, e), t = await Y(a);
-    this.copyMsg = t ? l("تم نسخ التصميم", "Design copied") : l("تعذر النسخ", "Could not copy"), this.copyTimer && clearTimeout(this.copyTimer), this.copyTimer = setTimeout(() => {
+    const currency = localizedString(this.config.acfg_currency) || "ر.س", basePrice = toNumber(this.config.acfg_base_price, 0), text = buildDesignSummary(this.groups, this.selections, basePrice, currency), ok = await copyText(text);
+    this.copyMsg = ok ? t("تم نسخ التصميم", "Design copied") : t("تعذر النسخ", "Could not copy"), this.copyTimer && clearTimeout(this.copyTimer), this.copyTimer = setTimeout(() => {
       this.copyMsg = "";
     }, 2400);
   }
   getOverlayImages() {
-    return this.groups.map((e, o) => {
-      const a = this.selections[e.key], t = e.options.find((c) => c.option_id === a), i = (t == null ? void 0 : t.overlay_image) || "";
-      return i ? { groupKey: e.key, src: i, z: o + 1 } : null;
-    }).filter((e) => !!e);
+    return this.groups.map((g, index) => {
+      const id = this.selections[g.key], opt = g.options.find((o) => o.option_id === id), src = (opt == null ? void 0 : opt.overlay_image) || "";
+      return src ? { groupKey: g.key, src, z: index + 1 } : null;
+    }).filter((x) => !!x);
   }
   render() {
-    const e = this.config || {}, o = J(e, "acfg_"), a = o.animate && !M(), t = this.groups, i = p(e.acfg_currency) || "ر.س", c = v(e.acfg_base_price, 0), d = L(c, t, this.selections), w = A(e.acfg_show_price, !0), C = z(e.acfg_base_image), P = Q(e.acfg_product_url), F = X(e.acfg_preview_side, "right"), I = p(e.acfg_whatsapp), U = p(e.acfg_whatsapp_msg) || l("أرغب في هذا التصميم", "I would like this design"), S = re(I, U), N = this.getOverlayImages(), h = p(e.acfg_title), $ = p(e.acfg_desc), B = p(e.acfg_recommend_btn) || l("الموصى به", "Recommended");
-    return r`
+    const c = this.config || {}, theme = readSectionTheme(c, "acfg_"), animate = theme.animate && !prefersReducedMotion(), groups = this.groups, currency = localizedString(c.acfg_currency) || "ر.س", basePrice = toNumber(c.acfg_base_price, 0), finalPrice = calcFinalPrice(basePrice, groups, this.selections), showPrice = isTruthy(c.acfg_show_price, !0), baseImage = extractImageUrl(c.acfg_base_image), productUrl = extractLink(c.acfg_product_url), previewSide = getRadioValue(c.acfg_preview_side, "right"), waPhone = localizedString(c.acfg_whatsapp), waMsg = localizedString(c.acfg_whatsapp_msg) || t("أرغب في هذا التصميم", "I would like this design"), waUrl = whatsAppLink(waPhone, waMsg), overlays = this.getOverlayImages(), title = localizedString(c.acfg_title), desc = localizedString(c.acfg_desc), recommendLabel = localizedString(c.acfg_recommend_btn) || t("الموصى به", "Recommended");
+    return html`
       <section
-        class=${k({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": a
+      "fs-animate": animate
     })}
-        style=${T(Z(o))}
-        aria-label=${h || l("مصممة العباية", "Abaya configurator")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("مصممة العباية", "Abaya configurator")}
       >
         <div class="fs-container">
-          ${h || $ ? r`<div class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${l("صمّم إطلالتك", "Design your look")}</p>
-                ${h ? r`<h2 class="fs-title">${h}</h2>` : f}
+          ${title || desc ? html`<div class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${t("صمّم إطلالتك", "Design your look")}</p>
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${$ ? r`<p class="fs-desc">${$}</p>` : f}
-              </div>` : f}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </div>` : nothing}
 
-          ${t.length ? r`<div class="acfg-studio">
+          ${groups.length ? html`<div class="acfg-studio">
                 <div
-                  class=${k({
+                  class=${classMap({
       "acfg-layout": !0,
-      "acfg-layout--preview-left": F === "left"
+      "acfg-layout--preview-left": previewSide === "left"
     })}
                 >
                   <div class="acfg-controls">
-                    ${this.hasRecommended() ? r`<div class="acfg-toolbar">
+                    ${this.hasRecommended() ? html`<div class="acfg-toolbar">
                           <button
                             type="button"
                             class="acfg-recommend"
                             @click=${this.applyRecommended}
                           >
-                            ${B}
+                            ${recommendLabel}
                           </button>
-                          ${this.recommendFlash ? r`<span class="acfg-flash" role="status">
-                                ${l("تم التطبيق", "Applied")}
-                              </span>` : f}
-                        </div>` : f}
+                          ${this.recommendFlash ? html`<span class="acfg-flash" role="status">
+                                ${t("تم التطبيق", "Applied")}
+                              </span>` : nothing}
+                        </div>` : nothing}
 
-                    ${t.map((m) => {
-      const y = m.options.find(
-        (s) => s.option_id === this.selections[m.key]
+                    ${groups.map((group) => {
+      const selected = group.options.find(
+        (o) => o.option_id === this.selections[group.key]
       );
-      return r`
+      return html`
                         <div class="acfg-group">
                           <div class="acfg-group__head">
-                            <h3 class="acfg-group__title">${m.name}</h3>
-                            ${y ? r`<span class="acfg-group__pick">${y.option_name}</span>` : f}
+                            <h3 class="acfg-group__title">${group.name}</h3>
+                            ${selected ? html`<span class="acfg-group__pick">${selected.option_name}</span>` : nothing}
                           </div>
                           <div class="acfg-options" role="list">
-                            ${m.options.map((s) => {
-        const x = this.selections[m.key] === s.option_id;
-        return r`
+                            ${group.options.map((opt) => {
+        const pressed = this.selections[group.key] === opt.option_id;
+        return html`
                                 <button
                                   type="button"
                                   class="acfg-option"
                                   role="listitem"
-                                  aria-pressed=${x ? "true" : "false"}
-                                  aria-label=${s.option_name}
-                                  title=${s.option_desc ? `${s.option_name} — ${s.option_desc}` : s.option_name}
-                                  @click=${() => this.selectOption(m.key, s.option_id)}
+                                  aria-pressed=${pressed ? "true" : "false"}
+                                  aria-label=${opt.option_name}
+                                  title=${opt.option_desc ? `${opt.option_name} — ${opt.option_desc}` : opt.option_name}
+                                  @click=${() => this.selectOption(group.key, opt.option_id)}
                                 >
-                                  ${s.thumb_image ? r`<img
+                                  ${opt.thumb_image ? html`<img
                                         class="acfg-option__media"
-                                        src=${s.thumb_image}
+                                        src=${opt.thumb_image}
                                         alt=""
                                         loading="lazy"
                                         decoding="async"
-                                      />` : r`<span
+                                      />` : html`<span
                                         class="acfg-option__media acfg-option__swatch"
-                                        style=${s.swatch_color ? T({ background: s.swatch_color }) : f}
+                                        style=${opt.swatch_color ? styleMap({ background: opt.swatch_color }) : nothing}
                                         aria-hidden="true"
                                       ></span>`}
-                                  <span class="acfg-option__name">${s.option_name}</span>
-                                  ${s.price_delta ? r`<span class="acfg-option__delta">
-                                        +${O(s.price_delta, i)}
-                                      </span>` : f}
+                                  <span class="acfg-option__name">${opt.option_name}</span>
+                                  ${opt.price_delta ? html`<span class="acfg-option__delta">
+                                        +${formatPrice(opt.price_delta, currency)}
+                                      </span>` : nothing}
                                 </button>
                               `;
       })}
@@ -608,67 +616,67 @@ const u = (g = class extends E {
     })}
 
                     <div class="acfg-summary">
-                      ${w ? r`<p class="acfg-price">
-                            <span>${l("السعر", "Price")}</span>
-                            ${O(d, i)}
-                          </p>` : f}
+                      ${showPrice ? html`<p class="acfg-price">
+                            <span>${t("السعر", "Price")}</span>
+                            ${formatPrice(finalPrice, currency)}
+                          </p>` : nothing}
 
                       <ul class="acfg-summary__list">
-                        ${t.map((m) => {
-      const y = this.selections[m.key], s = m.options.find((x) => x.option_id === y);
-      return r`<li>
-                            <span>${m.name}</span>
-                            <strong>${(s == null ? void 0 : s.option_name) || "—"}</strong>
+                        ${groups.map((g) => {
+      const id = this.selections[g.key], opt = g.options.find((o) => o.option_id === id);
+      return html`<li>
+                            <span>${g.name}</span>
+                            <strong>${(opt == null ? void 0 : opt.option_name) || "—"}</strong>
                           </li>`;
     })}
                       </ul>
 
                       <div class="acfg-actions">
-                        ${P ? r`<a class="fs-btn" href=${P}>
-                              ${p(e.acfg_finish_btn) || l("فتح المنتج", "Open product")}
-                            </a>` : f}
+                        ${productUrl ? html`<a class="fs-btn" href=${productUrl}>
+                              ${localizedString(c.acfg_finish_btn) || t("فتح المنتج", "Open product")}
+                            </a>` : nothing}
                         <button
                           type="button"
                           class="fs-btn fs-btn--ghost"
                           @click=${this.handleCopy}
                         >
-                          ${l("نسخ التصميم", "Copy design")}
+                          ${t("نسخ التصميم", "Copy design")}
                         </button>
-                        ${S ? r`<a
+                        ${waUrl ? html`<a
                               class="fs-btn fs-btn--ghost"
-                              href=${S}
+                              href=${waUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              ${l("واتساب", "WhatsApp")}
-                            </a>` : f}
+                              ${t("واتساب", "WhatsApp")}
+                            </a>` : nothing}
                       </div>
-                      ${this.copyMsg ? r`<p class="acfg-copy-msg" role="status">${this.copyMsg}</p>` : f}
+                      ${this.copyMsg ? html`<p class="acfg-copy-msg" role="status">${this.copyMsg}</p>` : nothing}
                     </div>
                   </div>
 
                   <div class="acfg-preview-wrap">
                     <div
-                      class=${k({
+                      class=${classMap({
       "acfg-preview": !0,
-      "acfg-preview--pulse": this.previewPulse && a
+      "acfg-preview--pulse": this.previewPulse && animate
     })}
-                      aria-label=${l("معاينة التصميم", "Design preview")}
+                      aria-label=${t("معاينة التصميم", "Design preview")}
                     >
-                      ${C ? r`<img
+                      ${baseImage ? html`<img
                             class="acfg-preview__base"
-                            src=${C}
-                            alt=${h || l("عباءة أساسية", "Base abaya")}
+                            src=${baseImage}
+                            alt=${title || t("عباءة أساسية", "Base abaya")}
                             loading="eager"
                             decoding="async"
-                          />` : r`<div class="acfg-preview__empty">
-                            ${l("أضيفي الصورة الأساسية", "Add base image")}
+                          />` : html`<div class="acfg-preview__empty">
+                            ${t("أضيفي الصورة الأساسية", "Add base image")}
                           </div>`}
-                      ${N.map(
-      (m) => r`<img
+                      ${overlays.map(
+      (o) => html`<img
                           class="acfg-preview__overlay"
-                          style=${T({ zIndex: String(m.z) })}
-                          src=${m.src}
+                          style=${styleMap({ zIndex: String(o.z) })}
+                          src=${o.src}
                           alt=""
                           loading="lazy"
                           decoding="async"
@@ -677,34 +685,34 @@ const u = (g = class extends E {
                     </div>
                   </div>
                 </div>
-              </div>` : f}
+              </div>` : nothing}
         </div>
-        ${ee(this.config || {}, "acfg_")}
+        ${renderCommerceOutcome(this.config || {}, "acfg_")}
       </section>
     `;
   }
-}, g.fontsReady = !1, g.styles = [V, te, G`
+}, __name(_a, "_AbayaConfigurator"), _a.fontsReady = !1, _a.styles = [sharedSectionCss, componentStyles, css`
     :host {
       direction: inherit;
     }
-  `], g);
-_([
-  D({ type: Object })
-], u.prototype, "config");
-_([
-  b()
-], u.prototype, "selections");
-_([
-  b()
-], u.prototype, "copyMsg");
-_([
-  b()
-], u.prototype, "recommendFlash");
-_([
-  b()
-], u.prototype, "previewPulse");
-let j = u;
-typeof j < "u" && j.registerSallaComponent("salla-abaya-configurator");
+  `], _a);
+__decorateClass([
+  property({ type: Object })
+], _AbayaConfigurator.prototype, "config");
+__decorateClass([
+  state()
+], _AbayaConfigurator.prototype, "selections");
+__decorateClass([
+  state()
+], _AbayaConfigurator.prototype, "copyMsg");
+__decorateClass([
+  state()
+], _AbayaConfigurator.prototype, "recommendFlash");
+__decorateClass([
+  state()
+], _AbayaConfigurator.prototype, "previewPulse");
+let AbayaConfigurator = _AbayaConfigurator;
+typeof AbayaConfigurator < "u" && AbayaConfigurator.registerSallaComponent("salla-abaya-configurator");
 export {
-  j as default
+  AbayaConfigurator as default
 };

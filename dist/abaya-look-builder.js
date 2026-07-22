@@ -1,9 +1,11 @@
-import { css as C, LitElement as O, nothing as m, html as n } from "lit";
-import { property as H, state as k } from "lit/decorators.js";
-import { classMap as T } from "lit/directives/class-map.js";
-import { styleMap as N } from "lit/directives/style-map.js";
-import { j as U, k as V, n as S, l as p, f as $, d as E, i as M, e as q, s as A, t as l, h as y, c as B, r as F, p as K, a as R, b as Y } from "./sharedStyles-Cd7RKVf-.js";
-const J = C`
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: !0 });
+import { css, LitElement, nothing, html } from "lit";
+import { property, state } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
+import { styleMap } from "lit/directives/style-map.js";
+import { j as groupByKey, k as sortByOrder, n as normalizeCollection, l as localizedString, f as toNumber, d as extractLink, i as isTruthy, e as extractImageUrl, s as sharedSectionCss, t, h as formatPrice, c as copyText, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+const componentStyles = css`
   .alb-studio {
     position: relative;
     overflow: hidden;
@@ -352,124 +354,135 @@ const J = C`
     }
   }
 `;
-function j(a) {
-  const e = S(a), t = [];
-  return e.forEach((r, s) => {
-    const c = p(r.group_name) || p(r.group_key) || `تبويب ${s + 1}`, d = p(r.group_key) || c || `tab-${s}`, g = $(r.group_order, s + 1), v = S(
-      r.items ?? r.pieces ?? r.products ?? r["alb_tabs.items"]
+function parseTabDrafts(raw) {
+  const rows = normalizeCollection(raw), drafts = [];
+  return rows.forEach((row, tabIndex) => {
+    const group_name = localizedString(row.group_name) || localizedString(row.group_key) || `تبويب ${tabIndex + 1}`, group_key = localizedString(row.group_key) || group_name || `tab-${tabIndex}`, group_order = toNumber(row.group_order, tabIndex + 1), entries = normalizeCollection(
+      row.items ?? row.pieces ?? row.products ?? row["alb_tabs.items"]
     );
-    v.length && v.forEach((o, f) => {
-      const h = p(o.piece_name).trim(), x = G(o.image), w = E(o.url), i = p(o.id).trim() || h || `${d}-${f + 1}`;
-      !h && !x && !w || t.push({
-        id: i,
-        group_key: d,
-        group_name: c,
-        group_order: g,
-        piece_name: h,
-        image: x,
-        price: $(o.price, 0),
-        old_price: $(o.old_price, 0),
-        url: w,
-        is_default: f === 0 || M(o.is_default),
-        color_note: p(o.color_note)
+    entries.length && entries.forEach((entry, productIndex) => {
+      const pieceName = localizedString(entry.piece_name).trim(), image = readImage(entry.image), url = extractLink(entry.url), id = localizedString(entry.id).trim() || pieceName || `${group_key}-${productIndex + 1}`;
+      !pieceName && !image && !url || drafts.push({
+        id,
+        group_key,
+        group_name,
+        group_order,
+        piece_name: pieceName,
+        image,
+        price: toNumber(entry.price, 0),
+        old_price: toNumber(entry.old_price, 0),
+        url,
+        is_default: productIndex === 0 || isTruthy(entry.is_default),
+        color_note: localizedString(entry.color_note)
       });
     });
-  }), t;
+  }), drafts;
 }
-function G(a) {
-  return q(a) || (typeof a == "string" ? a.trim() : p(a));
+__name(parseTabDrafts, "parseTabDrafts");
+function readImage(raw) {
+  return extractImageUrl(raw) || (typeof raw == "string" ? raw.trim() : localizedString(raw));
 }
-function P(a) {
-  return S(a).map((e, t) => {
-    const r = p(e.piece_name).trim(), s = G(e.image), c = E(e.url);
+__name(readImage, "readImage");
+function parseLookItemDrafts(raw) {
+  return normalizeCollection(raw).map((item, index) => {
+    const pieceName = localizedString(item.piece_name).trim(), image = readImage(item.image), url = extractLink(item.url);
     return {
-      id: p(e.id).trim() || r || `item-${t}`,
-      group_key: p(e.group_key) || p(e.group_name) || "default",
-      group_name: p(e.group_name) || p(e.group_key) || "default",
-      group_order: $(e.group_order, 0),
-      piece_name: r,
-      image: s,
-      price: $(e.price, 0),
-      old_price: $(e.old_price, 0),
-      url: c,
-      is_default: M(e.is_default),
-      color_note: p(e.color_note)
+      id: localizedString(item.id).trim() || pieceName || `item-${index}`,
+      group_key: localizedString(item.group_key) || localizedString(item.group_name) || "default",
+      group_name: localizedString(item.group_name) || localizedString(item.group_key) || "default",
+      group_order: toNumber(item.group_order, 0),
+      piece_name: pieceName,
+      image,
+      price: toNumber(item.price, 0),
+      old_price: toNumber(item.old_price, 0),
+      url,
+      is_default: isTruthy(item.is_default),
+      color_note: localizedString(item.color_note)
     };
-  }).filter((e) => e.piece_name || e.image || e.url);
+  }).filter((d) => d.piece_name || d.image || d.url);
 }
-function Q(a) {
+__name(parseLookItemDrafts, "parseLookItemDrafts");
+function draftToLookItem(draft) {
   return {
-    id: a.id,
-    group_key: a.group_key,
-    group_name: a.group_name,
-    group_order: a.group_order,
-    piece_name: a.piece_name,
-    image: a.image,
-    price: a.price,
-    old_price: a.old_price,
-    url: a.url,
-    is_default: a.is_default,
-    color_note: a.color_note
+    id: draft.id,
+    group_key: draft.group_key,
+    group_name: draft.group_name,
+    group_order: draft.group_order,
+    piece_name: draft.piece_name,
+    image: draft.image,
+    price: draft.price,
+    old_price: draft.old_price,
+    url: draft.url,
+    is_default: draft.is_default,
+    color_note: draft.color_note
   };
 }
-function W(a) {
-  const e = j(a.alb_tabs), t = P(a.alb_items);
-  return e.length ? e : t;
+__name(draftToLookItem, "draftToLookItem");
+function collectLookDrafts(config) {
+  const fromTabs = parseTabDrafts(config.alb_tabs), fromItems = parseLookItemDrafts(config.alb_items);
+  return fromTabs.length ? fromTabs : fromItems;
 }
-function D(a) {
-  return (a && typeof a == "object" && !Array.isArray(a) && ("alb_tabs" in a || "alb_items" in a) ? W(a) : [...j(a), ...P(a)]).map((t) => Q(t));
+__name(collectLookDrafts, "collectLookDrafts");
+function peekLookItems(raw) {
+  return (raw && typeof raw == "object" && !Array.isArray(raw) && ("alb_tabs" in raw || "alb_items" in raw) ? collectLookDrafts(raw) : [...parseTabDrafts(raw), ...parseLookItemDrafts(raw)]).map((draft) => draftToLookItem(draft));
 }
-async function X(a) {
-  return D(a);
+__name(peekLookItems, "peekLookItems");
+async function resolveLookItems(raw) {
+  return peekLookItems(raw);
 }
-async function Z(a) {
-  return X(a && typeof a == "object" ? a : {});
+__name(resolveLookItems, "resolveLookItems");
+async function resolveLookFromConfig(config) {
+  return resolveLookItems(config && typeof config == "object" ? config : {});
 }
-function L(a) {
-  const e = U(a, "group_key"), t = [];
-  for (const [r, s] of e) {
-    const c = V(s, "group_order"), d = c[0];
-    t.push({
-      key: r,
-      name: d.group_name || r,
-      order: d.group_order,
-      items: c
+__name(resolveLookFromConfig, "resolveLookFromConfig");
+function buildLookGroups(items) {
+  const map = groupByKey(items, "group_key"), groups = [];
+  for (const [key, list] of map) {
+    const sorted = sortByOrder(list, "group_order"), first = sorted[0];
+    groups.push({
+      key,
+      name: first.group_name || key,
+      order: first.group_order,
+      items: sorted
     });
   }
-  return t.sort((r, s) => r.order - s.order);
+  return groups.sort((a, b) => a.order - b.order);
 }
-function ee(a) {
-  const e = {};
-  for (const t of a) {
-    const r = t.items.find((s) => s.is_default) || t.items[0];
-    r && (e[t.key] = r.id);
+__name(buildLookGroups, "buildLookGroups");
+function defaultSelections(groups) {
+  const selections = {};
+  for (const group of groups) {
+    const def = group.items.find((i) => i.is_default) || group.items[0];
+    def && (selections[group.key] = def.id);
   }
-  return e;
+  return selections;
 }
-function I(a, e, t) {
-  const r = [];
-  let s = 0, c = 0, d = 0;
-  for (const g of a) {
-    const v = e[g.key], o = g.items.find((h) => h.id === v);
-    if (!o) continue;
-    d += 1, s += o.price, o.old_price > o.price && (c += o.old_price - o.price);
-    const f = o.color_note ? ` (${o.color_note})` : "";
-    r.push(`${g.name}: ${o.piece_name}${f}`), o.url && r.push(`  ${o.url}`), o.price > 0 && r.push(`  ${o.price} ${t}`);
+__name(defaultSelections, "defaultSelections");
+function buildLookSummary(groups, selections, currency) {
+  const lines = [];
+  let total = 0, savings = 0, count = 0;
+  for (const group of groups) {
+    const selectedId = selections[group.key], item = group.items.find((i) => i.id === selectedId);
+    if (!item) continue;
+    count += 1, total += item.price, item.old_price > item.price && (savings += item.old_price - item.price);
+    const note = item.color_note ? ` (${item.color_note})` : "";
+    lines.push(`${group.name}: ${item.piece_name}${note}`), item.url && lines.push(`  ${item.url}`), item.price > 0 && lines.push(`  ${item.price} ${currency}`);
   }
-  return { lines: r, total: s, count: d, savings: c };
+  return { lines, total, count, savings };
 }
-var ae = Object.defineProperty, _ = (a, e, t, r) => {
-  for (var s = void 0, c = a.length - 1, d; c >= 0; c--)
-    (d = a[c]) && (s = d(e, t, s) || s);
-  return s && ae(e, t, s), s;
-};
-const z = class z extends O {
+__name(buildLookSummary, "buildLookSummary");
+var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name((decorators, target, key, kind) => {
+  for (var result = void 0, i = decorators.length - 1, decorator; i >= 0; i--)
+    (decorator = decorators[i]) && (result = decorator(target, key, result) || result);
+  return result && __defProp2(target, key, result), result;
+}, "__decorateClass");
+const _AbayaLookBuilder = class _AbayaLookBuilder extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeGroup = "", this.selections = {}, this.statusMsg = "", this.statusError = !1, this.items = [], this.loading = !0, this.boundLangHandler = () => this.requestUpdate(), this.statusTimer = null, this.loadToken = 0;
   }
   get currency() {
-    var e;
-    return String(((e = this.config) == null ? void 0 : e.alb_currency) || "ر.س").trim() || "ر.س";
+    var _a;
+    return String(((_a = this.config) == null ? void 0 : _a.alb_currency) || "ر.س").trim() || "ر.س";
   }
   connectedCallback() {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLangHandler), this.loadItems();
@@ -477,202 +490,202 @@ const z = class z extends O {
   disconnectedCallback() {
     window.removeEventListener("language-changed", this.boundLangHandler), this.statusTimer && clearTimeout(this.statusTimer), super.disconnectedCallback();
   }
-  updated(e) {
-    e.has("config") && this.loadItems();
+  updated(changed) {
+    changed.has("config") && this.loadItems();
   }
   get groups() {
-    return L(this.items);
+    return buildLookGroups(this.items);
   }
-  applyItems(e) {
-    var r;
-    this.items = e;
-    const t = L(e);
-    this.selections = ee(t), (!this.activeGroup || !t.some((s) => s.key === this.activeGroup)) && (this.activeGroup = ((r = t[0]) == null ? void 0 : r.key) || "");
+  applyItems(resolved) {
+    var _a;
+    this.items = resolved;
+    const groups = buildLookGroups(resolved);
+    this.selections = defaultSelections(groups), (!this.activeGroup || !groups.some((g) => g.key === this.activeGroup)) && (this.activeGroup = ((_a = groups[0]) == null ? void 0 : _a.key) || "");
   }
   async loadItems() {
-    const e = ++this.loadToken, t = D(this.config || {});
-    t.length ? (this.applyItems(t), this.loading = !1) : this.loading = !0;
-    const r = await Z(this.config);
-    e === this.loadToken && (this.applyItems(r), this.loading = !1);
+    const token = ++this.loadToken, instant = peekLookItems(this.config || {});
+    instant.length ? (this.applyItems(instant), this.loading = !1) : this.loading = !0;
+    const resolved = await resolveLookFromConfig(this.config);
+    token === this.loadToken && (this.applyItems(resolved), this.loading = !1);
   }
-  selectItem(e, t) {
-    this.selections = { ...this.selections, [e]: t };
+  selectItem(groupKey, itemId) {
+    this.selections = { ...this.selections, [groupKey]: itemId };
   }
   getSelectedItems() {
-    return this.groups.map((e) => {
-      const t = this.selections[e.key], r = e.items.find((s) => s.id === t);
-      return r ? { group: e, item: r } : null;
-    }).filter((e) => !!e);
+    return this.groups.map((g) => {
+      const id = this.selections[g.key], item = g.items.find((i) => i.id === id);
+      return item ? { group: g, item } : null;
+    }).filter((x) => !!x);
   }
-  setStatus(e, t = !1) {
-    this.statusMsg = e, this.statusError = t, this.statusTimer && clearTimeout(this.statusTimer), this.statusTimer = setTimeout(() => {
+  setStatus(msg, isError = !1) {
+    this.statusMsg = msg, this.statusError = isError, this.statusTimer && clearTimeout(this.statusTimer), this.statusTimer = setTimeout(() => {
       this.statusMsg = "", this.statusError = !1;
     }, 4200);
   }
   async handleCopy() {
-    const e = this.currency, t = I(this.groups, this.selections, e), r = [
-      p(this.config.alb_title) || l("إطلالة مختارة", "Selected look"),
+    const currency = this.currency, summary = buildLookSummary(this.groups, this.selections, currency), text = [
+      localizedString(this.config.alb_title) || t("إطلالة مختارة", "Selected look"),
       "",
-      ...t.lines,
+      ...summary.lines,
       "",
-      `${l("الإجمالي", "Total")}: ${y(t.total, e)}`,
-      `${l("عدد القطع", "Pieces")}: ${t.count}`,
-      t.savings > 0 ? `${l("التوفير", "Savings")}: ${y(t.savings, e)}` : ""
+      `${t("الإجمالي", "Total")}: ${formatPrice(summary.total, currency)}`,
+      `${t("عدد القطع", "Pieces")}: ${summary.count}`,
+      summary.savings > 0 ? `${t("التوفير", "Savings")}: ${formatPrice(summary.savings, currency)}` : ""
     ].filter(Boolean).join(`
-`), s = await B(r);
+`), ok = await copyText(text);
     this.setStatus(
-      s ? l("تم نسخ التفاصيل", "Details copied") : l("تعذر النسخ", "Could not copy"),
-      !s
+      ok ? t("تم نسخ التفاصيل", "Details copied") : t("تعذر النسخ", "Could not copy"),
+      !ok
     );
   }
   render() {
-    var w;
-    const e = this.config || {}, t = F(e, "alb_"), r = t.animate && !K(), s = this.groups, c = this.currency, d = s.find((i) => i.key === this.activeGroup) || s[0], g = this.getSelectedItems(), v = g.map((i) => i.item), o = I(s, this.selections, c), f = p(e.alb_title), h = p(e.alb_desc), x = (w = v.find((i) => i.url)) == null ? void 0 : w.url;
-    return n`
+    var _a;
+    const c = this.config || {}, theme = readSectionTheme(c, "alb_"), animate = theme.animate && !prefersReducedMotion(), groups = this.groups, currency = this.currency, current = groups.find((g) => g.key === this.activeGroup) || groups[0], selectedPairs = this.getSelectedItems(), selectedItems = selectedPairs.map((p) => p.item), summary = buildLookSummary(groups, this.selections, currency), title = localizedString(c.alb_title), desc = localizedString(c.alb_desc), firstUrl = (_a = selectedItems.find((i) => i.url)) == null ? void 0 : _a.url;
+    return html`
       <section
-        class=${T({
+        class=${classMap({
       "fs-section": !0,
-      "fs-animate": r
+      "fs-animate": animate
     })}
-        style=${N(R(t))}
-        aria-label=${f || l("منسقة الإطلالة", "Look builder")}
+        style=${styleMap(themeStyleMap(theme))}
+        aria-label=${title || t("منسقة الإطلالة", "Look builder")}
       >
         <div class="fs-container">
-          ${f || h ? n`<div class="fs-header">
-                ${f ? n`<h2 class="fs-title">${f}</h2>` : m}
-                ${h ? n`<p class="fs-desc">${h}</p>` : m}
-              </div>` : m}
+          ${title || desc ? html`<div class="fs-header">
+                ${title ? html`<h2 class="fs-title">${title}</h2>` : nothing}
+                ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
+              </div>` : nothing}
 
-          ${this.loading ? n`<div class="alb-studio">
+          ${this.loading ? html`<div class="alb-studio">
                 <div class="alb-loading" role="status">
-                  ${l("جاري تحميل عناصر الإطلالة…", "Loading look items…")}
+                  ${t("جاري تحميل عناصر الإطلالة…", "Loading look items…")}
                 </div>
-              </div>` : s.length ? n`<div class="alb-studio">
+              </div>` : groups.length ? html`<div class="alb-studio">
                   <div class="alb-layout">
                     <div class="alb-picker">
                       <div
                         class="alb-tabs"
                         role="tablist"
-                        aria-label=${l("تبويبات الإطلالة", "Look tabs")}
+                        aria-label=${t("تبويبات الإطلالة", "Look tabs")}
                       >
-                        ${s.map(
-      (i) => n`
+                        ${groups.map(
+      (g) => html`
                             <button
                               type="button"
                               class="alb-tab"
                               role="tab"
-                              aria-selected=${this.activeGroup === i.key ? "true" : "false"}
+                              aria-selected=${this.activeGroup === g.key ? "true" : "false"}
                               @click=${() => {
-        this.activeGroup = i.key;
+        this.activeGroup = g.key;
       }}
                             >
-                              ${i.name}${this.selections[i.key] ? " · ✓" : ""}
+                              ${g.name}${this.selections[g.key] ? " · ✓" : ""}
                             </button>
                           `
     )}
                       </div>
 
-                      ${d ? n`
+                      ${current ? html`
                             <p class="alb-panel-label">
-                              ${l("اختاري من", "Choose from")} ${d.name}
+                              ${t("اختاري من", "Choose from")} ${current.name}
                             </p>
                             <div class="alb-grid" role="list">
-                              ${d.items.map((i) => {
-      const b = this.selections[d.key] === i.id;
-      return n`<div class="alb-slot" role="listitem">
+                              ${current.items.map((item) => {
+      const selected = this.selections[current.key] === item.id;
+      return html`<div class="alb-slot" role="listitem">
                                   <article
-                                    class=${T({
+                                    class=${classMap({
         "fs-card": !0,
         "alb-choice": !0,
-        "alb-choice--selected": b
+        "alb-choice--selected": selected
       })}
                                   >
-                                    ${i.image ? n`<img
+                                    ${item.image ? html`<img
                                           class="alb-piece__thumb"
-                                          src=${i.image}
-                                          alt=${i.piece_name}
+                                          src=${item.image}
+                                          alt=${item.piece_name}
                                           loading="lazy"
                                           decoding="async"
-                                        />` : m}
+                                        />` : nothing}
                                     <div class="alb-piece__meta">
-                                      <span class="alb-piece__group">${d.name}</span>
+                                      <span class="alb-piece__group">${current.name}</span>
                                       <strong class="alb-piece__name">
-                                        ${i.piece_name || l("قطعة", "Piece")}
+                                        ${item.piece_name || t("قطعة", "Piece")}
                                       </strong>
-                                      ${i.color_note ? n`<span class="alb-piece__group">${i.color_note}</span>` : m}
-                                      ${i.price > 0 ? n`<span class="alb-piece__price">
-                                            ${y(i.price, c)}
-                                          </span>` : m}
+                                      ${item.color_note ? html`<span class="alb-piece__group">${item.color_note}</span>` : nothing}
+                                      ${item.price > 0 ? html`<span class="alb-piece__price">
+                                            ${formatPrice(item.price, currency)}
+                                          </span>` : nothing}
                                     </div>
                                     <div class="alb-actions">
                                       <button
                                         type="button"
-                                        class="fs-btn ${b ? "fs-btn--ghost" : ""}"
-                                        @click=${() => this.selectItem(d.key, i.id)}
+                                        class="fs-btn ${selected ? "fs-btn--ghost" : ""}"
+                                        @click=${() => this.selectItem(current.key, item.id)}
                                       >
-                                        ${b ? l("القطعة المختارة", "Selected") : l("اختيار القطعة", "Select piece")}
+                                        ${selected ? t("القطعة المختارة", "Selected") : t("اختيار القطعة", "Select piece")}
                                       </button>
-                                      ${i.url ? n`<a
+                                      ${item.url ? html`<a
                                             class="fs-btn fs-btn--ghost"
-                                            href=${i.url}
+                                            href=${item.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                           >
-                                            ${l("عرض القطعة", "View piece")}
-                                          </a>` : m}
+                                            ${t("عرض القطعة", "View piece")}
+                                          </a>` : nothing}
                                     </div>
                                   </article>
                                 </div>`;
     })}
                             </div>
-                          ` : m}
+                          ` : nothing}
                     </div>
 
                     <aside
                       class="alb-summary"
-                      aria-label=${l("ملخص الإطلالة", "Look summary")}
+                      aria-label=${t("ملخص الإطلالة", "Look summary")}
                     >
                       <div class="alb-summary__head">
                         <h3 class="alb-summary__title">
-                          ${l("ملخص الإطلالة", "Look summary")}
+                          ${t("ملخص الإطلالة", "Look summary")}
                         </h3>
                         <span class="alb-summary__badge">
-                          ${o.count}
-                          ${l("قطع", "pieces")}
+                          ${summary.count}
+                          ${t("قطع", "pieces")}
                         </span>
                       </div>
 
-                      ${g.length ? n`<div class="alb-pieces">
-                            ${g.map(
-      ({ group: i, item: b }) => n`
+                      ${selectedPairs.length ? html`<div class="alb-pieces">
+                            ${selectedPairs.map(
+      ({ group, item }) => html`
                                 <div class="alb-piece">
-                                  ${b.image ? n`<img
+                                  ${item.image ? html`<img
                                         class="alb-piece__thumb"
-                                        src=${b.image}
+                                        src=${item.image}
                                         alt=""
                                         loading="lazy"
                                         decoding="async"
-                                      />` : n`<span class="alb-piece__thumb" aria-hidden="true"></span>`}
+                                      />` : html`<span class="alb-piece__thumb" aria-hidden="true"></span>`}
                                   <span class="alb-piece__meta">
-                                    <span class="alb-piece__group">${i.name}</span>
-                                    <span class="alb-piece__name">${b.piece_name}</span>
+                                    <span class="alb-piece__group">${group.name}</span>
+                                    <span class="alb-piece__name">${item.piece_name}</span>
                                   </span>
-                                  ${b.price > 0 ? n`<span class="alb-piece__price">
-                                        ${y(b.price, c)}
-                                      </span>` : m}
-                                  ${b.url ? n`<a
+                                  ${item.price > 0 ? html`<span class="alb-piece__price">
+                                        ${formatPrice(item.price, currency)}
+                                      </span>` : nothing}
+                                  ${item.url ? html`<a
                                         class="alb-piece__link"
-                                        href=${b.url}
+                                        href=${item.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        ${l("عرض القطعة", "View piece")}
-                                      </a>` : m}
+                                        ${t("عرض القطعة", "View piece")}
+                                      </a>` : nothing}
                                 </div>
                               `
     )}
-                          </div>` : n`<p class="alb-summary__empty">
-                            ${l(
+                          </div>` : html`<p class="alb-summary__empty">
+                            ${t(
       "اختاري قطعاً لبناء إطلالتك",
       "Select pieces to build your look"
     )}
@@ -680,60 +693,60 @@ const z = class z extends O {
 
                       <div class="alb-stats">
                         <div class="alb-stat">
-                          <span class="alb-stat__label">${l("عدد القطع", "Pieces")}</span>
-                          <span class="alb-stat__value">${o.count}</span>
+                          <span class="alb-stat__label">${t("عدد القطع", "Pieces")}</span>
+                          <span class="alb-stat__value">${summary.count}</span>
                         </div>
                         <div class="alb-stat alb-stat--accent">
-                          <span class="alb-stat__label">${l("الإجمالي", "Total")}</span>
+                          <span class="alb-stat__label">${t("الإجمالي", "Total")}</span>
                           <span class="alb-stat__value">
-                            ${y(o.total, c)}
+                            ${formatPrice(summary.total, currency)}
                           </span>
                         </div>
-                        ${o.savings > 0 ? n`<div class="alb-stat alb-stat--wide alb-stat--accent">
-                              <span class="alb-stat__label">${l("التوفير", "Savings")}</span>
+                        ${summary.savings > 0 ? html`<div class="alb-stat alb-stat--wide alb-stat--accent">
+                              <span class="alb-stat__label">${t("التوفير", "Savings")}</span>
                               <span class="alb-stat__value">
-                                ${y(o.savings, c)}
+                                ${formatPrice(summary.savings, currency)}
                               </span>
-                            </div>` : m}
+                            </div>` : nothing}
                       </div>
 
                       <div class="alb-actions">
                         <button type="button" class="fs-btn fs-btn--ghost" @click=${this.handleCopy}>
-                          ${p(e.alb_copy_btn) || l("نسخ التفاصيل", "Copy details")}
+                          ${localizedString(c.alb_copy_btn) || t("نسخ التفاصيل", "Copy details")}
                         </button>
-                        ${x ? n`<a
+                        ${firstUrl ? html`<a
                               class="fs-btn fs-btn--ghost"
-                              href=${x}
+                              href=${firstUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              ${p(e.alb_view_btn) || l("عرض المختار", "View selected")}
-                            </a>` : m}
+                              ${localizedString(c.alb_view_btn) || t("عرض المختار", "View selected")}
+                            </a>` : nothing}
                       </div>
-                      ${this.statusMsg ? n`<p
-                            class=${T({
+                      ${this.statusMsg ? html`<p
+                            class=${classMap({
       "alb-copy-msg": !0,
       "alb-copy-msg--error": this.statusError
     })}
                             role="status"
                           >
                             ${this.statusMsg}
-                          </p>` : m}
+                          </p>` : nothing}
                     </aside>
                   </div>
-                </div>` : n`<div class="fs-empty">
-                  ${l(
+                </div>` : html`<div class="fs-empty">
+                  ${t(
       "أضيفي تبويبات وعناصر مرئية لكل تبويب من إعدادات العنصر",
       "Add tabs and visual pieces for each tab from the element settings"
     )}
                 </div>`}
         </div>
-        ${Y(this.config || {}, "alb_")}
+        ${renderCommerceOutcome(this.config || {}, "alb_")}
       </section>
     `;
   }
 };
-z.styles = [A, J, C`
+__name(_AbayaLookBuilder, "AbayaLookBuilder"), _AbayaLookBuilder.styles = [sharedSectionCss, componentStyles, css`
     :host {
       direction: inherit;
     }
@@ -756,29 +769,29 @@ z.styles = [A, J, C`
       color: #8f4a45;
     }
   `];
-let u = z;
-_([
-  H({ type: Object })
-], u.prototype, "config");
-_([
-  k()
-], u.prototype, "activeGroup");
-_([
-  k()
-], u.prototype, "selections");
-_([
-  k()
-], u.prototype, "statusMsg");
-_([
-  k()
-], u.prototype, "statusError");
-_([
-  k()
-], u.prototype, "items");
-_([
-  k()
-], u.prototype, "loading");
-typeof u < "u" && u.registerSallaComponent("salla-abaya-look-builder");
+let AbayaLookBuilder = _AbayaLookBuilder;
+__decorateClass([
+  property({ type: Object })
+], AbayaLookBuilder.prototype, "config");
+__decorateClass([
+  state()
+], AbayaLookBuilder.prototype, "activeGroup");
+__decorateClass([
+  state()
+], AbayaLookBuilder.prototype, "selections");
+__decorateClass([
+  state()
+], AbayaLookBuilder.prototype, "statusMsg");
+__decorateClass([
+  state()
+], AbayaLookBuilder.prototype, "statusError");
+__decorateClass([
+  state()
+], AbayaLookBuilder.prototype, "items");
+__decorateClass([
+  state()
+], AbayaLookBuilder.prototype, "loading");
+typeof AbayaLookBuilder < "u" && AbayaLookBuilder.registerSallaComponent("salla-abaya-look-builder");
 export {
-  u as default
+  AbayaLookBuilder as default
 };
