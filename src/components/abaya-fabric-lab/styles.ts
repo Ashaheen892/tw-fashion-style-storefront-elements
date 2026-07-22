@@ -74,10 +74,7 @@ export const componentStyles = css`
   }
 
   .afl-toolbar .fs-btn {
-    border-radius: 2px;
-    min-height: 2.55rem;
-    letter-spacing: 0.02em;
-    border-color: color-mix(in srgb, #c9a86c 42%, var(--border-color, #e8ddd6));
+    flex: 0 0 auto;
   }
 
   .afl-swatches {
@@ -273,7 +270,7 @@ export const componentStyles = css`
     padding: 0.28rem 0.7rem;
     border-radius: 1px;
     border: 1px solid color-mix(in srgb, #c9a86c 50%, transparent);
-    background: color-mix(in srgb, #c9a86c 8%, #fff);
+    background: color-mix(in srgb, #c9a86c 8%, var(--fs-surface, var(--card-bg, #f0f0f0)));
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -459,10 +456,6 @@ export const componentStyles = css`
 
     .afl-meters {
       grid-template-columns: 1fr;
-    }
-
-    .afl-toolbar .fs-btn {
-      min-height: 44px;
     }
   }
 

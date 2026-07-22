@@ -2,7 +2,7 @@ import { css as _, LitElement as x, nothing as m, html as d } from "lit";
 import { property as y, state as $ } from "lit/decorators.js";
 import { classMap as L } from "lit/directives/class-map.js";
 import { styleMap as h } from "lit/directives/style-map.js";
-import { t as s, n as I, l as p, s as k, r as C, p as z, i as S, a as D, b as E } from "./sharedStyles-BYm1OK6w.js";
+import { t as s, n as I, l as f, s as k, r as C, p as z, i as S, a as D, b as E } from "./sharedStyles-Cd7RKVf-.js";
 const M = _`
   .stba-shell {
     position: relative;
@@ -94,7 +94,7 @@ const M = _`
     bottom: 0.85rem;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--text-color, #2b211c);
     font-size: 0.72rem;
     font-weight: 800;
@@ -133,7 +133,7 @@ const M = _`
     position: absolute;
     inset-block: 0;
     width: 2px;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   }
 
@@ -145,7 +145,7 @@ const M = _`
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
     color: var(--accent-color, var(--fs-store-primary));
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
     font-size: 0.85rem;
@@ -191,16 +191,16 @@ const M = _`
     caption: s("مقارنة القماش", "Fabric comparison")
   }
 ];
-function q(f) {
-  const t = I(f).map((e, i) => {
+function q(p) {
+  const t = I(p).map((e, i) => {
     const a = String(e.before_image || e.image_before || "").trim(), o = String(e.after_image || e.image_after || "").trim();
     return {
       id: String(e.id || `stba-${i}`),
       beforeImage: a,
       afterImage: o,
-      beforeLabel: p(e.before_label) || "",
-      afterLabel: p(e.after_label) || "",
-      caption: p(e.caption) || ""
+      beforeLabel: f(e.before_label) || "",
+      afterLabel: f(e.after_label) || "",
+      caption: f(e.caption) || ""
     };
   }).filter((e) => e.beforeImage || e.afterImage || e.caption);
   return t.length ? t.map((e, i) => {
@@ -215,9 +215,9 @@ function q(f) {
     };
   }) : g.map((e) => ({ ...e }));
 }
-var P = Object.defineProperty, w = (f, t, e, i) => {
-  for (var a = void 0, o = f.length - 1, l; o >= 0; o--)
-    (l = f[o]) && (a = l(t, e, a) || a);
+var P = Object.defineProperty, w = (p, t, e, i) => {
+  for (var a = void 0, o = p.length - 1, l; o >= 0; o--)
+    (l = p[o]) && (a = l(t, e, a) || a);
   return a && P(t, e, a), a;
 };
 const u = class u extends x {
@@ -260,7 +260,7 @@ const u = class u extends x {
     this.setReveal(t, o ? 100 - l : l);
   }
   render() {
-    const t = this.config || {}, e = C(t, "stba_"), i = e.animate && !z(), a = p(t.stba_title) || s("قبل وبعد", "Before & After"), o = p(t.stba_desc), l = S(t.stba_show_title, !0), v = this.pairs;
+    const t = this.config || {}, e = C(t, "stba_"), i = e.animate && !z(), a = f(t.stba_title) || s("قبل وبعد", "Before & After"), o = f(t.stba_desc), l = S(t.stba_show_title, !0), v = this.pairs;
     return d`
       <section
         class=${L({ "fs-section": !0, "fs-animate": i, "stba-shell": !0 })}

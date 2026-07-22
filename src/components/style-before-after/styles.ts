@@ -91,7 +91,7 @@ export const componentStyles = css`
     bottom: 0.85rem;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--text-color, #2b211c);
     font-size: 0.72rem;
     font-weight: 800;
@@ -130,7 +130,7 @@ export const componentStyles = css`
     position: absolute;
     inset-block: 0;
     width: 2px;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
   }
 
@@ -142,7 +142,7 @@ export const componentStyles = css`
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
     color: var(--accent-color, var(--fs-store-primary));
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
     font-size: 0.85rem;

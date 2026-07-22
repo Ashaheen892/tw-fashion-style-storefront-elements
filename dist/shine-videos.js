@@ -1,8 +1,8 @@
-import { css as x, LitElement as w, nothing as c, html as o } from "lit";
+import { css as x, LitElement as w, nothing as l, html as o } from "lit";
 import { property as k, state as _, query as $ } from "lit/decorators.js";
-import { classMap as f } from "lit/directives/class-map.js";
+import { classMap as b } from "lit/directives/class-map.js";
 import { styleMap as I } from "lit/directives/style-map.js";
-import { n as z, d as M, l as u, s as S, p as y, t as n, r as C, i as E, a as L, b as Y } from "./sharedStyles-BYm1OK6w.js";
+import { n as z, d as M, l as u, s as S, p as y, t as n, r as C, i as E, a as L, b as Y } from "./sharedStyles-Cd7RKVf-.js";
 const O = x`
   .sv-shell {
     position: relative;
@@ -258,7 +258,7 @@ const O = x`
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--accent-color, var(--fs-store-primary));
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
     transition: transform 0.25s ease;
@@ -350,7 +350,7 @@ const O = x`
 
   .sv-dot.is-active {
     width: 1.35rem;
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .sv-empty {
@@ -421,7 +421,7 @@ const O = x`
     height: 2.35rem;
     border: 0;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: #2b211c;
     cursor: pointer;
     font-size: 1.15rem;
@@ -453,7 +453,7 @@ const O = x`
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.9);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: #2b211c;
     cursor: pointer;
   }
@@ -500,22 +500,22 @@ const O = x`
     }
   }
 `;
-function P(l) {
+function P(c) {
   var t, e;
-  if (!l) return "";
+  if (!c) return "";
   try {
-    const s = new URL(l);
+    const s = new URL(c);
     return s.hostname.includes("youtu.be") ? s.pathname.replace("/", "").split("/")[0] || "" : s.pathname.includes("/shorts/") ? ((t = s.pathname.split("/shorts/")[1]) == null ? void 0 : t.split(/[/?#]/)[0]) || "" : s.pathname.includes("/embed/") ? ((e = s.pathname.split("/embed/")[1]) == null ? void 0 : e.split(/[/?#]/)[0]) || "" : s.searchParams.get("v") || "";
   } catch {
     return "";
   }
 }
-function T(l) {
-  const t = P(l);
+function T(c) {
+  const t = P(c);
   return t ? `https://www.youtube.com/embed/${t}?autoplay=1&rel=0` : "";
 }
-function U(l) {
-  return z(l).map((t, e) => {
+function U(c) {
+  return z(c).map((t, e) => {
     const s = String(t.poster || t.image || "").trim(), a = M(t.video_url) || String(t.video_url || t.youtube || "").trim(), r = u(t.caption) || u(t.title);
     return !s && !a ? null : {
       id: String(t.id || `sv-${e}`),
@@ -525,9 +525,9 @@ function U(l) {
     };
   }).filter((t) => !!t);
 }
-var F = Object.defineProperty, b = (l, t, e, s) => {
-  for (var a = void 0, r = l.length - 1, p; r >= 0; r--)
-    (p = l[r]) && (a = p(t, e, a) || a);
+var F = Object.defineProperty, h = (c, t, e, s) => {
+  for (var a = void 0, r = c.length - 1, p; r >= 0; r--)
+    (p = c[r]) && (a = p(t, e, a) || a);
   return a && F(t, e, a), a;
 };
 const g = class g extends w {
@@ -603,7 +603,7 @@ const g = class g extends w {
     this.active = e[a], this.focusId = e[a].id, this.scrollToIndex(a);
   }
   renderModal() {
-    if (!this.active) return c;
+    if (!this.active) return l;
     const t = this.active.videoUrl, e = T(t), a = this.videos.length > 1;
     return o`
       <div class="sv-modal" role="dialog" aria-modal="true" @click=${() => this.closeModal()}>
@@ -633,14 +633,14 @@ const g = class g extends w {
                 >
                   ›
                 </button>
-              ` : c}
+              ` : l}
           ${e ? o`<iframe
                 src=${e}
                 title=${this.active.caption || n("فيديو", "Video")}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
-              ></iframe>` : t ? o`<video src=${t} controls autoplay playsinline></video>` : this.active.poster ? o`<img src=${this.active.poster} alt=${this.active.caption || ""} />` : c}
-          ${this.active.caption ? o`<p class="sv-modal__cap">${this.active.caption}</p>` : c}
+              ></iframe>` : t ? o`<video src=${t} controls autoplay playsinline></video>` : this.active.poster ? o`<img src=${this.active.poster} alt=${this.active.caption || ""} />` : l}
+          ${this.active.caption ? o`<p class="sv-modal__cap">${this.active.caption}</p>` : l}
         </div>
       </div>
     `;
@@ -649,7 +649,7 @@ const g = class g extends w {
     const t = this.config || {}, e = C(t, "sv_"), s = e.animate && !y(), a = u(t.sv_title) || n("تألقي", "Shine"), r = u(t.sv_desc), p = E(t.sv_show_title, !0), v = this.videos, m = this.focusIndex();
     return o`
       <section
-        class=${f({ "fs-section": !0, "fs-animate": s, "sv-shell": !0 })}
+        class=${b({ "fs-section": !0, "fs-animate": s, "sv-shell": !0 })}
         style=${I(L(e))}
         aria-label=${a}
       >
@@ -658,8 +658,8 @@ const g = class g extends w {
                 <p class="sv-eyebrow">${n("لحظات الأناقة", "Style moments")}</p>
                 <h2 class="sv-title">${a}</h2>
                 <span class="sv-title-line" aria-hidden="true"></span>
-                ${r ? o`<p class="sv-desc">${r}</p>` : c}
-              </header>` : c}
+                ${r ? o`<p class="sv-desc">${r}</p>` : l}
+              </header>` : l}
 
           ${v.length ? o`<div class="sv-stage">
                 <button
@@ -683,9 +683,9 @@ const g = class g extends w {
 
                 <div class="sv-track" role="list">
                   ${v.map(
-      (i, h) => o`
+      (i, f) => o`
                       <article
-                        class=${f({ "sv-card": !0, "is-focus": i.id === this.focusId })}
+                        class=${b({ "sv-card": !0, "is-focus": i.id === this.focusId })}
                         role="listitem"
                         data-id=${i.id}
                       >
@@ -698,14 +698,14 @@ const g = class g extends w {
         this.focusId = i.id;
       }}
                         >
-                          ${i.poster ? o`<img src=${i.poster} alt=${i.caption || ""} loading="lazy" />` : c}
+                          ${i.poster ? o`<img src=${i.poster} alt=${i.caption || ""} loading="lazy" />` : l}
                           <span class="sv-film" aria-hidden="true"></span>
-                          <span class="sv-index">${String(h + 1).padStart(2, "0")}</span>
+                          <span class="sv-index">${String(f + 1).padStart(2, "0")}</span>
                           <span class="sv-play" aria-hidden="true">
                             <span class="sv-play__btn"><i class="sicon-play"></i></span>
                           </span>
                         </button>
-                        ${i.caption ? o`<p class="sv-caption">${i.caption}</p>` : c}
+                        ${i.caption ? o`<p class="sv-caption">${i.caption}</p>` : l}
                       </article>
                     `
     )}
@@ -713,13 +713,13 @@ const g = class g extends w {
 
                 <div class="sv-dots" role="tablist" aria-label=${n("التنقل بين المقاطع", "Browse clips")}>
                   ${v.map(
-      (i, h) => o`
+      (i, f) => o`
                       <button
                         type="button"
-                        class=${f({ "sv-dot": !0, "is-active": i.id === this.focusId })}
-                        aria-label=${n(`مقطع ${h + 1}`, `Clip ${h + 1}`)}
+                        class=${b({ "sv-dot": !0, "is-active": i.id === this.focusId })}
+                        aria-label=${n(`مقطع ${f + 1}`, `Clip ${f + 1}`)}
                         @click=${() => {
-        this.focusId = i.id, this.scrollToIndex(h);
+        this.focusId = i.id, this.scrollToIndex(f);
       }}
                       ></button>
                     `
@@ -743,16 +743,16 @@ g.styles = [
     `
 ];
 let d = g;
-b([
+h([
   k({ type: Object })
 ], d.prototype, "config");
-b([
+h([
   _()
 ], d.prototype, "active");
-b([
+h([
   _()
 ], d.prototype, "focusId");
-b([
+h([
   $(".sv-track")
 ], d.prototype, "trackEl");
 typeof d < "u" && d.registerSallaComponent("salla-shine-videos");

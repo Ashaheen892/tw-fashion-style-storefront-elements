@@ -206,7 +206,7 @@ export const componentStyles = css`
     transform: translateX(-50%);
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;

@@ -1,7 +1,7 @@
 import { css as R, LitElement as B, html as s, nothing as c } from "lit";
 import { property as E, state as $ } from "lit/decorators.js";
 import { styleMap as z } from "lit/directives/style-map.js";
-import { n as N, l as _, d as V, y as p, i as x, z as y, s as Y, r as W, t as o, a as G, b as A, A as P } from "./sharedStyles-BYm1OK6w.js";
+import { n as N, l as _, d as V, q as p, i as x, u as y, s as Y, r as W, t as o, a as G, b as q, v as P } from "./sharedStyles-Cd7RKVf-.js";
 const U = R`
   .alc-layout {
     display: grid;
@@ -481,7 +481,7 @@ const U = R`
     }
   }
 `;
-function q(i) {
+function A(i) {
   return N(i).map((e) => ({
     min_height: p(e.min_height),
     max_height: p(e.max_height),
@@ -603,7 +603,7 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
   }
   get ranges() {
     var e;
-    return q((e = this.config) == null ? void 0 : e.alc_ranges);
+    return A((e = this.config) == null ? void 0 : e.alc_ranges);
   }
   get cuts() {
     var e;
@@ -978,7 +978,7 @@ const T = ["#8b5e4b", "#a6775f", "#6b4a3d", "#c4a18a", "#5a3d32"], L = class L e
 
           ${n ? s`<p class="alc-disclaimer">${n}</p>` : c}
         </div>
-        ${A(this.config || {}, "alc_")}
+        ${q(this.config || {}, "alc_")}
       </section>
     `;
   }

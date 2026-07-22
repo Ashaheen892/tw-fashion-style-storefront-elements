@@ -2,7 +2,7 @@ import { css as G, LitElement as E, nothing as f, html as r } from "lit";
 import { property as D, state as b } from "lit/decorators.js";
 import { classMap as k } from "lit/directives/class-map.js";
 import { styleMap as T } from "lit/directives/style-map.js";
-import { q as H, v as q, n as K, l as p, e as z, i as A, f as v, w as W, s as V, p as M, c as Y, t as l, r as J, d as Q, x as X, a as Z, o as O, b as ee } from "./sharedStyles-BYm1OK6w.js";
+import { j as H, k as K, n as W, l as p, e as z, i as A, f as v, m as q, s as V, p as M, c as Y, t as l, r as J, d as Q, o as X, a as Z, h as O, b as ee } from "./sharedStyles-Cd7RKVf-.js";
 const te = G`
   .fs-header {
     margin-bottom: 1.5rem;
@@ -295,9 +295,6 @@ const te = G`
 
   .acfg-actions .fs-btn {
     flex: 1 1 auto;
-    min-height: 2.65rem;
-    border-radius: calc(var(--section-radius, 16px) * 0.35);
-    font-size: 0.82rem;
     justify-content: center;
   }
 
@@ -401,7 +398,7 @@ const te = G`
   }
 `;
 function oe(n) {
-  return K(n).map((e, o) => {
+  return W(n).map((e, o) => {
     const a = p(e.group_name), t = p(e.option_name), i = p(e.group_key) || a || "default";
     return {
       group_key: i,
@@ -421,7 +418,7 @@ function oe(n) {
 function ae(n) {
   const e = H(n, "group_key"), o = [];
   for (const [a, t] of e) {
-    const i = q(t, "group_order"), c = i[0];
+    const i = K(t, "group_order"), c = i[0];
     o.push({
       key: a,
       name: c.group_name || a,
@@ -458,7 +455,7 @@ function ie(n, e, o, a) {
 `);
 }
 function re(n, e) {
-  return W(n, e);
+  return q(n, e);
 }
 var se = Object.defineProperty, _ = (n, e, o, a) => {
   for (var t = void 0, i = n.length - 1, c; i >= 0; i--)

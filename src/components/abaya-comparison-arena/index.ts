@@ -12,7 +12,6 @@ import {
 import { localizedString } from '../../utils/localizedString.js';
 import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
-import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
 import {
   buildCompareRows,
@@ -122,6 +121,56 @@ export default class AbayaComparisonArena extends LitElement {
   private clearAll(): void {
     this.selectedIds = [];
     this.showTable = false;
+  }
+
+  private renderChoiceCard(product: CompareProduct, isSelected: boolean, disabled: boolean) {
+    return html`
+      <article
+        class=${classMap({
+          'acm-pick-slot': true,
+          'is-disabled': disabled,
+          'acm-pick-slot--selected': isSelected,
+        })}
+      >
+        ${product.image
+          ? html`<img
+              class="acm-product-head__img"
+              src=${product.image}
+              alt=${product.name}
+              loading="lazy"
+              decoding="async"
+            />`
+          : nothing}
+        <div class="acm-product-head">
+          <span class="acm-product-head__name">${product.name || t('عنصر', 'Item')}</span>
+          ${product.price > 0
+            ? html`<strong>${formatPrice(product.price, this.currency)}</strong>`
+            : nothing}
+          ${product.old_price > product.price && product.price > 0
+            ? html`<span class="acm-slot__empty">
+                ${formatPrice(product.old_price, this.currency)}
+              </span>`
+            : nothing}
+        </div>
+        <div class="acm-actions">
+          <button
+            type="button"
+            class="fs-btn ${isSelected ? 'fs-btn--ghost' : ''}"
+            ?disabled=${disabled}
+            @click=${() => {
+              if (!disabled) this.toggleProduct(product.id);
+            }}
+          >
+            ${isSelected ? t('إزالة من المقارنة', 'Remove') : t('اختيار للمقارنة', 'Compare')}
+          </button>
+          ${product.url
+            ? html`<a class="fs-btn fs-btn--ghost" href=${product.url}>
+                ${product.btn_text || t('عرض', 'View')}
+              </a>`
+            : nothing}
+        </div>
+      </article>
+    `;
   }
 
   private formatCellValue(
@@ -257,33 +306,8 @@ export default class AbayaComparisonArena extends LitElement {
                       const isSelected = this.selectedIds.includes(p.id);
                       const disabled = !isSelected && atMax;
                       return html`
-                        <div
-                          class=${classMap({
-                            'acm-pick-slot': true,
-                            'is-disabled': disabled,
-                          })}
-                          role="listitem"
-                        >
-                          ${renderProductCard(
-                            {
-                              id: p.product_id,
-                              name: p.name,
-                              image: p.image,
-                              url: p.url,
-                              price: p.price,
-                              old_price: p.old_price,
-                              rating: p.rating,
-                            },
-                            {
-                              currency,
-                              selectable: true,
-                              selected: isSelected,
-                              wishlist: true,
-                              onSelect: () => {
-                                if (!disabled) this.toggleProduct(p.id);
-                              },
-                            }
-                          )}
+                        <div role="listitem">
+                          ${this.renderChoiceCard(p, isSelected, disabled)}
                         </div>
                       `;
                     })}

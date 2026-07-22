@@ -141,19 +141,21 @@ export const componentStyles = css`
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
     min-width: 44px;
     min-height: 44px;
-    padding: 0.45rem 0.85rem;
-    border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 16px) * 0.4);
+    padding: 0.45rem 0.95rem;
+    border: 1.5px solid var(--border-color, #e8ddd6);
+    border-radius: 999px;
     background: var(--card-bg, #fff);
     color: var(--text-color, #2b211c);
     font: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.2;
     cursor: pointer;
     text-decoration: none;
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
   }
 
   .als-btn:hover {
@@ -167,9 +169,10 @@ export const componentStyles = css`
   }
 
   .als-btn--primary {
-    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
+    background: var(--button-bg, var(--fs-store-primary));
     color: var(--button-color, #fff);
     border-color: transparent;
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 24%, transparent);
   }
 
   .als-btn--accent {
@@ -238,7 +241,7 @@ export const componentStyles = css`
   .als-mode[aria-pressed='true'] {
     border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow: 0 0 0 1px var(--accent-color, var(--fs-store-primary));
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
   }
 
   .als-mode__thumb {

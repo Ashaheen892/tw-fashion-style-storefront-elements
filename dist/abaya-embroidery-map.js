@@ -3,7 +3,7 @@ import { property as N, state as b, query as O } from "lit/decorators.js";
 import { classMap as x } from "lit/directives/class-map.js";
 import { ifDefined as _ } from "lit/directives/if-defined.js";
 import { styleMap as k } from "lit/directives/style-map.js";
-import { n as H, l as u, y as S, i as f, d as E, e as T, x as y, z as q, f as P, s as Z, p as $, r as z, a as j, t as l, A as I, b as V } from "./sharedStyles-BYm1OK6w.js";
+import { n as H, l as u, q as S, i as f, d as E, e as T, o as y, u as q, f as P, s as Z, p as $, r as z, a as j, t as l, v as I, b as V } from "./sharedStyles-Cd7RKVf-.js";
 const B = C`
   .aem-shell {
     display: grid;
@@ -926,7 +926,7 @@ function X(o) {
     badge: e.badge
   }));
 }
-function A(o) {
+function F(o) {
   return o.card_side === "left" || o.card_side === "right" ? o.card_side : o.pos_x >= 50 ? "right" : "left";
 }
 function G(o) {
@@ -953,7 +953,7 @@ function Q(o, e, t, r) {
       if (!m || !n) continue;
       const p = m.getBoundingClientRect(), v = n.getBoundingClientRect();
       if (!p.width || !v.width) continue;
-      const w = A(c);
+      const w = F(c);
       d.push({
         index: c.index,
         d: J(p, v, a, w)
@@ -1325,7 +1325,7 @@ const D = class D extends R {
     `;
   }
   renderColSlot(e, t) {
-    const r = t && A(t) === e;
+    const r = t && F(t) === e;
     return i`
       <div class="aem-col aem-col--${e}">
         ${r && t ? i`<div class="aem-card-slot aem-card-slot--in">
@@ -1465,7 +1465,7 @@ const D = class D extends R {
   }
   render() {
     if (!this.mainImage) return s;
-    const e = this.config || {}, r = z(e, "aem_").animate && !$(), a = f(e.aem_full_width, !1), d = f(e.aem_show_title, !0), c = f(e.aem_show_desc, !0), m = f(e.aem_show_btn, !0), n = d ? u(e.aem_title).trim() : "", p = c ? u(e.aem_desc).trim() : "", v = E(e.aem_product_url), w = u(e.aem_btn_text).trim() || l("عرض العباية", "View abaya"), F = m && I(v);
+    const e = this.config || {}, r = z(e, "aem_").animate && !$(), a = f(e.aem_full_width, !1), d = f(e.aem_show_title, !0), c = f(e.aem_show_desc, !0), m = f(e.aem_show_btn, !0), n = d ? u(e.aem_title).trim() : "", p = c ? u(e.aem_desc).trim() : "", v = E(e.aem_product_url), w = u(e.aem_btn_text).trim() || l("عرض العباية", "View abaya"), A = m && I(v);
     return i`
       <section
         class=${x({
@@ -1494,7 +1494,7 @@ const D = class D extends R {
                     ${l("مسح التحديد", "Clear selection")}
                   </button>
                 </div>` : s}
-            ${F ? i`<div class="aem-cta">
+            ${A ? i`<div class="aem-cta">
                   <a
                     class="fs-btn"
                     href=${v}

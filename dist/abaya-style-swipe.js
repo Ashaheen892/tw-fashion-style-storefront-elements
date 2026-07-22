@@ -1,7 +1,7 @@
 import { css as S, LitElement as C, html as a, nothing as d } from "lit";
 import { property as L, state as u } from "lit/decorators.js";
 import { styleMap as f } from "lit/directives/style-map.js";
-import { n as $, l as n, d as I, J as P, s as z, r as X, i as M, H as E, I as j, t as i, a as U, b as D, A as Y } from "./sharedStyles-BYm1OK6w.js";
+import { n as $, l as n, d as I, z as P, s as z, r as X, i as M, x as E, y as j, t as i, a as U, b as D, v as Y } from "./sharedStyles-Cd7RKVf-.js";
 const O = S`
   .ass-studio {
     position: relative;
@@ -196,7 +196,7 @@ const O = S`
     opacity: 0;
     pointer-events: none;
     border: 2.5px solid;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     transition: opacity 0.12s ease;
   }
@@ -425,8 +425,8 @@ const O = S`
   }
 `;
 function R(l) {
-  return $(l).map((s, e) => ({
-    id: `card-${e}`,
+  return $(l).map((s, r) => ({
+    id: `card-${r}`,
     image: n(s.image),
     look_name: n(s.look_name),
     look_desc: n(s.look_desc),
@@ -446,31 +446,31 @@ function T(l) {
   })).filter((s) => s.tag_name.trim() !== "");
 }
 function K(l) {
-  const s = /* @__PURE__ */ new Map(), e = /* @__PURE__ */ new Map();
+  const s = /* @__PURE__ */ new Map(), r = /* @__PURE__ */ new Map();
   l.forEach((t, o) => {
     t.tags.forEach((c) => {
       const h = c.toLowerCase();
-      s.set(h, (s.get(h) ?? 0) + 1), e.has(h) || e.set(h, o);
+      s.set(h, (s.get(h) ?? 0) + 1), r.has(h) || r.set(h, o);
     });
   });
-  let r = null;
+  let e = null;
   for (const [t, o] of s) {
-    const c = e.get(t) ?? 0;
-    (!r || o > r.count || o === r.count && c < r.order) && (r = { tag: t, count: o, order: c });
+    const c = r.get(t) ?? 0;
+    (!e || o > e.count || o === e.count && c < e.order) && (e = { tag: t, count: o, order: c });
   }
-  return r ? { tag: r.tag, count: r.count } : null;
-}
-function H(l, s) {
-  const e = s.toLowerCase();
-  return l.find((r) => r.tag_name === e) ?? null;
+  return e ? { tag: e.tag, count: e.count } : null;
 }
 function V(l, s) {
+  const r = s.toLowerCase();
+  return l.find((e) => e.tag_name === r) ?? null;
+}
+function H(l, s) {
   return n(l, s).trim() || s;
 }
-var N = Object.defineProperty, p = (l, s, e, r) => {
+var N = Object.defineProperty, p = (l, s, r, e) => {
   for (var t = void 0, o = l.length - 1, c; o >= 0; o--)
-    (c = l[o]) && (t = c(s, e, t) || t);
-  return t && N(s, e, t), t;
+    (c = l[o]) && (t = c(s, r, t) || t);
+  return t && N(s, r, t), t;
 };
 const v = 80, x = class x extends C {
   constructor() {
@@ -510,10 +510,10 @@ const v = 80, x = class x extends C {
     this.style.display = this.cards.length ? "" : "none";
   }
   _loadState() {
-    var e;
+    var r;
     if (!this.enableStorage) return;
-    this._storageKey = V(
-      (e = this.config) == null ? void 0 : e.ass_storage_key,
+    this._storageKey = H(
+      (r = this.config) == null ? void 0 : r.ass_storage_key,
       "ass-style-swipe-state"
     );
     const s = E(this._storageKey, {
@@ -543,12 +543,12 @@ const v = 80, x = class x extends C {
     !this.dragging || s.pointerId !== this._pointerId || (this._cleanupPointerListeners(), this.dragging = !1, this.dragX > v ? this._swipe("like") : this.dragX < -v ? this._swipe("skip") : this.dragX = 0);
   }
   _swipe(s) {
-    const e = this.currentCard;
-    e && (this.history = [...this.history, { cardId: e.id, action: s }], s === "like" && (this.likedIds = [...this.likedIds, e.id]), this.dragX = 0, this.cardIndex += 1, this.cardIndex >= this.cards.length && (this.finished = !0), this._saveState());
+    const r = this.currentCard;
+    r && (this.history = [...this.history, { cardId: r.id, action: s }], s === "like" && (this.likedIds = [...this.likedIds, r.id]), this.dragX = 0, this.cardIndex += 1, this.cardIndex >= this.cards.length && (this.finished = !0), this._saveState());
   }
   _undo() {
     const s = this.history[this.history.length - 1];
-    s && (this.history = this.history.slice(0, -1), s.action === "like" && (this.likedIds = this.likedIds.filter((e) => e !== s.cardId)), this.cardIndex = Math.max(0, this.cardIndex - 1), this.finished = !1, this._saveState());
+    s && (this.history = this.history.slice(0, -1), s.action === "like" && (this.likedIds = this.likedIds.filter((r) => r !== s.cardId)), this.cardIndex = Math.max(0, this.cardIndex - 1), this.finished = !1, this._saveState());
   }
   _restart() {
     this.cardIndex = 0, this.likedIds = [], this.history = [], this.finished = !1, this.dragX = 0, this._saveState();
@@ -559,17 +559,17 @@ const v = 80, x = class x extends C {
       return a`<div class="fs-empty" role="status">
         ${i("لا توجد بطاقات للعرض", "No cards to display")}
       </div>`;
-    const s = this.theme, e = n((m = this.config) == null ? void 0 : m.ass_title), r = n((b = this.config) == null ? void 0 : b.ass_desc), t = n((_ = this.config) == null ? void 0 : _.ass_like_label) || i("أعجبني", "Like"), o = n((y = this.config) == null ? void 0 : y.ass_skip_label) || i("تخطي", "Skip"), c = n((k = this.config) == null ? void 0 : k.ass_undo_label) || i("تراجع", "Undo"), h = n((w = this.config) == null ? void 0 : w.ass_restart_label) || i("ابدئي من جديد", "Restart");
+    const s = this.theme, r = n((m = this.config) == null ? void 0 : m.ass_title), e = n((b = this.config) == null ? void 0 : b.ass_desc), t = n((_ = this.config) == null ? void 0 : _.ass_like_label) || i("أعجبني", "Like"), o = n((y = this.config) == null ? void 0 : y.ass_skip_label) || i("تخطي", "Skip"), c = n((k = this.config) == null ? void 0 : k.ass_undo_label) || i("تراجع", "Undo"), h = n((w = this.config) == null ? void 0 : w.ass_restart_label) || i("ابدئي من جديد", "Restart");
     return a`
       <section
         class="fs-section"
         style=${f(U(s))}
-        aria-label=${e || i("اكتشفي أسلوبك", "Discover your style")}
+        aria-label=${r || i("اكتشفي أسلوبك", "Discover your style")}
       >
         <div class="fs-container">
-          ${e || r ? a`<header class="fs-header">
-                ${e ? a`<h2 class="fs-title">${e}</h2>` : d}
-                ${r ? a`<p class="fs-desc">${r}</p>` : d}
+          ${r || e ? a`<header class="fs-header">
+                ${r ? a`<h2 class="fs-title">${r}</h2>` : d}
+                ${e ? a`<p class="fs-desc">${e}</p>` : d}
               </header>` : d}
 
           ${this.finished ? this._renderResult(h) : this._renderDeck(t, o, c)}
@@ -578,7 +578,7 @@ const v = 80, x = class x extends C {
       </section>
     `;
   }
-  _renderDeck(s, e, r) {
+  _renderDeck(s, r, e) {
     const t = this.currentCard;
     if (!t) return d;
     const o = Math.min(1, Math.max(0, this.dragX / v)), c = Math.min(1, Math.max(0, -this.dragX / v)), h = this.dragX * 0.06, m = this.cards.length - this.cardIndex, b = Math.round(this.cardIndex / this.cards.length * 100);
@@ -634,7 +634,7 @@ const v = 80, x = class x extends C {
               style=${f({ opacity: String(c) })}
               aria-hidden="true"
             >
-              ${e}
+              ${r}
             </span>
 
             <div class="ass-card__media">
@@ -662,7 +662,7 @@ const v = 80, x = class x extends C {
           <button
             type="button"
             class="ass-btn-round ass-btn-round--skip"
-            aria-label=${e}
+            aria-label=${r}
             @click=${() => this._swipe("skip")}
           >
             ✕
@@ -677,19 +677,19 @@ const v = 80, x = class x extends C {
           </button>
         </div>
         <div class="ass-btn-labels" aria-hidden="true">
-          <span>${e}</span>
+          <span>${r}</span>
           <span>${s}</span>
         </div>
         ${this.history.length ? a`<div class="ass-controls ass-undo">
               <button type="button" class="fs-btn fs-btn--ghost" @click=${this._undo}>
-                ${r}
+                ${e}
               </button>
             </div>` : d}
       </div>
     `;
   }
   _renderResult(s) {
-    const e = K(this.likedCards), r = e ? H(this.results, e.tag) : null, t = this.likedIds.length;
+    const r = K(this.likedCards), e = r ? V(this.results, r.tag) : null, t = this.likedIds.length;
     return a`
       <div class="ass-result">
         <span class="ass-result__badge">
@@ -699,29 +699,29 @@ const v = 80, x = class x extends C {
                 ${i("إعجاب", "likes")}` : d}
         </span>
 
-        ${r != null && r.result_image ? a`<div class="ass-result__frame">
+        ${e != null && e.result_image ? a`<div class="ass-result__frame">
               <img
                 class="ass-result__img"
-                src=${r.result_image}
-                alt=${r.result_title}
+                src=${e.result_image}
+                alt=${e.result_title}
                 loading="lazy"
               />
             </div>` : d}
 
         <h3 class="ass-result__title">
-          ${(r == null ? void 0 : r.result_title) || i("أسلوبك المميز", "Your signature style")}
+          ${(e == null ? void 0 : e.result_title) || i("أسلوبك المميز", "Your signature style")}
         </h3>
 
-        ${r != null && r.result_desc ? a`<p class="ass-result__desc">${r.result_desc}</p>` : e ? a`<p class="ass-result__desc">
+        ${e != null && e.result_desc ? a`<p class="ass-result__desc">${e.result_desc}</p>` : r ? a`<p class="ass-result__desc">
                 ${i("الوسم الأبرز في اختياراتك", "Your top style tag")}
               </p>
-              <span class="ass-result__tag">${e.tag}</span>` : a`<p class="ass-result__desc">
+              <span class="ass-result__tag">${r.tag}</span>` : a`<p class="ass-result__desc">
                 ${i("لم تعجبك أي بطاقة — جرّبي مرة أخرى", "No likes yet — try again")}
               </p>`}
 
         <div class="ass-result__actions">
-          ${r && Y(r.result_url) ? a`<a class="fs-btn" href=${r.result_url}>
-                ${r.result_btn || i("تسوقي الإطلالة", "Shop the look")}
+          ${e && Y(e.result_url) ? a`<a class="fs-btn" href=${e.result_url}>
+                ${e.result_btn || i("تسوقي الإطلالة", "Shop the look")}
               </a>` : d}
           <button type="button" class="fs-btn fs-btn--ghost" @click=${this._restart}>
             ${s}

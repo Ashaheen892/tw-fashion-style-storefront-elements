@@ -2,7 +2,7 @@ import { css as x, LitElement as w, html as t, nothing as s } from "lit";
 import { property as $, state as h } from "lit/decorators.js";
 import { classMap as y } from "lit/directives/class-map.js";
 import { styleMap as q } from "lit/directives/style-map.js";
-import { n as _, l, s as k, r as C, p as z, i as L, t as n, a as S, b as I } from "./sharedStyles-BYm1OK6w.js";
+import { n as _, l, s as k, r as C, p as z, i as L, t as n, a as S, b as I } from "./sharedStyles-Cd7RKVf-.js";
 const E = x`
   .ip-shell {
     display: grid;
@@ -80,7 +80,7 @@ const E = x`
   .ip-cat[aria-pressed='true'] {
     border-color: var(--accent-color, var(--fs-store-primary));
     color: #fff;
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .ip-list {

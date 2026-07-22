@@ -241,40 +241,6 @@ def variable_list(fid, label="الرابط", conditions=None):
     )
 
 
-def products_picker(
-    fid,
-    label="اختر المنتج",
-    *,
-    multichoice=True,
-    required=False,
-    max_length=1,
-    min_length=0,
-    desc=None,
-    conditions=None,
-):
-    """Saji-style Products picker (matches theme Saji's «المنتجات المختارة»)."""
-    return with_conditions(
-        {
-            "id": fid,
-            "icon": "sicon-keyboard_arrow_down",
-            "type": "items",
-            "label": label,
-            "format": "dropdown-list",
-            "source": "products",
-            "options": [],
-            "required": required,
-            "selected": [],
-            "maxLength": max_length,
-            "minLength": min_length,
-            "searchable": True,
-            "description": desc,
-            "multichoice": multichoice,
-            "key": u(),
-        },
-        conditions,
-    )
-
-
 def dropdown_manual(
     fid,
     label,
@@ -307,27 +273,6 @@ def dropdown_manual(
             "selected": [selected],
             "description": desc,
             "multichoice": multichoice,
-            "key": u(),
-        },
-        conditions,
-    )
-
-
-def categories_picker(fid, label="التصنيف", *, conditions=None, desc=None):
-    """Saji-style categories picker (matches theme Saji's «التصنيف»)."""
-    return with_conditions(
-        {
-            "id": fid,
-            "icon": "sicon-keyboard_arrow_down",
-            "type": "items",
-            "label": label,
-            "format": "dropdown-list",
-            "source": "categories",
-            "options": [],
-            "required": False,
-            "selected": [],
-            "searchable": True,
-            "description": desc,
             "key": u(),
         },
         conditions,
@@ -381,191 +326,34 @@ def collection(fid, label, fields, value, min_len=0, max_len=40, required=False,
     )
 
 
-def product_source_fields(
-    source_id,
-    *,
-    chosen_id="chosen_products",
-    category_id="category",
-    brands_id="brands",
-    limit_id="products_limit",
-    limit_default=6,
-    include_none=False,
-    default_source="latest",
-    extra_when_active=None,
-    collection_id=None,
-):
-    """
-    Raed/Saji product source + conditional dependent fields for the theme editor.
-    Nested collection conditions MUST include collection_id + value_index="."
-    (Saji/Rayhana official pattern) or the editor shows all pickers at once.
-    """
-    options = []
-    if include_none:
-        options.append(("بدون — لا منتجات", "none"))
-    options.extend(
-        [
-            ("منتجات من تصنيف", "categories"),
-            ("الأكثر مبيعا", "sales"),
-            ("أحدث المنتجات", "latest"),
-            ("منتجات مختارة", "selected"),
-            ("الماركات التجارية", "brands"),
-        ]
-    )
-    if include_none and default_source not in {v for _, v in options}:
-        default_source = "none"
-
-    def nest_cond(field_id, value):
-        cond = {"id": field_id, "value": value, "operation": "="}
-        if collection_id:
-            cond["collection_id"] = collection_id
-            cond["value_index"] = "."
-        return [cond]
-
-    active = cond_neq(source_id, "none") if include_none else None
-    if active and collection_id:
-        for c in active:
-            c["collection_id"] = collection_id
-            c["value_index"] = "."
-
-    fields = [
-        dropdown_manual(
-            source_id,
-            "نوع المنتجات",
-            options,
-            default_source,
-            icon="sicon-t-shirt",
-        ),
-        products_picker(
-            chosen_id,
-            "المنتجات المختارة",
-            multichoice=True,
-            max_length=24,
-            conditions=nest_cond(source_id, "selected"),
-        ),
-        categories_picker(
-            category_id,
-            "التصنيف",
-            conditions=nest_cond(source_id, "categories"),
-        ),
-        with_conditions(
-            {
-                "id": brands_id,
-                "icon": "sicon-keyboard_arrow_down",
-                "type": "items",
-                "label": "الماركات التجارية",
-                "format": "dropdown-list",
-                "source": "brands",
-                "options": [],
-                "required": False,
-                "selected": [],
-                "searchable": True,
-                "description": "عرض منتجات من الماركات التجارية.",
-                "key": u(),
-            },
-            nest_cond(source_id, "brands"),
-        ),
-        number(
-            limit_id,
-            "عدد المنتجات",
-            limit_default,
-            1,
-            40,
-            "",
-            "الحد الأقصى للمنتجات المعروضة",
-            conditions=active,
-        ),
-    ]
-    if extra_when_active:
-        for field in extra_when_active:
-            existing = field.get("conditions") or []
-            field["conditions"] = cond_all(active, existing) if active else existing
-            fields.append(field)
-    return fields
-
-
 def theme_fields(p):
+    """Section colors inherit store primary + light/dark theme — no merchant pickers."""
+    return []
+
+
+def commerce_fields(p):
+    """Conversion outcome: CTA only."""
     return [
-        static_title(f"{p}theme_title", "ألوان وتنسيق العنصر"),
-        color(f"{p}bg", "لون الخلفية", "#faf7f5"),
-        color(f"{p}text", "لون النص", "#2b211c"),
-        color(f"{p}muted", "لون النص الثانوي", "#7a6a62"),
-        color(f"{p}accent", "اللون الرئيسي", "#8b5e4b"),
-        color(f"{p}card", "لون البطاقات", "#ffffff"),
-        color(f"{p}border", "لون الحدود", "#e8ddd6"),
-        color(f"{p}button_bg", "خلفية الأزرار", "#8b5e4b"),
-        color(f"{p}button_color", "لون نص الأزرار", "#ffffff"),
-        number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
-    ]
-
-
-def commerce_fields(p, include_products=True):
-    """Conversion outcome: real Salla product picker (Raed-style) + optional CTA.
-
-    No fake sample products. Merchant must enable the toggle and pick store products.
-    """
-    fields = [
-        static_title(f"{p}commerce_title", "التسوق والدعوة للعمل"),
+        static_title(f"{p}commerce_title", "الدعوة للعمل"),
         boolean(
-            f"{p}show_products",
-            "عرض منتجات بعد النتيجة",
+            f"{p}show_cta",
+            "عرض زر رابط بعد النتيجة",
             False,
-            "عند التفعيل: اختر منتجات حقيقية من متجرك لتظهر بعد الاختبار/النتيجة.",
+            "زر يوجّه العميل لرابط تختاره (تصنيف، صفحة، منتج، رابط خارجي…).",
+        ),
+        variable_list(
+            f"{p}result_link",
+            "رابط زر التسوق",
+            conditions=cond_eq(f"{p}show_cta", True),
+        ),
+        multilang(
+            f"{p}cta_label",
+            "نص زر التسوق",
+            "تسوق الآن",
+            "Shop now",
+            conditions=cond_eq(f"{p}show_cta", True),
         ),
     ]
-    if include_products:
-        fields.extend(
-            [
-                products_picker(
-                    f"{p}chosen_products",
-                    "المنتجات المختارة",
-                    multichoice=True,
-                    max_length=24,
-                    min_length=0,
-                    desc="منتجات سلة الحقيقية (مثل ثيم رائد) — بدون عينات وهمية.",
-                    conditions=cond_eq(f"{p}show_products", True),
-                ),
-                number(
-                    f"{p}products_limit",
-                    "عدد المنتجات المعروضة",
-                    8,
-                    1,
-                    24,
-                    "",
-                    "الحد الأقصى لعرض المنتجات المختارة",
-                    conditions=cond_eq(f"{p}show_products", True),
-                ),
-                multilang(
-                    f"{p}products_title",
-                    "عنوان قسم المنتجات",
-                    "منتجات مختارة لك",
-                    "Selected for you",
-                    conditions=cond_eq(f"{p}show_products", True),
-                ),
-            ]
-        )
-    fields.extend(
-        [
-            boolean(
-                f"{p}show_cta",
-                "عرض زر رابط بعد النتيجة",
-                False,
-                "زر يوجّه العميل لرابط تختاره (تصنيف، صفحة، منتج، رابط خارجي…).",
-            ),
-            variable_list(
-                f"{p}result_link",
-                "رابط زر التسوق",
-                conditions=cond_eq(f"{p}show_cta", True),
-            ),
-            multilang(
-                f"{p}cta_label",
-                "نص زر التسوق",
-                "تسوق الآن",
-                "Shop now",
-                conditions=cond_eq(f"{p}show_cta", True),
-            ),
-        ]
-    )
-    return fields
 
 
 def component(name, title, icon, image, fields):
@@ -597,39 +385,18 @@ def component(name, title, icon, image, fields):
         has_commerce = any(
             field.get("id")
             in {
-                f"{prefix}show_products",
-                f"{prefix}chosen_products",
-                f"{prefix}products",
+                f"{prefix}show_cta",
                 f"{prefix}result_link",
             }
             for field in fields
         )
         if not has_commerce:
-            fields = [*fields, *commerce_fields(prefix, include_products=True)]
+            fields = [*fields, *commerce_fields(prefix)]
         else:
-            # Ensure Raed-style picker fields exist even if older fake collection was present
             existing = {field.get("id") for field in fields}
-            for field in commerce_fields(prefix, include_products=True):
+            for field in commerce_fields(prefix):
                 if field.get("id") not in existing:
                     fields.append(field)
-            # Drop legacy fake product collections — but keep collections that
-            # wrap a real Salla products picker (e.g. acm_products rows where the
-            # merchant picks a store product + sets comparison attributes).
-            def has_real_picker(field):
-                return any(
-                    sub.get("source") == "products"
-                    for sub in field.get("fields", [])
-                    if isinstance(sub, dict)
-                )
-
-            fields = [
-                field
-                for field in fields
-                if field.get("id") != f"{prefix}products"
-                or field.get("source") == "products"
-                or field.get("format") != "collection"
-                or has_real_picker(field)
-            ]
     return {
         "key": u(),
         "name": name,
@@ -1141,26 +908,6 @@ def build_cr():
 def build_vab():
     p = "vab_"
 
-    def hotspot_product_fields():
-        return product_source_fields(
-            "products",
-            default_source="latest",
-            limit_default=6,
-            collection_id="vab_hotspots",
-        )
-
-    def demo_products(items):
-        return [
-            {
-                "name": {"ar": name_ar, "en": name_en},
-                "image": img,
-                "price": price,
-                "old_price": old,
-                "url": {"type": "custom", "url": url},
-            }
-            for name_ar, name_en, img, price, old, url in items
-        ]
-
     return component(
         "virtual-abaya-boutique",
         "بوتيك العبايات التفاعلي",
@@ -1204,7 +951,6 @@ def build_vab():
                         [("يمين", "right"), ("يسار", "left"), ("أعلى", "top"), ("أسفل", "bottom")],
                         "right",
                     ),
-                    *hotspot_product_fields(),
                 ],
                 [
                     {
@@ -1220,24 +966,6 @@ def build_vab():
                         "spot_btn": {"ar": "استكشفي", "en": "Explore"},
                         "spot_color": "#8b5e4b",
                         "card_dir": [{"label": "يمين", "value": "right"}],
-                        # Form-builder expects selected[] shape inside collection items
-                        "products": [
-                            {
-                                "key": "latest",
-                                "label": "أحدث المنتجات",
-                                "value": "latest",
-                            }
-                        ],
-                        "chosen_products": [],
-                        "category": [],
-                        "products_limit": 6,
-                        "demo_products": demo_products(
-                            [
-                                ("عباية ندى", "Nada abaya", IMG["abaya1"], 480, 560, "/products/nada"),
-                                ("عباية ليلى", "Layla abaya", IMG["abaya4"], 520, 0, "/products/layla"),
-                                ("عباية سارة", "Sara abaya", IMG["abaya3"], 450, 510, "/products/sara"),
-                            ]
-                        ),
                     },
                     {
                         "spot_name": {"ar": "سهرة", "en": "Evening"},
@@ -1252,22 +980,6 @@ def build_vab():
                         "spot_btn": {"ar": "استكشفي", "en": "Explore"},
                         "spot_color": "#6b4c3b",
                         "card_dir": [{"label": "يسار", "value": "left"}],
-                        "products": [
-                            {
-                                "key": "sales",
-                                "label": "الأكثر مبيعا",
-                                "value": "sales",
-                            }
-                        ],
-                        "chosen_products": [],
-                        "category": [],
-                        "products_limit": 6,
-                        "demo_products": demo_products(
-                            [
-                                ("عباية سهرة", "Evening abaya", IMG["abaya2"], 690, 790, "/products/evening"),
-                                ("عباية مطرزة", "Embroidered abaya", IMG["abaya4"], 750, 0, "/products/emb"),
-                            ]
-                        ),
                     },
                     {
                         "spot_name": {"ar": "صيفي", "en": "Summer"},
@@ -1282,22 +994,6 @@ def build_vab():
                         "spot_btn": {"ar": "استكشفي", "en": "Explore"},
                         "spot_color": "#a67c52",
                         "card_dir": [{"label": "أعلى", "value": "top"}],
-                        "products": [
-                            {
-                                "key": "latest",
-                                "label": "أحدث المنتجات",
-                                "value": "latest",
-                            }
-                        ],
-                        "chosen_products": [],
-                        "category": [],
-                        "products_limit": 6,
-                        "demo_products": demo_products(
-                            [
-                                ("عباية صيف", "Summer abaya", IMG["abaya3"], 390, 0, "/products/summer"),
-                                ("عباية خفيفة", "Light abaya", IMG["abaya1"], 420, 480, "/products/light"),
-                            ]
-                        ),
                     },
                 ],
                 1,
@@ -1360,16 +1056,13 @@ def build_acm():
             text(f"{p}currency", "العملة", "ر.س", max_len="20"),
             collection(
                 f"{p}products",
-                "منتج",
+                "عنصر مقارنة",
                 [
-                    products_picker(
-                        "product",
-                        "اختر المنتج",
-                        multichoice=True,
-                        required=True,
-                        max_length=1,
-                        min_length=1,
-                    ),
+                    multilang("name", "الاسم", "عباية كلاسيك", "Classic abaya"),
+                    image("image", "الصورة", IMG["abaya1"]),
+                    number("price", "السعر", 450, 0, 99999, "ر.س"),
+                    number("old_price", "السعر قبل الخصم", 550, 0, 99999, "ر.س"),
+                    variable_list("url", "الرابط"),
                     multilang("btn_text", "نص زر العرض", "عرض", "View"),
                     collection(
                         "attributes",
@@ -1472,6 +1165,15 @@ def build_acm():
 
 def build_alb():
     p = "alb_"
+    look_item_fields = [
+        multilang("piece_name", "اسم القطعة", "عباية انسيابية", "Flowing abaya"),
+        image("image", "الصورة", IMG["abaya1"]),
+        number("price", "السعر", 420, 0, 99999, "ر.س"),
+        number("old_price", "السعر قبل الخصم", 0, 0, 99999, "ر.س"),
+        variable_list("url", "رابط القطعة"),
+        multilang("color_note", "ملاحظة/لون", "أسود كلاسيكي", "Classic black"),
+        boolean("is_default", "اختيار افتراضي", False),
+    ]
 
     return component(
         "abaya-look-builder",
@@ -1484,8 +1186,8 @@ def build_alb():
             multilang(
                 f"{p}desc",
                 "الوصف",
-                "اختاري منتجات متجرك، ثم دعمي الزائرة تبني إطلالتها من التبويبات.",
-                "Pick store products, then let shoppers build a look from the tabs.",
+                "رتّبي قطع الإطلالة داخل التبويبات، ثم دعمي الزائرة تبني إطلالتها من الاختيارات.",
+                "Arrange look pieces inside tabs, then let shoppers build their outfit from those choices.",
                 "textarea",
                 "300",
             ),
@@ -1502,31 +1204,70 @@ def build_alb():
                         desc="يظهر كتبويب في الواجهة (مثل: العباية، الحجاب، الحقيبة)",
                     ),
                     number("group_order", "ترتيب التبويب", 1, 0, 99, ""),
-                    products_picker(
-                        "products",
-                        "منتجات التبويب",
-                        multichoice=True,
-                        required=False,
-                        max_length=12,
-                        min_length=0,
-                        desc="اختاري عدة منتجات لهذا التبويب",
+                    collection(
+                        "items",
+                        "قطعة",
+                        look_item_fields,
+                        [],
+                        1,
+                        12,
+                        False,
                     ),
                 ],
                 [
                     {
                         "group_name": {"ar": "العباية", "en": "Abaya"},
                         "group_order": 1,
-                        "products": [],
+                        "items": [
+                            {
+                                "piece_name": {"ar": "عباية انسيابية", "en": "Flowing abaya"},
+                                "image": IMG["abaya1"],
+                                "price": 480,
+                                "old_price": 560,
+                                "url": {"type": "custom", "url": "/collections/abaya"},
+                                "color_note": {"ar": "أسود كلاسيكي", "en": "Classic black"},
+                                "is_default": True,
+                            },
+                            {
+                                "piece_name": {"ar": "عباية مطرزة", "en": "Embroidered abaya"},
+                                "image": IMG["abaya2"],
+                                "price": 690,
+                                "old_price": 0,
+                                "url": {"type": "custom", "url": "/collections/evening-abaya"},
+                                "color_note": {"ar": "تفاصيل ذهبية", "en": "Golden details"},
+                                "is_default": False,
+                            },
+                        ],
                     },
                     {
                         "group_name": {"ar": "الحجاب", "en": "Hijab"},
                         "group_order": 2,
-                        "products": [],
+                        "items": [
+                            {
+                                "piece_name": {"ar": "حجاب ناعم", "en": "Soft hijab"},
+                                "image": IMG["abaya3"],
+                                "price": 95,
+                                "old_price": 0,
+                                "url": {"type": "custom", "url": "/collections/hijab"},
+                                "color_note": {"ar": "بيج دافئ", "en": "Warm beige"},
+                                "is_default": True,
+                            }
+                        ],
                     },
                     {
                         "group_name": {"ar": "الإكسسوار", "en": "Accessory"},
                         "group_order": 3,
-                        "products": [],
+                        "items": [
+                            {
+                                "piece_name": {"ar": "حقيبة أنيقة", "en": "Elegant bag"},
+                                "image": IMG["abaya4"],
+                                "price": 180,
+                                "old_price": 220,
+                                "url": {"type": "custom", "url": "/collections/accessories"},
+                                "color_note": {"ar": "بني موكا", "en": "Mocha brown"},
+                                "is_default": True,
+                            }
+                        ],
                     },
                 ],
                 1,
@@ -1542,34 +1283,6 @@ def build_alb():
             ),
             multilang(f"{p}copy_btn", "نص زر النسخ", "نسخ التفاصيل", "Copy details"),
             multilang(f"{p}view_btn", "نص زر العرض", "عرض المختار", "View selected"),
-            static_title(f"{p}source_title", "مصدر إضافي (اختياري)"),
-            *product_source_fields(
-                f"{p}products",
-                chosen_id=f"{p}chosen_products",
-                category_id=f"{p}category",
-                brands_id=f"{p}brands",
-                limit_id=f"{p}products_limit",
-                limit_default=12,
-                include_none=True,
-                default_source="latest",
-                extra_when_active=[
-                    multilang(
-                        f"{p}import_group_name",
-                        "اسم تبويب الاستيراد",
-                        "المنتجات",
-                        "Products",
-                        desc="يُعرض كتبويب إضافي للمنتجات المجلوبة تلقائيًا",
-                    ),
-                    number(
-                        f"{p}import_group_order",
-                        "ترتيب تبويب الاستيراد",
-                        99,
-                        0,
-                        99,
-                        "",
-                    ),
-                ],
-            ),
             *theme_fields(p),
         ],
     )
@@ -2222,7 +1935,6 @@ def build_amm():
             boolean(f"{p}enable_captions", "تفعيل المعلومات اللحظية", True, conditions=seq),
             boolean(f"{p}show_hint", "إظهار تلميح الاستخدام", True),
             image(f"{p}placeholder", "صورة Placeholder", "", conditions=seq),
-            boolean(f"{p}animate", "تفعيل الحركات", True),
             static_title(f"{p}info_title", "معلومات العباية"),
             multilang(f"{p}name", "اسم العباية", "عباية ندى الانسيابية", "Nada Flow Abaya"),
             multilang(
@@ -2289,7 +2001,6 @@ def build_amm():
             color(f"{p}border", "لون الحدود", "#e8ddd6"),
             color(f"{p}button_bg", "خلفية الأزرار", "#8b5e4b"),
             color(f"{p}button_color", "لون نص الأزرار", "#ffffff"),
-            number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
             number(f"{p}shadow", "مستوى الظل", 1, 0, 3, ""),
         ],
     )
@@ -2376,7 +2087,6 @@ def build_als():
             boolean(f"{p}show_product", "إظهار رابط المنتج", True),
             multilang(f"{p}default_btn", "النص الافتراضي للزر", "مشاهدة المنتج", "View product"),
             variable_list(f"{p}product_url", "رابط منتج عام (اختياري)"),
-            boolean(f"{p}animate", "تفعيل الحركات", True),
             static_title(f"{p}modes_title", "أوضاع الإضاءة"),
             collection(
                 f"{p}modes",
@@ -2485,7 +2195,6 @@ def build_als():
             color(f"{p}border", "لون الحدود", "#e8ddd6"),
             color(f"{p}button_bg", "خلفية الأزرار", "#8b5e4b"),
             color(f"{p}button_color", "لون نص الأزرار", "#ffffff"),
-            number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
             number(f"{p}shadow", "مستوى الظل", 1, 0, 3, ""),
             boolean(f"{p}full_width", "عرض كامل", False),
         ],
@@ -2582,7 +2291,6 @@ def build_aem():
             boolean(f"{p}enable_detail_images", "تفعيل صور التفاصيل", True),
             boolean(f"{p}enable_zoom", "تفعيل التكبير", True),
             boolean(f"{p}open_new_tab", "فتح الروابط في نافذة جديدة", True),
-            boolean(f"{p}animate", "تفعيل الحركات", True),
             static_title(f"{p}details_title", "تفاصيل التطريز"),
             collection(
                 f"{p}details",
@@ -2741,7 +2449,6 @@ def build_aem():
             color(f"{p}border", "لون الحدود", "#e8ddd6"),
             color(f"{p}button_bg", "خلفية الأزرار", "#8b5e4b"),
             color(f"{p}button_color", "لون نص الأزرار", "#ffffff"),
-            number(f"{p}radius", "تدوير الحواف", 16, 0, 40, "px"),
             number(f"{p}shadow", "مستوى الظل", 1, 0, 3, ""),
             boolean(f"{p}full_width", "عرض كامل أو داخل Container", False),
         ],
@@ -3018,6 +2725,7 @@ def build_stpb():
             static_title(f"{p}content_title", "محتوى العنصر"),
             multilang(f"{p}title", "العنوان", "عروض مميزة", "Featured Promotions"),
             boolean(f"{p}show_title", "إظهار العنوان", True),
+            boolean(f"{p}autoplay", "تشغيل تلقائي للبانرات", True),
             collection(
                 f"{p}items",
                 "بانر",

@@ -255,7 +255,7 @@ export const componentStyles = css`
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--accent-color, var(--fs-store-primary));
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
     transition: transform 0.25s ease;
@@ -347,7 +347,7 @@ export const componentStyles = css`
 
   .sv-dot.is-active {
     width: 1.35rem;
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .sv-empty {
@@ -418,7 +418,7 @@ export const componentStyles = css`
     height: 2.35rem;
     border: 0;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: #2b211c;
     cursor: pointer;
     font-size: 1.15rem;
@@ -450,7 +450,7 @@ export const componentStyles = css`
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.9);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: #2b211c;
     cursor: pointer;
   }

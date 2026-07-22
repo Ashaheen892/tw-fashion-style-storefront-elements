@@ -1,9 +1,9 @@
-import { css as I, LitElement as S, nothing as h, html as o } from "lit";
+import { css as z, LitElement as S, nothing as h, html as o } from "lit";
 import { property as L, state as M, query as C } from "lit/decorators.js";
 import { classMap as v } from "lit/directives/class-map.js";
 import { styleMap as y } from "lit/directives/style-map.js";
-import { n as E, l as u, d as k, z as _, y as $, s as Y, p as z, A as g, r as A, t as i, i as O, a as j, b as q } from "./sharedStyles-BYm1OK6w.js";
-const D = I`
+import { n as E, l as u, d as k, u as _, q as $, s as Y, p as I, v as g, r as A, t as i, i as O, a as j, b as q } from "./sharedStyles-Cd7RKVf-.js";
+const D = z`
   .nal-shell {
     position: relative;
   }
@@ -274,7 +274,7 @@ const D = I`
     transform: translate(-50%, calc(-100% - 0.85rem));
     padding: 0.35rem 0.65rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--text-color, #2b211c);
     font-size: 0.72rem;
     font-weight: 700;
@@ -396,7 +396,7 @@ const D = I`
 
   .nal-step.is-active {
     width: 1.35rem;
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .nal-empty {
@@ -549,7 +549,7 @@ const w = class w extends S {
     if (this.activeId = e.id, !a || !this.galleryEl) return;
     const n = this.galleryEl.querySelector(`[data-id="${e.id}"]`);
     n == null || n.scrollIntoView({
-      behavior: z() ? "auto" : "smooth",
+      behavior: I() ? "auto" : "smooth",
       inline: "center",
       block: "nearest"
     });
@@ -567,7 +567,7 @@ const w = class w extends S {
     e.key === "ArrowRight" ? (e.preventDefault(), this.shift(-1)) : e.key === "ArrowLeft" && (e.preventDefault(), this.shift(1));
   }
   render() {
-    const e = this.config || {}, a = A(e, "nal_"), n = a.animate && !z(), r = u(e.nal_title) || i("وصل حديثا", "New Arrivals"), s = u(e.nal_desc), c = O(e.nal_show_title, !0), m = this.items, l = this.activeItem;
+    const e = this.config || {}, a = A(e, "nal_"), n = a.animate && !I(), r = u(e.nal_title) || i("وصل حديثا", "New Arrivals"), s = u(e.nal_desc), c = O(e.nal_show_title, !0), m = this.items, l = this.activeItem;
     return o`
       <section
         class=${v({ "fs-section": !0, "fs-animate": n, "nal-shell": !0 })}
@@ -674,7 +674,7 @@ const w = class w extends S {
 w.styles = [
   Y,
   D,
-  I`
+  z`
       :host {
         direction: inherit;
       }

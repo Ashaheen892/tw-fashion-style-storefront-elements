@@ -5,17 +5,14 @@ import { styleMap } from 'lit/directives/style-map.js';
 import {
   copyText,
   formatPrice,
-  getStoreCurrency,
   prefersReducedMotion,
   readSectionTheme,
   t,
   themeStyleMap,
 } from '../../utils/helpers.js';
 import { localizedString } from '../../utils/localizedString.js';
-import { addProductsToCart } from '../../utils/sallaApi.js';
 import { renderCommerceOutcome } from '../../utils/commerceOutcome.js';
 import { sharedSectionCss } from '../../utils/sharedStyles.js';
-import { renderProductCard } from '../../utils/productCard.js';
 import { componentStyles } from './styles.js';
 import {
   buildLookGroups,
@@ -36,7 +33,6 @@ export default class AbayaLookBuilder extends LitElement {
   @state() private statusError = false;
   @state() private items: LookItem[] = [];
   @state() private loading = true;
-  @state() private addingToCart = false;
 
   private boundLangHandler = () => this.requestUpdate();
   private statusTimer: ReturnType<typeof setTimeout> | null = null;
@@ -67,7 +63,7 @@ export default class AbayaLookBuilder extends LitElement {
   `];
 
   private get currency(): string {
-    return getStoreCurrency('ر.س');
+    return String(this.config?.alb_currency || 'ر.س').trim() || 'ر.س';
   }
 
   connectedCallback(): void {
@@ -166,72 +162,6 @@ export default class AbayaLookBuilder extends LitElement {
     );
   }
 
-  private async handleAddToCart(): Promise<void> {
-    if (this.addingToCart) return;
-
-    const selected = this.getSelectedItems();
-    const productIds = selected.map(({ item }) => item.product_id).filter(Boolean);
-
-    if (!productIds.length) {
-      this.setStatus(
-        t('اختاري قطعاً من المتجر أولاً', 'Select store pieces first'),
-        true
-      );
-      return;
-    }
-
-    this.addingToCart = true;
-    const result = await addProductsToCart(productIds);
-    this.addingToCart = false;
-
-    if (result.ok) {
-      this.setStatus(
-        result.error === 'partial'
-          ? t(
-              'أُضيفت بعض القطع إلى السلة. تأكدي من السلة قبل الدفع.',
-              'Some pieces were added. Check the cart before checkout.'
-            )
-          : t(
-              `تمت إضافة ${result.added} قطعة إلى السلة`,
-              `Added ${result.added} piece(s) to cart`
-            )
-      );
-      return;
-    }
-
-    if (result.error === 'unavailable') {
-      this.setStatus(
-        t(
-          'السلة غير متاحة في المعاينة. افتحي صفحة المنتج للإضافة من المتجر.',
-          'Cart is unavailable in preview. Open the product page to add it in the store.'
-        ),
-        true
-      );
-      const url = selected.map(({ item }) => item.url).find(Boolean);
-      if (url) window.open(url, '_blank', 'noopener,noreferrer');
-      return;
-    }
-
-    if (result.added > 0 || result.error === 'partial') {
-      this.setStatus(
-        t(
-          `أُضيفت ${result.added} قطعة، وتعذّر إكمال الباقي`,
-          `Added ${result.added} piece(s); some could not be added`
-        ),
-        true
-      );
-      return;
-    }
-
-    this.setStatus(
-      t(
-        'تعذّرت الإضافة. جرّبي فتح صفحة المنتج أو اختيار مقاس إن وُجد.',
-        'Could not add. Try opening the product page or choosing a size if required.'
-      ),
-      true
-    );
-  }
-
   render() {
     const c = this.config || {};
     const theme = readSectionTheme(c, 'alb_');
@@ -245,7 +175,6 @@ export default class AbayaLookBuilder extends LitElement {
     const title = localizedString(c.alb_title as string);
     const desc = localizedString(c.alb_desc as string);
     const firstUrl = selectedItems.find((i) => i.url)?.url;
-    const canAddToCart = selectedItems.some((i) => i.product_id);
 
     return html`
       <section
@@ -267,7 +196,7 @@ export default class AbayaLookBuilder extends LitElement {
           ${this.loading
             ? html`<div class="alb-studio">
                 <div class="alb-loading" role="status">
-                  ${t('جاري تحميل منتجات الإطلالة…', 'Loading look products…')}
+                  ${t('جاري تحميل عناصر الإطلالة…', 'Loading look items…')}
                 </div>
               </div>`
             : groups.length
@@ -305,26 +234,58 @@ export default class AbayaLookBuilder extends LitElement {
                               ${current.items.map((item) => {
                                 const selected = this.selections[current.key] === item.id;
                                 return html`<div class="alb-slot" role="listitem">
-                                  ${renderProductCard(
-                                    {
-                                      id: item.product_id,
-                                      name: item.piece_name,
-                                      image: item.image,
-                                      url: item.url,
-                                      price: item.price,
-                                      old_price: item.old_price,
-                                      rating: item.rating,
-                                      subtitle: item.color_note,
-                                    },
-                                    {
-                                      currency,
-                                      selectable: true,
-                                      selected,
-                                      wishlist: true,
-                                      viewLink: true,
-                                      onSelect: () => this.selectItem(current.key, item.id),
-                                    }
-                                  )}
+                                  <article
+                                    class=${classMap({
+                                      'fs-card': true,
+                                      'alb-choice': true,
+                                      'alb-choice--selected': selected,
+                                    })}
+                                  >
+                                    ${item.image
+                                      ? html`<img
+                                          class="alb-piece__thumb"
+                                          src=${item.image}
+                                          alt=${item.piece_name}
+                                          loading="lazy"
+                                          decoding="async"
+                                        />`
+                                      : nothing}
+                                    <div class="alb-piece__meta">
+                                      <span class="alb-piece__group">${current.name}</span>
+                                      <strong class="alb-piece__name">
+                                        ${item.piece_name || t('قطعة', 'Piece')}
+                                      </strong>
+                                      ${item.color_note
+                                        ? html`<span class="alb-piece__group">${item.color_note}</span>`
+                                        : nothing}
+                                      ${item.price > 0
+                                        ? html`<span class="alb-piece__price">
+                                            ${formatPrice(item.price, currency)}
+                                          </span>`
+                                        : nothing}
+                                    </div>
+                                    <div class="alb-actions">
+                                      <button
+                                        type="button"
+                                        class="fs-btn ${selected ? 'fs-btn--ghost' : ''}"
+                                        @click=${() => this.selectItem(current.key, item.id)}
+                                      >
+                                        ${selected
+                                          ? t('القطعة المختارة', 'Selected')
+                                          : t('اختيار القطعة', 'Select piece')}
+                                      </button>
+                                      ${item.url
+                                        ? html`<a
+                                            class="fs-btn fs-btn--ghost"
+                                            href=${item.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            ${t('عرض القطعة', 'View piece')}
+                                          </a>`
+                                        : nothing}
+                                    </div>
+                                  </article>
                                 </div>`;
                               })}
                             </div>
@@ -412,17 +373,6 @@ export default class AbayaLookBuilder extends LitElement {
                       </div>
 
                       <div class="alb-actions">
-                        <button
-                          type="button"
-                          class="fs-btn"
-                          ?disabled=${this.addingToCart || !canAddToCart}
-                          @click=${this.handleAddToCart}
-                        >
-                          ${this.addingToCart
-                            ? t('جاري الإضافة…', 'Adding…')
-                            : localizedString(c.alb_cart_btn as string) ||
-                              t('أضيفي إلى السلة', 'Add to cart')}
-                        </button>
                         <button type="button" class="fs-btn fs-btn--ghost" @click=${this.handleCopy}>
                           ${localizedString(c.alb_copy_btn as string) ||
                           t('نسخ التفاصيل', 'Copy details')}
@@ -455,8 +405,8 @@ export default class AbayaLookBuilder extends LitElement {
                 </div>`
               : html`<div class="fs-empty">
                   ${t(
-                    'أضيفي تبويبات من إعدادات العنصر واختاري منتجات لكل تبويب',
-                    'Add tabs in the element settings and pick products for each tab'
+                    'أضيفي تبويبات وعناصر مرئية لكل تبويب من إعدادات العنصر',
+                    'Add tabs and visual pieces for each tab from the element settings'
                   )}
                 </div>`}
         </div>

@@ -11,6 +11,63 @@ export const componentStyles = css`
     gap: 1.35rem;
   }
 
+  /* Autoplay carousel mode */
+  .stpb-carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(var(--section-radius, 16px) * 0.95);
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .stpb-carousel:active {
+    cursor: grabbing;
+  }
+
+  .stpb-carousel__track {
+    display: flex;
+    transition: transform 0.32s ease;
+  }
+
+  .stpb-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  .stpb-dots {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.85rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+    z-index: 2;
+  }
+
+  .stpb-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .stpb-dot.is-active {
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
+    transform: scale(1.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stpb-carousel__track {
+      transition: none;
+    }
+  }
+
   /* Single banner — full-bleed magazine style */
   .stpb-banner {
     position: relative;
@@ -90,24 +147,29 @@ export const componentStyles = css`
   .stpb-banner__cta {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: #fff;
-    font-size: 0.82rem;
+    min-height: 46px;
+    padding: 0.7rem 1.35rem;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    background: var(--button-bg, var(--fs-store-primary));
+    color: var(--button-color, #fff);
+    font-size: 0.92rem;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
     text-decoration: none;
+    text-transform: none;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    padding-bottom: 0.2rem;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
+    transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .stpb-banner__cta:hover {
-    opacity: 0.75;
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    opacity: 1;
   }
 
   .stpb-banner__cta-arrow {

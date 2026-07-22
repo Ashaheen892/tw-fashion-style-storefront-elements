@@ -194,7 +194,7 @@ export const componentStyles = css`
     opacity: 0;
     pointer-events: none;
     border: 2.5px solid;
-    background: rgba(255, 255, 255, 0.92);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     transition: opacity 0.12s ease;
   }

@@ -2,8 +2,8 @@ import { css as w, LitElement as k, nothing as c, html as i } from "lit";
 import { property as C, state as _ } from "lit/decorators.js";
 import { classMap as f } from "lit/directives/class-map.js";
 import { styleMap as y } from "lit/directives/style-map.js";
-import { l as t, n as O, d as x, z as U, y as j, s as H, p as b, i as p, t as m, r as I, a as E, b as D } from "./sharedStyles-BYm1OK6w.js";
-const P = w`
+import { l as t, n as O, d as x, u as U, q as j, s as H, p as b, i as p, t as m, r as I, a as E, b as D } from "./sharedStyles-Cd7RKVf-.js";
+const q = w`
   .cr-stage {
     position: relative;
     overflow: hidden;
@@ -242,17 +242,17 @@ const P = w`
     }
   }
 `;
-function Q(a) {
+function P(a) {
   const e = t(a, "").trim();
   if (!e) return null;
   const r = new Date(e);
   return Number.isFinite(r.getTime()) ? r : null;
 }
-function Y(a, e = /* @__PURE__ */ new Date()) {
+function Q(a, e = /* @__PURE__ */ new Date()) {
   const r = Math.max(0, a.getTime() - e.getTime()), s = Math.floor(r / 1e3), n = Math.floor(s / 86400), l = Math.floor(s % 86400 / 3600), o = Math.floor(s % 3600 / 60), g = s % 60;
   return { days: n, hours: l, minutes: o, seconds: g, totalMs: r };
 }
-function q(a) {
+function Y(a) {
   return O(a).map((e) => ({
     image: t(e.image),
     name: t(e.name),
@@ -298,13 +298,13 @@ const v = class v extends k {
   }
   syncTimer() {
     this.clearTimer();
-    const e = Q(this.cfg.cr_launch_at);
+    const e = P(this.cfg.cr_launch_at);
     if (!e) {
       this.phase = "post";
       return;
     }
     const r = () => {
-      const s = Y(e);
+      const s = Q(e);
       this.countdown = s, s.totalMs <= 0 && (this.clearTimer(), this.phase === "pre" && this.beginLaunchReveal());
     };
     r(), this.phase === "pre" && (this.timerId = setInterval(r, 1e3));
@@ -334,7 +334,7 @@ const v = class v extends k {
     ` : c;
   }
   render() {
-    const e = this.cfg, r = I(e, "cr_"), s = r.animate && !b(), n = q(e.cr_products), l = x(e.cr_cta_url), o = t(e.cr_launch_media), g = F(e.cr_overlay_opacity), $ = String(e.cr_timer_color || r.accent), T = String(e.cr_overlay_color || "#2b211c"), M = p(e.cr_show_days, !0), z = p(e.cr_show_hours, !0), S = p(e.cr_show_minutes, !0), L = p(e.cr_show_seconds, !0);
+    const e = this.cfg, r = I(e, "cr_"), s = r.animate && !b(), n = Y(e.cr_products), l = x(e.cr_cta_url), o = t(e.cr_launch_media), g = F(e.cr_overlay_opacity), $ = String(e.cr_timer_color || r.accent), T = String(e.cr_overlay_color || "#2b211c"), M = p(e.cr_show_days, !0), S = p(e.cr_show_hours, !0), z = p(e.cr_show_minutes, !0), L = p(e.cr_show_seconds, !0);
     return i`
       <section
         class=${f({
@@ -382,8 +382,8 @@ const v = class v extends k {
                         />` : c}
                     <div class="cr-timer" role="timer" aria-label=${m("العد التنازلي", "Countdown")}>
                       ${this.renderTimerUnit(this.countdown.days, "يوم", "Days", M)}
-                      ${this.renderTimerUnit(this.countdown.hours, "ساعة", "Hours", z)}
-                      ${this.renderTimerUnit(this.countdown.minutes, "دقيقة", "Minutes", S)}
+                      ${this.renderTimerUnit(this.countdown.hours, "ساعة", "Hours", S)}
+                      ${this.renderTimerUnit(this.countdown.minutes, "دقيقة", "Minutes", z)}
                       ${this.renderTimerUnit(this.countdown.seconds, "ثانية", "Seconds", L)}
                     </div>
                   </div>
@@ -449,7 +449,7 @@ const v = class v extends k {
     `;
   }
 };
-v.styles = [H, P, w`
+v.styles = [H, q, w`
     :host {
       direction: inherit;
     }

@@ -2,7 +2,7 @@ import { css as P, LitElement as D, nothing as d, html as i } from "lit";
 import { property as Y, state as m, query as I } from "lit/decorators.js";
 import { classMap as _ } from "lit/directives/class-map.js";
 import { styleMap as x } from "lit/directives/style-map.js";
-import { n as j, e as w, l as u, d as L, y as f, i as g, f as F, x as O, s as Z, r as k, a as R, t as n, A as C, p as M, b as V } from "./sharedStyles-BYm1OK6w.js";
+import { n as j, e as w, l as u, d as L, q as f, i as g, f as F, o as O, s as Z, r as k, a as R, t as n, v as C, p as M, b as V } from "./sharedStyles-Cd7RKVf-.js";
 const N = P`
   .als-shell {
     display: grid;
@@ -144,19 +144,21 @@ const N = P`
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
     min-width: 44px;
     min-height: 44px;
-    padding: 0.45rem 0.85rem;
-    border: 1px solid var(--border-color, #e8ddd6);
-    border-radius: calc(var(--section-radius, 16px) * 0.4);
+    padding: 0.45rem 0.95rem;
+    border: 1.5px solid var(--border-color, #e8ddd6);
+    border-radius: 999px;
     background: var(--card-bg, #fff);
     color: var(--text-color, #2b211c);
     font: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.2;
     cursor: pointer;
     text-decoration: none;
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
   }
 
   .als-btn:hover {
@@ -170,9 +172,10 @@ const N = P`
   }
 
   .als-btn--primary {
-    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
+    background: var(--button-bg, var(--fs-store-primary));
     color: var(--button-color, #fff);
     border-color: transparent;
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 24%, transparent);
   }
 
   .als-btn--accent {
@@ -241,7 +244,7 @@ const N = P`
   .als-mode[aria-pressed='true'] {
     border-color: var(--accent-color, var(--fs-store-primary));
     box-shadow: 0 0 0 1px var(--accent-color, var(--fs-store-primary));
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
   }
 
   .als-mode__thumb {
@@ -581,11 +584,11 @@ const N = P`
     }
   }
 `, T = [1.5, 2, 2.5, 3];
-function H(o) {
+function q(o) {
   const e = O(o, "3/4").replace(/\s/g, "");
   return e === "1/1" || e === "4/5" || e === "16/9" || e === "3/4" ? e : "3/4";
 }
-function q(o) {
+function H(o) {
   const e = F(O(o, "2") || o, 2);
   return T.includes(e) ? e : 2;
 }
@@ -765,7 +768,7 @@ const $ = class $ extends D {
   }
   get lensZoom() {
     var e;
-    return q((e = this.config) == null ? void 0 : e.als_lens_zoom);
+    return H((e = this.config) == null ? void 0 : e.als_lens_zoom);
   }
   get placeholder() {
     var e;
@@ -902,7 +905,7 @@ const $ = class $ extends D {
       "--als-handle-color": String(e.als_handle_color || "#ffffff"),
       "--als-thumb-border": String(e.als_thumb_border || t.border),
       "--als-shadow": r[a] || r[1],
-      "--als-aspect": H(e.als_aspect),
+      "--als-aspect": q(e.als_aspect),
       "--als-max-width": `${f(e.als_max_width, 720)}px`,
       "--als-compare": `${this.comparePct}%`
     };

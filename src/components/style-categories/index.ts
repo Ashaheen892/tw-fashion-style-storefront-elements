@@ -1,7 +1,9 @@
 import { css, html, LitElement, nothing } from 'lit';
 import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { enableDragScroll } from '../../utils/dragScroll.js';
 import {
   isTruthy,
   isValidHref,
@@ -79,7 +81,15 @@ export default class StyleCategories extends LitElement {
 
           ${tiles.length
             ? html`
-                <div class=${classMap({ 'stc-grid': layout === 'grid', 'stc-slider': layout === 'slider' })} role="list">
+                <div
+                  class=${classMap({ 'stc-grid': layout === 'grid', 'stc-slider': layout === 'slider' })}
+                  role="list"
+                  ${ref((el) => {
+                    if (el instanceof HTMLElement && el.classList.contains('stc-slider')) {
+                      enableDragScroll(el);
+                    }
+                  })}
+                >
                   ${tiles.map(
                     (tile) => html`
                       <a

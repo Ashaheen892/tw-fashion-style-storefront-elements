@@ -2,7 +2,7 @@ import { css as b, LitElement as x, html as a, nothing as o } from "lit";
 import { property as $, state as _ } from "lit/decorators.js";
 import { classMap as u } from "lit/directives/class-map.js";
 import { styleMap as w } from "lit/directives/style-map.js";
-import { n as k, l as d, z as A, f as z, s as I, i as q, p as v, r as C, t as p, a as T, b as S } from "./sharedStyles-BYm1OK6w.js";
+import { n as k, l as d, u as A, f as I, s as z, i as q, p as v, r as C, t as p, a as T, b as S } from "./sharedStyles-Cd7RKVf-.js";
 const L = b`
   .es-shell {
     display: grid;
@@ -241,7 +241,7 @@ function M(n) {
     name: d(e.name),
     role: d(e.role),
     avatar: String(e.avatar || "").trim(),
-    rating: A(z(e.rating, 5), 1, 5),
+    rating: A(I(e.rating, 5), 1, 5),
     quote: d(e.quote),
     product_note: d(e.product_note)
   })).filter((e) => e.name || e.quote);
@@ -404,7 +404,7 @@ const h = class h extends x {
   }
 };
 h.styles = [
-  I,
+  z,
   L,
   b`
       :host {

@@ -292,9 +292,6 @@ export const componentStyles = css`
 
   .acfg-actions .fs-btn {
     flex: 1 1 auto;
-    min-height: 2.65rem;
-    border-radius: calc(var(--section-radius, 16px) * 0.35);
-    font-size: 0.82rem;
     justify-content: center;
   }
 

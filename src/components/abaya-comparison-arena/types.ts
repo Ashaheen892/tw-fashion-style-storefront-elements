@@ -6,14 +6,12 @@ export interface CompareAttribute {
 
 export interface CompareProduct {
   id: string;
-  product_id: string;
   name: string;
   image: string;
   price: number;
   old_price: number;
   url: string;
   btn_text: string;
-  rating: number;
   /** Merchant-configured comparison rows for this product */
   attributes: CompareAttribute[];
 }

@@ -1,9 +1,9 @@
-import { css as u, LitElement as _, nothing as c, html as r } from "lit";
-import { property as v } from "lit/decorators.js";
-import { classMap as w } from "lit/directives/class-map.js";
-import { styleMap as y } from "lit/directives/style-map.js";
-import { t as s, n as x, d as g, l as i, s as $, r as k, p as L, i as z, a as S, A as C, b as U } from "./sharedStyles-BYm1OK6w.js";
-const E = u`
+import { css as v, LitElement as w, nothing as c, html as r } from "lit";
+import { property as $, state as k } from "lit/decorators.js";
+import { classMap as m } from "lit/directives/class-map.js";
+import { styleMap as f } from "lit/directives/style-map.js";
+import { t as i, n as S, d as g, l as o, s as L, i as _, v as T, r as A, p as C, a as z, b as I } from "./sharedStyles-Cd7RKVf-.js";
+const X = v`
   .stpb-shell {
     position: relative;
   }
@@ -12,6 +12,63 @@ const E = u`
   .stpb-banners {
     display: grid;
     gap: 1.35rem;
+  }
+
+  /* Autoplay carousel mode */
+  .stpb-carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(var(--section-radius, 16px) * 0.95);
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .stpb-carousel:active {
+    cursor: grabbing;
+  }
+
+  .stpb-carousel__track {
+    display: flex;
+    transition: transform 0.32s ease;
+  }
+
+  .stpb-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  .stpb-dots {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.85rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+    z-index: 2;
+  }
+
+  .stpb-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .stpb-dot.is-active {
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
+    transform: scale(1.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stpb-carousel__track {
+      transition: none;
+    }
   }
 
   /* Single banner — full-bleed magazine style */
@@ -93,24 +150,29 @@ const E = u`
   .stpb-banner__cta {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: #fff;
-    font-size: 0.82rem;
+    min-height: 46px;
+    padding: 0.7rem 1.35rem;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    background: var(--button-bg, var(--fs-store-primary));
+    color: var(--button-color, #fff);
+    font-size: 0.92rem;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
     text-decoration: none;
+    text-transform: none;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    padding-bottom: 0.2rem;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
+    transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .stpb-banner__cta:hover {
-    opacity: 0.75;
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    opacity: 1;
   }
 
   .stpb-banner__cta-arrow {
@@ -148,124 +210,195 @@ const E = u`
       transition: none !important;
     }
   }
-`, m = [
+`, h = [
   {
     id: "collection",
     image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1400&q=80",
-    headline: s("مجموعة الموسم", "Season collection"),
-    subtitle: s("قصّات هادئة بتفاصيل فاخرة", "Quiet cuts with refined detail"),
-    ctaLabel: s("تسوّقي الآن", "Shop now"),
+    headline: i("مجموعة الموسم", "Season collection"),
+    subtitle: i("قصّات هادئة بتفاصيل فاخرة", "Quiet cuts with refined detail"),
+    ctaLabel: i("تسوّقي الآن", "Shop now"),
     ctaUrl: ""
   },
   {
     id: "lookbook",
     image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1400&q=80",
-    headline: s("لوكبوك جديد", "New lookbook"),
-    subtitle: s("إطلالات جاهزة من المحل", "Ready looks from the boutique"),
-    ctaLabel: s("شاهدي اللوكبوك", "View lookbook"),
+    headline: i("لوكبوك جديد", "New lookbook"),
+    subtitle: i("إطلالات جاهزة من المحل", "Ready looks from the boutique"),
+    ctaLabel: i("شاهدي اللوكبوك", "View lookbook"),
     ctaUrl: ""
   }
 ];
-function T(p) {
-  const a = x(p).map((e, o) => {
-    const t = String(e.image || e.poster || "").trim();
+function P(p) {
+  const t = S(p).map((e, n) => {
+    const a = String(e.image || e.poster || "").trim();
     return {
-      id: String(e.id || `stpb-${o}`),
-      image: t,
-      headline: i(e.headline) || i(e.title) || "",
-      subtitle: i(e.subtitle) || i(e.desc) || "",
-      ctaLabel: i(e.cta_label) || "",
+      id: String(e.id || `stpb-${n}`),
+      image: a,
+      headline: o(e.headline) || o(e.title) || "",
+      subtitle: o(e.subtitle) || o(e.desc) || "",
+      ctaLabel: o(e.cta_label) || "",
       ctaUrl: g(e.cta_link) || g(e.link) || String(e.link || "").trim()
     };
   }).filter((e) => e.image || e.headline);
-  return a.length ? a.map((e, o) => {
-    const t = m[o % m.length];
+  return t.length ? t.map((e, n) => {
+    const a = h[n % h.length];
     return {
       ...e,
-      image: e.image || t.image,
-      headline: e.headline || t.headline,
-      subtitle: e.subtitle || t.subtitle,
-      ctaLabel: e.ctaLabel || t.ctaLabel
+      image: e.image || a.image,
+      headline: e.headline || a.headline,
+      subtitle: e.subtitle || a.subtitle,
+      ctaLabel: e.ctaLabel || a.ctaLabel
     };
-  }) : m.map((e) => ({ ...e }));
+  }) : h.map((e) => ({ ...e }));
 }
-var q = Object.defineProperty, M = (p, a, e, o) => {
-  for (var t = void 0, l = p.length - 1, d; l >= 0; l--)
-    (d = p[l]) && (t = d(a, e, t) || t);
-  return t && q(a, e, t), t;
+var U = Object.defineProperty, y = (p, t, e, n) => {
+  for (var a = void 0, s = p.length - 1, d; s >= 0; s--)
+    (d = p[s]) && (a = d(t, e, a) || a);
+  return a && U(t, e, a), a;
 };
-const h = class h extends _ {
+const M = 5e3, u = class u extends w {
   constructor() {
-    super(...arguments), this.config = {}, this.boundLang = () => this.requestUpdate();
+    super(...arguments), this.config = {}, this.activeIndex = 0, this.boundLang = () => this.requestUpdate(), this.autoTimer = null, this.swipeStartX = null, this.onPointerDown = (t) => {
+      t.pointerType === "mouse" && t.button !== 0 || (this.swipeStartX = t.clientX, this.clearAutoplay());
+    }, this.onPointerUp = (t) => {
+      const e = this.swipeStartX;
+      if (this.swipeStartX = null, this.syncAutoplay(), e == null) return;
+      const n = t.clientX - e;
+      if (Math.abs(n) < 40) return;
+      (getComputedStyle(this).direction === "rtl" ? n > 0 : n < 0) ? this.next() : this.prev();
+    }, this.onPointerCancel = () => {
+      this.swipeStartX = null, this.syncAutoplay();
+    }, this.onDragStart = (t) => t.preventDefault();
   }
   connectedCallback() {
-    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang);
+    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.syncAutoplay();
   }
   disconnectedCallback() {
-    window.removeEventListener("language-changed", this.boundLang), super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), this.clearAutoplay(), super.disconnectedCallback();
+  }
+  updated(t) {
+    if (t.has("config")) {
+      const e = this.banners;
+      this.activeIndex >= e.length && (this.activeIndex = 0), this.syncAutoplay();
+    }
   }
   get banners() {
-    var a;
-    return T((a = this.config) == null ? void 0 : a.stpb_items);
+    var t;
+    return P((t = this.config) == null ? void 0 : t.stpb_items);
+  }
+  get carouselMode() {
+    var t;
+    return _((t = this.config) == null ? void 0 : t.stpb_autoplay, !0) && this.banners.length > 1;
+  }
+  clearAutoplay() {
+    this.autoTimer && (clearInterval(this.autoTimer), this.autoTimer = null);
+  }
+  syncAutoplay() {
+    this.clearAutoplay(), this.carouselMode && (this.autoTimer = setInterval(() => this.next(), M));
+  }
+  goTo(t) {
+    const e = this.banners.length;
+    e && (this.activeIndex = (t % e + e) % e, this.syncAutoplay());
+  }
+  prev() {
+    this.goTo(this.activeIndex - 1);
+  }
+  next() {
+    this.goTo(this.activeIndex + 1);
+  }
+  renderBanner(t) {
+    return r`
+      <article class="stpb-banner" aria-label=${t.headline || i("عرض", "Promo")}>
+        <img class="stpb-banner__img" src=${t.image} alt=${t.headline || ""} loading="lazy" />
+        <div class="stpb-banner__shade" aria-hidden="true"></div>
+        <div class="stpb-banner__content">
+          ${t.headline ? r`<h3 class="stpb-banner__headline">${t.headline}</h3>` : c}
+          ${t.subtitle ? r`<p class="stpb-banner__subtitle">${t.subtitle}</p>` : c}
+          ${T(t.ctaUrl) && t.ctaLabel ? r`<a
+                class="stpb-banner__cta"
+                href=${t.ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >${t.ctaLabel}<span class="stpb-banner__cta-arrow" aria-hidden="true">←</span></a>` : c}
+        </div>
+      </article>
+    `;
+  }
+  renderCarousel(t) {
+    const e = (getComputedStyle(this).direction || "ltr") === "rtl", n = this.activeIndex * 100 * (e ? 1 : -1);
+    return r`
+      <div
+        class="stpb-carousel"
+        role="region"
+        aria-roledescription="carousel"
+        @pointerdown=${this.onPointerDown}
+        @pointerup=${this.onPointerUp}
+        @pointercancel=${this.onPointerCancel}
+        @dragstart=${this.onDragStart}
+      >
+        <div class="stpb-carousel__track" style=${f({ transform: `translateX(${n}%)` })}>
+          ${t.map(
+      (a, s) => r`<div
+              class="stpb-carousel__slide"
+              aria-hidden=${s === this.activeIndex ? "false" : "true"}
+            >${this.renderBanner(a)}</div>`
+    )}
+        </div>
+        <div class="stpb-dots" role="tablist">
+          ${t.map(
+      (a, s) => r`<button
+              type="button"
+              role="tab"
+              class=${m({ "stpb-dot": !0, "is-active": s === this.activeIndex })}
+              aria-selected=${s === this.activeIndex ? "true" : "false"}
+              aria-label=${`${s + 1}`}
+              @click=${() => this.goTo(s)}
+            ></button>`
+    )}
+        </div>
+      </div>
+    `;
   }
   render() {
-    const a = this.config || {}, e = k(a, "stpb_"), o = e.animate && !L(), t = i(a.stpb_title) || s("عروض مميزة", "Featured Promotions"), l = i(a.stpb_desc), d = z(a.stpb_show_title, !0), f = this.banners;
+    const t = this.config || {}, e = A(t, "stpb_"), n = e.animate && !C(), a = o(t.stpb_title) || i("عروض مميزة", "Featured Promotions"), s = o(t.stpb_desc), d = _(t.stpb_show_title, !0), b = this.banners;
     return r`
       <section
-        class=${w({ "fs-section": !0, "fs-animate": o, "stpb-shell": !0 })}
-        style=${y(S(e))}
-        aria-label=${t}
+        class=${m({ "fs-section": !0, "fs-animate": n, "stpb-shell": !0 })}
+        style=${f(z(e))}
+        aria-label=${a}
       >
         <div class="fs-container">
           ${d ? r`<header class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${s("حصريًا", "Exclusive")}</p>
-                <h2 class="fs-title">${t}</h2>
+                <p class="fs-eyebrow">${i("حصريًا", "Exclusive")}</p>
+                <h2 class="fs-title">${a}</h2>
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${l ? r`<p class="fs-desc">${l}</p>` : c}
+                ${s ? r`<p class="fs-desc">${s}</p>` : c}
               </header>` : c}
 
-          ${f.length ? r`
-                <div class="stpb-banners">
-                  ${f.map(
-      (n) => r`
-                      <article class="stpb-banner" aria-label=${n.headline || s("عرض", "Promo")}>
-                        <img class="stpb-banner__img" src=${n.image} alt=${n.headline || ""} loading="lazy" />
-                        <div class="stpb-banner__shade" aria-hidden="true"></div>
-                        <div class="stpb-banner__content">
-                          ${n.headline ? r`<h3 class="stpb-banner__headline">${n.headline}</h3>` : c}
-                          ${n.subtitle ? r`<p class="stpb-banner__subtitle">${n.subtitle}</p>` : c}
-                          ${C(n.ctaUrl) && n.ctaLabel ? r`<a
-                                class="stpb-banner__cta"
-                                href=${n.ctaUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >${n.ctaLabel}<span class="stpb-banner__cta-arrow" aria-hidden="true">←</span></a>` : c}
-                        </div>
-                      </article>
-                    `
-    )}
-                </div>
-              ` : r`<div class="fs-empty">${s("أضف بانرات ترويجية من إعدادات العنصر", "Add promo banners from element settings")}</div>`}
-          ${U(this.config || {}, "stpb_")}
+          ${b.length ? this.carouselMode ? this.renderCarousel(b) : r`<div class="stpb-banners">${b.map((x) => this.renderBanner(x))}</div>` : r`<div class="fs-empty">${i("أضف بانرات ترويجية من إعدادات العنصر", "Add promo banners from element settings")}</div>`}
+          ${I(this.config || {}, "stpb_")}
         </div>
       </section>
     `;
   }
 };
-h.styles = [
-  $,
-  E,
-  u`
+u.styles = [
+  L,
+  X,
+  v`
       :host {
         direction: inherit;
       }
     `
 ];
-let b = h;
-M([
-  v({ type: Object })
-], b.prototype, "config");
-typeof b < "u" && b.registerSallaComponent("salla-style-promo-banners");
+let l = u;
+y([
+  $({ type: Object })
+], l.prototype, "config");
+y([
+  k()
+], l.prototype, "activeIndex");
+typeof l < "u" && l.registerSallaComponent("salla-style-promo-banners");
 export {
-  b as default
+  l as default
 };

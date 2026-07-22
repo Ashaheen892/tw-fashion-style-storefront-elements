@@ -271,7 +271,7 @@ export const componentStyles = css`
     transform: translate(-50%, calc(-100% - 0.85rem));
     padding: 0.35rem 0.65rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--text-color, #2b211c);
     font-size: 0.72rem;
     font-weight: 700;
@@ -393,7 +393,7 @@ export const componentStyles = css`
 
   .nal-step.is-active {
     width: 1.35rem;
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .nal-empty {

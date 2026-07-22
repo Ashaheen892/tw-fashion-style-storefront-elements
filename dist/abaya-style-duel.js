@@ -1,9 +1,9 @@
-import { css as q, LitElement as M, html as o, nothing as i } from "lit";
+import { css as L, LitElement as M, html as o, nothing as i } from "lit";
 import { property as B, state as I } from "lit/decorators.js";
 import { classMap as b } from "lit/directives/class-map.js";
 import { styleMap as R } from "lit/directives/style-map.js";
-import { n as K, l, d as C, y as S, s as O, r as j, i as x, t as d, H as A, I as T, p as E, a as N, b as P, A as V } from "./sharedStyles-BYm1OK6w.js";
-const H = q`
+import { n as K, l, d as C, q as S, s as O, r as j, i as x, t as d, x as T, y as A, p as E, a as N, b as P, v as V } from "./sharedStyles-Cd7RKVf-.js";
+const U = L`
   .asd-arena {
     position: relative;
     overflow: hidden;
@@ -209,7 +209,7 @@ const H = q`
     transform: translateX(-50%);
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.94);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--accent-color, var(--fs-store-primary));
     font-size: 0.75rem;
     font-weight: 700;
@@ -384,7 +384,7 @@ const H = q`
     }
   }
 `;
-function U(c) {
+function X(c) {
   return K(c).map((e, r) => ({
     id: `round-${r}`,
     question: l(e.question),
@@ -402,7 +402,7 @@ function U(c) {
     (e) => e.question.trim() !== "" && (e.name_a.trim() !== "" || e.img_a.trim() !== "") && (e.name_b.trim() !== "" || e.img_b.trim() !== "")
   );
 }
-function X(c, e, r) {
+function Y(c, e, r) {
   let t = r ? c.votes_a : 0, a = r ? c.votes_b : 0;
   e === "a" && (t += 1), e === "b" && (a += 1);
   const s = t + a;
@@ -412,13 +412,13 @@ function X(c, e, r) {
     total: s
   };
 }
-function Y(c, e) {
+function G(c, e) {
   return l(c, e).trim() || e;
 }
-var G = Object.defineProperty, y = (c, e, r, t) => {
+var H = Object.defineProperty, y = (c, e, r, t) => {
   for (var a = void 0, s = c.length - 1, p; s >= 0; s--)
     (p = c[s]) && (a = p(e, r, a) || a);
-  return a && G(e, r, a), a;
+  return a && H(e, r, a), a;
 };
 const $ = class $ extends M {
   constructor() {
@@ -435,7 +435,7 @@ const $ = class $ extends M {
   }
   get rounds() {
     var e;
-    return U((e = this.config) == null ? void 0 : e.asd_rounds);
+    return X((e = this.config) == null ? void 0 : e.asd_rounds);
   }
   get theme() {
     return j(this.config, "asd_");
@@ -464,15 +464,15 @@ const $ = class $ extends M {
   }
   _loadVotes() {
     var r;
-    this._storageKey = Y(
+    this._storageKey = G(
       (r = this.config) == null ? void 0 : r.asd_storage_key,
       "asd-style-duel-votes"
     );
-    const e = A(this._storageKey, { votes: {} });
+    const e = T(this._storageKey, { votes: {} });
     this.votes = e.votes || {};
   }
   _saveVotes() {
-    T(this._storageKey, { votes: this.votes });
+    A(this._storageKey, { votes: this.votes });
   }
   _vote(e) {
     const r = this.currentRound;
@@ -489,7 +489,7 @@ const $ = class $ extends M {
       </div>`;
     const e = this.theme, r = e.animate && !E(), t = this.currentRound;
     if (!t) return i;
-    const a = l((w = this.config) == null ? void 0 : w.asd_title), s = l((k = this.config) == null ? void 0 : k.asd_desc), p = l((z = this.config) == null ? void 0 : z.asd_result_note), _ = this._label("asd_next_btn", "المواجهة التالية", "Next duel"), m = this.votes[t.id] ?? null, n = m !== null, { pctA: g, pctB: h } = X(t, m, this.useSeedVotes), f = n && g >= h, v = n && h > g;
+    const a = l((w = this.config) == null ? void 0 : w.asd_title), s = l((k = this.config) == null ? void 0 : k.asd_desc), p = l((z = this.config) == null ? void 0 : z.asd_result_note), _ = this._label("asd_next_btn", "المواجهة التالية", "Next duel"), m = this.votes[t.id] ?? null, n = m !== null, { pctA: g, pctB: f } = Y(t, m, this.useSeedVotes), h = n && g >= f, v = n && f > g;
     return o`
       <section
         class=${b({
@@ -514,10 +514,10 @@ const $ = class $ extends M {
               </span>
               <div class="asd-dots" aria-hidden="true">
                 ${this.rounds.map(
-      (F, L) => o`<span
+      (F, q) => o`<span
                     class=${b({
         "asd-dot": !0,
-        "asd-dot--active": L === this.roundIndex
+        "asd-dot--active": q === this.roundIndex
       })}
                   ></span>`
     )}
@@ -527,9 +527,9 @@ const $ = class $ extends M {
             <p class="asd-question">${t.question}</p>
 
             <div class="asd-options">
-              ${this._renderOption("a", t, g, f, n, m === "a", r)}
+              ${this._renderOption("a", t, g, h, n, m === "a", r)}
               <span class="asd-vs" aria-hidden="true">VS</span>
-              ${this._renderOption("b", t, h, v, n, m === "b", r)}
+              ${this._renderOption("b", t, f, v, n, m === "b", r)}
             </div>
 
             ${n && t.result_desc ? o`<div class="asd-result" aria-live="polite">${t.result_desc}</div>` : i}
@@ -555,7 +555,7 @@ const $ = class $ extends M {
     `;
   }
   _renderOption(e, r, t, a, s, p, _) {
-    const m = e === "a" ? r.img_a : r.img_b, n = e === "a" ? r.name_a : r.name_b, g = e === "a" ? r.url_a : r.url_b, h = !s || this.allowRevote, f = {
+    const m = e === "a" ? r.img_a : r.img_b, n = e === "a" ? r.name_a : r.name_b, g = e === "a" ? r.url_a : r.url_b, f = !s || this.allowRevote, h = {
       "asd-option": !0,
       "asd-option--winner": a,
       "asd-option--picked": p,
@@ -596,7 +596,7 @@ const $ = class $ extends M {
     `;
     return V(g) && s ? o`
         <a
-          class=${b(f)}
+          class=${b(h)}
           href=${g}
           target="_blank"
           rel="noopener noreferrer"
@@ -607,8 +607,8 @@ const $ = class $ extends M {
       ` : o`
       <button
         type="button"
-        class=${b(f)}
-        ?disabled=${!h && s}
+        class=${b(h)}
+        ?disabled=${!f && s}
         aria-label=${d(`اختيار ${n}`, `Choose ${n}`)}
         aria-pressed=${p ? "true" : "false"}
         @click=${() => this._vote(e)}
@@ -618,7 +618,7 @@ const $ = class $ extends M {
     `;
   }
 };
-$.styles = [O, H];
+$.styles = [O, U];
 let u = $;
 y([
   B({ type: Object })

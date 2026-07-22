@@ -1,8 +1,8 @@
-import { css as q, LitElement as z, html as n, nothing as m } from "lit";
+import { css as q, LitElement as A, html as n, nothing as m } from "lit";
 import { property as D, state as f, query as P } from "lit/decorators.js";
 import { classMap as v } from "lit/directives/class-map.js";
 import { styleMap as T } from "lit/directives/style-map.js";
-import { x as _, n as A, e as O, l as p, d as B, i as d, f as S, y as k, s as H, p as b, r as M, a as U, A as I, t as c, b as N } from "./sharedStyles-BYm1OK6w.js";
+import { o as _, n as B, e as O, l as p, d as z, i as d, f as S, q as k, s as H, p as b, r as M, a as U, v as I, t as c, b as N } from "./sharedStyles-Cd7RKVf-.js";
 const j = q`
   .amm-shell {
     display: grid;
@@ -548,7 +548,7 @@ function Q(a) {
   return e === "1/1" || e === "4/5" || e === "16/9" || e === "3/4" ? e : "3/4";
 }
 function Z(a) {
-  return A(a).map((e, t) => {
+  return B(a).map((e, t) => {
     const i = O(e.image) || String(e.image || "").trim(), s = p(e.title).trim(), r = p(e.desc).trim(), o = p(e.alt).trim() || s || `Frame ${t + 1}`;
     return {
       index: t,
@@ -557,13 +557,13 @@ function Z(a) {
       title: s,
       desc: r,
       show_info: d(e.show_info, !!(s || r)),
-      url: B(e.url),
+      url: z(e.url),
       btn_text: p(e.btn_text).trim()
     };
   }).filter((e) => !!e.image);
 }
 function ee(a) {
-  return A(a).map((e) => {
+  return B(a).map((e) => {
     const t = p(e.name).trim(), i = Math.max(
       0,
       Math.min(100, k(e.value ?? e.grade ?? e.degree, 0))
@@ -590,7 +590,7 @@ function ie(a) {
     cut: p(a.amm_cut).trim(),
     meters: e.length ? e : te(a),
     sleeves: p(a.amm_sleeves).trim(),
-    product_url: B(a.amm_product_url),
+    product_url: z(a.amm_product_url),
     product_btn: p(a.amm_product_btn).trim()
   };
 }
@@ -647,7 +647,7 @@ var re = Object.defineProperty, h = (a, e, t, i) => {
     (o = a[r]) && (s = o(e, t, s) || s);
   return s && re(e, t, s), s;
 };
-const R = 18, E = class E extends z {
+const R = 18, E = class E extends A {
   constructor() {
     super(...arguments), this.config = {}, this.frameIndex = 0, this.displaySrc = "", this.playing = !1, this.dragging = !1, this.hintHidden = !1, this.inView = !1, this.videoTime = 0, this.videoDuration = 0, this.fullscreenOpen = !1, this.framesReady = !1, this.mediaFront = "", this.mediaBack = "", this.frontIsA = !0, this.loader = new L(), this.boundLang = () => this.requestUpdate(), this.io = null, this.playRaf = 0, this.dragRaf = 0, this.lastPlayTs = 0, this.playBusy = !1, this.boundFsChange = () => this.syncFullscreenState(), this.pointerId = null, this.dragStartX = 0, this.dragStartIndex = 0, this.dragStartVideoTime = 0, this.wasPlayingBeforeDrag = !1, this.userStopped = !1, this.pendingIndex = null, this.preloadStarted = !1, this.boundVisibility = () => this.onVisibilityChange(), this.boundKeydown = (e) => this.onGlobalKey(e), this.onPointerMove = (e) => {
       !this.dragging || e.pointerId !== this.pointerId || this.dragRaf || (this.dragRaf = requestAnimationFrame(() => {

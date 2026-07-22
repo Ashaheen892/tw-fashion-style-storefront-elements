@@ -1,9 +1,54 @@
-import { css as x, LitElement as _, nothing as p, html as l } from "lit";
-import { property as k } from "lit/decorators.js";
-import { classMap as v } from "lit/directives/class-map.js";
-import { styleMap as $ } from "lit/directives/style-map.js";
-import { t as r, n as z, l as m, d as y, s as S, A as g, r as C, p as L, i as T, a as q, b as E } from "./sharedStyles-BYm1OK6w.js";
-const O = x`
+import { css as $, LitElement as E, nothing as b, html as p } from "lit";
+import { property as S } from "lit/decorators.js";
+import { classMap as _ } from "lit/directives/class-map.js";
+import { ref as C } from "lit/directives/ref.js";
+import { styleMap as D } from "lit/directives/style-map.js";
+import { t as l, n as T, l as h, d as L, s as z, v, r as P, p as M, i as O, a as q, b as A } from "./sharedStyles-Cd7RKVf-.js";
+const k = "__fsDragScrollCleanup", H = 6;
+function I(c) {
+  var f;
+  if (!c) return;
+  const e = c;
+  (f = e[k]) == null || f.call(e);
+  let t = null, n = 0, r = 0, i = !1;
+  const o = (s) => {
+    s.pointerType !== "mouse" || s.button !== 0 || e.scrollWidth <= e.clientWidth || (t = s.pointerId, n = s.clientX, r = e.scrollLeft, i = !1, e.style.scrollSnapType = "none", e.style.cursor = "grabbing");
+  }, m = (s) => {
+    if (t === null || s.pointerId !== t) return;
+    const u = s.clientX - n;
+    if (!i && Math.abs(u) > H) {
+      i = !0;
+      try {
+        e.setPointerCapture(t);
+      } catch {
+      }
+    }
+    i && (s.preventDefault(), e.scrollLeft = r - u);
+  }, d = (s) => {
+    if (!(t === null || s.pointerId !== t)) {
+      if (i)
+        try {
+          e.releasePointerCapture(t);
+        } catch {
+        }
+      if (t = null, e.style.scrollSnapType = "", e.style.cursor = "", i) {
+        const u = (w) => {
+          w.preventDefault(), w.stopPropagation();
+        };
+        e.addEventListener("click", u, { capture: !0, once: !0 }), window.setTimeout(() => {
+          e.removeEventListener("click", u, { capture: !0 });
+        }, 0);
+      }
+      i = !1;
+    }
+  }, a = (s) => {
+    s.preventDefault();
+  };
+  e.addEventListener("pointerdown", o), e.addEventListener("pointermove", m), e.addEventListener("pointerup", d), e.addEventListener("pointercancel", d), e.addEventListener("dragstart", a, { capture: !0 }), e.style.touchAction = "pan-x pan-y", e.scrollWidth > e.clientWidth && (e.style.cursor = "grab"), e[k] = () => {
+    e.removeEventListener("pointerdown", o), e.removeEventListener("pointermove", m), e.removeEventListener("pointerup", d), e.removeEventListener("pointercancel", d), e.removeEventListener("dragstart", a, { capture: !0 });
+  };
+}
+const W = $`
   .stc-shell {
     position: relative;
   }
@@ -202,57 +247,57 @@ const O = x`
       transition: none !important;
     }
   }
-`, h = [
+`, y = [
   {
     id: "evening",
     image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
-    title: r("سهرة", "Evening"),
+    title: l("سهرة", "Evening"),
     url: ""
   },
   {
     id: "daily",
     image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80",
-    title: r("يومي", "Daily"),
+    title: l("يومي", "Daily"),
     url: ""
   },
   {
     id: "occasion",
     image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80",
-    title: r("مناسبات", "Occasions"),
+    title: l("مناسبات", "Occasions"),
     url: ""
   },
   {
     id: "new",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
-    title: r("وصل حديثاً", "New in"),
+    title: l("وصل حديثاً", "New in"),
     url: ""
   }
 ];
-function M(d) {
-  const e = z(d).map((t, n) => {
-    const i = String(t.image || t.poster || "").trim(), a = m(t.title) || m(t.label), o = y(t.link) || y(t.url) || String(t.link || "").trim();
+function X(c) {
+  const e = T(c).map((t, n) => {
+    const r = String(t.image || t.poster || "").trim(), i = h(t.title) || h(t.label), o = L(t.link) || L(t.url) || String(t.link || "").trim();
     return {
       id: String(t.id || `stc-${n}`),
-      image: i,
-      title: a,
+      image: r,
+      title: i,
       url: o
     };
   }).filter((t) => t.image || t.title);
   return e.length ? e.map((t, n) => {
-    const i = h[n % h.length];
+    const r = y[n % y.length];
     return {
       ...t,
-      image: t.image || i.image,
-      title: t.title || i.title
+      image: t.image || r.image,
+      title: t.title || r.title
     };
-  }) : h.map((t) => ({ ...t }));
+  }) : y.map((t) => ({ ...t }));
 }
-var j = Object.defineProperty, A = (d, e, t, n) => {
-  for (var i = void 0, a = d.length - 1, o; a >= 0; a--)
-    (o = d[a]) && (i = o(e, t, i) || i);
-  return i && j(e, t, i), i;
+var j = Object.defineProperty, R = (c, e, t, n) => {
+  for (var r = void 0, i = c.length - 1, o; i >= 0; i--)
+    (o = c[i]) && (r = o(e, t, r) || r);
+  return r && j(e, t, r), r;
 };
-const f = class f extends _ {
+const x = class x extends E {
   constructor() {
     super(...arguments), this.config = {}, this.boundLang = () => this.requestUpdate();
   }
@@ -264,74 +309,80 @@ const f = class f extends _ {
   }
   get tiles() {
     var e;
-    return M((e = this.config) == null ? void 0 : e.stc_items);
+    return X((e = this.config) == null ? void 0 : e.stc_items);
   }
   openTile(e) {
-    g(e) && window.open(e, "_blank", "noopener,noreferrer");
+    v(e) && window.open(e, "_blank", "noopener,noreferrer");
   }
   render() {
-    const e = this.config || {}, t = C(e, "stc_"), n = t.animate && !L(), i = m(e.stc_title) || r("تصنيفات الأزياء", "Style Categories"), a = m(e.stc_desc), o = T(e.stc_show_title, !0), u = String(e.stc_layout || "grid"), b = this.tiles;
-    return l`
+    const e = this.config || {}, t = P(e, "stc_"), n = t.animate && !M(), r = h(e.stc_title) || l("تصنيفات الأزياء", "Style Categories"), i = h(e.stc_desc), o = O(e.stc_show_title, !0), m = String(e.stc_layout || "grid"), d = this.tiles;
+    return p`
       <section
-        class=${v({ "fs-section": !0, "fs-animate": n, "stc-shell": !0 })}
-        style=${$(q(t))}
-        aria-label=${i}
+        class=${_({ "fs-section": !0, "fs-animate": n, "stc-shell": !0 })}
+        style=${D(q(t))}
+        aria-label=${r}
       >
         <div class="fs-container">
-          ${o ? l`<header class="stc-header">
-                <p class="stc-eyebrow">${r("تشكيلتنا", "Our collection")}</p>
-                <h2 class="stc-title">${i}</h2>
+          ${o ? p`<header class="stc-header">
+                <p class="stc-eyebrow">${l("تشكيلتنا", "Our collection")}</p>
+                <h2 class="stc-title">${r}</h2>
                 <span class="stc-title-line" aria-hidden="true"></span>
-                ${a ? l`<p class="stc-desc">${a}</p>` : p}
-              </header>` : p}
+                ${i ? p`<p class="stc-desc">${i}</p>` : b}
+              </header>` : b}
 
-          ${b.length ? l`
-                <div class=${v({ "stc-grid": u === "grid", "stc-slider": u === "slider" })} role="list">
-                  ${b.map(
-      (s) => l`
+          ${d.length ? p`
+                <div
+                  class=${_({ "stc-grid": m === "grid", "stc-slider": m === "slider" })}
+                  role="list"
+                  ${C((a) => {
+      a instanceof HTMLElement && a.classList.contains("stc-slider") && I(a);
+    })}
+                >
+                  ${d.map(
+      (a) => p`
                       <a
                         class="stc-tile"
                         role="listitem"
-                        href=${g(s.url) ? s.url : p}
+                        href=${v(a.url) ? a.url : b}
                         target="_blank"
                         rel="noopener noreferrer"
                         tabindex="0"
-                        aria-label=${s.title || r("تصنيف", "Category")}
-                        @click=${(w) => {
-        g(s.url) || w.preventDefault();
+                        aria-label=${a.title || l("تصنيف", "Category")}
+                        @click=${(f) => {
+        v(a.url) || f.preventDefault();
       }}
                       >
-                        <img class="stc-tile__img" src=${s.image} alt=${s.title || ""} loading="lazy" />
+                        <img class="stc-tile__img" src=${a.image} alt=${a.title || ""} loading="lazy" />
                         <div class="stc-tile__shade" aria-hidden="true"></div>
                         <div class="stc-tile__label">
-                          ${s.title}
+                          ${a.title}
                           <span class="stc-tile__rule" aria-hidden="true"></span>
                         </div>
                       </a>
                     `
     )}
                 </div>
-              ` : l`<div class="stc-empty">${r("أضف تصنيفات من إعدادات العنصر", "Add categories from element settings")}</div>`}
-          ${E(this.config || {}, "stc_")}
+              ` : p`<div class="stc-empty">${l("أضف تصنيفات من إعدادات العنصر", "Add categories from element settings")}</div>`}
+          ${A(this.config || {}, "stc_")}
         </div>
       </section>
     `;
   }
 };
-f.styles = [
-  S,
-  O,
-  x`
+x.styles = [
+  z,
+  W,
+  $`
       :host {
         direction: inherit;
       }
     `
 ];
-let c = f;
-A([
-  k({ type: Object })
-], c.prototype, "config");
-typeof c < "u" && c.registerSallaComponent("salla-style-categories");
+let g = x;
+R([
+  S({ type: Object })
+], g.prototype, "config");
+typeof g < "u" && g.registerSallaComponent("salla-style-categories");
 export {
-  c as default
+  g as default
 };

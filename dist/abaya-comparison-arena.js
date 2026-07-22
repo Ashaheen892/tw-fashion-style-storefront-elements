@@ -1,10 +1,9 @@
-import { css as D, LitElement as K, nothing as h, html as d } from "lit";
-import { property as q, state as C } from "lit/decorators.js";
-import { classMap as $ } from "lit/directives/class-map.js";
-import { styleMap as R } from "lit/directives/style-map.js";
-import { n as S, l as u, d as M, f as A, e as _, h as X, j, i as B, k as x, u as Y, m as G, s as J, o as Q, t as m, r as W, p as Z, a as ee, b as te } from "./sharedStyles-BYm1OK6w.js";
-import { r as re } from "./productCard-BlEnQRkD.js";
-const ae = D`
+import { css as L, LitElement as R, nothing as f, html as c } from "lit";
+import { property as O, state as w } from "lit/decorators.js";
+import { classMap as _ } from "lit/directives/class-map.js";
+import { styleMap as V } from "lit/directives/style-map.js";
+import { n as k, l as p, d as H, f as P, e as B, s as N, t as l, h as $, r as K, p as U, a as q, b as F } from "./sharedStyles-Cd7RKVf-.js";
+const X = L`
   .acm-studio {
     position: relative;
     overflow: hidden;
@@ -334,9 +333,8 @@ const ae = D`
   }
 
   .acm-product-head .fs-btn {
-    min-height: 2.75rem;
-    padding: 0.45rem 0.85rem;
-    font-size: 0.8rem;
+    width: 100%;
+    justify-content: center;
   }
 
   @keyframes acm-reveal {
@@ -410,131 +408,56 @@ const ae = D`
     }
   }
 `;
-function ie(t) {
-  return Y(t);
+function T(i, e) {
+  return i.trim().toLowerCase().replace(/\s+/g, "-") || `criterion-${e + 1}`;
 }
-function oe(t) {
-  return G(t);
-}
-function se(t) {
-  const e = !!u(t.name).trim(), r = !!(_(t.image) || _(t.thumbnail) || _(t.main_image)), i = !!M(t.url || t.permalink), a = x(t.price) > 0 || x(t.sale_price) > 0 || x(t.regular_price) > 0;
-  return e && (r || i || a);
-}
-function ce(t) {
-  for (const r of ie(t))
-    if (r != null) {
-      if (typeof r == "number" || typeof r == "string") {
-        const i = String(r).trim();
-        if (i) return { id: i, label: "", hydrated: null };
-      }
-      if (typeof r == "object") {
-        const i = r, a = oe(i), o = u(i.label ?? i.name).trim(), s = se(i) ? i : null;
-        if (a || s)
-          return {
-            id: a || String((s == null ? void 0 : s.id) ?? "").trim(),
-            label: o,
-            hydrated: s
-          };
-      }
-    }
-  const e = j(t);
-  return e != null && e.id ? {
-    id: e.id,
-    label: e.name,
-    hydrated: t && typeof t == "object" ? t : null
-  } : null;
-}
-function O(t, e) {
-  return t.trim().toLowerCase().replace(/\s+/g, "-") || `criterion-${e + 1}`;
-}
-function ne(t) {
-  return S(t).map((e, r) => {
-    const i = u(e.label).trim(), a = u(e.value).trim(), o = u(e.key).trim() || O(i, r);
-    return { key: o, label: i || o, value: a };
+function Y(i) {
+  return k(i).map((e, t) => {
+    const o = p(e.label).trim(), r = p(e.value).trim(), a = p(e.key).trim() || T(o, t);
+    return { key: a, label: o || a, value: r };
   }).filter((e) => e.label && e.value);
 }
-function H(t) {
-  return S(t).map((e, r) => {
-    const i = ce(
-      e.product ?? e.products ?? e.selected_product
-    ), a = (i == null ? void 0 : i.id) || "";
-    return {
-      id: a ? `product-${a}` : `item-${r}`,
-      product_id: a,
-      product_label: (i == null ? void 0 : i.label) || "",
-      hydrated: (i == null ? void 0 : i.hydrated) || null,
-      name: u(e.name),
-      image: _(e.image),
-      price: A(e.price, 0),
-      old_price: A(e.old_price, 0),
-      url: M(e.url),
-      btn_text: u(e.btn_text),
-      attributes: ne(e.attributes)
-    };
-  }).filter((e) => e.product_id || e.name || e.image || e.hydrated || e.attributes.length);
+function M(i) {
+  return k(i).map((e, t) => ({
+    id: p(e.id).trim() || p(e.name).trim() || `item-${t}`,
+    name: p(e.name).trim(),
+    image: B(e.image),
+    price: P(e.price, 0),
+    old_price: P(e.old_price, 0),
+    url: H(e.url),
+    btn_text: p(e.btn_text).trim(),
+    attributes: Y(e.attributes)
+  })).filter((e) => e.name || e.image || e.url || e.attributes.length);
 }
-function le(t) {
-  return t.hydrated ? !0 : !!(t.name && (t.image || t.url || t.price > 0));
+async function G(i) {
+  return M(i);
 }
-function z(t, e) {
-  const r = e ? j(e) : null, i = e && typeof e == "object" ? e : null, a = t.name || (r == null ? void 0 : r.name) || (i ? u(i.name) : "") || t.product_label, o = t.image || (r == null ? void 0 : r.image) || (i ? _(i.image) || _(i.thumbnail) || _(i.main_image) : ""), s = t.url || (r == null ? void 0 : r.url) || (i ? M(i.url || i.permalink) : "");
-  let c = t.price > 0 ? t.price : (r == null ? void 0 : r.price) || 0, l = t.old_price > 0 ? t.old_price : (r == null ? void 0 : r.old_price) || 0;
-  if (!(t.price > 0) && i) {
-    const p = B(i.is_on_sale) || B(i.on_sale), g = x(i.sale_price), b = x(i.regular_price), w = x(i.price);
-    p && g > 0 ? (c = g, l = b > g ? b : 0) : w > 0 && (c = w, b > w && (l = b));
-  }
-  return {
-    id: t.id,
-    product_id: t.product_id || (r == null ? void 0 : r.id) || "",
-    name: a,
-    image: o,
-    price: c,
-    old_price: l,
-    url: s,
-    btn_text: t.btn_text,
-    rating: (r == null ? void 0 : r.rating) || 0,
-    attributes: t.attributes
-  };
-}
-function L(t, e) {
-  return e ? z(t, e) : t.hydrated ? z(t, t.hydrated) : z(t);
-}
-function de(t) {
-  return H(t).map((e) => L(e)).filter((e) => e.name || e.image || e.product_id || e.attributes.length);
-}
-async function me(t) {
-  return X(t);
-}
-async function ue(t) {
-  const e = H(t), r = e.filter((a) => a.product_id && !le(a)).map((a) => a.product_id), i = r.length ? await me(r) : /* @__PURE__ */ new Map();
-  return e.map((a) => a.product_id && i.has(a.product_id) ? L(a, i.get(a.product_id)) : L(a)).filter((a) => a.name || a.image || a.product_id || a.attributes.length);
-}
-function pe(t, e = []) {
-  const r = S(t).map((o, s) => {
-    const c = u(o.label).trim(), l = u(o.key).trim() || O(c, s);
-    return { key: l, label: c || l };
-  }).filter((o) => o.label);
-  if (r.length) return r;
-  const i = /* @__PURE__ */ new Set(), a = [];
-  for (const o of e)
-    for (const s of o.attributes) {
-      const c = s.key || s.label;
-      !c || i.has(c) || (i.add(c), a.push({ key: s.key, label: s.label }));
+function J(i, e = []) {
+  const t = k(i).map((a, n) => {
+    const s = p(a.label).trim(), d = p(a.key).trim() || T(s, n);
+    return { key: d, label: s || d };
+  }).filter((a) => a.label);
+  if (t.length) return t;
+  const o = /* @__PURE__ */ new Set(), r = [];
+  for (const a of e)
+    for (const n of a.attributes) {
+      const s = n.key || n.label;
+      !s || o.has(s) || (o.add(s), r.push({ key: n.key, label: n.label }));
     }
-  return a;
+  return r;
 }
-function N(t, e) {
-  const r = t.attributes.find((o) => o.key === e.key);
-  if (r != null && r.value) return r.value;
-  const i = e.label.trim().toLowerCase(), a = t.attributes.find(
-    (o) => o.label.trim().toLowerCase() === i
+function E(i, e) {
+  const t = i.attributes.find((a) => a.key === e.key);
+  if (t != null && t.value) return t.value;
+  const o = e.label.trim().toLowerCase(), r = i.attributes.find(
+    (a) => a.label.trim().toLowerCase() === o
   );
-  return (a == null ? void 0 : a.value) || "";
+  return (r == null ? void 0 : r.value) || "";
 }
-function V(t, e) {
-  return !e || e <= t ? 0 : Math.round((e - t) / e * 100);
+function S(i, e) {
+  return !e || e <= i ? 0 : Math.round((e - i) / e * 100);
 }
-function fe(t) {
+function Q(i) {
   return [
     {
       key: "price",
@@ -550,7 +473,7 @@ function fe(t) {
       kind: "discount",
       isDiscount: !0
     },
-    ...t.map((e) => ({
+    ...i.map((e) => ({
       key: `attr:${e.key}`,
       labelAr: e.label,
       labelEn: e.label,
@@ -560,41 +483,41 @@ function fe(t) {
     }))
   ];
 }
-function he(t, e, r) {
-  const i = /* @__PURE__ */ new Set();
-  let a = null, o = null;
-  if (t.highlightIdentical && t.criterionKey && e.length > 1) {
-    const s = r.find((c) => c.key === t.criterionKey);
-    if (s) {
-      const c = e.map((l) => N(l, s).trim().toLowerCase()).filter(Boolean);
-      c.length === e.length && c.every((l) => l === c[0]) && e.forEach((l) => i.add(l.id));
+function W(i, e, t) {
+  const o = /* @__PURE__ */ new Set();
+  let r = null, a = null;
+  if (i.highlightIdentical && i.criterionKey && e.length > 1) {
+    const n = t.find((s) => s.key === i.criterionKey);
+    if (n) {
+      const s = e.map((d) => E(d, n).trim().toLowerCase()).filter(Boolean);
+      s.length === e.length && s.every((d) => d === s[0]) && e.forEach((d) => o.add(d.id));
     }
   }
-  if (t.isPrice) {
-    const s = e.filter((c) => c.price > 0);
-    if (s.length) {
-      const c = Math.min(...s.map((p) => p.price)), l = s.filter((p) => p.price === c);
-      l.length === 1 && (a = l[0].id);
+  if (i.isPrice) {
+    const n = e.filter((s) => s.price > 0);
+    if (n.length) {
+      const s = Math.min(...n.map((h) => h.price)), d = n.filter((h) => h.price === s);
+      d.length === 1 && (r = d[0].id);
     }
   }
-  if (t.isDiscount) {
-    const s = e.map((c) => ({
-      id: c.id,
-      pct: V(c.price, c.old_price)
-    })).filter((c) => c.pct > 0);
-    if (s.length) {
-      const c = Math.max(...s.map((p) => p.pct)), l = s.filter((p) => p.pct === c);
-      l.length === 1 && (o = l[0].id);
+  if (i.isDiscount) {
+    const n = e.map((s) => ({
+      id: s.id,
+      pct: S(s.price, s.old_price)
+    })).filter((s) => s.pct > 0);
+    if (n.length) {
+      const s = Math.max(...n.map((h) => h.pct)), d = n.filter((h) => h.pct === s);
+      d.length === 1 && (a = d[0].id);
     }
   }
-  return { identical: i, bestPriceId: a, bestDiscountId: o };
+  return { identical: o, bestPriceId: r, bestDiscountId: a };
 }
-var ge = Object.defineProperty, k = (t, e, r, i) => {
-  for (var a = void 0, o = t.length - 1, s; o >= 0; o--)
-    (s = t[o]) && (a = s(e, r, a) || a);
-  return a && ge(e, r, a), a;
+var Z = Object.defineProperty, v = (i, e, t, o) => {
+  for (var r = void 0, a = i.length - 1, n; a >= 0; a--)
+    (n = i[a]) && (r = n(e, t, r) || r);
+  return r && Z(e, t, r), r;
 };
-const I = 3, P = 2, T = class T extends K {
+const y = 3, x = 2, C = class C extends R {
   constructor() {
     super(...arguments), this.config = {}, this.products = [], this.productsLoading = !1, this.selectedIds = [], this.showTable = !1, this.loadToken = 0, this.boundLangHandler = () => this.requestUpdate();
   }
@@ -609,85 +532,126 @@ const I = 3, P = 2, T = class T extends K {
   }
   get criteria() {
     var e;
-    return pe((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
+    return J((e = this.config) == null ? void 0 : e.acm_criteria, this.products);
   }
   get selected() {
-    return this.selectedIds.map((e) => this.products.find((r) => r.id === e)).filter((e) => !!e);
+    return this.selectedIds.map((e) => this.products.find((t) => t.id === e)).filter((e) => !!e);
   }
   get currency() {
     var e;
     return String(((e = this.config) == null ? void 0 : e.acm_currency) || "ر.س").trim() || "ر.س";
   }
   async loadProducts() {
-    var a, o;
-    const e = ++this.loadToken, r = de((a = this.config) == null ? void 0 : a.acm_products);
-    r.length ? (this.products = r, this.productsLoading = !1) : this.productsLoading = !0;
-    const i = await ue((o = this.config) == null ? void 0 : o.acm_products);
-    e === this.loadToken && (this.products = i, this.productsLoading = !1, this.selectedIds = this.selectedIds.filter(
-      (s) => i.some((c) => c.id === s)
-    ), this.selectedIds.length < P && (this.showTable = !1));
+    var r, a;
+    const e = ++this.loadToken, t = M((r = this.config) == null ? void 0 : r.acm_products);
+    t.length ? (this.products = t, this.productsLoading = !1) : this.productsLoading = !0;
+    const o = await G((a = this.config) == null ? void 0 : a.acm_products);
+    e === this.loadToken && (this.products = o, this.productsLoading = !1, this.selectedIds = this.selectedIds.filter(
+      (n) => o.some((s) => s.id === n)
+    ), this.selectedIds.length < x && (this.showTable = !1));
   }
   toggleProduct(e) {
     if (this.selectedIds.includes(e)) {
-      this.selectedIds = this.selectedIds.filter((r) => r !== e), this.selectedIds.length < P && (this.showTable = !1);
+      this.selectedIds = this.selectedIds.filter((t) => t !== e), this.selectedIds.length < x && (this.showTable = !1);
       return;
     }
-    this.selectedIds.length >= I || (this.selectedIds = [...this.selectedIds, e]);
+    this.selectedIds.length >= y || (this.selectedIds = [...this.selectedIds, e]);
   }
   removeProduct(e) {
-    this.selectedIds = this.selectedIds.filter((r) => r !== e), this.selectedIds.length < P && (this.showTable = !1);
+    this.selectedIds = this.selectedIds.filter((t) => t !== e), this.selectedIds.length < x && (this.showTable = !1);
   }
   clearAll() {
     this.selectedIds = [], this.showTable = !1;
   }
-  formatCellValue(e, r, i) {
+  renderChoiceCard(e, t, o) {
+    return c`
+      <article
+        class=${_({
+      "acm-pick-slot": !0,
+      "is-disabled": o,
+      "acm-pick-slot--selected": t
+    })}
+      >
+        ${e.image ? c`<img
+              class="acm-product-head__img"
+              src=${e.image}
+              alt=${e.name}
+              loading="lazy"
+              decoding="async"
+            />` : f}
+        <div class="acm-product-head">
+          <span class="acm-product-head__name">${e.name || l("عنصر", "Item")}</span>
+          ${e.price > 0 ? c`<strong>${$(e.price, this.currency)}</strong>` : f}
+          ${e.old_price > e.price && e.price > 0 ? c`<span class="acm-slot__empty">
+                ${$(e.old_price, this.currency)}
+              </span>` : f}
+        </div>
+        <div class="acm-actions">
+          <button
+            type="button"
+            class="fs-btn ${t ? "fs-btn--ghost" : ""}"
+            ?disabled=${o}
+            @click=${() => {
+      o || this.toggleProduct(e.id);
+    }}
+          >
+            ${t ? l("إزالة من المقارنة", "Remove") : l("اختيار للمقارنة", "Compare")}
+          </button>
+          ${e.url ? c`<a class="fs-btn fs-btn--ghost" href=${e.url}>
+                ${e.btn_text || l("عرض", "View")}
+              </a>` : f}
+        </div>
+      </article>
+    `;
+  }
+  formatCellValue(e, t, o) {
     if (e === "price")
-      return r.price > 0 ? Q(r.price, this.currency) : "—";
+      return t.price > 0 ? $(t.price, this.currency) : "—";
     if (e === "discount") {
-      const a = V(r.price, r.old_price);
-      return a > 0 ? `${a}%` : "—";
+      const r = S(t.price, t.old_price);
+      return r > 0 ? `${r}%` : "—";
     }
-    if (i) {
-      const a = this.criteria.find((o) => o.key === i);
-      if (a)
-        return N(r, a) || "—";
+    if (o) {
+      const r = this.criteria.find((a) => a.key === o);
+      if (r)
+        return E(t, r) || "—";
     }
     return "—";
   }
   _renderSlots(e) {
-    return d`
-      <div class="acm-slots" aria-label=${m("خانات المقارنة", "Comparison slots")}>
-        ${Array.from({ length: I }, (r, i) => {
-      const a = e[i];
-      return d`
+    return c`
+      <div class="acm-slots" aria-label=${l("خانات المقارنة", "Comparison slots")}>
+        ${Array.from({ length: y }, (t, o) => {
+      const r = e[o];
+      return c`
             <div
-              class=${$({
+              class=${_({
         "acm-slot": !0,
-        "acm-slot--filled": !!a
+        "acm-slot--filled": !!r
       })}
             >
-              <span class="acm-slot__num" aria-hidden="true">${i + 1}</span>
-              ${a ? d`
-                    ${a.image ? d`<img
+              <span class="acm-slot__num" aria-hidden="true">${o + 1}</span>
+              ${r ? c`
+                    ${r.image ? c`<img
                           class="acm-slot__thumb"
-                          src=${a.image}
+                          src=${r.image}
                           alt=""
                           loading="lazy"
                           decoding="async"
-                        />` : h}
+                        />` : f}
                     <span class="acm-slot__meta">
-                      <span class="acm-slot__name">${a.name}</span>
+                      <span class="acm-slot__name">${r.name}</span>
                     </span>
                     <button
                       type="button"
                       class="acm-slot__remove"
-                      aria-label=${m("إزالة", "Remove") + " " + a.name}
-                      @click=${() => this.removeProduct(a.id)}
+                      aria-label=${l("إزالة", "Remove") + " " + r.name}
+                      @click=${() => this.removeProduct(r.id)}
                     >
                       ×
                     </button>
-                  ` : d`<span class="acm-slot__empty">
-                    ${m("فارغة", "Empty")}
+                  ` : c`<span class="acm-slot__empty">
+                    ${l("فارغة", "Empty")}
                   </span>`}
             </div>
           `;
@@ -696,73 +660,50 @@ const I = 3, P = 2, T = class T extends K {
     `;
   }
   render() {
-    const e = this.config || {}, r = W(e, "acm_"), i = r.animate && !Z(), a = this.products, o = this.selected, s = this.currency, c = this.selectedIds.length >= I, l = o.length >= P, p = u(e.acm_title), g = u(e.acm_desc), b = this.criteria, w = fe(b);
-    return d`
+    const e = this.config || {}, t = K(e, "acm_"), o = t.animate && !U(), r = this.products, a = this.selected;
+    this.currency;
+    const n = this.selectedIds.length >= y, s = a.length >= x, d = p(e.acm_title), h = p(e.acm_desc), I = this.criteria, A = Q(I);
+    return c`
       <section
-        class=${$({
+        class=${_({
       "fs-section": !0,
-      "fs-animate": i
+      "fs-animate": o
     })}
-        style=${R(ee(r))}
-        aria-label=${p || m("مقارنة العبايات", "Compare abayas")}
+        style=${V(q(t))}
+        aria-label=${d || l("مقارنة العبايات", "Compare abayas")}
       >
         <div class="fs-container">
-          ${p || g ? d`<div class="fs-header fs-header--editorial">
-                <p class="fs-eyebrow">${m("مقارنة ذكية", "Smart compare")}</p>
-                ${p ? d`<h2 class="fs-title">${p}</h2>` : h}
+          ${d || h ? c`<div class="fs-header fs-header--editorial">
+                <p class="fs-eyebrow">${l("مقارنة ذكية", "Smart compare")}</p>
+                ${d ? c`<h2 class="fs-title">${d}</h2>` : f}
                 <span class="fs-title-line" aria-hidden="true"></span>
-                ${g ? d`<p class="fs-desc">${g}</p>` : h}
-              </div>` : h}
+                ${h ? c`<p class="fs-desc">${h}</p>` : f}
+              </div>` : f}
 
-          ${this.productsLoading ? d`<div class="fs-empty" role="status">
-                ${m("جاري تحميل المنتجات...", "Loading products...")}
-              </div>` : a.length ? d`<div class="acm-studio">
+          ${this.productsLoading ? c`<div class="fs-empty" role="status">
+                ${l("جاري تحميل المنتجات...", "Loading products...")}
+              </div>` : r.length ? c`<div class="acm-studio">
                   <div class="acm-toolbar">
                     <p class="acm-hint">
-                      ${u(e.acm_select_hint) || m(
+                      ${p(e.acm_select_hint) || l(
       "اختر من 2 إلى 3 عبايات ثم اضغط قارن",
       "Pick 2 to 3 abayas, then tap Compare"
     )}
                     </p>
                     <span class="acm-count" aria-live="polite">
-                      ${o.length} / ${I}
-                      ${m("مختارة", "selected")}
+                      ${a.length} / ${y}
+                      ${l("مختارة", "selected")}
                     </span>
                   </div>
 
-                  ${this._renderSlots(o)}
+                  ${this._renderSlots(a)}
 
                   <div class="acm-picker" role="list">
-                    ${a.map((n) => {
-      const y = this.selectedIds.includes(n.id), v = !y && c;
-      return d`
-                        <div
-                          class=${$({
-        "acm-pick-slot": !0,
-        "is-disabled": v
-      })}
-                          role="listitem"
-                        >
-                          ${re(
-        {
-          id: n.product_id,
-          name: n.name,
-          image: n.image,
-          url: n.url,
-          price: n.price,
-          old_price: n.old_price,
-          rating: n.rating
-        },
-        {
-          currency: s,
-          selectable: !0,
-          selected: y,
-          wishlist: !0,
-          onSelect: () => {
-            v || this.toggleProduct(n.id);
-          }
-        }
-      )}
+                    ${r.map((m) => {
+      const b = this.selectedIds.includes(m.id), u = !b && n;
+      return c`
+                        <div role="listitem">
+                          ${this.renderChoiceCard(m, b, u)}
                         </div>
                       `;
     })}
@@ -772,27 +713,27 @@ const I = 3, P = 2, T = class T extends K {
                     <button
                       type="button"
                       class="fs-btn"
-                      ?disabled=${!l}
+                      ?disabled=${!s}
                       @click=${() => {
       this.showTable = !0;
     }}
                     >
-                      ${u(e.acm_compare_btn) || m("قارني", "Compare")}
+                      ${p(e.acm_compare_btn) || l("قارني", "Compare")}
                     </button>
                     <button
                       type="button"
                       class="fs-btn fs-btn--ghost"
-                      ?disabled=${!o.length}
+                      ?disabled=${!a.length}
                       @click=${this.clearAll}
                     >
-                      ${u(e.acm_clear_btn) || m("مسح الكل", "Clear all")}
+                      ${p(e.acm_clear_btn) || l("مسح الكل", "Clear all")}
                     </button>
                   </div>
 
-                  ${this.showTable && l ? d`
+                  ${this.showTable && s ? c`
                         <div class="acm-table-wrap">
                           <p class="acm-user-hint">
-                            ${u(e.acm_user_hint) || m(
+                            ${p(e.acm_user_hint) || l(
       "السعر من المتجر تلقائيًا — وبقية المقارنة من إعدادات كل منتج",
       "Price comes from the store — other rows come from each product’s settings"
     )}
@@ -800,32 +741,32 @@ const I = 3, P = 2, T = class T extends K {
                           <div class="acm-legend" aria-hidden="true">
                             <span class="acm-legend__item">
                               <span class="acm-legend__swatch acm-legend__swatch--best"></span>
-                              ${m("أفضل قيمة", "Best value")}
+                              ${l("أفضل قيمة", "Best value")}
                             </span>
                             <span class="acm-legend__item">
                               <span class="acm-legend__swatch acm-legend__swatch--same"></span>
-                              ${m("متطابق", "Identical")}
+                              ${l("متطابق", "Identical")}
                             </span>
                           </div>
                           <table class="acm-table">
                             <thead>
                               <tr>
-                                <th class="acm-table__label">${m("الخاصية", "Attribute")}</th>
-                                ${o.map(
-      (n) => d`
+                                <th class="acm-table__label">${l("الخاصية", "Attribute")}</th>
+                                ${a.map(
+      (m) => c`
                                     <th>
                                       <div class="acm-product-head">
-                                        ${n.image ? d`<img
+                                        ${m.image ? c`<img
                                               class="acm-product-head__img"
-                                              src=${n.image}
-                                              alt=${n.name}
+                                              src=${m.image}
+                                              alt=${m.name}
                                               loading="lazy"
                                               decoding="async"
-                                            />` : h}
-                                        <span class="acm-product-head__name">${n.name}</span>
-                                        ${n.url ? d`<a class="fs-btn fs-btn--ghost" href=${n.url}>
-                                              ${n.btn_text || m("عرض", "View")}
-                                            </a>` : h}
+                                            />` : f}
+                                        <span class="acm-product-head__name">${m.name}</span>
+                                        ${m.url ? c`<a class="fs-btn fs-btn--ghost" href=${m.url}>
+                                              ${m.btn_text || l("عرض", "View")}
+                                            </a>` : f}
                                       </div>
                                     </th>
                                   `
@@ -833,30 +774,30 @@ const I = 3, P = 2, T = class T extends K {
                               </tr>
                             </thead>
                             <tbody>
-                              ${w.map((n) => {
-      const y = he(n, o, b);
-      return d`
+                              ${A.map((m) => {
+      const b = W(m, a, I);
+      return c`
                                   <tr>
                                     <th class="acm-table__label" scope="row">
-                                      ${m(n.labelAr, n.labelEn)}
+                                      ${l(m.labelAr, m.labelEn)}
                                     </th>
-                                    ${o.map((v) => {
-        const U = y.identical.has(v.id), E = y.bestPriceId === v.id || y.bestDiscountId === v.id, F = this.formatCellValue(
-          n.key,
-          v,
-          n.criterionKey
+                                    ${a.map((u) => {
+        const j = b.identical.has(u.id), z = b.bestPriceId === u.id || b.bestDiscountId === u.id, D = this.formatCellValue(
+          m.key,
+          u,
+          m.criterionKey
         );
-        return d`
+        return c`
                                         <td
-                                          class=${$({
-          "acm-cell--same": U,
-          "acm-cell--best": E
+                                          class=${_({
+          "acm-cell--same": j,
+          "acm-cell--best": z
         })}
                                         >
-                                          ${F}
-                                          ${E ? d`<span class="acm-cell__badge">
-                                                ${m("الأفضل", "Best")}
-                                              </span>` : h}
+                                          ${D}
+                                          ${z ? c`<span class="acm-cell__badge">
+                                                ${l("الأفضل", "Best")}
+                                              </span>` : f}
                                         </td>
                                       `;
       })}
@@ -866,45 +807,45 @@ const I = 3, P = 2, T = class T extends K {
                             </tbody>
                           </table>
                         </div>
-                      ` : h}
-                </div>` : d`<div class="fs-empty" role="status">
-                  ${m(
+                      ` : f}
+                </div>` : c`<div class="fs-empty" role="status">
+                  ${l(
       "أضف منتجات المقارنة من إعدادات العنصر لعرضها هنا.",
       "Add comparison products from the element settings to show them here."
     )}
                 </div>`}
         </div>
-        ${te(this.config || {}, "acm_")}
+        ${F(this.config || {}, "acm_")}
       </section>
     `;
   }
 };
-T.styles = [
-  J,
-  ae,
-  D`
+C.styles = [
+  N,
+  X,
+  L`
       :host {
         direction: inherit;
       }
     `
 ];
-let f = T;
-k([
-  q({ type: Object })
-], f.prototype, "config");
-k([
-  C()
-], f.prototype, "products");
-k([
-  C()
-], f.prototype, "productsLoading");
-k([
-  C()
-], f.prototype, "selectedIds");
-k([
-  C()
-], f.prototype, "showTable");
-typeof f < "u" && f.registerSallaComponent("salla-abaya-comparison-arena");
+let g = C;
+v([
+  O({ type: Object })
+], g.prototype, "config");
+v([
+  w()
+], g.prototype, "products");
+v([
+  w()
+], g.prototype, "productsLoading");
+v([
+  w()
+], g.prototype, "selectedIds");
+v([
+  w()
+], g.prototype, "showTable");
+typeof g < "u" && g.registerSallaComponent("salla-abaya-comparison-arena");
 export {
-  f as default
+  g as default
 };

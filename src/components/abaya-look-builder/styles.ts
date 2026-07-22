@@ -82,7 +82,7 @@ export const componentStyles = css`
   }
 
   .alb-tab[aria-selected='true']::after {
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .alb-panel-label {

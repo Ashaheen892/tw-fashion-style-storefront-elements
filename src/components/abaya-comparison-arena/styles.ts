@@ -330,9 +330,8 @@ export const componentStyles = css`
   }
 
   .acm-product-head .fs-btn {
-    min-height: 2.75rem;
-    padding: 0.45rem 0.85rem;
-    font-size: 0.8rem;
+    width: 100%;
+    justify-content: center;
   }
 
   @keyframes acm-reveal {

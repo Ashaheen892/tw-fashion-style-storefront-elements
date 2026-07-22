@@ -66,7 +66,7 @@ export const componentStyles = css`
     padding: 0.7rem 0.95rem;
     border: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e8ddd6));
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--text-color, #2b211c);
     font: inherit;
     box-sizing: border-box;
@@ -111,7 +111,7 @@ export const componentStyles = css`
 
   .aca-list__item:hover {
     border-color: color-mix(in srgb, #c9a86c 40%, var(--border-color, #e8ddd6));
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
     transform: translateY(-1px);
   }
 
@@ -389,7 +389,7 @@ export const componentStyles = css`
     padding: 0.9rem 0.95rem;
     border-radius: 2px;
     border: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e8ddd6));
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
   }
 
   .aca-allow__icon {
@@ -419,21 +419,21 @@ export const componentStyles = css`
 
   .aca-allow--yes {
     border-color: color-mix(in srgb, #3d6b55 30%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, #3d6b55 5%, #fff);
+    background: color-mix(in srgb, #3d6b55 5%, var(--fs-surface, var(--card-bg, #f0f0f0)));
   }
 
   .aca-allow--yes .aca-allow__icon {
-    background: color-mix(in srgb, #3d6b55 14%, #fff);
+    background: color-mix(in srgb, #3d6b55 14%, var(--fs-surface, var(--card-bg, #f0f0f0)));
     color: #2f5a47;
   }
 
   .aca-allow--no {
     border-color: color-mix(in srgb, #8f4a45 24%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, #8f4a45 4%, #fff);
+    background: color-mix(in srgb, #8f4a45 4%, var(--fs-surface, var(--card-bg, #f0f0f0)));
   }
 
   .aca-allow--no .aca-allow__icon {
-    background: color-mix(in srgb, #8f4a45 12%, #fff);
+    background: color-mix(in srgb, #8f4a45 12%, var(--fs-surface, var(--card-bg, #f0f0f0)));
     color: #8f4a45;
   }
 
@@ -472,15 +472,7 @@ export const componentStyles = css`
   }
 
   .aca-actions .fs-btn {
-    border-radius: 2px;
-    min-height: 2.85rem;
-    letter-spacing: 0.03em;
-    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.1);
-  }
-
-  .aca-actions .fs-btn--ghost {
-    box-shadow: none;
-    border-color: color-mix(in srgb, #c9a86c 45%, var(--border-color, #e8ddd6));
+    flex: 1 1 auto;
   }
 
   .aca-toast {
@@ -635,7 +627,7 @@ export const componentStyles = css`
       display: block !important;
       padding: 2rem;
       color: #000;
-      background: #fff;
+      background: var(--fs-surface, var(--card-bg, #f0f0f0));
     }
 
     .aca-print-card h1 {

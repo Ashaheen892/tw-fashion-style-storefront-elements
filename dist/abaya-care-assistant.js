@@ -2,7 +2,7 @@ import { css as A, LitElement as E, html as i, nothing as n } from "lit";
 import { property as G, state as _ } from "lit/decorators.js";
 import { classMap as L } from "lit/directives/class-map.js";
 import { styleMap as F } from "lit/directives/style-map.js";
-import { n as j, i as f, l as p, e as P, s as K, r as M, g as N, c as R, t as o, p as W, a as Q, b as U } from "./sharedStyles-BYm1OK6w.js";
+import { n as j, i as b, l as p, e as P, s as K, r as M, g as N, c as R, t as o, p as W, a as Q, b as U } from "./sharedStyles-Cd7RKVf-.js";
 const I = A`
   .aca-layout {
     display: grid;
@@ -69,7 +69,7 @@ const I = A`
     padding: 0.7rem 0.95rem;
     border: 1px solid color-mix(in srgb, #c9a86c 28%, var(--border-color, #e8ddd6));
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--card-bg, #ffffff) 92%, var(--fs-surface, #f0f0f0));
     color: var(--text-color, #2b211c);
     font: inherit;
     box-sizing: border-box;
@@ -114,7 +114,7 @@ const I = A`
 
   .aca-list__item:hover {
     border-color: color-mix(in srgb, #c9a86c 40%, var(--border-color, #e8ddd6));
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
     transform: translateY(-1px);
   }
 
@@ -392,7 +392,7 @@ const I = A`
     padding: 0.9rem 0.95rem;
     border-radius: 2px;
     border: 1px solid color-mix(in srgb, #c9a86c 22%, var(--border-color, #e8ddd6));
-    background: #fff;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
   }
 
   .aca-allow__icon {
@@ -422,21 +422,21 @@ const I = A`
 
   .aca-allow--yes {
     border-color: color-mix(in srgb, #3d6b55 30%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, #3d6b55 5%, #fff);
+    background: color-mix(in srgb, #3d6b55 5%, var(--fs-surface, var(--card-bg, #f0f0f0)));
   }
 
   .aca-allow--yes .aca-allow__icon {
-    background: color-mix(in srgb, #3d6b55 14%, #fff);
+    background: color-mix(in srgb, #3d6b55 14%, var(--fs-surface, var(--card-bg, #f0f0f0)));
     color: #2f5a47;
   }
 
   .aca-allow--no {
     border-color: color-mix(in srgb, #8f4a45 24%, var(--border-color, #e8ddd6));
-    background: color-mix(in srgb, #8f4a45 4%, #fff);
+    background: color-mix(in srgb, #8f4a45 4%, var(--fs-surface, var(--card-bg, #f0f0f0)));
   }
 
   .aca-allow--no .aca-allow__icon {
-    background: color-mix(in srgb, #8f4a45 12%, #fff);
+    background: color-mix(in srgb, #8f4a45 12%, var(--fs-surface, var(--card-bg, #f0f0f0)));
     color: #8f4a45;
   }
 
@@ -475,15 +475,7 @@ const I = A`
   }
 
   .aca-actions .fs-btn {
-    border-radius: 2px;
-    min-height: 2.85rem;
-    letter-spacing: 0.03em;
-    box-shadow: 0 10px 22px rgba(43, 33, 28, 0.1);
-  }
-
-  .aca-actions .fs-btn--ghost {
-    box-shadow: none;
-    border-color: color-mix(in srgb, #c9a86c 45%, var(--border-color, #e8ddd6));
+    flex: 1 1 auto;
   }
 
   .aca-toast {
@@ -638,7 +630,7 @@ const I = A`
       display: block !important;
       padding: 2rem;
       color: #000;
-      background: #fff;
+      background: var(--fs-surface, var(--card-bg, #f0f0f0));
     }
 
     .aca-print-card h1 {
@@ -691,9 +683,9 @@ function V(t) {
     stain: m(a.stain),
     embroidery_warn: m(a.embroidery_warn),
     wash_temp: m(a.wash_temp),
-    allow_washer: f(a.allow_washer),
-    allow_dryer: f(a.allow_dryer),
-    allow_steam: f(a.allow_steam)
+    allow_washer: b(a.allow_washer),
+    allow_dryer: b(a.allow_dryer),
+    allow_steam: b(a.allow_steam)
   })).filter((a) => a.fabric_name.trim() !== "");
 }
 function u(t) {
@@ -723,12 +715,12 @@ function B(t, a) {
     (e) => e.fabric_name.toLowerCase().includes(r) || e.fabric_summary.toLowerCase().includes(r)
   ) : t;
 }
-var O = Object.defineProperty, b = (t, a, r, e) => {
-  for (var s = void 0, d = t.length - 1, g; d >= 0; d--)
-    (g = t[d]) && (s = g(a, r, s) || s);
+var O = Object.defineProperty, h = (t, a, r, e) => {
+  for (var s = void 0, d = t.length - 1, f; d >= 0; d--)
+    (f = t[d]) && (s = f(a, r, s) || s);
   return s && O(a, r, s), s;
-}, c;
-const h = (c = class extends E {
+}, l;
+const g = (l = class extends E {
   constructor() {
     super(...arguments), this.config = {}, this.searchQuery = "", this.selectedKey = "", this.showToast = !1, this._onLangChange = () => this.requestUpdate(), this._toastTimer = null;
   }
@@ -736,14 +728,14 @@ const h = (c = class extends E {
     super.connectedCallback(), this._ensureFonts(), document.addEventListener("language-changed", this._onLangChange), this._ensureSelection(), this._syncVisibility();
   }
   _ensureFonts() {
-    if (c.fontsReady || typeof document > "u") return;
+    if (l.fontsReady || typeof document > "u") return;
     const a = "aca-luxury-fonts";
     if (document.getElementById(a)) {
-      c.fontsReady = !0;
+      l.fontsReady = !0;
       return;
     }
     const r = document.createElement("link");
-    r.id = a, r.rel = "stylesheet", r.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(r), c.fontsReady = !0;
+    r.id = a, r.rel = "stylesheet", r.href = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap", document.head.appendChild(r), l.fontsReady = !0;
   }
   disconnectedCallback() {
     super.disconnectedCallback(), document.removeEventListener("language-changed", this._onLangChange), this._toastTimer && (clearTimeout(this._toastTimer), this._toastTimer = null);
@@ -805,7 +797,7 @@ const h = (c = class extends E {
       return i`<div class="fs-empty" role="status">
         ${o("لا توجد أقمشة متاحة", "No fabrics available")}
       </div>`;
-    const a = this.theme, r = a.animate && !W(), e = this.selected, s = p((x = this.config) == null ? void 0 : x.aca_title), d = p((w = this.config) == null ? void 0 : w.aca_desc), g = this._label("aca_search_placeholder", "ابحثي عن الخامة...", "Search fabrics..."), C = this._label("aca_copy_btn", "نسخ التعليمات", "Copy instructions"), z = this._label("aca_print_btn", "طباعة البطاقة", "Print card"), T = this._label("aca_copied_msg", "تم النسخ بنجاح", "Copied successfully"), y = e ? u(e) : [];
+    const a = this.theme, r = a.animate && !W(), e = this.selected, s = p((x = this.config) == null ? void 0 : x.aca_title), d = p((w = this.config) == null ? void 0 : w.aca_desc), f = this._label("aca_search_placeholder", "ابحثي عن الخامة...", "Search fabrics..."), C = this._label("aca_copy_btn", "نسخ التعليمات", "Copy instructions"), z = this._label("aca_print_btn", "طباعة البطاقة", "Print card"), T = this._label("aca_copied_msg", "تم النسخ بنجاح", "Copied successfully"), y = e ? u(e) : [];
     return i`
       <section
         class=${L({
@@ -831,32 +823,32 @@ const h = (c = class extends E {
                 class="aca-search"
                 type="search"
                 .value=${this.searchQuery}
-                placeholder=${g}
+                placeholder=${f}
                 @input=${this._onSearch}
-                aria-label=${g}
+                aria-label=${f}
               />
               <ul class="aca-list" role="listbox" aria-label=${o("قائمة الأقمشة", "Fabric list")}>
                 ${this.filteredFabrics.map(
-      (l) => i`
+      (c) => i`
                     <li>
                       <button
                         type="button"
                         class="aca-list__item"
                         role="option"
-                        aria-current=${l.fabric_name === (e == null ? void 0 : e.fabric_name) ? "true" : "false"}
-                        @click=${() => this._selectFabric(l.fabric_name)}
+                        aria-current=${c.fabric_name === (e == null ? void 0 : e.fabric_name) ? "true" : "false"}
+                        @click=${() => this._selectFabric(c.fabric_name)}
                       >
-                        ${l.fabric_image ? i`<img
+                        ${c.fabric_image ? i`<img
                               class="aca-list__thumb"
-                              src=${l.fabric_image}
+                              src=${c.fabric_image}
                               alt=""
                               loading="lazy"
                               width="48"
                               height="48"
                             />` : i`<span class="aca-list__thumb" aria-hidden="true"></span>`}
                         <span class="aca-list__meta">
-                          <span class="aca-list__name">${l.fabric_name}</span>
-                          ${l.fabric_summary ? i`<span class="aca-list__hint">${l.fabric_summary}</span>` : n}
+                          <span class="aca-list__name">${c.fabric_name}</span>
+                          ${c.fabric_summary ? i`<span class="aca-list__hint">${c.fabric_summary}</span>` : n}
                         </span>
                         <span class="aca-list__check" aria-hidden="true">✓</span>
                       </button>
@@ -890,11 +882,11 @@ const h = (c = class extends E {
                       </h4>
                       ${y.length ? i`<div class="aca-journey" aria-label=${o("خطوات العناية", "Care steps")}>
                             ${y.map(
-      (l, S) => i`
+      (c, S) => i`
                                 <div class="aca-step">
                                   <span class="aca-step__num" aria-hidden="true">${S + 1}</span>
-                                  <p class="aca-step__title">${o(l.labelAr, l.labelEn)}</p>
-                                  <p class="aca-step__text">${l.value}</p>
+                                  <p class="aca-step__title">${o(c.labelAr, c.labelEn)}</p>
+                                  <p class="aca-step__text">${c.value}</p>
                                 </div>
                               `
     )}
@@ -985,20 +977,20 @@ const h = (c = class extends E {
       </div>
     `;
   }
-}, c.fontsReady = !1, c.styles = [K, I], c);
-b([
+}, l.fontsReady = !1, l.styles = [K, I], l);
+h([
   G({ type: Object })
-], h.prototype, "config");
-b([
+], g.prototype, "config");
+h([
   _()
-], h.prototype, "searchQuery");
-b([
+], g.prototype, "searchQuery");
+h([
   _()
-], h.prototype, "selectedKey");
-b([
+], g.prototype, "selectedKey");
+h([
   _()
-], h.prototype, "showToast");
-let $ = h;
+], g.prototype, "showToast");
+let $ = g;
 typeof $ < "u" && $.registerSallaComponent("salla-abaya-care-assistant");
 export {
   $ as default

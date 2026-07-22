@@ -1,4 +1,5 @@
 import { localizedString, type LocaleValue } from './localizedString.js';
+import { ensureFsThemeWatch, fsThemeVars } from './fsTheme.js';
 
 export type ConfigValue = Record<string, unknown> | null | undefined;
 
@@ -348,6 +349,8 @@ export interface SectionTheme {
   spaceMobile: number;
   animate: boolean;
   fullWidth: boolean;
+  noBottomMargin: boolean;
+  hasContainer: boolean;
 }
 
 export function readSectionTheme(
@@ -356,18 +359,17 @@ export function readSectionTheme(
   defaults?: Partial<SectionTheme>
 ): SectionTheme {
   const c = config || {};
+  // Colors come from the store theme (primary + light/dark), not merchant pickers.
   return {
-    bg: String(c[`${prefix}bg`] ?? defaults?.bg ?? '#faf7f5'),
-    text: String(c[`${prefix}text`] ?? defaults?.text ?? '#2b211c'),
-    muted: String(c[`${prefix}muted`] ?? defaults?.muted ?? '#7a6a62'),
-    accent: String(c[`${prefix}accent`] ?? defaults?.accent ?? '#8b5e4b'),
-    card: String(c[`${prefix}card`] ?? defaults?.card ?? '#ffffff'),
-    border: String(c[`${prefix}border`] ?? defaults?.border ?? '#e8ddd6'),
-    buttonBg: String(c[`${prefix}button_bg`] ?? defaults?.buttonBg ?? '#8b5e4b'),
-    buttonColor: String(
-      c[`${prefix}button_color`] ?? defaults?.buttonColor ?? '#ffffff'
-    ),
-    radius: `${getUnitValue(c[`${prefix}radius`], defaults?.radius ? Number(String(defaults.radius).replace('px', '')) : 16)}px`,
+    bg: 'transparent',
+    text: '#000000',
+    muted: '#666666',
+    accent: 'var(--color-primary, var(--primary-color, var(--color-main, #64748b)))',
+    card: 'var(--color-white, var(--bg-color, #ffffff))',
+    border: 'var(--color-border, #e5e7eb)',
+    buttonBg: 'var(--color-primary, var(--primary-color, var(--color-main, #64748b)))',
+    buttonColor: '#ffffff',
+    radius: `${getUnitValue(c[`${prefix}radius`], defaults?.radius ? Number(String(defaults.radius).replace('px', '')) : 20)}px`,
     spaceDesktop: getUnitValue(
       c[`${prefix}space_desktop`],
       defaults?.spaceDesktop ?? 48
@@ -378,22 +380,24 @@ export function readSectionTheme(
     ),
     animate: isTruthy(c[`${prefix}animate`], defaults?.animate ?? true),
     fullWidth: isTruthy(c[`${prefix}full_width`], defaults?.fullWidth ?? false),
+    noBottomMargin: false,
+    hasContainer: true,
   };
 }
 
 export function themeStyleMap(theme: SectionTheme): Record<string, string> {
+  const useContainer = theme.hasContainer !== false;
+  ensureFsThemeWatch();
   return {
-    '--section-bg': theme.bg,
-    '--text-color': theme.text,
-    '--muted-color': theme.muted,
-    '--accent-color': theme.accent || 'var(--color-primary, var(--primary-color, #64748b))', /* raed-bridge */
-    '--card-bg': theme.card,
-    '--border-color': theme.border,
-    '--button-bg': theme.buttonBg || theme.accent || 'var(--color-primary, var(--primary-color, #64748b))',
-    '--button-color': theme.buttonColor,
+    ...fsThemeVars(),
     '--section-radius': theme.radius,
     '--space-desktop': `${theme.spaceDesktop}px`,
     '--space-mobile': `${theme.spaceMobile}px`,
+    '--space-desktop-bottom': theme.noBottomMargin ? '0px' : `${theme.spaceDesktop}px`,
+    '--space-mobile-bottom': theme.noBottomMargin ? '0px' : `${theme.spaceMobile}px`,
+    '--section-container-max': useContainer ? '1440px' : 'none',
+    '--section-container-pad': useContainer ? '16px' : '0px',
+    '--section-container-pad-sm': useContainer ? '12px' : '0px',
   };
 }
 

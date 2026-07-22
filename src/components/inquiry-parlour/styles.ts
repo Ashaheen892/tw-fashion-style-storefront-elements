@@ -77,7 +77,7 @@ export const componentStyles = css`
   .ip-cat[aria-pressed='true'] {
     border-color: var(--accent-color, var(--fs-store-primary));
     color: #fff;
-    background: var(--accent-color, var(--fs-store-primary));
+    background: var(--button-bg, var(--accent-color, var(--fs-store-primary)));
   }
 
   .ip-list {

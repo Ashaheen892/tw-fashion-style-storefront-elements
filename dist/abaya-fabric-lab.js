@@ -1,8 +1,8 @@
 import { css as M, LitElement as E, html as i, nothing as n } from "lit";
-import { property as F, state as _ } from "lit/decorators.js";
+import { property as F, state as u } from "lit/decorators.js";
 import { classMap as x } from "lit/directives/class-map.js";
 import { styleMap as w } from "lit/directives/style-map.js";
-import { n as S, z as d, y as m, l as p, e as O, B as V, s as G, r as A, i as j, t as s, p as L, a as R, b as T } from "./sharedStyles-BYm1OK6w.js";
+import { n as S, u as d, q as m, l as p, e as O, w as V, s as G, r as A, i as j, t as s, p as L, a as R, b as T } from "./sharedStyles-Cd7RKVf-.js";
 const U = M`
   .fs-header {
     margin-bottom: 2rem;
@@ -77,10 +77,7 @@ const U = M`
   }
 
   .afl-toolbar .fs-btn {
-    border-radius: 2px;
-    min-height: 2.55rem;
-    letter-spacing: 0.02em;
-    border-color: color-mix(in srgb, #c9a86c 42%, var(--border-color, #e8ddd6));
+    flex: 0 0 auto;
   }
 
   .afl-swatches {
@@ -276,7 +273,7 @@ const U = M`
     padding: 0.28rem 0.7rem;
     border-radius: 1px;
     border: 1px solid color-mix(in srgb, #c9a86c 50%, transparent);
-    background: color-mix(in srgb, #c9a86c 8%, #fff);
+    background: color-mix(in srgb, #c9a86c 8%, var(--fs-surface, var(--card-bg, #f0f0f0)));
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -462,10 +459,6 @@ const U = M`
 
     .afl-meters {
       grid-template-columns: 1fr;
-    }
-
-    .afl-toolbar .fs-btn {
-      min-height: 44px;
     }
   }
 
@@ -697,12 +690,12 @@ const g = (c = class extends E {
     return a ? a.slice(0, 1) : "أ";
   }
   render() {
-    var u, v;
+    var _, v;
     if (!this.fabrics.length)
       return i`<div class="fs-empty" role="status">
         ${s("لا توجد أقمشة للعرض", "No fabrics to display")}
       </div>`;
-    const e = this.theme, a = e.animate && !L(), r = p((u = this.config) == null ? void 0 : u.afl_title), t = p((v = this.config) == null ? void 0 : v.afl_desc), l = this._label("afl_compare_btn", "قارني خامتين", "Compare two fabrics"), h = this._label("afl_exit_compare", "إنهاء المقارنة", "Exit compare");
+    const e = this.theme, a = e.animate && !L(), r = p((_ = this.config) == null ? void 0 : _.afl_title), t = p((v = this.config) == null ? void 0 : v.afl_desc), l = this._label("afl_compare_btn", "قارني خامتين", "Compare two fabrics"), h = this._label("afl_exit_compare", "إنهاء المقارنة", "Exit compare");
     return i`
       <section
         class=${x({
@@ -875,13 +868,13 @@ b([
   F({ type: Object })
 ], g.prototype, "config");
 b([
-  _()
+  u()
 ], g.prototype, "activeIndex");
 b([
-  _()
+  u()
 ], g.prototype, "compareMode");
 b([
-  _()
+  u()
 ], g.prototype, "compareIds");
 let k = g;
 typeof k < "u" && k.registerSallaComponent("salla-abaya-fabric-lab");

@@ -1,37 +1,27 @@
 import { html, nothing, type TemplateResult } from 'lit';
-import { keyed } from 'lit/directives/keyed.js';
-import {
-  extractLink,
-  isExternalUrl,
-  isTruthy,
-  t,
-} from './helpers.js';
+import { extractLink, isExternalUrl, isTruthy, t } from './helpers.js';
 import { localizedString, type LocaleValue } from './localizedString.js';
-import {
-  resolveConfigProductSlider,
-  resolveSelectionProductSlider,
-  type ProductsSliderAttrs,
-} from './productPicker.js';
-import './productsSwiper.js';
 
-export type CommerceRenderOptions = {
+export type CommerceCtaOptions = {
+  className?: string;
+  /** Per-item link. Falls back to the merchant's configured CTA link. */
+  href?: string;
+};
+
+export type CommerceRenderOptions = CommerceCtaOptions & {
   config?: Record<string, unknown>;
   prefix?: string;
-  /** Retained for existing call sites; not used for fake tag-matching. */
+  /** Retained for existing call sites. */
   matchTags?: string[];
-  /** When false, hide the products block (e.g. before shopper selection / quiz result). */
+  /** Retained for existing call sites. */
   ready?: boolean;
-  /**
-   * Dynamic slider from the current choice cascade.
-   * `undefined` = use static config pickers.
-   * `null` = hide products (no binding for this selection).
-   */
-  sliderOverride?: ProductsSliderAttrs | null;
-  /** Force dynamic-only: ignore static chosen_products when override is set. */
+  /** Retained for existing call sites. */
+  sliderOverride?: unknown;
+  /** Retained for existing call sites. */
   dynamicOnly?: boolean;
-  /** Active selection/result row — resolves products_source bindings when present. */
+  /** Retained for existing call sites. */
   selection?: unknown;
-  /** Default products title (kit-specific). */
+  /** Retained for existing call sites. */
   defaultProductsTitle?: { ar: string; en: string };
 };
 
@@ -66,13 +56,32 @@ function normalizeArgs(
   };
 }
 
-/**
- * Merchant-controlled conversion after quizzes/tools.
- * Products come from Salla's real product picker — never fake samples.
- *
- * Sources (Twilight): selected | categories | brands | sales | latest
- * Docs: https://docs.salla.dev/ · https://salla.stoplight.io/
- */
+export function renderCommerceCtaButton(
+  config: Record<string, unknown>,
+  prefix: string,
+  options: CommerceCtaOptions = {}
+): TemplateResult {
+  const ctaLink =
+    (options.href || '').trim() ||
+    extractLink(config[`${prefix}result_link`] ?? config[`${prefix}cta_link`]) ||
+    '/';
+  const ctaLabel =
+    localizedString(config[`${prefix}cta_label`] as LocaleValue, '').trim() ||
+    t('تسوق الآن', 'Shop now');
+  const className = ['fs-btn', 'fs-tap', options.className || '']
+    .filter(Boolean)
+    .join(' ');
+
+  return html`<a
+    class=${className}
+    href=${ctaLink}
+    target=${isExternalUrl(ctaLink) ? '_blank' : nothing}
+    rel=${isExternalUrl(ctaLink) ? 'noopener noreferrer' : nothing}
+  >
+    ${ctaLabel}
+  </a>`;
+}
+
 export function renderCommerceOutcome(
   options: CommerceRenderOptions
 ): TemplateResult | typeof nothing;
@@ -89,100 +98,23 @@ export function renderCommerceOutcome(
   const opts = normalizeArgs(optionsOrConfig, legacyPrefix, legacyOptions);
   const c = opts.config || {};
   const prefix = opts.prefix || '';
-  /** Explicit sliderOverride (even null) means the caller controls product visibility. */
-  const overrideActive = opts.sliderOverride !== undefined;
-  const showProducts =
-    overrideActive || isTruthy(c[`${prefix}show_products`], false);
-  const ready = opts.ready !== false;
-  const limit = Math.max(
-    1,
-    Math.min(40, Number(c[`${prefix}products_limit`]) || 8)
-  );
-  const defaultTitle = opts.defaultProductsTitle || {
-    ar: 'قطع مختارة لك',
-    en: 'Selected parts for you',
-  };
+  if (opts.ready === false) return nothing;
 
-  let slider: ProductsSliderAttrs | null = null;
-  if (showProducts && ready) {
-    if (overrideActive) {
-      slider = opts.sliderOverride ?? null;
-    } else if (opts.selection !== undefined || opts.dynamicOnly) {
-      slider = resolveSelectionProductSlider(c, prefix, opts.selection);
-    } else {
-      slider = resolveConfigProductSlider(c, prefix);
-    }
-    if (slider) {
-      slider = { ...slider, limit: Math.min(limit, slider.limit) || limit };
-    }
-  }
-
-  const ctaLink = extractLink(
-    c[`${prefix}result_link`] ?? c[`${prefix}cta_link`]
-  );
+  const ctaLink =
+    (opts.href || '').trim() ||
+    extractLink(c[`${prefix}result_link`] ?? c[`${prefix}cta_link`]);
   const showCta =
     isTruthy(c[`${prefix}show_cta`], Boolean(ctaLink)) && Boolean(ctaLink);
-  const ctaLabel =
-    localizedString(c[`${prefix}cta_label`] as LocaleValue, '').trim() ||
-    t('تسوق الآن', 'Shop now');
-  const productsTitle =
-    localizedString(c[`${prefix}products_title`] as LocaleValue, '').trim() ||
-    t(defaultTitle.ar, defaultTitle.en);
-
-  const waitingHint =
-    showProducts && ready && opts.dynamicOnly && !slider
-      ? t(
-          'اختر من الخيارات أعلاه لعرض المنتجات المناسبة.',
-          'Make a selection above to see matching products.'
-        )
-      : '';
-
-  if (!slider && !showCta && !waitingHint) return nothing;
-
-  const shadow = isTruthy(c[`${prefix}product_shadow`], true);
-  const hideAdd = isTruthy(c[`${prefix}hide_add_btn`], false);
-  const showOptions = isTruthy(c[`${prefix}show_product_options`], false);
-  const slidesPerView = Math.max(
-    1.2,
-    Math.min(5, Number(c[`${prefix}slides_per_view`]) || 4.2)
-  );
-  const sliderKey = slider
-    ? `${slider.source}:${slider.sourceValue}:${slider.limit}:${showOptions ? 1 : 0}`
-    : '';
+  if (!showCta) return nothing;
 
   return html`
     <aside class="fs-commerce" aria-label=${t('التسوق', 'Shopping')}>
-      ${slider
-        ? html`
-            <div class="fs-commerce__head">
-              <h3 class="fs-commerce__title">${productsTitle}</h3>
-            </div>
-            ${keyed(
-              sliderKey,
-              html`<fs-products-swiper
-                source=${slider.source}
-                source-value=${slider.sourceValue}
-                limit=${slider.limit}
-                slides-per-view=${slidesPerView}
-                ?shadow=${shadow}
-                ?hide-add=${hideAdd}
-                ?show-options=${showOptions}
-              ></fs-products-swiper>`
-            )}
-          `
-        : waitingHint
-          ? html`<p class="fs-commerce__hint">${waitingHint}</p>`
-          : nothing}
-      ${showCta
-        ? html`<div class="fs-commerce__actions">
-            <a
-              class="fs-btn fs-tap fs-commerce__cta"
-              href=${ctaLink}
-              target=${isExternalUrl(ctaLink) ? '_blank' : nothing}
-              rel=${isExternalUrl(ctaLink) ? 'noopener noreferrer' : nothing}
-            >${ctaLabel}</a>
-          </div>`
-        : nothing}
+      <div class="fs-commerce__actions">
+        ${renderCommerceCtaButton(c, prefix, {
+          className: 'fs-commerce__cta',
+          href: ctaLink,
+        })}
+      </div>
     </aside>
   `;
 }
