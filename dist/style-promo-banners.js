@@ -4,73 +4,30 @@ import { css, LitElement, nothing, html } from "lit";
 import { property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { t, n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, i as isTruthy, v as isValidHref, r as readSectionTheme, p as prefersReducedMotion, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { t, n as normalizeCollection, d as extractLink, l as localizedString, s as sharedSectionCss, i as isTruthy, p as prefersReducedMotion, v as isValidHref, r as readSectionTheme, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper, A as Autoplay } from "./fsSwiper-BQLtGSuN.js";
 const componentStyles = css`
+  :host {
+    direction: inherit;
+  }
+
   .stpb-shell {
     position: relative;
   }
 
-  /* Banners stack */
-  .stpb-banners {
-    display: grid;
-    gap: 1.35rem;
+  /* Swiper carousel wrapper */
+  .stpb-carousel {
+    position: relative;
   }
 
-  /* Autoplay carousel mode */
-  .stpb-carousel {
+  .stpb-swiper {
     position: relative;
     overflow: hidden;
     border-radius: calc(var(--section-radius, 16px) * 0.95);
-    touch-action: pan-y;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
   }
 
-  .stpb-carousel:active {
-    cursor: grabbing;
-  }
-
-  .stpb-carousel__track {
-    display: flex;
-    transition: transform 0.32s ease;
-  }
-
-  .stpb-carousel__slide {
-    flex: 0 0 100%;
-    min-width: 0;
-  }
-
-  .stpb-dots {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0.85rem;
-    display: flex;
-    justify-content: center;
-    gap: 0.45rem;
-    z-index: 2;
-  }
-
-  .stpb-dot {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 999px;
-    border: 0;
-    padding: 0;
-    background: rgba(255, 255, 255, 0.45);
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
-
-  .stpb-dot.is-active {
-    background: var(--fs-surface, var(--card-bg, #f0f0f0));
-    transform: scale(1.25);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .stpb-carousel__track {
-      transition: none;
-    }
+  .stpb-slide {
+    height: auto;
   }
 
   /* Single banner — full-bleed magazine style */
@@ -79,7 +36,6 @@ const componentStyles = css`
     display: flex;
     align-items: flex-end;
     min-height: min(55vw, 420px);
-    border-radius: calc(var(--section-radius, 16px) * 0.95);
     overflow: hidden;
     background: #1a1210;
     box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
@@ -89,8 +45,12 @@ const componentStyles = css`
     animation: stpb-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .fs-animate .stpb-banner:nth-child(2) { animation-delay: 0.12s; }
-  .fs-animate .stpb-banner:nth-child(3) { animation-delay: 0.2s; }
+  .fs-animate .stpb-banner:nth-child(2) {
+    animation-delay: 0.12s;
+  }
+  .fs-animate .stpb-banner:nth-child(3) {
+    animation-delay: 0.2s;
+  }
 
   @keyframes stpb-rise {
     from {
@@ -110,6 +70,7 @@ const componentStyles = css`
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
   }
 
   .stpb-banner:hover .stpb-banner__img {
@@ -119,8 +80,12 @@ const componentStyles = css`
   .stpb-banner__shade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgba(14, 9, 7, 0.05) 0%, rgba(14, 9, 7, 0.55) 60%, rgba(14, 9, 7, 0.82) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(14, 9, 7, 0.05) 0%,
+      rgba(14, 9, 7, 0.55) 60%,
+      rgba(14, 9, 7, 0.82) 100%
+    );
     pointer-events: none;
   }
 
@@ -167,7 +132,12 @@ const componentStyles = css`
     text-decoration: none;
     text-transform: none;
     cursor: pointer;
-    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
+    box-shadow: 0 8px 20px
+      color-mix(
+        in srgb,
+        var(--accent-color, var(--fs-store-primary)) 28%,
+        transparent
+      );
     transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -191,6 +161,37 @@ const componentStyles = css`
     transform: translateX(3px);
   }
 
+  /* Pagination dots below carousel */
+  .stpb-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+
+  .stpb-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0 !important;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    opacity: 1;
+    transition: width 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .stpb-dot.is-active {
+    width: 1.1rem;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
+    transform: scale(1.1);
+  }
+
   @media (max-width: 639px) {
     .stpb-banner {
       min-height: 320px;
@@ -203,11 +204,27 @@ const componentStyles = css`
     .stpb-banner__headline {
       font-size: 1.45rem;
     }
+
+    .stpb-dots {
+      margin-top: 0.6rem;
+      gap: 0.3rem;
+    }
+
+    .stpb-dot {
+      width: 0.4rem;
+      height: 0.4rem;
+    }
+
+    .stpb-dot.is-active {
+      width: 0.85rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .stpb-banner,
-    .stpb-banner__img {
+    .stpb-banner__img,
+    .stpb-banner__cta,
+    .stpb-dot {
       animation: none !important;
       transition: none !important;
     }
@@ -261,58 +278,67 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
 }, "__decorateClass");
 const AUTOPLAY_MS = 5e3, _StylePromoBanners = class _StylePromoBanners extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.activeIndex = 0, this.boundLang = () => this.requestUpdate(), this.autoTimer = null, this.swipeStartX = null, this.onPointerDown = (e) => {
-      e.pointerType === "mouse" && e.button !== 0 || (this.swipeStartX = e.clientX, this.clearAutoplay());
-    }, this.onPointerUp = (e) => {
-      const startX = this.swipeStartX;
-      if (this.swipeStartX = null, this.syncAutoplay(), startX == null) return;
-      const dx = e.clientX - startX;
-      if (Math.abs(dx) < 40) return;
-      (getComputedStyle(this).direction === "rtl" ? dx > 0 : dx < 0) ? this.next() : this.prev();
-    }, this.onPointerCancel = () => {
-      this.swipeStartX = null, this.syncAutoplay();
-    }, this.onDragStart = (e) => e.preventDefault();
+    super(...arguments), this.config = {}, this.swiperReady = !1, this.boundLang = () => {
+      this.requestUpdate(), queueMicrotask(() => this.remountSwiper());
+    }, this.swiper = null, this.remountTimer = null;
   }
   connectedCallback() {
-    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang), this.syncAutoplay();
+    super.connectedCallback(), window.addEventListener("language-changed", this.boundLang);
   }
   disconnectedCallback() {
-    window.removeEventListener("language-changed", this.boundLang), this.clearAutoplay(), super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), this.remountTimer && clearTimeout(this.remountTimer), destroyFsSwiper(this.swiper), this.swiper = null, super.disconnectedCallback();
+  }
+  firstUpdated() {
+    this.remountSwiper();
   }
   updated(changed) {
-    if (changed.has("config")) {
-      const banners = this.banners;
-      this.activeIndex >= banners.length && (this.activeIndex = 0), this.syncAutoplay();
-    }
+    changed.has("config") && this.scheduleRemount();
+  }
+  scheduleRemount() {
+    this.remountTimer && clearTimeout(this.remountTimer), this.remountTimer = setTimeout(() => this.remountSwiper(), 0);
+  }
+  remountSwiper() {
+    var _a;
+    destroyFsSwiper(this.swiper), this.swiper = null, this.swiperReady = !1;
+    const banners = this.banners, root = this.renderRoot.querySelector(".stpb-swiper");
+    if (!root || banners.length < 1) return;
+    const multi = banners.length > 1, autoplayOn = multi && isTruthy((_a = this.config) == null ? void 0 : _a.stpb_autoplay, !0) && !prefersReducedMotion(), pagEl = this.renderRoot.querySelector(".stpb-dots"), rtl = getComputedStyle(this).direction !== "ltr";
+    this.swiper = mountFsSwiper(root, {
+      rtl,
+      modules: autoplayOn ? [Autoplay] : [],
+      slidesPerView: 1,
+      spaceBetween: 0,
+      speed: 480,
+      loop: multi,
+      watchOverflow: !0,
+      pagination: multi && pagEl ? {
+        el: pagEl,
+        clickable: !0,
+        bulletClass: "stpb-dot",
+        bulletActiveClass: "is-active"
+      } : void 0,
+      autoplay: autoplayOn ? {
+        delay: AUTOPLAY_MS,
+        disableOnInteraction: !1,
+        pauseOnMouseEnter: !0
+      } : !1
+    }), this.swiperReady = !0;
   }
   get banners() {
     var _a;
     return parsePromoBanners((_a = this.config) == null ? void 0 : _a.stpb_items);
   }
-  get carouselMode() {
-    var _a;
-    return isTruthy((_a = this.config) == null ? void 0 : _a.stpb_autoplay, !0) && this.banners.length > 1;
-  }
-  clearAutoplay() {
-    this.autoTimer && (clearInterval(this.autoTimer), this.autoTimer = null);
-  }
-  syncAutoplay() {
-    this.clearAutoplay(), this.carouselMode && (this.autoTimer = setInterval(() => this.next(), AUTOPLAY_MS));
-  }
-  goTo(index) {
-    const len = this.banners.length;
-    len && (this.activeIndex = (index % len + len) % len, this.syncAutoplay());
-  }
-  prev() {
-    this.goTo(this.activeIndex - 1);
-  }
-  next() {
-    this.goTo(this.activeIndex + 1);
-  }
-  renderBanner(banner) {
+  renderBanner(banner, index) {
     return html`
       <article class="stpb-banner" aria-label=${banner.headline || t("عرض", "Promo")}>
-        <img class="stpb-banner__img" src=${banner.image} alt=${banner.headline || ""} loading="lazy" />
+        <img
+          class="stpb-banner__img"
+          src=${banner.image}
+          alt=${banner.headline || ""}
+          loading=${index === 0 ? "eager" : "lazy"}
+          decoding="async"
+          draggable="false"
+        />
         <div class="stpb-banner__shade" aria-hidden="true"></div>
         <div class="stpb-banner__content">
           ${banner.headline ? html`<h3 class="stpb-banner__headline">${banner.headline}</h3>` : nothing}
@@ -322,48 +348,14 @@ const AUTOPLAY_MS = 5e3, _StylePromoBanners = class _StylePromoBanners extends L
                 href=${banner.ctaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                draggable="false"
               >${banner.ctaLabel}<span class="stpb-banner__cta-arrow" aria-hidden="true">←</span></a>` : nothing}
         </div>
       </article>
     `;
   }
-  renderCarousel(banners) {
-    const rtl = (getComputedStyle(this).direction || "ltr") === "rtl", offset = this.activeIndex * 100 * (rtl ? 1 : -1);
-    return html`
-      <div
-        class="stpb-carousel"
-        role="region"
-        aria-roledescription="carousel"
-        @pointerdown=${this.onPointerDown}
-        @pointerup=${this.onPointerUp}
-        @pointercancel=${this.onPointerCancel}
-        @dragstart=${this.onDragStart}
-      >
-        <div class="stpb-carousel__track" style=${styleMap({ transform: `translateX(${offset}%)` })}>
-          ${banners.map(
-      (banner, i) => html`<div
-              class="stpb-carousel__slide"
-              aria-hidden=${i === this.activeIndex ? "false" : "true"}
-            >${this.renderBanner(banner)}</div>`
-    )}
-        </div>
-        <div class="stpb-dots" role="tablist">
-          ${banners.map(
-      (_b, i) => html`<button
-              type="button"
-              role="tab"
-              class=${classMap({ "stpb-dot": !0, "is-active": i === this.activeIndex })}
-              aria-selected=${i === this.activeIndex ? "true" : "false"}
-              aria-label=${`${i + 1}`}
-              @click=${() => this.goTo(i)}
-            ></button>`
-    )}
-        </div>
-      </div>
-    `;
-  }
   render() {
-    const c = this.config || {}, theme = readSectionTheme(c, "stpb_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.stpb_title) || t("عروض مميزة", "Featured Promotions"), desc = localizedString(c.stpb_desc), showTitle = isTruthy(c.stpb_show_title, !0), banners = this.banners;
+    const c = this.config || {}, theme = readSectionTheme(c, "stpb_"), animate = theme.animate && !prefersReducedMotion(), title = localizedString(c.stpb_title) || t("عروض مميزة", "Featured Promotions"), desc = localizedString(c.stpb_desc), showTitle = isTruthy(c.stpb_show_title, !0), banners = this.banners, multi = banners.length > 1;
     return html`
       <section
         class=${classMap({ "fs-section": !0, "fs-animate": animate, "stpb-shell": !0 })}
@@ -378,29 +370,55 @@ const AUTOPLAY_MS = 5e3, _StylePromoBanners = class _StylePromoBanners extends L
                 ${desc ? html`<p class="fs-desc">${desc}</p>` : nothing}
               </header>` : nothing}
 
-          ${banners.length ? this.carouselMode ? this.renderCarousel(banners) : html`<div class="stpb-banners">${banners.map((banner) => this.renderBanner(banner))}</div>` : html`<div class="fs-empty">${t("أضف بانرات ترويجية من إعدادات العنصر", "Add promo banners from element settings")}</div>`}
+          ${banners.length ? html`
+                <div class="stpb-carousel">
+                  <div
+                    class=${classMap({
+      swiper: !0,
+      "stpb-swiper": !0,
+      "is-ready": this.swiperReady
+    })}
+                    role="region"
+                    aria-roledescription="carousel"
+                    aria-label=${title}
+                  >
+                    <div class="swiper-wrapper">
+                      ${banners.map(
+      (banner, i) => html`
+                          <div class="swiper-slide stpb-slide">
+                            ${this.renderBanner(banner, i)}
+                          </div>
+                        `
+    )}
+                    </div>
+                  </div>
+
+                  ${multi ? html`<div
+                        class="stpb-dots"
+                        aria-label=${t("شرائح العرض", "Promo slides")}
+                      ></div>` : nothing}
+                </div>
+              ` : html`<div class="fs-empty">
+                ${t(
+      "أضف بانرات ترويجية من إعدادات العنصر",
+      "Add promo banners from element settings"
+    )}
+              </div>`}
+
           ${renderCommerceOutcome(this.config || {}, "stpb_")}
         </div>
       </section>
     `;
   }
 };
-__name(_StylePromoBanners, "StylePromoBanners"), _StylePromoBanners.styles = [
-  sharedSectionCss,
-  componentStyles,
-  css`
-      :host {
-        direction: inherit;
-      }
-    `
-];
+__name(_StylePromoBanners, "StylePromoBanners"), _StylePromoBanners.styles = [sharedSectionCss, fsSwiperCss, componentStyles];
 let StylePromoBanners = _StylePromoBanners;
 __decorateClass([
   property({ type: Object })
 ], StylePromoBanners.prototype, "config");
 __decorateClass([
   state()
-], StylePromoBanners.prototype, "activeIndex");
+], StylePromoBanners.prototype, "swiperReady");
 typeof StylePromoBanners < "u" && StylePromoBanners.registerSallaComponent("salla-style-promo-banners");
 export {
   StylePromoBanners as default

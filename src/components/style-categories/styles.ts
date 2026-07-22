@@ -57,24 +57,21 @@ export const componentStyles = css`
     gap: 1.15rem;
   }
 
-  /* Slider layout */
-  .stc-slider {
-    display: flex;
-    gap: 0.85rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    padding: 0.2rem 0.1rem 0.55rem;
-    scrollbar-width: none;
+  /* Slider layout (Swiper) */
+  .stc-swiper {
+    overflow: hidden;
   }
 
-  .stc-slider::-webkit-scrollbar {
-    display: none;
+  .stc-swiper .swiper-slide {
+    width: auto;
   }
 
-  .stc-slider .stc-tile {
-    flex: 0 0 min(72vw, 280px);
-    scroll-snap-align: start;
+  .stc-slide {
+    width: min(72vw, 280px);
+  }
+
+  .stc-slide .stc-tile {
+    width: 100%;
   }
 
   /* Tile */

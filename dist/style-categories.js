@@ -3,54 +3,9 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 import { css, LitElement, nothing, html } from "lit";
 import { property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { ref } from "lit/directives/ref.js";
 import { styleMap } from "lit/directives/style-map.js";
+import { f as fsSwiperCss, d as destroyFsSwiper, m as mountFsSwiper } from "./fsSwiper-BQLtGSuN.js";
 import { t, n as normalizeCollection, l as localizedString, d as extractLink, s as sharedSectionCss, v as isValidHref, r as readSectionTheme, p as prefersReducedMotion, i as isTruthy, a as themeStyleMap, b as renderCommerceOutcome } from "./sharedStyles-Q5qADHV9.js";
-const CLEANUP_KEY = "__fsDragScrollCleanup", DRAG_THRESHOLD_PX = 6;
-function enableDragScroll(el) {
-  var _a;
-  if (!el) return;
-  const host = el;
-  (_a = host[CLEANUP_KEY]) == null || _a.call(host);
-  let pointerId = null, startX = 0, startScrollLeft = 0, dragged = !1;
-  const onPointerDown = /* @__PURE__ */ __name((event) => {
-    event.pointerType !== "mouse" || event.button !== 0 || host.scrollWidth <= host.clientWidth || (pointerId = event.pointerId, startX = event.clientX, startScrollLeft = host.scrollLeft, dragged = !1, host.style.scrollSnapType = "none", host.style.cursor = "grabbing");
-  }, "onPointerDown"), onPointerMove = /* @__PURE__ */ __name((event) => {
-    if (pointerId === null || event.pointerId !== pointerId) return;
-    const dx = event.clientX - startX;
-    if (!dragged && Math.abs(dx) > DRAG_THRESHOLD_PX) {
-      dragged = !0;
-      try {
-        host.setPointerCapture(pointerId);
-      } catch {
-      }
-    }
-    dragged && (event.preventDefault(), host.scrollLeft = startScrollLeft - dx);
-  }, "onPointerMove"), endDrag = /* @__PURE__ */ __name((event) => {
-    if (!(pointerId === null || event.pointerId !== pointerId)) {
-      if (dragged)
-        try {
-          host.releasePointerCapture(pointerId);
-        } catch {
-        }
-      if (pointerId = null, host.style.scrollSnapType = "", host.style.cursor = "", dragged) {
-        const suppressClick = /* @__PURE__ */ __name((clickEvent) => {
-          clickEvent.preventDefault(), clickEvent.stopPropagation();
-        }, "suppressClick");
-        host.addEventListener("click", suppressClick, { capture: !0, once: !0 }), window.setTimeout(() => {
-          host.removeEventListener("click", suppressClick, { capture: !0 });
-        }, 0);
-      }
-      dragged = !1;
-    }
-  }, "endDrag"), onDragStart = /* @__PURE__ */ __name((event) => {
-    event.preventDefault();
-  }, "onDragStart");
-  host.addEventListener("pointerdown", onPointerDown), host.addEventListener("pointermove", onPointerMove), host.addEventListener("pointerup", endDrag), host.addEventListener("pointercancel", endDrag), host.addEventListener("dragstart", onDragStart, { capture: !0 }), host.style.touchAction = "pan-x pan-y", host.scrollWidth > host.clientWidth && (host.style.cursor = "grab"), host[CLEANUP_KEY] = () => {
-    host.removeEventListener("pointerdown", onPointerDown), host.removeEventListener("pointermove", onPointerMove), host.removeEventListener("pointerup", endDrag), host.removeEventListener("pointercancel", endDrag), host.removeEventListener("dragstart", onDragStart, { capture: !0 });
-  };
-}
-__name(enableDragScroll, "enableDragScroll");
 const componentStyles = css`
   .stc-shell {
     position: relative;
@@ -108,24 +63,21 @@ const componentStyles = css`
     gap: 1.15rem;
   }
 
-  /* Slider layout */
-  .stc-slider {
-    display: flex;
-    gap: 0.85rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    padding: 0.2rem 0.1rem 0.55rem;
-    scrollbar-width: none;
+  /* Slider layout (Swiper) */
+  .stc-swiper {
+    overflow: hidden;
   }
 
-  .stc-slider::-webkit-scrollbar {
-    display: none;
+  .stc-swiper .swiper-slide {
+    width: auto;
   }
 
-  .stc-slider .stc-tile {
-    flex: 0 0 min(72vw, 280px);
-    scroll-snap-align: start;
+  .stc-slide {
+    width: min(72vw, 280px);
+  }
+
+  .stc-slide .stc-tile {
+    width: 100%;
   }
 
   /* Tile */
@@ -303,13 +255,27 @@ var __defProp2 = Object.defineProperty, __decorateClass = /* @__PURE__ */ __name
 }, "__decorateClass");
 const _StyleCategories = class _StyleCategories extends LitElement {
   constructor() {
-    super(...arguments), this.config = {}, this.boundLang = () => this.requestUpdate();
+    super(...arguments), this.config = {}, this.boundLang = () => {
+      this.requestUpdate(), queueMicrotask(() => this.remountSwiper());
+    };
   }
   connectedCallback() {
     super.connectedCallback(), window.addEventListener("language-changed", this.boundLang);
   }
   disconnectedCallback() {
-    window.removeEventListener("language-changed", this.boundLang), super.disconnectedCallback();
+    window.removeEventListener("language-changed", this.boundLang), destroyFsSwiper(this.swiper), this.swiper = void 0, super.disconnectedCallback();
+  }
+  updated() {
+    this.updateComplete.then(() => this.remountSwiper());
+  }
+  remountSwiper() {
+    var _a;
+    if (destroyFsSwiper(this.swiper), this.swiper = void 0, String(((_a = this.config) == null ? void 0 : _a.stc_layout) || "grid") !== "slider") return;
+    const root = this.renderRoot.querySelector(".stc-swiper");
+    !root || !this.tiles.length || (this.swiper = mountFsSwiper(root, {
+      slidesPerView: "auto",
+      spaceBetween: 16
+    }));
   }
   get tiles() {
     var _a;
@@ -334,39 +300,64 @@ const _StyleCategories = class _StyleCategories extends LitElement {
                 ${desc ? html`<p class="stc-desc">${desc}</p>` : nothing}
               </header>` : nothing}
 
-          ${tiles.length ? html`
-                <div
-                  class=${classMap({ "stc-grid": layout === "grid", "stc-slider": layout === "slider" })}
-                  role="list"
-                  ${ref((el) => {
-      el instanceof HTMLElement && el.classList.contains("stc-slider") && enableDragScroll(el);
-    })}
-                >
-                  ${tiles.map(
+          ${tiles.length ? layout === "slider" ? html`
+                  <div class="swiper stc-swiper">
+                    <div class="swiper-wrapper">
+                      ${tiles.map(
       (tile) => html`
-                      <a
-                        class="stc-tile"
-                        role="listitem"
-                        href=${isValidHref(tile.url) ? tile.url : nothing}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        tabindex="0"
-                        aria-label=${tile.title || t("تصنيف", "Category")}
-                        @click=${(e) => {
+                          <div class="swiper-slide stc-slide">
+                            <a
+                              class="stc-tile"
+                              role="listitem"
+                              href=${isValidHref(tile.url) ? tile.url : nothing}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              tabindex="0"
+                              draggable="false"
+                              aria-label=${tile.title || t("تصنيف", "Category")}
+                              @click=${(e) => {
         isValidHref(tile.url) || e.preventDefault();
       }}
-                      >
-                        <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ""} loading="lazy" />
-                        <div class="stc-tile__shade" aria-hidden="true"></div>
-                        <div class="stc-tile__label">
-                          ${tile.title}
-                          <span class="stc-tile__rule" aria-hidden="true"></span>
-                        </div>
-                      </a>
-                    `
+                            >
+                              <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ""} loading="lazy" draggable="false" />
+                              <div class="stc-tile__shade" aria-hidden="true"></div>
+                              <div class="stc-tile__label">
+                                ${tile.title}
+                                <span class="stc-tile__rule" aria-hidden="true"></span>
+                              </div>
+                            </a>
+                          </div>
+                        `
     )}
-                </div>
-              ` : html`<div class="stc-empty">${t("أضف تصنيفات من إعدادات العنصر", "Add categories from element settings")}</div>`}
+                    </div>
+                  </div>
+                ` : html`
+                  <div class="stc-grid" role="list">
+                    ${tiles.map(
+      (tile) => html`
+                        <a
+                          class="stc-tile"
+                          role="listitem"
+                          href=${isValidHref(tile.url) ? tile.url : nothing}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          tabindex="0"
+                          aria-label=${tile.title || t("تصنيف", "Category")}
+                          @click=${(e) => {
+        isValidHref(tile.url) || e.preventDefault();
+      }}
+                        >
+                          <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ""} loading="lazy" />
+                          <div class="stc-tile__shade" aria-hidden="true"></div>
+                          <div class="stc-tile__label">
+                            ${tile.title}
+                            <span class="stc-tile__rule" aria-hidden="true"></span>
+                          </div>
+                        </a>
+                      `
+    )}
+                  </div>
+                ` : html`<div class="stc-empty">${t("أضف تصنيفات من إعدادات العنصر", "Add categories from element settings")}</div>`}
           ${renderCommerceOutcome(this.config || {}, "stc_")}
         </div>
       </section>
@@ -375,6 +366,7 @@ const _StyleCategories = class _StyleCategories extends LitElement {
 };
 __name(_StyleCategories, "StyleCategories"), _StyleCategories.styles = [
   sharedSectionCss,
+  fsSwiperCss,
   componentStyles,
   css`
       :host {

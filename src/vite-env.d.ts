@@ -12,3 +12,8 @@ declare const Salla: SallaGlobal | undefined;
 
 interface HTMLElementTagNameMap {
 }
+
+declare module '*.css?inline' {
+  const css: string;
+  export default css;
+}

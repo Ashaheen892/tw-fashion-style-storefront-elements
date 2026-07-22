@@ -1,71 +1,27 @@
 import { css } from 'lit';
 
 export const componentStyles = css`
+  :host {
+    direction: inherit;
+  }
+
   .stpb-shell {
     position: relative;
   }
 
-  /* Banners stack */
-  .stpb-banners {
-    display: grid;
-    gap: 1.35rem;
+  /* Swiper carousel wrapper */
+  .stpb-carousel {
+    position: relative;
   }
 
-  /* Autoplay carousel mode */
-  .stpb-carousel {
+  .stpb-swiper {
     position: relative;
     overflow: hidden;
     border-radius: calc(var(--section-radius, 16px) * 0.95);
-    touch-action: pan-y;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
   }
 
-  .stpb-carousel:active {
-    cursor: grabbing;
-  }
-
-  .stpb-carousel__track {
-    display: flex;
-    transition: transform 0.32s ease;
-  }
-
-  .stpb-carousel__slide {
-    flex: 0 0 100%;
-    min-width: 0;
-  }
-
-  .stpb-dots {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0.85rem;
-    display: flex;
-    justify-content: center;
-    gap: 0.45rem;
-    z-index: 2;
-  }
-
-  .stpb-dot {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 999px;
-    border: 0;
-    padding: 0;
-    background: rgba(255, 255, 255, 0.45);
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
-
-  .stpb-dot.is-active {
-    background: var(--fs-surface, var(--card-bg, #f0f0f0));
-    transform: scale(1.25);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .stpb-carousel__track {
-      transition: none;
-    }
+  .stpb-slide {
+    height: auto;
   }
 
   /* Single banner — full-bleed magazine style */
@@ -74,7 +30,6 @@ export const componentStyles = css`
     display: flex;
     align-items: flex-end;
     min-height: min(55vw, 420px);
-    border-radius: calc(var(--section-radius, 16px) * 0.95);
     overflow: hidden;
     background: #1a1210;
     box-shadow: 0 14px 32px rgba(43, 33, 28, 0.1);
@@ -84,8 +39,12 @@ export const componentStyles = css`
     animation: stpb-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .fs-animate .stpb-banner:nth-child(2) { animation-delay: 0.12s; }
-  .fs-animate .stpb-banner:nth-child(3) { animation-delay: 0.2s; }
+  .fs-animate .stpb-banner:nth-child(2) {
+    animation-delay: 0.12s;
+  }
+  .fs-animate .stpb-banner:nth-child(3) {
+    animation-delay: 0.2s;
+  }
 
   @keyframes stpb-rise {
     from {
@@ -105,6 +64,7 @@ export const componentStyles = css`
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
   }
 
   .stpb-banner:hover .stpb-banner__img {
@@ -114,8 +74,12 @@ export const componentStyles = css`
   .stpb-banner__shade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgba(14, 9, 7, 0.05) 0%, rgba(14, 9, 7, 0.55) 60%, rgba(14, 9, 7, 0.82) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(14, 9, 7, 0.05) 0%,
+      rgba(14, 9, 7, 0.55) 60%,
+      rgba(14, 9, 7, 0.82) 100%
+    );
     pointer-events: none;
   }
 
@@ -162,7 +126,12 @@ export const componentStyles = css`
     text-decoration: none;
     text-transform: none;
     cursor: pointer;
-    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-color, var(--fs-store-primary)) 28%, transparent);
+    box-shadow: 0 8px 20px
+      color-mix(
+        in srgb,
+        var(--accent-color, var(--fs-store-primary)) 28%,
+        transparent
+      );
     transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -186,6 +155,37 @@ export const componentStyles = css`
     transform: translateX(3px);
   }
 
+  /* Pagination dots below carousel */
+  .stpb-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+
+  .stpb-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0 !important;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    opacity: 1;
+    transition: width 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .stpb-dot.is-active {
+    width: 1.1rem;
+    background: var(--fs-surface, var(--card-bg, #f0f0f0));
+    transform: scale(1.1);
+  }
+
   @media (max-width: 639px) {
     .stpb-banner {
       min-height: 320px;
@@ -198,11 +198,27 @@ export const componentStyles = css`
     .stpb-banner__headline {
       font-size: 1.45rem;
     }
+
+    .stpb-dots {
+      margin-top: 0.6rem;
+      gap: 0.3rem;
+    }
+
+    .stpb-dot {
+      width: 0.4rem;
+      height: 0.4rem;
+    }
+
+    .stpb-dot.is-active {
+      width: 0.85rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .stpb-banner,
-    .stpb-banner__img {
+    .stpb-banner__img,
+    .stpb-banner__cta,
+    .stpb-dot {
       animation: none !important;
       transition: none !important;
     }

@@ -1,9 +1,8 @@
 import { css, html, LitElement, nothing } from 'lit';
 import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { ref } from 'lit/directives/ref.js';
 import { styleMap } from 'lit/directives/style-map.js';
-import { enableDragScroll } from '../../utils/dragScroll.js';
+import { destroyFsSwiper, fsSwiperCss, mountFsSwiper, type Swiper } from '../../utils/fsSwiper.js';
 import {
   isTruthy,
   isValidHref,
@@ -22,10 +21,15 @@ export default class StyleCategories extends LitElement {
   @property({ type: Object })
   config: Record<string, unknown> = {};
 
-  private boundLang = () => this.requestUpdate();
+  private boundLang = () => {
+    this.requestUpdate();
+    queueMicrotask(() => this.remountSwiper());
+  };
+  private swiper?: Swiper;
 
   static styles = [
     sharedSectionCss,
+    fsSwiperCss,
     componentStyles,
     css`
       :host {
@@ -41,7 +45,29 @@ export default class StyleCategories extends LitElement {
 
   disconnectedCallback(): void {
     window.removeEventListener('language-changed', this.boundLang);
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
     super.disconnectedCallback();
+  }
+
+  updated(): void {
+    this.updateComplete.then(() => this.remountSwiper());
+  }
+
+  private remountSwiper(): void {
+    destroyFsSwiper(this.swiper);
+    this.swiper = undefined;
+
+    const layout = String(this.config?.stc_layout || 'grid');
+    if (layout !== 'slider') return;
+
+    const root = this.renderRoot.querySelector('.stc-swiper') as HTMLElement | null;
+    if (!root || !this.tiles.length) return;
+
+    this.swiper = mountFsSwiper(root, {
+      slidesPerView: 'auto',
+      spaceBetween: 16,
+    });
   }
 
   private get tiles() {
@@ -80,41 +106,66 @@ export default class StyleCategories extends LitElement {
             : nothing}
 
           ${tiles.length
-            ? html`
-                <div
-                  class=${classMap({ 'stc-grid': layout === 'grid', 'stc-slider': layout === 'slider' })}
-                  role="list"
-                  ${ref((el) => {
-                    if (el instanceof HTMLElement && el.classList.contains('stc-slider')) {
-                      enableDragScroll(el);
-                    }
-                  })}
-                >
-                  ${tiles.map(
-                    (tile) => html`
-                      <a
-                        class="stc-tile"
-                        role="listitem"
-                        href=${isValidHref(tile.url) ? tile.url : nothing}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        tabindex="0"
-                        aria-label=${tile.title || t('تصنيف', 'Category')}
-                        @click=${(e: Event) => {
-                          if (!isValidHref(tile.url)) e.preventDefault();
-                        }}
-                      >
-                        <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ''} loading="lazy" />
-                        <div class="stc-tile__shade" aria-hidden="true"></div>
-                        <div class="stc-tile__label">
-                          ${tile.title}
-                          <span class="stc-tile__rule" aria-hidden="true"></span>
-                        </div>
-                      </a>
-                    `
-                  )}
-                </div>
-              `
+            ? layout === 'slider'
+              ? html`
+                  <div class="swiper stc-swiper">
+                    <div class="swiper-wrapper">
+                      ${tiles.map(
+                        (tile) => html`
+                          <div class="swiper-slide stc-slide">
+                            <a
+                              class="stc-tile"
+                              role="listitem"
+                              href=${isValidHref(tile.url) ? tile.url : nothing}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              tabindex="0"
+                              draggable="false"
+                              aria-label=${tile.title || t('تصنيف', 'Category')}
+                              @click=${(e: Event) => {
+                                if (!isValidHref(tile.url)) e.preventDefault();
+                              }}
+                            >
+                              <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ''} loading="lazy" draggable="false" />
+                              <div class="stc-tile__shade" aria-hidden="true"></div>
+                              <div class="stc-tile__label">
+                                ${tile.title}
+                                <span class="stc-tile__rule" aria-hidden="true"></span>
+                              </div>
+                            </a>
+                          </div>
+                        `
+                      )}
+                    </div>
+                  </div>
+                `
+              : html`
+                  <div class="stc-grid" role="list">
+                    ${tiles.map(
+                      (tile) => html`
+                        <a
+                          class="stc-tile"
+                          role="listitem"
+                          href=${isValidHref(tile.url) ? tile.url : nothing}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          tabindex="0"
+                          aria-label=${tile.title || t('تصنيف', 'Category')}
+                          @click=${(e: Event) => {
+                            if (!isValidHref(tile.url)) e.preventDefault();
+                          }}
+                        >
+                          <img class="stc-tile__img" src=${tile.image} alt=${tile.title || ''} loading="lazy" />
+                          <div class="stc-tile__shade" aria-hidden="true"></div>
+                          <div class="stc-tile__label">
+                            ${tile.title}
+                            <span class="stc-tile__rule" aria-hidden="true"></span>
+                          </div>
+                        </a>
+                      `
+                    )}
+                  </div>
+                `
             : html`<div class="stc-empty">${t('أضف تصنيفات من إعدادات العنصر', 'Add categories from element settings')}</div>`}
           ${renderCommerceOutcome(this.config || {}, 'stc_')}
         </div>
