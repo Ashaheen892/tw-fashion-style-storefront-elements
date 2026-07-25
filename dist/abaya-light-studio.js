@@ -2725,6 +2725,31 @@ function nextModeIndex(modes, currentIndex, delta) {
   return positions[next];
 }
 __name(nextModeIndex, "nextModeIndex");
+function bindSallaRegistration(ctor) {
+  ctor.registerSallaComponent = /* @__PURE__ */ __name(function(tagName) {
+    if (typeof window > "u") return;
+    const attempt = /* @__PURE__ */ __name(() => {
+      var _a, _b;
+      const bundles = (_a = window.Salla) == null ? void 0 : _a.bundles;
+      if (bundles != null && bundles.registerComponent) {
+        if ((_b = bundles.isRegistered) != null && _b.call(bundles, tagName)) return !0;
+        const dynamicTagName = `${tagName}-${Math.random().toString(36).slice(2, 8)}`;
+        return bundles.registerComponent(tagName, {
+          component: this,
+          dynamicTagName
+        }), !0;
+      }
+      const host = HTMLElement;
+      return typeof host.registerSallaComponent == "function" ? (host.registerSallaComponent.call(this, tagName), !0) : !1;
+    }, "attempt");
+    if (attempt()) return;
+    let ticks = 0;
+    const timer = window.setInterval(() => {
+      ticks += 1, (attempt() || ticks > 200) && window.clearInterval(timer);
+    }, 50);
+  }, "registerSallaComponent");
+}
+__name(bindSallaRegistration, "bindSallaRegistration");
 const _AbayaLightStudio = class _AbayaLightStudio extends LitElement {
   constructor() {
     super(...arguments), this.config = {}, this.activeIndex = 0, this.displaySrc = "", this.fading = !1, this.zoom = 1, this.panX = 0, this.panY = 0, this.lensOn = !1, this.lensStyle = {}, this.compareOn = !1, this.compareA = 0, this.compareB = 1, this.comparePct = 50, this.notesOpen = !1, this.panning = !1, this.loadToken = 0, this.boundLang = () => this.requestUpdate(), this.pointerId = null, this.panStartX = 0, this.panStartY = 0, this.panOriginX = 0, this.panOriginY = 0, this.compareDragging = !1, this.isCoarse = !1, this.prefetchCache = /* @__PURE__ */ new Set(), this.onPanMove = (e) => {
@@ -3361,6 +3386,7 @@ __decorateClass([
 __decorateClass([
   query(".als-compare")
 ], AbayaLightStudio.prototype, "compareEl");
+bindSallaRegistration(AbayaLightStudio);
 typeof AbayaLightStudio < "u" && AbayaLightStudio.registerSallaComponent("salla-abaya-light-studio");
 export {
   AbayaLightStudio as default

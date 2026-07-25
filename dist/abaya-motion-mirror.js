@@ -2651,45 +2651,70 @@ function preloadImage(src) {
   }) : Promise.resolve(!1);
 }
 __name(preloadImage, "preloadImage");
-const _FrameLoader = class _FrameLoader {
+function createFrameLoader() {
+  const ready = /* @__PURE__ */ new Set(), failed = /* @__PURE__ */ new Set(), inflight = /* @__PURE__ */ new Map();
+  return {
+    isReady(src) {
+      return ready.has(src);
+    },
+    isFailed(src) {
+      return failed.has(src);
+    },
+    async load(src) {
+      if (!src) return !1;
+      if (ready.has(src)) return !0;
+      if (failed.has(src)) return !1;
+      const existing = inflight.get(src);
+      if (existing) return existing;
+      const promise = preloadImage(src).then((ok) => (inflight.delete(src), ok ? ready.add(src) : failed.add(src), ok));
+      return inflight.set(src, promise), promise;
+    },
+    async loadMany(srcs) {
+      await Promise.all(srcs.filter(Boolean).map((s) => this.load(s)));
+    },
+    firstReady(frames) {
+      for (const f of frames)
+        if ((ready.has(f.image) || !failed.has(f.image)) && ready.has(f.image))
+          return f;
+      for (const f of frames)
+        if (!failed.has(f.image)) return f;
+      return null;
+    },
+    failureRatio(frames) {
+      return frames.length ? frames.filter((f) => failed.has(f.image)).length / frames.length : 1;
+    }
+  };
+}
+__name(createFrameLoader, "createFrameLoader");
+const DRAG_PX_PER_FRAME = 18;
+function bindSallaRegistration(ctor) {
+  ctor.registerSallaComponent = /* @__PURE__ */ __name(function(tagName) {
+    if (typeof window > "u") return;
+    const attempt = /* @__PURE__ */ __name(() => {
+      var _a, _b;
+      const bundles = (_a = window.Salla) == null ? void 0 : _a.bundles;
+      if (bundles != null && bundles.registerComponent) {
+        if ((_b = bundles.isRegistered) != null && _b.call(bundles, tagName)) return !0;
+        const dynamicTagName = `${tagName}-${Math.random().toString(36).slice(2, 8)}`;
+        return bundles.registerComponent(tagName, {
+          component: this,
+          dynamicTagName
+        }), !0;
+      }
+      const host = HTMLElement;
+      return typeof host.registerSallaComponent == "function" ? (host.registerSallaComponent.call(this, tagName), !0) : !1;
+    }, "attempt");
+    if (attempt()) return;
+    let ticks = 0;
+    const timer = window.setInterval(() => {
+      ticks += 1, (attempt() || ticks > 200) && window.clearInterval(timer);
+    }, 50);
+  }, "registerSallaComponent");
+}
+__name(bindSallaRegistration, "bindSallaRegistration");
+const _AbayaMotionMirror = class _AbayaMotionMirror extends LitElement {
   constructor() {
-    this.ready = /* @__PURE__ */ new Set(), this.failed = /* @__PURE__ */ new Set(), this.inflight = /* @__PURE__ */ new Map();
-  }
-  isReady(src) {
-    return this.ready.has(src);
-  }
-  isFailed(src) {
-    return this.failed.has(src);
-  }
-  async load(src) {
-    if (!src) return !1;
-    if (this.ready.has(src)) return !0;
-    if (this.failed.has(src)) return !1;
-    const existing = this.inflight.get(src);
-    if (existing) return existing;
-    const promise = preloadImage(src).then((ok) => (this.inflight.delete(src), ok ? this.ready.add(src) : this.failed.add(src), ok));
-    return this.inflight.set(src, promise), promise;
-  }
-  async loadMany(srcs) {
-    await Promise.all(srcs.filter(Boolean).map((s) => this.load(s)));
-  }
-  firstReady(frames) {
-    for (const f of frames)
-      if ((this.ready.has(f.image) || !this.failed.has(f.image)) && this.ready.has(f.image))
-        return f;
-    for (const f of frames)
-      if (!this.failed.has(f.image)) return f;
-    return null;
-  }
-  failureRatio(frames) {
-    return frames.length ? frames.filter((f) => this.failed.has(f.image)).length / frames.length : 1;
-  }
-};
-__name(_FrameLoader, "FrameLoader");
-let FrameLoader = _FrameLoader;
-const DRAG_PX_PER_FRAME = 18, _AbayaMotionMirror = class _AbayaMotionMirror extends LitElement {
-  constructor() {
-    super(...arguments), this.config = {}, this.frameIndex = 0, this.displaySrc = "", this.playing = !1, this.dragging = !1, this.hintHidden = !1, this.inView = !1, this.videoTime = 0, this.videoDuration = 0, this.fullscreenOpen = !1, this.framesReady = !1, this.mediaFront = "", this.mediaBack = "", this.frontIsA = !0, this.loader = new FrameLoader(), this.boundLang = () => this.requestUpdate(), this.io = null, this.playRaf = 0, this.dragRaf = 0, this.lastPlayTs = 0, this.playBusy = !1, this.boundFsChange = () => this.syncFullscreenState(), this.pointerId = null, this.dragStartX = 0, this.dragStartIndex = 0, this.dragStartVideoTime = 0, this.wasPlayingBeforeDrag = !1, this.userStopped = !1, this.pendingIndex = null, this.preloadStarted = !1, this.boundVisibility = () => this.onVisibilityChange(), this.boundKeydown = (e) => this.onGlobalKey(e), this.onPointerMove = (e) => {
+    super(...arguments), this.config = {}, this.frameIndex = 0, this.displaySrc = "", this.playing = !1, this.dragging = !1, this.hintHidden = !1, this.inView = !1, this.videoTime = 0, this.videoDuration = 0, this.fullscreenOpen = !1, this.framesReady = !1, this.mediaFront = "", this.mediaBack = "", this.frontIsA = !0, this.loader = createFrameLoader(), this.boundLang = () => this.requestUpdate(), this.io = null, this.playRaf = 0, this.dragRaf = 0, this.lastPlayTs = 0, this.playBusy = !1, this.boundFsChange = () => this.syncFullscreenState(), this.pointerId = null, this.dragStartX = 0, this.dragStartIndex = 0, this.dragStartVideoTime = 0, this.wasPlayingBeforeDrag = !1, this.userStopped = !1, this.pendingIndex = null, this.preloadStarted = !1, this.boundVisibility = () => this.onVisibilityChange(), this.boundKeydown = (e) => this.onGlobalKey(e), this.onPointerMove = (e) => {
       !this.dragging || e.pointerId !== this.pointerId || this.dragRaf || (this.dragRaf = requestAnimationFrame(() => {
         this.dragRaf = 0;
         const dx = e.clientX - this.dragStartX, dir = getComputedStyle(this).direction === "rtl" ? -1 : 1, signed = dx * dir;
@@ -2719,7 +2744,7 @@ const DRAG_PX_PER_FRAME = 18, _AbayaMotionMirror = class _AbayaMotionMirror exte
     this.bootstrapFrames(), this.observeHost();
   }
   updated(changed) {
-    changed.has("config") && (this.loader = new FrameLoader(), this.preloadStarted = !1, this.frameIndex = 0, this.displaySrc = "", this.mediaFront = "", this.mediaBack = "", this.frontIsA = !0, this.playing = !1, this.userStopped = !1, this.hintHidden = !1, this.bootstrapFrames()), this.syncHostVisibility();
+    changed.has("config") && (this.loader = createFrameLoader(), this.preloadStarted = !1, this.frameIndex = 0, this.displaySrc = "", this.mediaFront = "", this.mediaBack = "", this.frontIsA = !0, this.playing = !1, this.userStopped = !1, this.hintHidden = !1, this.bootstrapFrames()), this.syncHostVisibility();
   }
   get mode() {
     var _a;
@@ -3410,7 +3435,8 @@ __decorateClass([
 __decorateClass([
   query(".amm-fs-trigger")
 ], AbayaMotionMirror.prototype, "fsTrigger");
-typeof FrameLoader < "u" && FrameLoader.registerSallaComponent("salla-abaya-motion-mirror");
+bindSallaRegistration(AbayaMotionMirror);
+typeof AbayaMotionMirror < "u" && AbayaMotionMirror.registerSallaComponent("salla-abaya-motion-mirror");
 export {
   AbayaMotionMirror as default
 };

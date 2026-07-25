@@ -3244,61 +3244,118 @@ function preloadImage(src: string): Promise<boolean> {
   });
 }
 
-class FrameLoader {
-  private ready = new Set<string>();
-  private failed = new Set<string>();
-  private inflight = new Map<string, Promise<boolean>>();
+type FrameLoader = {
+  isReady(src: string): boolean;
+  isFailed(src: string): boolean;
+  load(src: string): Promise<boolean>;
+  loadMany(srcs: string[]): Promise<void>;
+  firstReady(frames: MotionFrame[]): MotionFrame | null;
+  failureRatio(frames: MotionFrame[]): number;
+};
 
-  isReady(src: string): boolean {
-    return this.ready.has(src);
-  }
+function createFrameLoader(): FrameLoader {
+  const ready = new Set<string>();
+  const failed = new Set<string>();
+  const inflight = new Map<string, Promise<boolean>>();
 
-  isFailed(src: string): boolean {
-    return this.failed.has(src);
-  }
+  return {
+    isReady(src: string): boolean {
+      return ready.has(src);
+    },
+    isFailed(src: string): boolean {
+      return failed.has(src);
+    },
+    async load(src: string): Promise<boolean> {
+      if (!src) return false;
+      if (ready.has(src)) return true;
+      if (failed.has(src)) return false;
+      const existing = inflight.get(src);
+      if (existing) return existing;
 
-  async load(src: string): Promise<boolean> {
-    if (!src) return false;
-    if (this.ready.has(src)) return true;
-    if (this.failed.has(src)) return false;
-    const existing = this.inflight.get(src);
-    if (existing) return existing;
-
-    const promise = preloadImage(src).then((ok) => {
-      this.inflight.delete(src);
-      if (ok) this.ready.add(src);
-      else this.failed.add(src);
-      return ok;
-    });
-    this.inflight.set(src, promise);
-    return promise;
-  }
-
-  async loadMany(srcs: string[]): Promise<void> {
-    await Promise.all(srcs.filter(Boolean).map((s) => this.load(s)));
-  }
-
-  firstReady(frames: MotionFrame[]): MotionFrame | null {
-    for (const f of frames) {
-      if (this.ready.has(f.image) || !this.failed.has(f.image)) {
-        if (this.ready.has(f.image)) return f;
+      const promise = preloadImage(src).then((ok) => {
+        inflight.delete(src);
+        if (ok) ready.add(src);
+        else failed.add(src);
+        return ok;
+      });
+      inflight.set(src, promise);
+      return promise;
+    },
+    async loadMany(srcs: string[]): Promise<void> {
+      await Promise.all(srcs.filter(Boolean).map((s) => this.load(s)));
+    },
+    firstReady(frames: MotionFrame[]): MotionFrame | null {
+      for (const f of frames) {
+        if (ready.has(f.image) || !failed.has(f.image)) {
+          if (ready.has(f.image)) return f;
+        }
       }
-    }
-    for (const f of frames) {
-      if (!this.failed.has(f.image)) return f;
-    }
-    return null;
-  }
-
-  failureRatio(frames: MotionFrame[]): number {
-    if (!frames.length) return 1;
-    const failed = frames.filter((f) => this.failed.has(f.image)).length;
-    return failed / frames.length;
-  }
+      for (const f of frames) {
+        if (!failed.has(f.image)) return f;
+      }
+      return null;
+    },
+    failureRatio(frames: MotionFrame[]): number {
+      if (!frames.length) return 1;
+      const n = frames.filter((f) => failed.has(f.image)).length;
+      return n / frames.length;
+    },
+  };
 }
 
 /* ---- inlined: components/abaya-motion-mirror/index.ts ---- */
 const DRAG_PX_PER_FRAME = 18;
+
+function bindSallaRegistration(
+  ctor: CustomElementConstructor & { registerSallaComponent?: (tagName: string) => void }
+): void {
+  ctor.registerSallaComponent = function registerSallaComponent(tagName: string): void {
+    if (typeof window === 'undefined') return;
+    const attempt = (): boolean => {
+      const bundles = (
+        window as Window & {
+          Salla?: {
+            bundles?: {
+              registerComponent: (
+                tag: string,
+                meta: { component: CustomElementConstructor; dynamicTagName: string }
+              ) => void;
+              isRegistered?: (tag: string) => boolean;
+            };
+          };
+        }
+      ).Salla?.bundles;
+
+      if (bundles?.registerComponent) {
+        if (bundles.isRegistered?.(tagName)) return true;
+        const dynamicTagName = `${tagName}-${Math.random().toString(36).slice(2, 8)}`;
+        bundles.registerComponent(tagName, {
+          component: this as CustomElementConstructor,
+          dynamicTagName,
+        });
+        return true;
+      }
+
+      const host = HTMLElement as typeof HTMLElement & {
+        registerSallaComponent?: (this: CustomElementConstructor, tag: string) => void;
+      };
+      if (typeof host.registerSallaComponent === 'function') {
+        host.registerSallaComponent.call(this as CustomElementConstructor, tagName);
+        return true;
+      }
+
+      return false;
+    };
+
+    if (attempt()) return;
+
+    let ticks = 0;
+    const timer = window.setInterval(() => {
+      ticks += 1;
+      if (attempt() || ticks > 200) window.clearInterval(timer);
+    }, 50);
+  };
+}
 
 export default class AbayaMotionMirror extends LitElement {
   @property({ type: Object })
@@ -3322,7 +3379,7 @@ export default class AbayaMotionMirror extends LitElement {
   @query('video.amm-stage__media') private videoEl?: HTMLVideoElement;
   @query('.amm-fs-trigger') private fsTrigger?: HTMLButtonElement;
 
-  private loader = new FrameLoader();
+  private loader = createFrameLoader();
   private boundLang = () => this.requestUpdate();
   private io: IntersectionObserver | null = null;
   private playRaf = 0;
@@ -3383,7 +3440,7 @@ export default class AbayaMotionMirror extends LitElement {
 
   updated(changed: Map<string, unknown>): void {
     if (changed.has('config')) {
-      this.loader = new FrameLoader();
+      this.loader = createFrameLoader();
       this.preloadStarted = false;
       this.frameIndex = 0;
       this.displaySrc = '';
@@ -4438,3 +4495,4 @@ export default class AbayaMotionMirror extends LitElement {
   }
 }
 
+bindSallaRegistration(AbayaMotionMirror as unknown as CustomElementConstructor & { registerSallaComponent?: (tagName: string) => void });
